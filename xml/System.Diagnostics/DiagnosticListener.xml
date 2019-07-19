@@ -1,5 +1,5 @@
 <Type Name="DiagnosticListener" FullName="System.Diagnostics.DiagnosticListener">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="ee69c9bbc69b712102cee4af1a8fd044575a3161" /><Meta Name="ms.sourcegitcommit" Value="bc24a3ba616ee1df8b858f9400cae4f058ea3a7e" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="06/19/2019" /><Meta Name="ms.locfileid" Value="67239465" /></Metadata><TypeSignature Language="C#" Value="public class DiagnosticListener : System.Diagnostics.DiagnosticSource, IDisposable, IObservable&lt;System.Collections.Generic.KeyValuePair&lt;string,object&gt;&gt;" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="f0ca1d8fc3384f636938fa376747be0e95d7412c" /><Meta Name="ms.sourcegitcommit" Value="cfc0e4215fd0d259582ada2141878befd7c3c8c6" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/12/2019" /><Meta Name="ms.locfileid" Value="67855032" /></Metadata><TypeSignature Language="C#" Value="public class DiagnosticListener : System.Diagnostics.DiagnosticSource, IDisposable, IObservable&lt;System.Collections.Generic.KeyValuePair&lt;string,object&gt;&gt;" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit DiagnosticListener extends System.Diagnostics.DiagnosticSource implements class System.IDisposable, class System.IObservable`1&lt;valuetype System.Collections.Generic.KeyValuePair`2&lt;string, object&gt;&gt;" />
   <TypeSignature Language="DocId" Value="T:System.Diagnostics.DiagnosticListener" />
   <TypeSignature Language="VB.NET" Value="Public Class DiagnosticListener&#xA;Inherits DiagnosticSource&#xA;Implements IDisposable, IObservable(Of KeyValuePair(Of String, Object))" />
@@ -151,7 +151,13 @@ Wenn Sie diese abonnieren, erhalten Sie Rückrufe für alle NotificationListener
       <Docs>
         <summary>Bestimmt, ob registrierte Abonnenten vorhanden sind.</summary>
         <returns><see langword="true" />, wenn registrierte Abonnenten vorhanden sind, andernfalls <see langword="false" />.</returns>
-        <remarks>To be added.</remarks>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+Wenn Setup für die Benachrichtigung, teuer ist, können Sie aufrufen `IsEnabled` vor dem Ausführen dieses Setups. Producer rufen Sie möglicherweise optional `IsEnabled` vor dem Aufruf <xref:System.Diagnostics.DiagnosticListener.IsEnabled(System.String) in performance-critical parts of the application to determine whether there are any listeners to the <xref:System.Diagnostics.DiagnosticListener>.
+
+          ]]></format>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="IsEnabled">
@@ -318,9 +324,9 @@ Wenn Sie diese abonnieren, erhalten Sie Rückrufe für alle NotificationListener
         <Parameter Name="observer" Type="System.IObserver&lt;System.Collections.Generic.KeyValuePair&lt;System.String,System.Object&gt;&gt;" />
       </Parameters>
       <Docs>
-        <param name="observer">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="observer">Ein Abonnent.</param>
+        <summary>Fügt einen Abonnenten hinzu.</summary>
+        <returns>Ein Verweis auf eine Schnittstelle, mit der der Listener den Empfang von Benachrichtigungen beenden kann, bevor die <see cref="T:System.Diagnostics.DiagnosticSource" /> das Absenden der Benachrichtigungen abgeschlossen hat.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -348,11 +354,13 @@ Wenn Sie diese abonnieren, erhalten Sie Rückrufe für alle NotificationListener
       </Parameters>
       <Docs>
         <param name="observer">Ein Abonnent.</param>
-        <param name="isEnabled">Ein Delegat, der Ereignisse auf der Grundlage ihres Namens und von bis zu zwei Kontextobjekten filtert (die <see langword="null" /> sein können).</param>
-        <summary>Fügt einen Abonnenten hinzu. Weist, wenn der <paramref name="isEnabled" />-Parameter nicht <see langword="null" /> ist, darauf hin, dass einige Ereignisse uninteressant sind und aus Effizienzgründen übersprungen werden können.</summary>
-        <returns>To be added.</returns>
+        <param name="isEnabled">Ein Delegat, der Ereignisse auf der Grundlage ihres Namens und von bis zu zwei Kontextobjekten filtert (die <see langword="null" /> sein können), oder <see langword="null" />, wenn ein Ereignisfilter nicht erwünscht ist.</param>
+        <summary>Fügt einen Abonnenten hinzu und filtert optional Ereignisse auf der Grundlage ihres Namens und von bis zu zwei Kontextobjekten.</summary>
+        <returns>Ein Verweis auf eine Schnittstelle, mit der der Listener den Empfang von Benachrichtigungen beenden kann, bevor die <see cref="T:System.Diagnostics.DiagnosticSource" /> das Absenden der Benachrichtigungen abgeschlossen hat.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[
+
+Wenn `isEnabled` nicht `null`, bedeutet dies, dass einige Ereignisse nicht relevante sind für Effizienz übersprungen werden kann.
 
 Eine bestimmten Instrumentation-Website hat die Möglichkeit des Aufrufs eine oder mehrere <xref:System.Diagnostics.DiagnosticListener.IsEnabled%2A> Überladungen, die in der der Name des Ereignisses und bis zu zwei andere Objekte (Instrumentation: standortspezifisch) als Argumente übergeben. Wenn einer dieser <xref:System.Diagnostics.DiagnosticListener.IsEnabled%2A> Aufrufe dann diese `isEnabled` Prädikat mit übergebenen Werte aufgerufen wird (wenn kürzere Überladungen verwendet werden, `null` für fehlende Kontextobjekte übergeben wird).
 
@@ -395,14 +403,14 @@ Wenn dieser Parameter ist `null`, erfolgt keine Filterung (alle Überladungen de
       <Docs>
         <param name="observer">Ein Abonnent.</param>
         <param name="isEnabled">Ein Delegat, der Ereignisse auf der Grundlage ihres Namens filtert (<see cref="T:System.String" />). Der Delegat sollte <see langword="true" /> zurückgeben, wenn das Ereignis aktiviert ist.</param>
-        <summary>Einen Abonnenten (Beobachter) hinzufügen. Weist, wenn der <paramref name="isEnabled" />-Parameter nicht <see langword="null" /> ist, darauf hin, dass einige Ereignisse uninteressant sind und aus Effizienzgründen übersprungen werden können.</summary>
-        <returns>To be added.</returns>
+        <summary>Fügt einen Abonnenten hinzu und filtert optional Ereignisse auf der Grundlage ihres Namens.</summary>
+        <returns>Ein Verweis auf eine Schnittstelle, mit der der Listener den Empfang von Benachrichtigungen beenden kann, bevor die <see cref="T:System.Diagnostics.DiagnosticSource" /> das Absenden der Benachrichtigungen abgeschlossen hat.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[
-            
-Beachten Sie, dass die `isEnabled` Prädikat ist eine optionale Optimierung auf die Instrumentation-Website, um zu vermeiden, das Einrichten der Nutzlast und das Aufrufen von erlauben <xref:System.Diagnostics.DiagnosticListener.Write(System.String,System.Object)> Wenn keine Abonnenten interessiert es. Insbesondere die Instrumentation auf der Dokumentationswebsite der Möglichkeit, ignoriert der <xref:System.Diagnostics.DiagnosticListener.IsEnabled> Prädikat (nicht aufrufen) und Aufrufen <xref:System.Diagnostics.DiagnosticListener.Write(System.String,System.Object)>. Also wenn Abonnenten erforderlich sind, die Filterung, muss es sich selbst.
 
-Wenn dieser Parameter ist `null`, erfolgt keine Filterung (alle Überladungen der <xref:System.Diagnostics.DiagnosticSource.IsEnabled%2A> zurückgeben `true`).
+Wenn `isEnabled` nicht `null`, einige Ereignisse werden nicht relevante und Effizienzgründen übersprungen werden kann. Die `isEnabled` Prädikat ist eine optionale Optimierung auf die Instrumentation-Website, um zu vermeiden, das Einrichten der Nutzlast und das Aufrufen von erlauben <xref:System.Diagnostics.DiagnosticListener.Write(System.String,System.Object)> Wenn keine Abonnenten interessiert es. Insbesondere die Instrumentation auf der Dokumentationswebsite der Möglichkeit, ignoriert der <xref:System.Diagnostics.DiagnosticListener.IsEnabled> Prädikat (nicht aufrufen) und Aufrufen <xref:System.Diagnostics.DiagnosticListener.Write(System.String,System.Object)>. Also wenn Abonnenten erforderlich sind, die Filterung, muss es sich selbst.
+
+Wenn `isEnabled` ist `null`, erfolgt keine Filterung (alle Überladungen der <xref:System.Diagnostics.DiagnosticSource.IsEnabled%2A> zurückgeben `true`).
 
           ]]></format>
         </remarks>
@@ -433,9 +441,17 @@ Wenn dieser Parameter ist `null`, erfolgt keine Filterung (alle Überladungen de
         <param name="isEnabled">To be added.</param>
         <param name="onActivityImport">To be added.</param>
         <param name="onActivityExport">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Fügt einen Abonnenten hinzu, filtert optional Ereignisse auf der Grundlage ihres Namens und von bis zu zwei Kontextobjekten, und gibt Methoden an, die aufgerufen werden sollen, wenn Anbieter Aktivitäten von außerhalb des Prozesses importieren oder exportieren.</summary>
+        <returns>Ein Verweis auf eine Schnittstelle, mit der der Listener den Empfang von Benachrichtigungen beenden kann, bevor die <see cref="T:System.Diagnostics.DiagnosticSource" /> das Absenden der Benachrichtigungen abgeschlossen hat.</returns>
+        <remarks>  
+          <format type="text/markdown"><![CDATA[  
+
+Wenn `isEnabled` ist nicht Null ist, einige Ereignisse werden nicht relevante für Effizienz übersprungen werden kann.  
+
+Sie können auch angeben, 'OnActivityImport' und 'OnActivityExport'-Methoden, die aufgerufen werden Anbieter importieren oder Exportieren von Aktivitäten von außerhalb des Prozesses (z. B. von HTTP-Anforderungen). Diese Methoden werden nach dem Importieren oder exportieren Sie die Aktivität aufgerufen und können verwendet werden, so ändern Sie die Aktivität oder die ausgehende Anforderung an die Richtlinie hinzufügen.
+
+         ]]></format>
+         </remarks>
       </Docs>
     </Member>
     <Member MemberName="ToString">
@@ -493,11 +509,18 @@ Wenn dieser Parameter ist `null`, erfolgt keine Filterung (alle Überladungen de
         <Parameter Name="parameters" Type="System.Object" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2" />
       </Parameters>
       <Docs>
-        <param name="name">To be added.</param>
-        <param name="value">To be added.</param>
-        <param name="parameters">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="name">Der Name des zu protokollierenden Ereignisses.</param>
+        <param name="value">Ein Objekt, das die Nutzlast für das Ereignis darstellt.</param>
+        <param name="parameters">Ein Objekt, das die Nutzlast für das Ereignis darstellt.</param>
+        <summary>Protokolliert eine Benachrichtigung.</summary>
+        <remarks>  
+          <format type="text/markdown"><![CDATA[  
+
+Weitere Informationen finden Sie unter der Methode <xref:System.Diagnostics.DiagnosticSource.Write%2A?displayProperty=nameWithType>.
+
+         ]]></format>
+         </remarks>
+
       </Docs>
     </Member>
   </Members>
