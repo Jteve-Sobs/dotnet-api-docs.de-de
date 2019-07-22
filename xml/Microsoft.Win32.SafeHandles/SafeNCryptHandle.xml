@@ -1,5 +1,5 @@
 <Type Name="SafeNCryptHandle" FullName="Microsoft.Win32.SafeHandles.SafeNCryptHandle">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="0587dc04070c77ac04f4355a1798ec80dfeb6f41" /><Meta Name="ms.sourcegitcommit" Value="220917117f9d774aaa482439aa7324e39dc1f5b6" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="02/25/2019" /><Meta Name="ms.locfileid" Value="56775949" /></Metadata><TypeSignature Language="C#" Value="public abstract class SafeNCryptHandle : Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="0cbff58f64d36eb4aa11d9911a1ae313cecbd1a2" /><Meta Name="ms.sourcegitcommit" Value="ea104bc7868886a205b1df30baed6ca34ff70ecb" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/20/2019" /><Meta Name="ms.locfileid" Value="68368827" /></Metadata><TypeSignature Language="C#" Value="public abstract class SafeNCryptHandle : Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit SafeNCryptHandle extends Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid" />
   <TypeSignature Language="DocId" Value="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class SafeNCryptHandle&#xA;Inherits SafeHandleZeroOrMinusOneIsInvalid" />
@@ -33,9 +33,24 @@
     </Attribute>
   </Attributes>
   <Docs>
-    <summary><span data-ttu-id="5f715-101">Stellt ein sicheres Handle bereit, das von CNG-Objekten (Cryptography Next Generation) verwendet werden kann.</span><span class="sxs-lookup"><span data-stu-id="5f715-101">Provides a safe handle that can be used by Cryptography Next Generation (CNG) objects.</span></span></summary>
-    <remarks>To be added.</remarks>
-    <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="5f715-102">für die Berechtigung zum Aufrufen von nicht verwalteten Codes.</span><span class="sxs-lookup"><span data-stu-id="5f715-102">for permission to call unmanaged code.</span></span> <span data-ttu-id="5f715-103">Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand" />.</span><span class="sxs-lookup"><span data-stu-id="5f715-103">Security action: <see cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand" />.</span></span> <span data-ttu-id="5f715-104">Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></span><span class="sxs-lookup"><span data-stu-id="5f715-104">Associated enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></span></span></permission>
+    <summary><span data-ttu-id="25959-101">Stellt ein sicheres Handle bereit, das von CNG-Objekten (Cryptography Next Generation) verwendet werden kann.</span><span class="sxs-lookup"><span data-stu-id="25959-101">Provides a safe handle that can be used by Cryptography Next Generation (CNG) objects.</span></span></summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[
+      
+## Remarks
+
+
+<span data-ttu-id="25959-102">Diese Klasse schließt die Logik ein, um diese Handles ordnungsgemäß zu duplizieren und freizugeben, um eine native Duplizierung zu simulieren.</span><span class="sxs-lookup"><span data-stu-id="25959-102">This class wraps up the logic to correctly duplicate and free these handles to simulate a native duplication.</span></span>
+            
+<span data-ttu-id="25959-103">Jedes geöffnete handle-Objekt kann als in einem von drei Zuständen betrachtet werden:</span><span class="sxs-lookup"><span data-stu-id="25959-103">Each open handle object can be thought of as being in one of three states:</span></span>
+
+- <span data-ttu-id="25959-104">**Besitzer** : erstellt über den Mars Haller, herkömmliches Stil sicheres Handle.</span><span class="sxs-lookup"><span data-stu-id="25959-104">**Owner** - Created via the marshaler, traditional style safe handle.</span></span> <span data-ttu-id="25959-105">Insbesondere ist nur ein Besitzer Handle für ein angegebenes System eigenes handle vorhanden.</span><span class="sxs-lookup"><span data-stu-id="25959-105">Notably, only one owner handle exists for a given native handle.</span></span>
+- <span data-ttu-id="25959-106">**Doppelte** Punkte an einem Handle im Inhaber Zustand.</span><span class="sxs-lookup"><span data-stu-id="25959-106">**Duplicate** - Points at a handle in the Holder state.</span></span> <span data-ttu-id="25959-107">Das Freigeben eines Handles im doppelten Zustand führt nur zum Dekrementieren des Verweis Zählers des Inhabers, nicht in einem Release des systemeigenen Handles.</span><span class="sxs-lookup"><span data-stu-id="25959-107">Releasing a handle in the duplicate state results only in decrementing the reference count of the holder, not in a release of the native handle.</span></span>
+- <span data-ttu-id="25959-108">Der **Halter** hält auf einem nativen Handle und wird von Handles im doppelten Zustand referenziert.</span><span class="sxs-lookup"><span data-stu-id="25959-108">**Holder** - Holds onto a native handle and is referenced by handles in the duplicate state.</span></span> <span data-ttu-id="25959-109">Wenn alle doppelten Handles geschlossen werden, gibt das Inhaber handle das Native Handle frei.</span><span class="sxs-lookup"><span data-stu-id="25959-109">When all duplicate handles are closed, the holder handle releases the native handle.</span></span> <span data-ttu-id="25959-110">Ein Inhaber Handle wird nie fertiggestellt, da dies zu einem Wettlauf zwischen den Finalizern der doppelten Handles und dem Inhaber handle führt.</span><span class="sxs-lookup"><span data-stu-id="25959-110">A holder handle will never be finalized, since this results in a race between the finalizers of the duplicate handles and the holder handle.</span></span> <span data-ttu-id="25959-111">Stattdessen werden alle doppelten Handles abgeschlossen, und der Verweis Zähler wird auf 0 (null) herabgesetzt.</span><span class="sxs-lookup"><span data-stu-id="25959-111">Instead, it relies upon all of the duplicate handles to be finalized and decrement the ref count to zero.</span></span> <span data-ttu-id="25959-112">Instanzen eines Inhaber Handles sollten nie von einem doppelten handle referenziert werden.</span><span class="sxs-lookup"><span data-stu-id="25959-112">Instances of a holder handle should never be referenced by anything but a duplicate handle.</span></span>
+
+      ]]></format>
+    </remarks>
+    <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="25959-113">für die Berechtigung zum Abrufen von nicht verwaltetem Code.</span><span class="sxs-lookup"><span data-stu-id="25959-113">for permission to call unmanaged code.</span></span> <span data-ttu-id="25959-114">Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand" />.</span><span class="sxs-lookup"><span data-stu-id="25959-114">Security action: <see cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand" />.</span></span> <span data-ttu-id="25959-115">Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></span><span class="sxs-lookup"><span data-stu-id="25959-115">Associated enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></span></span></permission>
     <forInternalUseOnly />
   </Docs>
   <Members>
@@ -65,9 +80,9 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary><span data-ttu-id="5f715-105">Initialisiert eine neue Instanz der <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" />-Klasse.</span><span class="sxs-lookup"><span data-stu-id="5f715-105">Initializes a new instance of the <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" /> class.</span></span></summary>
+        <summary><span data-ttu-id="25959-116">Initialisiert eine neue Instanz der <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" />-Klasse.</span><span class="sxs-lookup"><span data-stu-id="25959-116">Initializes a new instance of the <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" /> class.</span></span></summary>
         <remarks>To be added.</remarks>
-        <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="5f715-106">für die Berechtigung zum Aufrufen von nicht verwalteten Codes.</span><span class="sxs-lookup"><span data-stu-id="5f715-106">for permission to call unmanaged code.</span></span> <span data-ttu-id="5f715-107">Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand" />.</span><span class="sxs-lookup"><span data-stu-id="5f715-107">Security action: <see cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand" />.</span></span> <span data-ttu-id="5f715-108">Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></span><span class="sxs-lookup"><span data-stu-id="5f715-108">Associated enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></span></span></permission>
+        <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="25959-117">für die Berechtigung zum Abrufen von nicht verwaltetem Code.</span><span class="sxs-lookup"><span data-stu-id="25959-117">for permission to call unmanaged code.</span></span> <span data-ttu-id="25959-118">Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand" />.</span><span class="sxs-lookup"><span data-stu-id="25959-118">Security action: <see cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand" />.</span></span> <span data-ttu-id="25959-119">Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></span><span class="sxs-lookup"><span data-stu-id="25959-119">Associated enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></span></span></permission>
         <forInternalUseOnly />
       </Docs>
     </Member>
@@ -94,15 +109,15 @@
         <Parameter Name="parentHandle" Type="System.Runtime.InteropServices.SafeHandle" Index="1" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.7.2;netframework-4.8" />
       </Parameters>
       <Docs>
-        <param name="handle"><span data-ttu-id="5f715-109">Das bereits vorhandene Handle, das verwendet werden soll.</span><span class="sxs-lookup"><span data-stu-id="5f715-109">The pre-existing handle to use.</span></span> <span data-ttu-id="5f715-110">Bei Verwendung von <see cref="F:System.IntPtr.Zero" /> wird ein ungültiges Handle zurückgegeben.</span><span class="sxs-lookup"><span data-stu-id="5f715-110">Using <see cref="F:System.IntPtr.Zero" /> returns an invalid handle.</span></span></param>
-        <param name="parentHandle"><span data-ttu-id="5f715-111">Das übergeordnete Handle dieses <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" />.</span><span class="sxs-lookup"><span data-stu-id="5f715-111">The parent handle of this <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" />.</span></span></param>
-        <summary><span data-ttu-id="5f715-112">Instanziiert eine neue Instanz der <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" />-Klasse.</span><span class="sxs-lookup"><span data-stu-id="5f715-112">Instantiates a new instance of the <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" /> class.</span></span></summary>
+        <param name="handle"><span data-ttu-id="25959-120">Das bereits vorhandene Handle, das verwendet werden soll.</span><span class="sxs-lookup"><span data-stu-id="25959-120">The pre-existing handle to use.</span></span> <span data-ttu-id="25959-121">Bei Verwendung von <see cref="F:System.IntPtr.Zero" /> wird ein ungültiges Handle zurückgegeben.</span><span class="sxs-lookup"><span data-stu-id="25959-121">Using <see cref="F:System.IntPtr.Zero" /> returns an invalid handle.</span></span></param>
+        <param name="parentHandle"><span data-ttu-id="25959-122">Das übergeordnete Handle dieses <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" />.</span><span class="sxs-lookup"><span data-stu-id="25959-122">The parent handle of this <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" />.</span></span></param>
+        <summary><span data-ttu-id="25959-123">Instanziiert eine neue Instanz der <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" />-Klasse.</span><span class="sxs-lookup"><span data-stu-id="25959-123">Instantiates a new instance of the <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" /> class.</span></span></summary>
         <remarks>To be added.</remarks>
-        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="5f715-113"><paramref name="parentHandle" /> ist <see langword="null" />.</span><span class="sxs-lookup"><span data-stu-id="5f715-113"><paramref name="parentHandle" /> is <see langword="null" />.</span></span></exception>
-        <exception cref="T:System.ArgumentException"><span data-ttu-id="5f715-114">Der <paramref name="parentHandle" /> ist geschlossen.</span><span class="sxs-lookup"><span data-stu-id="5f715-114"><paramref name="parentHandle" /> is closed.</span></span>  
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="25959-124"><paramref name="parentHandle" /> ist <see langword="null" />.</span><span class="sxs-lookup"><span data-stu-id="25959-124"><paramref name="parentHandle" /> is <see langword="null" />.</span></span></exception>
+        <exception cref="T:System.ArgumentException"><span data-ttu-id="25959-125">Der <paramref name="parentHandle" /> ist geschlossen.</span><span class="sxs-lookup"><span data-stu-id="25959-125"><paramref name="parentHandle" /> is closed.</span></span>  
   
-<span data-ttu-id="5f715-115">- oder -</span><span class="sxs-lookup"><span data-stu-id="5f715-115">-or-</span></span> 
- <span data-ttu-id="5f715-116"><paramref name="parentHandle" /> ist ungültig.</span><span class="sxs-lookup"><span data-stu-id="5f715-116"><paramref name="parentHandle" /> is invalid.</span></span></exception>
+<span data-ttu-id="25959-126">- oder -</span><span class="sxs-lookup"><span data-stu-id="25959-126">-or-</span></span> 
+ <span data-ttu-id="25959-127"><paramref name="parentHandle" /> ist ungültig.</span><span class="sxs-lookup"><span data-stu-id="25959-127"><paramref name="parentHandle" /> is invalid.</span></span></exception>
       </Docs>
     </Member>
     <Member MemberName="IsInvalid">
@@ -164,9 +179,23 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary><span data-ttu-id="5f715-117">Gibt ein Handle frei, das von einem CNG (Cryptography Next Generation)-Objekt verwendet wird.</span><span class="sxs-lookup"><span data-stu-id="5f715-117">Releases a handle used by a Cryptography Next Generation (CNG) object.</span></span></summary>
-        <returns><span data-ttu-id="5f715-118"><see langword="true" />, wenn das Handle erfolgreich freigegeben wird, andernfalls <see langword="false" />.</span><span class="sxs-lookup"><span data-stu-id="5f715-118"><see langword="true" /> if the handle is released successfully; otherwise, <see langword="false" />.</span></span></returns>
-        <remarks>To be added.</remarks>
+        <summary><span data-ttu-id="25959-128">Gibt ein Handle frei, das von einem CNG (Cryptography Next Generation)-Objekt verwendet wird.</span><span class="sxs-lookup"><span data-stu-id="25959-128">Releases a handle used by a Cryptography Next Generation (CNG) object.</span></span></summary>
+        <returns><span data-ttu-id="25959-129"><see langword="true" />, wenn das Handle erfolgreich freigegeben wird, andernfalls <see langword="false" />.</span><span class="sxs-lookup"><span data-stu-id="25959-129"><see langword="true" /> if the handle is released successfully; otherwise, <see langword="false" />.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+<span data-ttu-id="25959-130">Ähnlich wie bei der Duplizierung führt das Freigeben eines Handles verschiedene Vorgänge basierend auf dem Zustand des Handles aus.</span><span class="sxs-lookup"><span data-stu-id="25959-130">Similar to duplication, releasing a handle performs different operations based upon the state of the handle.</span></span>
+            
+<span data-ttu-id="25959-131">Eine-Instanz, die mit einem "Klammern Wert"-Wert erstellt wurde, ruft "gefährousrelease" nur für das "Parser"-Objekt auf.</span><span class="sxs-lookup"><span data-stu-id="25959-131">An instance that was constructed with a parentHandle value will only call DangerousRelease on the parentHandle object.</span></span> <span data-ttu-id="25959-132">Andernfalls wird das Verhalten durch den Besitz Status vorgegeben.</span><span class="sxs-lookup"><span data-stu-id="25959-132">Otherwise, the behavior is dictated by the ownership state.</span></span>
+
+- <span data-ttu-id="25959-133">**Owner** : ruft einfach die Release-P/aufrufen-Methode auf.</span><span class="sxs-lookup"><span data-stu-id="25959-133">**Owner** - Simply calls the release P/Invoke method.</span></span>
+- <span data-ttu-id="25959-134">**Duplicate** : Dekremente den Verweis Zähler des aktuellen Inhabers.</span><span class="sxs-lookup"><span data-stu-id="25959-134">**Duplicate** - Decrements the reference count of the current holder.</span></span>
+- <span data-ttu-id="25959-135">**Inhaber** : Ruft den Release-P/-Aufruf auf.</span><span class="sxs-lookup"><span data-stu-id="25959-135">**Holder** - Calls the release P/Invoke.</span></span> <span data-ttu-id="25959-136">Beachten Sie, dass ReleaseHandle für einen Halter einen Verweis Zähler von 0 (null) impliziert.</span><span class="sxs-lookup"><span data-stu-id="25959-136">Note that ReleaseHandle on a holder implies a reference count of zero.</span></span>
+
+          ]]></format>
+        </remarks>
         <forInternalUseOnly />
       </Docs>
     </Member>
@@ -205,8 +234,8 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary><span data-ttu-id="5f715-119">Gibt ein systemeigenes Handle frei, das von einem CNG (Cryptography Next Generation)-Objekt verwendet wird.</span><span class="sxs-lookup"><span data-stu-id="5f715-119">Releases a native handle used by a Cryptography Next Generation (CNG) object.</span></span></summary>
-        <returns><span data-ttu-id="5f715-120"><see langword="true" />, wenn das Handle erfolgreich freigegeben wird, andernfalls <see langword="false" />.</span><span class="sxs-lookup"><span data-stu-id="5f715-120"><see langword="true" /> if the handle is released successfully; otherwise, <see langword="false" />.</span></span></returns>
+        <summary><span data-ttu-id="25959-137">Gibt ein systemeigenes Handle frei, das von einem CNG (Cryptography Next Generation)-Objekt verwendet wird.</span><span class="sxs-lookup"><span data-stu-id="25959-137">Releases a native handle used by a Cryptography Next Generation (CNG) object.</span></span></summary>
+        <returns><span data-ttu-id="25959-138"><see langword="true" />, wenn das Handle erfolgreich freigegeben wird, andernfalls <see langword="false" />.</span><span class="sxs-lookup"><span data-stu-id="25959-138"><see langword="true" /> if the handle is released successfully; otherwise, <see langword="false" />.</span></span></returns>
         <remarks>To be added.</remarks>
         <forInternalUseOnly />
       </Docs>
