@@ -1,5 +1,5 @@
 <Type Name="SafeNCryptHandle" FullName="Microsoft.Win32.SafeHandles.SafeNCryptHandle">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="0587dc04070c77ac04f4355a1798ec80dfeb6f41" /><Meta Name="ms.sourcegitcommit" Value="220917117f9d774aaa482439aa7324e39dc1f5b6" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="02/25/2019" /><Meta Name="ms.locfileid" Value="56775949" /></Metadata><TypeSignature Language="C#" Value="public abstract class SafeNCryptHandle : Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="0cbff58f64d36eb4aa11d9911a1ae313cecbd1a2" /><Meta Name="ms.sourcegitcommit" Value="ea104bc7868886a205b1df30baed6ca34ff70ecb" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/20/2019" /><Meta Name="ms.locfileid" Value="68368827" /></Metadata><TypeSignature Language="C#" Value="public abstract class SafeNCryptHandle : Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit SafeNCryptHandle extends Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid" />
   <TypeSignature Language="DocId" Value="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class SafeNCryptHandle&#xA;Inherits SafeHandleZeroOrMinusOneIsInvalid" />
@@ -34,8 +34,23 @@
   </Attributes>
   <Docs>
     <summary>Stellt ein sicheres Handle bereit, das von CNG-Objekten (Cryptography Next Generation) verwendet werden kann.</summary>
-    <remarks>To be added.</remarks>
-    <permission cref="T:System.Security.Permissions.SecurityPermission">für die Berechtigung zum Aufrufen von nicht verwalteten Codes. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand" />. Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+    <remarks>
+      <format type="text/markdown"><![CDATA[
+      
+## Remarks
+
+
+Diese Klasse schließt die Logik ein, um diese Handles ordnungsgemäß zu duplizieren und freizugeben, um eine native Duplizierung zu simulieren.
+            
+Jedes geöffnete handle-Objekt kann als in einem von drei Zuständen betrachtet werden:
+
+- **Besitzer** : erstellt über den Mars Haller, herkömmliches Stil sicheres Handle. Insbesondere ist nur ein Besitzer Handle für ein angegebenes System eigenes handle vorhanden.
+- **Doppelte** Punkte an einem Handle im Inhaber Zustand. Das Freigeben eines Handles im doppelten Zustand führt nur zum Dekrementieren des Verweis Zählers des Inhabers, nicht in einem Release des systemeigenen Handles.
+- Der **Halter** hält auf einem nativen Handle und wird von Handles im doppelten Zustand referenziert. Wenn alle doppelten Handles geschlossen werden, gibt das Inhaber handle das Native Handle frei. Ein Inhaber Handle wird nie fertiggestellt, da dies zu einem Wettlauf zwischen den Finalizern der doppelten Handles und dem Inhaber handle führt. Stattdessen werden alle doppelten Handles abgeschlossen, und der Verweis Zähler wird auf 0 (null) herabgesetzt. Instanzen eines Inhaber Handles sollten nie von einem doppelten handle referenziert werden.
+
+      ]]></format>
+    </remarks>
+    <permission cref="T:System.Security.Permissions.SecurityPermission">für die Berechtigung zum Abrufen von nicht verwaltetem Code. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand" />. Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
     <forInternalUseOnly />
   </Docs>
   <Members>
@@ -67,7 +82,7 @@
       <Docs>
         <summary>Initialisiert eine neue Instanz der <see cref="T:Microsoft.Win32.SafeHandles.SafeNCryptHandle" />-Klasse.</summary>
         <remarks>To be added.</remarks>
-        <permission cref="T:System.Security.Permissions.SecurityPermission">für die Berechtigung zum Aufrufen von nicht verwalteten Codes. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand" />. Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">für die Berechtigung zum Abrufen von nicht verwaltetem Code. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand" />. Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
         <forInternalUseOnly />
       </Docs>
     </Member>
@@ -101,7 +116,7 @@
         <exception cref="T:System.ArgumentNullException"><paramref name="parentHandle" /> ist <see langword="null" />.</exception>
         <exception cref="T:System.ArgumentException">Der <paramref name="parentHandle" /> ist geschlossen.  
   
-- oder - 
+- oder - 
  <paramref name="parentHandle" /> ist ungültig.</exception>
       </Docs>
     </Member>
@@ -166,7 +181,21 @@
       <Docs>
         <summary>Gibt ein Handle frei, das von einem CNG (Cryptography Next Generation)-Objekt verwendet wird.</summary>
         <returns><see langword="true" />, wenn das Handle erfolgreich freigegeben wird, andernfalls <see langword="false" />.</returns>
-        <remarks>To be added.</remarks>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+Ähnlich wie bei der Duplizierung führt das Freigeben eines Handles verschiedene Vorgänge basierend auf dem Zustand des Handles aus.
+            
+Eine-Instanz, die mit einem "Klammern Wert"-Wert erstellt wurde, ruft "gefährousrelease" nur für das "Parser"-Objekt auf. Andernfalls wird das Verhalten durch den Besitz Status vorgegeben.
+
+- **Owner** : ruft einfach die Release-P/aufrufen-Methode auf.
+- **Duplicate** : Dekremente den Verweis Zähler des aktuellen Inhabers.
+- **Inhaber** : Ruft den Release-P/-Aufruf auf. Beachten Sie, dass ReleaseHandle für einen Halter einen Verweis Zähler von 0 (null) impliziert.
+
+          ]]></format>
+        </remarks>
         <forInternalUseOnly />
       </Docs>
     </Member>
