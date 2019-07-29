@@ -1,5 +1,5 @@
 <Type Name="DiagnosticSource" FullName="System.Diagnostics.DiagnosticSource">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="d79c7605daf68e0c4169c32fac48c2c1ac277dad" /><Meta Name="ms.sourcegitcommit" Value="cfc0e4215fd0d259582ada2141878befd7c3c8c6" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/12/2019" /><Meta Name="ms.locfileid" Value="67854883" /></Metadata><TypeSignature Language="C#" Value="public abstract class DiagnosticSource" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="e4e02866434c5d718f1e5b5791fa4eb7fa1c5428" /><Meta Name="ms.sourcegitcommit" Value="634678f7ccd2928c6b2cf792a301b079b63639af" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/26/2019" /><Meta Name="ms.locfileid" Value="68540880" /></Metadata><TypeSignature Language="C#" Value="public abstract class DiagnosticSource" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit DiagnosticSource extends System.Object" />
   <TypeSignature Language="DocId" Value="T:System.Diagnostics.DiagnosticSource" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class DiagnosticSource" />
@@ -20,7 +20,7 @@
   <Interfaces />
   <Docs>
     <summary>Eine abstrakte Klasse, die das Instrumentieren von Code für die Protokollierung umfangreicher Datennutzlasten zur Produktionszeit für die Nutzung innerhalb des instrumentierten Prozesses ermöglicht.</summary>
-    <remarks>Weitere Informationen finden Sie unter [DiagnosticSource-Benutzerhandbuch](https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md).</remarks>
+    <remarks>Weitere Informationen finden Sie [im Benutzerhandbuch für diagnosticsource](https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md).</remarks>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -75,7 +75,7 @@
         <remarks>
           <format type="text/markdown"><![CDATA[
 
-Ist es teuer Setup für die Benachrichtigung, können Sie die IsEnabled vor dem Ausführen dieses Setups aufrufen. Kunden sollten nicht davon ausgehen, dass sie nur Benachrichtigungen erhalten, für die IsEnabled "true" ist. Es ist jedoch optional für Hersteller, um diese API aufzurufen. Der Name muss identisch, die an <see cref="M:System.Diagnostics.DiagnosticSource.Write(System.String,System.Object)" />.
+Wenn das Setup für die Benachrichtigung aufwendig ist, können Sie "isaktivierte" vor dem Ausführen dieses Setups anrufen. Consumer sollten nicht davon ausgehen, dass Sie nur Benachrichtigungen erhalten, für die isaktivierte "true" ist. Allerdings ist es für Producer optional, diese API aufzurufen. Der Name sollte mit dem an <see cref="M:System.Diagnostics.DiagnosticSource.Write(System.String,System.Object)" />übereinstimmen.
 
            ]]></format>
         </remarks>
@@ -106,13 +106,13 @@ Ist es teuer Setup für die Benachrichtigung, können Sie die IsEnabled vor dem 
       <Docs>
         <param name="name">Der Name des geschriebenen Ereignisses.</param>
         <param name="arg1">Ein Objekt, das den zusätzlichen Kontext für „IsEnabled“ darstellt. Consumer sollten den Empfang von <see langword="null" /> erwarten, was darauf hinweisen kann, dass der Hersteller eine reine IsEnabled(string)-Zeichenfolge aufgerufen hat, um zu prüfen, ob der Consumer für derartige Ereignisse überhaupt Benachrichtigungen empfangen möchte. Auf dieser Grundlage ruft der Hersteller möglicherweise erneut IsEnabled(string, object, object) mit einem Kontext ungleich <see langword="null" /> auf.</param>
-        <param name="arg2">Optional. Ein Objekt, das den zusätzlichen Kontext für „IsEnabled“ darstellt. <see langword="null" /> standardmäßig. Consumer sollten den Empfang von <see langword="null" /> erwarten, was darauf hinweisen kann, dass der Hersteller eine reine IsEnabled(string)-Zeichenfolge aufgerufen hat oder der Hersteller den gesamten erforderlichen Kontext in <paramref name="arg1" /> übergeben hat.</param>
+        <param name="arg2">Dies ist optional. Ein Objekt, das den zusätzlichen Kontext für „IsEnabled“ darstellt. <see langword="null" /> standardmäßig. Consumer sollten den Empfang von <see langword="null" /> erwarten, was darauf hinweisen kann, dass der Hersteller eine reine IsEnabled(string)-Zeichenfolge aufgerufen hat oder der Hersteller den gesamten erforderlichen Kontext in <paramref name="arg1" /> übergeben hat.</param>
         <summary>Überprüft, ob das Benachrichtigungsereignis aktiviert ist.</summary>
         <returns><see langword="true" /> wenn das Benachrichtigungsereignis aktiviert ist, andernfalls <see langword="false" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[
           
-Ist es teuer Setup für die Benachrichtigung, können Sie diese Methode aufrufen und Kontext bereitzustellen, bevor Sie das Setup ausführen.
+Wenn das Setup für die Benachrichtigung aufwendig ist, können Sie diese Methode anrufen und Kontext bereitstellen, bevor Sie das Setup durchführen.
           
            ]]></format>
         </remarks>
@@ -140,22 +140,22 @@ Ist es teuer Setup für die Benachrichtigung, können Sie diese Methode aufrufen
         <param name="activity">To be added.</param>
         <param name="payload">To be added.</param>
         <summary>Überträgt den Status von einer Aktivität auf außerhalb des Prozesses stattfindende Ereignisse oder Vorgänge, wie z.B. eine ausgehende HTTP-Anfrage.</summary>
-        <remarks>  
+        <remarks>
           <format type="text/markdown"><![CDATA[  
 
-Ist eine Website Instumentation an einem Speicherort, in denen Aktivitäten des Prozesses (z. B. ausgehenden HTTP-Anforderungen) lassen, wird dieses Standorts Status aus der Aktivität zu einer ausgehenden Anforderung übertragen möchten.
+Wenn sich eine instanzwebsite an einem Speicherort befindet, an dem Aktivitäten den Prozess verlassen (z. b. ausgehende HTTP-Anforderungen), möchte diese Site den Status von der-Aktivität an die ausgehende Anforderung übertragen.
 
-Soweit möglich, dies sollte erfolgen von der Website Instrumenation, da es ein Vertrag zwischen ist einer <xref:System.Diagnostics.Activity> und die Ougoing Anforderung Logik des Standorts der Instrumentation.   Allerdings kann die Website Instrumenation nicht verarbeiten Richtlinie (z. B., ob Aktivitätsinformationen sollten werden deaktiviert oder in einem älteren Format aus Kompatibilitätsgründen geschrieben).
-Hierzu muss der Standort für die Instrumentation einen Rückruf an an das Protokollierungssystem, und bitten ihn zum Auflösen von Richtlinien. Dies ist der Zweck der `OnActivityExport` Methode.
+Soweit dies möglich ist, sollte dies von der Instrumentierungs-Website erfolgen, weil ein Vertrag zwischen einer <xref:System.Diagnostics.Activity> und der Anforderung für die ausgehende Anforderung an der Instrumentations Site vorhanden ist.   Die Instrumentierungs-Website kann die Richtlinie jedoch nicht verarbeiten (z. b. ob Aktivitäts Informationen aus Kompatibilitätsgründen in einem älteren Format deaktiviert oder geschrieben werden sollen).
+Hierfür muss die Instrumentierungs Site einen Rückruf an das Protokollierungs System durchsuchen und diese zum Auflösen von Richtlinien auffordern. Dies ist der Zweck `OnActivityExport` der-Methode.
 
-Die `OnActivityExport` Methode erhält den <xref:System.Diagnostics.Activity> sowie eine nutzlastobjekt, das die ausgehende Anforderung darstellt. Ein <xref:System.Diagnostics.DiagnosticSource> Abonnent hat dann die Möglichkeit, die ausgehende Anforderung zu aktualisieren, bevor sie gesendet wird.
+Der `OnActivityExport` -Methode <xref:System.Diagnostics.Activity> werden sowohl als auch ein Nutz Last Objekt, das die ausgehende Anforderung darstellt, zugewiesen. Ein <xref:System.Diagnostics.DiagnosticSource> Abonnent hat dann die Möglichkeit, die ausgehende Anforderung zu aktualisieren, bevor Sie gesendet wird.
  
-Beachten Sie, dass diese Methode wird nur selten verwendet, bei der Instrumentation-Websites (nur diese Websites, die auf eine ausgehende Grenze des Prozesses befinden).   Darüber hinaus ist in der Regel die Standardrichtlinie, dass die Instrumenation-Website (z. B., um alle Aktivitäten in einer bestimmten ausgehenden Konvention statusübertragung) führt wahrscheinlich zu funktionieren. Diese Methode ist nur für Fälle, d. h. ein Problem aufgetreten. Daher diese Methode sollte nur sehr selten verwendet werden und ist größtenteils hier Symetry mit `OnActivityImport` und die zukunftsfähigkeit.
+Beachten Sie, dass diese Methode selten an Instrumentations Standorten verwendet wird (nur die Standorte, die sich an einer ausgehenden Prozess Grenze befinden).   Darüber hinaus ist die Standard Richtlinie, die von der Instrumentierungs-Website durchführt (z. b. zum Übertragen des gesamten Aktivitäts Zustands in einer bestimmten ausgehenden Konvention), in der Regel in Ordnung. Bei dieser Methode handelt es sich nur um Fälle, in denen ein Problem vorliegt. Daher sollte diese Methode sehr selten verwendet werden und ist größtenteils für die Symetrie mit `OnActivityImport` und zukünftiger Absicherung.
 
-Beachten Sie, dass `payload` typisiert ist, als ein <xref:System.Object> hier allerdings eine bestimmte Instrumentation-Standort und dem Abonnenten müssen den Typ der Nutzlast kennen und daher umgewandelt und Decodieren bei Bedarf.
+Beachten Sie `payload` , dass <xref:System.Object> hier als typisiert ist, aber eine bestimmte Instrumentierungs Site und ein Abonnent den Typ der Nutzlast kennen und diese ggf. umwandeln und decodieren.
 
          ]]></format>
-         </remarks>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="OnActivityImport">
@@ -180,19 +180,19 @@ Beachten Sie, dass `payload` typisiert ist, als ein <xref:System.Object> hier al
         <param name="activity">Die Aktivität, die von einem externen Ereignis betroffen ist.</param>
         <param name="payload">Eine Nutzlast, die die eingehende Anforderung darstellt.</param>
         <summary>Überträgt den Status von außerhalb des Prozesses stattfindenden Ereignissen oder Vorgängen, wie z.B. einer eingehenden Anfrage, auf eine Aktivität.</summary>
-        <remarks>  
+        <remarks>
           <format type="text/markdown"><![CDATA[  
 
-Wenn eine Instumentation-Website eine neue Aktivität als Reaktion auf ein Ereignis außerhalb des Prozesses erstellt werden, z. B. einer eingehenden HTTP Anforderung), die `OnActivityImport` -Methode ermöglicht es, diesen Standort wird erstellen möchten, einen neuen Status der Aktivität und die Übertragung in die eingehende Anforderung an die Aktivität. 
+Wenn eine instanzwebsite eine neue Aktivität als Reaktion auf ein Ereignis außerhalb des Prozesses erstellt (z. b. eine HTTP-Eingabe Anforderung), ermöglicht `OnActivityImport` die-Methode der Website, eine neue Aktivität zu erstellen und den Status von der eingehenden Anforderung an den zu übertragen. aktiv. 
 
-Soweit möglich, dies sollte erfolgen von der Instrumentation-Website, weil es ein Vertrag zwischen ist dem <xref:System.Diagnostics.Activity> und der eingehenden Anforderung Logik des Standorts der Instrumentation.   Allerdings kann die Website für die Instrumentation Richtlinie nicht verarbeiten. (Z. B. wenn Sampling erfolgt, sollte genau die Anforderungen Stichproben erstellt werden?) In diesen Fällen muss der Standort für die Instrumentation einen Rückruf an an das Protokollierungssystem, und bitten, um die Richtlinie (z. B. entscheiden, ob der Aktivität "Sampling" Bit festgelegt werden soll) zu beheben. Dies ist der Zweck der `OnActivityImport` Methode. Es wird zugewiesen, die Aktivität als auch auf ein nutzlastobjekt, die der eingehenden Anforderung darstellt. Abonnenten der <xref:System.Diagnostics.DiagnosticSource> dann haben die Möglichkeit, diese Aktivität nach Bedarf aktualisiert. 
+Soweit dies möglich ist, sollte dies von der Instrumentations Site erfolgen, weil ein Vertrag zwischen der <xref:System.Diagnostics.Activity> -und der-Anforderungs Logik an der Instrumentations Site vorhanden ist.   Die Instrumentations Site kann die Richtlinie jedoch nicht verarbeiten. (Wenn z. b. die Stichprobenentnahme durchgeführt wird, genau welche Anforderungen sollten angenommen werden?) In diesen Fällen muss die Instrumentations Site einen Rückruf an das Protokollierungs System durchsetzen und ihn auffordern, Richtlinien aufzulösen (z. b. um zu entscheiden, ob das "Sampling"-Bit der Aktivität festgelegt werden soll). Dies ist der Zweck `OnActivityImport` der-Methode. Ihm wird die-Aktivität sowie ein Nutz Last Objekt zugewiesen, das die incomminganforderung darstellt. Die Abonnenten von <xref:System.Diagnostics.DiagnosticSource> haben dann die Möglichkeit, diese Aktivität nach Bedarf zu aktualisieren. 
 
-Diese Methode wird nur selten verwendet, bei der Instrumentation-Websites (nur diese Websites, die auf die Begrenzung des Prozesses befinden) und der Standort für die Verwaltungsinstrumentation implementiert einige Standardrichtlinie (wird die Aktivität *einige* Möglichkeit), und daher es nicht notwendig ist, Diese Standardrichtlinie wird, wird überschreiben Sie diese Methode. Das heißt, sollten diese Methode in sehr selten (aber oft wichtige) Fällen überschrieben werden.
+Diese Methode wird nur selten an Instrumentations Standorten verwendet (nur die Standorte, die sich in der Prozess Grenze befinden), und die Instrumentierungs Site implementiert eine Standard Richtlinie (die Aktivität wird auf *irgendeine* Weise festgelegt). Daher ist es nicht erforderlich, diese Methode außer Kraft zu setzen, wenn Diese Standard Richtlinie ist in Ordnung. Anders ausgedrückt: Diese Methode sollte in sehr seltenen Fällen (aber häufig wichtig) überschrieben werden.
 
-Beachten Sie, dass `payload` typisiert ist, als <xref:System.Object> hier allerdings eine bestimmte Instrumentation-Standort und dem Abonnenten werden den Typ der Nutzlast kennen und daher umgewandelt und Decodieren bei Bedarf.
+Beachten Sie `payload` , dass so <xref:System.Object> typisiert ist, dass eine bestimmte Instrumentierungs Site und ein Abonnent den Typ der Nutzlast kennen und daher bei Bedarf umwandeln und decodieren.
 
          ]]></format>
-         </remarks>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="StartActivity">
@@ -224,11 +224,11 @@ Beachten Sie, dass `payload` typisiert ist, als <xref:System.Object> hier allerd
         <remarks>
           <format type="text/markdown"><![CDATA[
            
-Die <xref:System.Diagnostics.Activity> beschreibt die logische Operation, seinen Kontext sowie die übergeordnete Beziehung der aktuellen <xref:System.Diagnostics.Activity> durchläuft die vorgangsverarbeitung.
+Beschreibt die logische Operation, den Kontext und die übergeordnete Beziehung. der aktuelle <xref:System.Diagnostics.Activity> Fluss durchläuft die Vorgangs Verarbeitung. <xref:System.Diagnostics.Activity>
 
-Diese Methode startet die angegebene <xref:System.Diagnostics.Activity>, verwaltet eine globale <xref:System.Diagnostics.Activity.Current?displayProperty=nameWithType> und <xref:System.Diagnostics.Activity.Parent?displayProperty=nameWithType> Aktivität für die angegebenen <xref:System.Diagnostics.Activity>, und benachrichtigt Consumer, ein neues <xref:System.Diagnostics.Activity> gestartet wurde. Consumer können auf zugreifen <xref:System.Diagnostics.Activity.Current?displayProperty=nameWithType> Kontext hinzufügen bzw. Erweitern der Telemetriedaten.
+Diese Methode startet den angegebenen <xref:System.Diagnostics.Activity>, verwaltet eine globale <xref:System.Diagnostics.Activity.Current?displayProperty=nameWithType> - <xref:System.Diagnostics.Activity.Parent?displayProperty=nameWithType> Aktivität und-Aktivität <xref:System.Diagnostics.Activity>für den angegebenen und benachrichtigt Consumer, dass <xref:System.Diagnostics.Activity> ein neuer gestartet wurde. Consumer können auf <xref:System.Diagnostics.Activity.Current?displayProperty=nameWithType> zugreifen, um Kontext und/oder eine Erweiterung der Telemetrie hinzuzufügen.
 
-Hersteller können zusätzliche Details an den Consumer in der Nutzlast übergeben.
+Producer können zusätzliche Details an den Consumer in der Nutzlast übergeben.
 
            ]]></format>
         </remarks>
@@ -262,9 +262,9 @@ Hersteller können zusätzliche Details an den Consumer in der Nutzlast übergeb
         <remarks>
           <format type="text/markdown"><![CDATA[  
 
-Hersteller können zusätzliche Details an den Consumer in der Nutzlast übergeben.
+Producer können zusätzliche Details an den Consumer in der Nutzlast übergeben.
 
-Consumer können auf zugreifen <xref:System.Diagnostics.Activity.Current?displayProperty=nameWithType> Kontext hinzufügen bzw. Erweitern der Telemetriedaten.
+Consumer können auf <xref:System.Diagnostics.Activity.Current?displayProperty=nameWithType> zugreifen, um Kontext und/oder eine Erweiterung der Telemetrie hinzuzufügen.
 
 
          ]]></format>
@@ -302,13 +302,13 @@ Consumer können auf zugreifen <xref:System.Diagnostics.Activity.Current?display
         <remarks>
           <format type="text/markdown"><![CDATA[  
 
-Jede Benachrichtigung ist ein Name zugewiesen, der angibt, sowie ein Objekt (i. d. r. ein anonymer Typ), die willkürlichen Informationen an der Benachrichtigung übergeben bereitstellt.  
+Jeder Benachrichtigung wird ein Name zugewiesen, der Sie identifiziert, sowie ein Objekt (in der Regel ein anonymer Typ), der beliebige Informationen bereitstellt, die an die Benachrichtigung übergeben werden.  
 
-`name` sollte kurz sein. Verwenden Sie einen vollqualifizierten Namen nicht, es sei denn, Sie zu haben, um Mehrdeutigkeit zu vermeiden, da `name` muss global eindeutig sein. In der Regel *componentName.eventName*, wobei *ComponentName* und *EventName* sind Zeichenfolgen mit höchstens 10 Zeichen sind ein guter Kompromiss.
+`name`sollte kurz sein. Verwenden Sie keinen voll qualifizierten Namen, es sei denn, Sie müssen die Mehrdeutigkeit vermeiden, da `name` global eindeutig sein muss. In der Regel sind " *componentname. EventName*", wobei " *componentname* " und " *EventName* " Zeichen folgen mit weniger als 10 Zeichen sind, eine gute Gefährdung.
 
-Benachrichtigungs-Namen dürfen keine `.` darin da Komponentennamen Punkte aufweisen und für diese beiden Punkte haben führt zu Mehrdeutigkeiten. Wir empfehlen die Verwendung von `_` stattdessen.
+Benachrichtigungs Namen dürfen nicht `.` enthalten sein, da Komponentennamen Punkte aufweisen und beide Punkte zu Mehrdeutigkeit führen. Wir empfehlen Ihnen, stattdessen `_` zu verwenden.
 
-Wird davon ausgegangen Sie, dass Listener verwendet Zeichenfolge voranstellen, um Gruppen zu filtern. Aus diesem Grund ist eine Hierarchie von Komponentennamen bewährt.
+Angenommen, die Listener verwenden die Präfixen von Zeichen folgen, um Gruppen zu filtern. Daher ist es eine bewährte Vorgehensweise, eine Hierarchie von Komponentennamen zu haben.
 
          ]]></format>
         </remarks>

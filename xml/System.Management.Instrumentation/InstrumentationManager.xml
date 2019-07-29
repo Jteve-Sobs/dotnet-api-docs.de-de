@@ -22,16 +22,16 @@ Hinweis: Die WMI .NET-Bibliotheken werden jetzt als abgeschlossen betrachtet, un
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Entkoppelte Anbieter werden von einer Anwendung gehostet. Zwei Methoden können von der Anwendung verwendet werden, um Instanzen der WMI-Klassen verfügbar zu machen: Veröffentlichen/widerrufen oder die Callback-Methode. Die Callback-Methode verwendet die <xref:System.Management.Instrumentation.InstrumentationManager.RegisterType%2A> und <xref:System.Management.Instrumentation.InstrumentationManager.UnregisterType%2A> Methoden.  
+ Entkoppelte Anbieter werden von einer Anwendung gehostet. Zwei Methoden können von der Anwendung verwendet werden, um Instanzen von WMI-Klassen verfügbar zu machen: veröffentlichen/widerrufen oder Rückruf Methode. Die Rückruf Methode verwendet die <xref:System.Management.Instrumentation.InstrumentationManager.RegisterType%2A> - <xref:System.Management.Instrumentation.InstrumentationManager.UnregisterType%2A> Methode und die-Methode.  
   
- Im Veröffentlichen/Revoke-Modell bietet die WMI-Infrastruktur Standardverhalten für viele der Methoden Sie sich in der Rückrufmethode zu schreiben müssen. Diese umfassen die Enumeration und Methoden zu binden. In diesem Modell wird die Anwendung Instanzen erstellt und veröffentlicht werden. Die Anwendung ist dafür verantwortlich, sicherzustellen, dass die wichtigsten Eigenschaften der Klassen berücksichtigt werden. Die Anwendung ist auch verantwortlich für das Löschen von Instanzen.  
+ Im Veröffentlichungs-/widerrufungsmodell stellt die WMI-Infrastruktur Standardverhalten für viele der Methoden bereit, die Sie selbst in der Rückruf Methode schreiben müssen. Hierzu gehören die Enumerationsmethoden und die Bind-Methode. In diesem Modell werden von der Anwendung Instanzen erstellt und veröffentlicht. Die Anwendung ist dafür verantwortlich, sicherzustellen, dass die Schlüsseleigenschaften der Klassen beachtet werden. Die Anwendung ist auch für das Löschen von-Instanzen verantwortlich.  
   
- Die WMI-Infrastruktur erwartet die Anwendung Methoden verfügen über die Behandlung von Enumeration, die Bindung und alle anderen Methoden erforderlich, um die Funktionalität des Anbieters zu implementieren, in dem rückrufmodell. Bei der Anwendung für diese Funktionalität wird, und schlägt fehl, wenn er nicht vorhanden oder wurde nicht richtig implementiert. Die Anwendung registriert den Typ der WMI-Klassen mit der Infrastruktur, durch den Aufruf <xref:System.Management.Instrumentation.InstrumentationManager.RegisterType%2A> und gibt an, dass er nicht mehr über die WMI-Klassen, die verfügbar gemacht werden, durch den Aufruf will <xref:System.Management.Instrumentation.InstrumentationManager.UnregisterType%2A>.  
+ Im Rückruf Modell erwartet die WMI-Infrastruktur Methoden, die die Enumeration, die Bindung und alle anderen Methoden, die zum Implementieren der Funktionalität des Anbieters erforderlich sind, verarbeiten. Sie ruft die Anwendung für diese Funktionalität auf und schlägt fehl, wenn Sie nicht vorhanden oder nicht ordnungsgemäß implementiert ist. Die Anwendung registriert den Typ der WMI-Klassen bei der-Infrastruktur, <xref:System.Management.Instrumentation.InstrumentationManager.RegisterType%2A> indem aufgerufen wird, und gibt an, dass die WMI-Klassen <xref:System.Management.Instrumentation.InstrumentationManager.UnregisterType%2A>nicht mehr durch Aufrufen von verfügbar gemacht werden sollen.  
   
    
   
 ## Examples  
- Im folgenden Beispiel wird veranschaulicht, wie das Veröffentlichen/Revoke-Modell verwendet wird. Zwei Instanzen der Routerklasse erstellt und veröffentlicht. Sie werden später widerrufen.  
+ Im folgenden Beispiel wird veranschaulicht, wie das Veröffentlichungs-/widerrufenmodell verwendet wird. Es werden zwei Instanzen der Routerklasse erstellt und veröffentlicht. Sie werden später widerrufen.  
   
 ```  
 public class Sample_InstanceProvider  
@@ -52,7 +52,7 @@ return 0;
 }  
 ```  
   
- Im nächsten Beispiel wird die Callback-Methode der Registrierung verwendet, um die RouterNew-Klasse verfügbar zu machen.  
+ Im nächsten Beispiel wird die Rückruf Methode der Registrierung verwendet, um die routernew-Klasse verfügbar zu machen.  
   
 ```  
 public int MainNew(string[] args)   
@@ -122,7 +122,7 @@ public int MainNew(string[] args)
       </Parameters>
       <Docs>
         <param name="managementAssembly">Die zu registrierende Assembly.</param>
-        <summary>Registriert eine Assembly mit der WMI-Infrastruktur.</summary>
+        <summary>Registriert eine Assembly bei der WMI-Infrastruktur.</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -147,7 +147,7 @@ public int MainNew(string[] args)
       </Parameters>
       <Docs>
         <param name="managementType">Der Typ der Klasse.</param>
-        <summary>Registriert eine Klasse mit der WMI-Infrastruktur.</summary>
+        <summary>Registriert eine Klasse bei der WMI-Infrastruktur.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -218,8 +218,8 @@ static int Main(string[] args)
         <Parameter Name="managementAssembly" Type="System.Reflection.Assembly" />
       </Parameters>
       <Docs>
-        <param name="managementAssembly">Die registrierte Assembly aufgehoben werden.</param>
-        <summary>Hebt die Registrierung einer derzeit bei der WMI-Infrastruktur registrierten Assembly.</summary>
+        <param name="managementAssembly">Die registrierte Assembly, deren Registrierung aufgehoben werden soll.</param>
+        <summary>Hebt die Registrierung einer derzeit bei der WMI-Infrastruktur registrierten Assembly auf.</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -243,8 +243,8 @@ static int Main(string[] args)
         <Parameter Name="managementType" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="managementType">Der registrierte Typ aufgehoben werden.</param>
-        <summary>Hebt die Registrierung einer bei der WMI-Infrastruktur registrierten Klasse.</summary>
+        <param name="managementType">Der registrierte Typ, dessen Registrierung aufgehoben werden soll.</param>
+        <summary>Hebt die Registrierung einer bei der WMI-Infrastruktur registrierten Klasse auf.</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
