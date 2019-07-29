@@ -23,38 +23,38 @@
     </Interface>
   </Interfaces>
   <Docs>
-    <summary>Gibt den generischen Rückgängig/Wiederholen-Funktionalität zur Entwurfszeit an.</summary>
+    <summary>Gibt generische Funktionen zum Rückgängigmachen/Wiederholen zur Entwurfszeit an.</summary>
     <remarks>
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die <xref:System.ComponentModel.Design.UndoEngine> abstrakte Klasse stellt eine Standardimplementierung der Rückgängig-Funktion zur Entwurfszeit bereit. Eine Rückgängig-Komponente stellt eine Arbeitseinheit rückgängig gemacht werden kann. Diese Einheit wird auf einen Stapel hinzugefügt, und der Benutzer kann dann Schritt für Schritt den Stapel, um jede Aktion rückgängig zu machen. Rückgängig-Komponenten in der Regel dienen zum ein-oder auszuschalten, was bedeutet, dass dieser Aufruf zum Rückgängigmachen zweimal von der Anwendung, mit dessen anfänglichem Zustand zurückgegeben.  
+ Die <xref:System.ComponentModel.Design.UndoEngine> abstrakte-Klasse stellt zur Entwurfszeit eine Standard Implementierung der Rückgängig-Funktionalität bereit. Eine Rückgängig-Einheit stellt eine einzelne Einheit von nicht doable work dar. Diese Einheit wird einem Stapel hinzugefügt, und der Benutzer kann dann den Stapel durchlaufen, um jede Aktion rückgängig zu machen. Rückgängig-Einheiten sind in der Regel für ein-/ausschalten vorgesehen. Dies bedeutet, dass die Anwendung durch das doppelte Aufrufen von Rückgängig in den Anfangszustand  
   
- Die <xref:System.ComponentModel.Design.UndoEngine> -Klasse nutzt die folgenden Eigenschaften von Objekten, die im Designer ausgeführt wird:  
+ Die <xref:System.ComponentModel.Design.UndoEngine> -Klasse nutzt die folgenden Eigenschaften von Objekten, die im Designer ausgeführt werden:  
   
--   Alle relevanten Objekte können in einem Format vom Designerladeprogramm gespeichert werden.  
+-   Alle interessanten Objekte können vom Designer Lade Modul in einem Format persistent gespeichert werden.  
   
--   Alle Objekte lösen eigenschaftsänderungen-Benachrichtigungen, wenn eine Eigenschaft geändert wird.  
+-   Alle-Objekte rufen Benachrichtigungen über Eigenschafts Änderungen auf, wenn eine Eigenschaft geändert wird.  
   
--   <xref:System.ComponentModel.Design.IDesignerHost> Stellt das Konzept der Transaktionen, die verwendet werden können, um eine Rückgängig-Aktion zu erstellen, die mehrere kleinere Aktionen umfasst.  
+-   <xref:System.ComponentModel.Design.IDesignerHost>bietet die Idee von Transaktionen, die verwendet werden können, um eine Rückgängig-Aktion zu fabrizieren, die mehrere kleinere Aktionen umfasst.  
   
- Mit diesen Features <xref:System.ComponentModel.Design.UndoEngine> können alle Rückgängig-Komponenten automatisch erstellt.  
+ Mit diesen Features <xref:System.ComponentModel.Design.UndoEngine> kann alle benötigten rückgängig-Einheiten automatisch fabrizieren.  
   
 > [!NOTE]
->  Ändern Sie Eigenschaftswerte nicht direkt auf. Die <xref:System.ComponentModel.Design.UndoEngine> Klasse müssen Sie die entsprechende <xref:System.ComponentModel.TypeDescriptor> um Eigenschaftswerte zu ändern.  
+>  Ändern Sie die Eigenschaftswerte nicht direkt. Die <xref:System.ComponentModel.Design.UndoEngine> -Klasse erfordert, dass Sie die <xref:System.ComponentModel.TypeDescriptor> entsprechenden verwenden, um Eigenschaftswerte zu ändern.  
   
- <xref:System.ComponentModel.Design.UndoEngine> Monitore für zum Erstellen von änderungsbenachrichtigungen Rückgängig-Komponenten, und die Einheiten selbst bestehen, der Status des serialisierten Objekts. Die folgende Tabelle zeigt die Dienste, die verfügbar, wenn sein müssen <xref:System.ComponentModel.Design.UndoEngine> erstellt wird.  
+ <xref:System.ComponentModel.Design.UndoEngine>überwacht auf Änderungs Benachrichtigungen, um rückgängig-Einheiten zu erstellen, und die eigentlichen Einheiten bestehen aus serialisierten Objekt Zuständen. In der folgenden Tabelle sind die Dienste aufgeführt, die bei <xref:System.ComponentModel.Design.UndoEngine> der Erstellung von verfügbar sein müssen.  
   
 |Dienst|Beschreibung|  
 |-------------|-----------------|  
-|<xref:System.ComponentModel.Design.Serialization.ComponentSerializationService>|Eigenschaften- und Objektwerte für eine Komponente speichert, bevor und nachdem eine Änderung vorgenommen wird.|  
-|<xref:System.ComponentModel.Design.IComponentChangeService>|Benachrichtigt die rückgängig-Engine von Änderungen an der Komponenten.|  
-|<xref:System.ComponentModel.Design.IDesignerHost>|Zum Nachverfolgen von Transaktionen verwendet.|  
+|<xref:System.ComponentModel.Design.Serialization.ComponentSerializationService>|Speichert Eigenschafts-und Objektwerte für eine Komponente vor und nach der Änderung.|  
+|<xref:System.ComponentModel.Design.IComponentChangeService>|Benachrichtigt die rückgängig-Engine über Änderungen an-Komponenten.|  
+|<xref:System.ComponentModel.Design.IDesignerHost>|Wird zum Nachverfolgen von Transaktionen verwendet.|  
   
 > [!NOTE]
->  Da die <xref:System.ComponentModel.Design.UndoEngine> Klasse erfordert <xref:System.ComponentModel.Design.Serialization.ComponentSerializationService> und <xref:System.ComponentModel.Design.IComponentChangeService>, es ist nur zur Entwurfszeit verfügbar.  
+>  Da die <xref:System.ComponentModel.Design.UndoEngine> -Klasse <xref:System.ComponentModel.Design.Serialization.ComponentSerializationService> und <xref:System.ComponentModel.Design.IComponentChangeService>erfordert, ist Sie nur zur Entwurfszeit verfügbar.  
   
- Die rückgängig-Engine verfolgt Transaktionen und erstellt eine einzelne Rückgängig-Einheit, die eine Transaktion umfasst. Die rückgängig-Engine hat daher Kontrolle über die Dauer der Aktion rückgängig zu machen. Da Transaktionen benannt werden können, erben rückgängig zu machende Aktionen ihre Namen aus der aktuellen Transaktion. Wenn keine Transaktion verfügbar ist, und eine Änderung gemeldet wurde, erstellt die rückgängig-Engine einen Rückgängignamen, die basierend auf den Typ der Änderung (z. B. "Change Property 'Text'").  
+ Die rückgängig-Engine verfolgt Transaktionen und erstellt eine einzelne Rückgängig-Einheit, die eine Transaktion umfasst. Folglich hat die rückgängig-Engine die Kontrolle über die Dauer einer nicht doable-Aktion. Da auch Transaktionen benannt werden können, erben nicht doable-Aktionen ihre Namen von der aktuellen Transaktion. Wenn keine Transaktion verfügbar ist und eine Änderung gemeldet wird, erstellt die rückgängig-Engine basierend auf dem Änderungstyp einen rückgängig-Namen (z. b. "Eigenschaft ändern").  
   
  ]]></format>
     </remarks>
@@ -92,12 +92,12 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die <xref:System.ComponentModel.Design.UndoEngine> benötigt mehrere Dienste die `provider` -Parameters.  
+ Erfordert, dass mehrere Dienste aus `provider` dem-Parameter nützlich sind. <xref:System.ComponentModel.Design.UndoEngine>  
   
  ]]></format>
         </remarks>
         <exception cref="T:System.ArgumentNullException"><paramref name="provider" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.NotSupportedException">Ein erforderlicher Dienst nicht gefunden. Finden Sie unter <see cref="T:System.ComponentModel.Design.UndoEngine" /> für erforderliche Dienste. Wenn Sie diesen Dienst entfernt haben, stellen Sie sicher, dass Sie einen Ersatz bereitstellen.</exception>
+        <exception cref="T:System.NotSupportedException">Ein erforderlicher Dienst kann nicht gefunden werden. Die erforderlichen Dienste finden Sie unter <see cref="T:System.ComponentModel.Design.UndoEngine" />. Wenn Sie diesen Dienst entfernt haben, stellen Sie sicher, dass Sie einen Ersatz bereitstellen.</exception>
         <altmember cref="T:System.ComponentModel.Design.UndoEngine.UndoUnit" />
         <altmember cref="T:System.ComponentModel.Design.IDesignerHost" />
         <altmember cref="T:System.IServiceProvider" />
@@ -127,13 +127,13 @@
         <Parameter Name="unit" Type="System.ComponentModel.Design.UndoEngine+UndoUnit" />
       </Parameters>
       <Docs>
-        <param name="unit">Die Rückgängig-Komponente hinzufügen</param>
-        <summary>Fügt eine <see cref="T:System.ComponentModel.Design.UndoEngine.UndoUnit" /> der Rückgängig-Stapel.</summary>
+        <param name="unit">Die hinzuzufügende Rückgängigeinheit.</param>
+        <summary>Fügt dem Rückgängigstapel eine <see cref="T:System.ComponentModel.Design.UndoEngine.UndoUnit" /> hinzu.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Erstellen der `unit` Parameter durch Aufrufen der <xref:System.ComponentModel.Design.UndoEngine.CreateUndoUnit%2A> Methode.  
+ Erstellen Sie `unit` den Parameter, indem <xref:System.ComponentModel.Design.UndoEngine.CreateUndoUnit%2A> Sie die-Methode aufrufen.  
   
  ]]></format>
         </remarks>
@@ -165,17 +165,17 @@
         <Parameter Name="primary" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="name">Der Name des zu erstellenden Einheit.</param>
-        <param name="primary"><see langword="true" /> die erste einer Reihe von geschachtelten Einheiten zu erstellen; <see langword="false" /> um nachfolgende geschachtelte Einheiten zu erstellen.</param>
+        <param name="name">Der Name der zu erstellenden Einheit.</param>
+        <param name="primary"><see langword="true" />, um die erste einer Reihe von geschachtelten Einheiten zu erstellen, <see langword="false" />, um nachfolgende geschachtelte Einheiten zu erstellen.</param>
         <summary>Erstellt einen neuen <see cref="T:System.ComponentModel.Design.UndoEngine.UndoUnit" />.</summary>
         <returns>Ein neues <see cref="T:System.ComponentModel.Design.UndoEngine.UndoUnit" /> mit einem angegebenen Namen.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die standardmäßige Implementierung der <xref:System.ComponentModel.Design.UndoEngine.CreateUndoUnit%2A> Methode gibt einfach eine neue <xref:System.ComponentModel.Design.UndoEngine.UndoUnit>.  
+ Die Standard Implementierung <xref:System.ComponentModel.Design.UndoEngine.CreateUndoUnit%2A> der-Methode gibt einfach einen neuen <xref:System.ComponentModel.Design.UndoEngine.UndoUnit>zurück.  
   
- Standardmäßig <xref:System.ComponentModel.Design.UndoEngine> hat keine Auswirkungen, die mit der `primary` Parameter, aber einige Implementierungen von "Rückgängig", z. B. die im Zusammenhang mit COM `Microsoft.VisualStudio.OLE.Interop.IOleParentUndoUnit` -Entwurfsmuster, die möglicherweise den Unterschied zwischen einer primären Einheit und seine untergeordneten Elemente zu identifizieren.  
+ In der Standard <xref:System.ComponentModel.Design.UndoEngine> Einstellung wird mit dem `primary` -Parameter nicht verwendet, aber einige Implementierungen von Rückgängig (z. `Microsoft.VisualStudio.OLE.Interop.IOleParentUndoUnit` b. solche, die das com-Entwurfsmuster betreffen) müssen möglicherweise den Unterschied zwischen einer primären Einheit und ihren untergeordneten Elementen identifizieren.  
   
  ]]></format>
         </remarks>
@@ -211,7 +211,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Bevor Sie die <xref:System.ComponentModel.Design.UndoEngine.DiscardUndoUnit%2A> -Methode aufgerufen wird, die Rückgängig-Komponente wird geschlossen, und klicken Sie dann rückgängig gemacht.  
+ Bevor die <xref:System.ComponentModel.Design.UndoEngine.DiscardUndoUnit%2A> -Methode aufgerufen wird, wird die Rückgängig-Einheit geschlossen und dann rückgängig gemacht.  
   
  ]]></format>
         </remarks>
@@ -319,7 +319,7 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Aktiviert oder deaktiviert die <see cref="T:System.ComponentModel.Design.UndoEngine" />.</summary>
+        <summary>Aktiviert oder deaktiviert das <see cref="T:System.ComponentModel.Design.UndoEngine" />.</summary>
         <value><see langword="true" />, wenn das <see cref="T:System.ComponentModel.Design.UndoEngine" /> aktiviert ist, andernfalls <see langword="false" />.</value>
         <remarks>To be added.</remarks>
       </Docs>
@@ -350,10 +350,10 @@
       <Docs>
         <param name="serviceType">Der Typ des abzurufenden Diensts.</param>
         <summary>Ruft den angeforderten Dienst ab.</summary>
-        <returns>Der angeforderte Dienst, falls gefunden.</returns>
+        <returns>Der angeforderte Dienst, wenn vorhanden.</returns>
         <remarks>To be added.</remarks>
         <exception cref="T:System.ArgumentNullException"><paramref name="serviceType" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.NotSupportedException"><paramref name="serviceType" /> ist erforderlich, jedoch nicht gefunden werden kann. Wenn Sie diesen Dienst entfernt haben, stellen Sie sicher, dass Sie einen Ersatz bereitstellen.</exception>
+        <exception cref="T:System.NotSupportedException"><paramref name="serviceType" /> ist erforderlich, wurde jedoch nicht gefunden. Wenn Sie diesen Dienst entfernt haben, stellen Sie sicher, dass Sie einen Ersatz bereitstellen.</exception>
       </Docs>
     </Member>
     <Member MemberName="GetService">
@@ -382,7 +382,7 @@
       <Docs>
         <param name="serviceType">Der Typ des abzurufenden Diensts.</param>
         <summary>Ruft den angeforderten Dienst ab.</summary>
-        <returns>Der angeforderte Dienst oder <see langword="null" /> Wenn der angeforderte Dienst nicht gefunden wird.</returns>
+        <returns>Der angeforderte Dienst oder <see langword="null" />, wenn der angeforderte Dienst nicht gefunden wird.</returns>
         <remarks>To be added.</remarks>
         <exception cref="T:System.ArgumentNullException"><paramref name="serviceType" /> ist <see langword="null" />.</exception>
       </Docs>
@@ -466,7 +466,7 @@
         <ReturnType>System.EventHandler</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Tritt auf, unmittelbar bevor eine Rückgängigaktion ausgeführt wird.</summary>
+        <summary>Tritt sofort auf, bevor eine Rückgängigaktion ausgeführt wird.</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -491,8 +491,8 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gibt an, ob eine Rückgängigaktion ausgeführt wird.</summary>
-        <value><see langword="true" /> Wenn eine Rückgängigaktion ausgeführt wird; andernfalls <see langword="false" />.</value>
+        <summary>Gibt an, ob gerade eine Rückgängigaktion ausgeführt wird.</summary>
+        <value><see langword="true" />, wenn eine Rückgängigaktion ausgeführt wird, andernfalls <see langword="false" />.</value>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -517,12 +517,12 @@
         <ReturnType>System.EventHandler</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Tritt auf, sobald eine Rückgängigaktion ausgeführt wird.</summary>
+        <summary>Tritt sofort auf, nachdem eine Rückgängigaktion ausgeführt wurde.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die <xref:System.ComponentModel.Design.UndoEngine.Undone> Ereignis wird immer ausgelöst, selbst wenn eine Ausnahme ausgelöst wird.  
+ Das <xref:System.ComponentModel.Design.UndoEngine.Undone> -Ereignis wird immer ausgelöst, auch wenn eine Ausnahme ausgelöst wird.  
   
  ]]></format>
         </remarks>

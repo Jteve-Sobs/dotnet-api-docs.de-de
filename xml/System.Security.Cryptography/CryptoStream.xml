@@ -42,17 +42,17 @@
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die common Language Runtime verwendet ein streamorientiertes Design für die Kryptografie. Der Kern dieses Designs ist <xref:System.Security.Cryptography.CryptoStream>. Alle kryptografischen Objekte implementiert <xref:System.Security.Cryptography.CryptoStream> können verkettet werden, zusammen mit der alle Objekte, implementieren <xref:System.IO.Stream>, sodass die gestreamte Ausgabe von einem Objekt in der Eingabe eines anderen Objekts verwendet werden kann. Das Zwischenergebnis (die Ausgabe des ersten Objekts) muss nicht separat gespeichert werden.  
+ Der Common Language Runtime verwendet einen streamorientierten Entwurf für die Kryptografie. Der Kern dieses Entwurfs ist <xref:System.Security.Cryptography.CryptoStream>. Alle kryptografischen Objekte, die <xref:System.Security.Cryptography.CryptoStream> implementieren, können mit allen Objekten verkettet werden <xref:System.IO.Stream>, die implementieren. Daher kann die per Streaming übertragene Ausgabe eines Objekts in die Eingabe eines anderen Objekts eingegeben werden. Das Zwischenergebnis (die Ausgabe des ersten Objekts) muss nicht separat gespeichert werden.  
   
 > [!IMPORTANT]
->  Dieser Typ implementiert die <xref:System.IDisposable>-Schnittstelle. Wenn Sie mit dem Typ haben, sollten Sie freigeben es entweder direkt oder indirekt durch Aufrufen der <xref:System.Security.Cryptography.CryptoStream.Clear%2A> -Methode, die wiederum ruft die <xref:System.IDisposable> Implementierung. Zum direkten Löschen des Typs rufen Sie seine <xref:System.Security.Cryptography.CryptoStream.Clear%2A>-Methode in einem `try`/`catch`-Block auf. Zum indirekten Löschen verwenden Sie ein Sprachkonstrukt wie `using` (in C#) oder `Using` (in Visual Basic). Weitere Informationen finden Sie im Abschnitt „Verwenden eines Objekts, das IDisposable implementiert“ des Themas „Die <xref:System.IDisposable>-Schnittstelle“.  
+>  Dieser Typ implementiert die <xref:System.IDisposable>-Schnittstelle. Wenn Sie die Verwendung des Typs abgeschlossen haben, sollten Sie ihn entweder direkt oder indirekt durch Aufrufen seiner <xref:System.Security.Cryptography.CryptoStream.Clear%2A> -Methode verwerfen, die wiederum seine <xref:System.IDisposable> -Implementierung aufruft. Zum direkten Löschen des Typs rufen Sie seine <xref:System.Security.Cryptography.CryptoStream.Clear%2A>-Methode in einem `try`/`catch`-Block auf. Zum indirekten Löschen verwenden Sie ein Sprachkonstrukt wie `using` (in C#) oder `Using` (in Visual Basic). Weitere Informationen finden Sie im Abschnitt „Verwenden eines Objekts, das IDisposable implementiert“ des Themas „Die <xref:System.IDisposable>-Schnittstelle“.  
   
- Sie sollten immer explizit schließen Ihre <xref:System.Security.Cryptography.CryptoStream> Objekt, wenn Sie fertig sind mit der sie durch Aufrufen von der <xref:System.Security.Cryptography.CryptoStream.Clear%2A> Methode.  Entleert den zugrunde liegenden Stream und bewirkt, dass alle verbleibenden Datenblöcke von verarbeitet werden auf diese Weise die <xref:System.Security.Cryptography.CryptoStream> Objekt.  Jedoch, wenn eine Ausnahme auftritt, vor dem Aufruf der <xref:System.IO.Stream.Close%2A> -Methode, die <xref:System.Security.Cryptography.CryptoStream> Objekt kann nicht geschlossen werden.  Um sicherzustellen, dass die <xref:System.IO.Stream.Close%2A> Methode immer aufgerufen wird, rufen Sie die <xref:System.Security.Cryptography.CryptoStream.Clear%2A> Methode innerhalb der `finally` -Block eine `try` / `catch` Anweisung.  
+ Sie sollten das <xref:System.Security.Cryptography.CryptoStream> Objekt immer explizit schließen, nachdem Sie es verwendet haben, indem Sie <xref:System.Security.Cryptography.CryptoStream.Clear%2A> die-Methode aufrufen.  Dadurch wird der zugrunde liegende Stream geleert und bewirkt, dass alle verbleibenden Datenblöcke vom <xref:System.Security.Cryptography.CryptoStream> Objekt verarbeitet werden.  Wenn jedoch eine Ausnahme auftritt, bevor Sie die <xref:System.IO.Stream.Close%2A> -Methode aufruft, wird das <xref:System.Security.Cryptography.CryptoStream> Objekt möglicherweise nicht geschlossen.  Um sicherzustellen, <xref:System.IO.Stream.Close%2A> dass die-Methode immer aufgerufen wird, platzieren Sie <xref:System.Security.Cryptography.CryptoStream.Clear%2A> den Aufruf der `finally` -Methode im `try` -Block einer / `catch` -Anweisung.  
   
    
   
 ## Examples  
- Im folgenden Beispiel wird veranschaulicht, wie eine <xref:System.Security.Cryptography.CryptoStream> verschlüsseln eine Zeichenfolge. Diese Methode verwendet <xref:System.Security.Cryptography.RijndaelManaged> Klasse mit dem angegebenen <xref:System.Security.Cryptography.SymmetricAlgorithm.Key%2A> und Initialisierungsvektor (<xref:System.Security.Cryptography.SymmetricAlgorithm.IV%2A>).  
+ Im folgenden Beispiel wird veranschaulicht, wie eine <xref:System.Security.Cryptography.CryptoStream> -Zeichenfolge mit einem verschlüsselt wird. Diese Methode verwendet <xref:System.Security.Cryptography.RijndaelManaged> die-Klasse mit <xref:System.Security.Cryptography.SymmetricAlgorithm.Key%2A> dem angegebenen und dem angegebenen<xref:System.Security.Cryptography.SymmetricAlgorithm.IV%2A>Initialisierungs Vektor ().  
   
  [!code-csharp[Cryptography.Rijndael.Create.File#1](~/samples/snippets/csharp/VS_Snippets_CLR/cryptography.rijndael.create.file/cs/fileexample.cs#1)]
  [!code-vb[Cryptography.Rijndael.Create.File#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/cryptography.rijndael.create.file/vb/fileexample.vb#1)]  
@@ -101,7 +101,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Jedes Objekt, das von abgeleitet ist <xref:System.IO.Stream> übergeben werden kann, in der `stream` Parameter. Jedes Objekt, das implementiert <xref:System.Security.Cryptography.ICryptoTransform> (z. B. <xref:System.Security.Cryptography.HashAlgorithm>) übergeben werden kann, in der `transform` Parameter.  
+ Jedes Objekt, das von <xref:System.IO.Stream> abgeleitet wird, kann an `stream` den-Parameter übergeben werden. Alle Objekte, die <xref:System.Security.Cryptography.ICryptoTransform> implementieren ( <xref:System.Security.Cryptography.HashAlgorithm>z. b.), können `transform` an den-Parameter übergeben werden.  
   
  ]]></format>
         </remarks>
@@ -297,7 +297,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Suchvorgänge in nicht aktiviert ist eine <xref:System.Security.Cryptography.CryptoStream>, sodass diese Methode immer gibt `false`.  
+ Die Suche ist in einem <xref:System.Security.Cryptography.CryptoStream>nicht aktiviert, daher gibt diese Methode immer zurück. `false`  
   
  ]]></format>
         </remarks>
@@ -335,7 +335,7 @@
       </ReturnValue>
       <Docs>
         <summary>Ruft einen Wert ab, der angibt, ob in den aktuellen <see cref="T:System.Security.Cryptography.CryptoStream" /> geschrieben werden kann.</summary>
-        <value><see langword="true" />, wenn in den aktuellen Stream geschrieben werden kann; andernfalls <see langword="false" />.</value>
+        <value><see langword="true" />, wenn in den aktuellen Stream geschrieben werden kann, andernfalls <see langword="false" />.</value>
         <remarks>To be added.</remarks>
         <related type="Article" href="~/docs/standard/security/cryptographic-services.md">Kryptografische Dienste</related>
       </Docs>
@@ -375,9 +375,9 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Methode umschließt einen Aufruf des Typs <xref:System.IDisposable.Dispose%2A?displayProperty=nameWithType> Implementierung.  
+ Diese Methode umschließt einen Rückruf für die- <xref:System.IDisposable.Dispose%2A?displayProperty=nameWithType> Implementierung des Typs.  
   
- Aufrufen von `Dispose` können die Ressourcen, die von verwendet die <xref:System.Security.Cryptography.CryptoStream> , für andere Zwecke verschoben werden. Weitere Informationen zu `Dispose`, finden Sie unter [Bereinigen von nicht verwalteten Ressourcen](~/docs/standard/garbage-collection/unmanaged.md)  
+ Durch Aufrufen `Dispose` von können die Ressourcen ,dievonverwendetwerden,fürandereZweckeneuzugeordnetwerden.<xref:System.Security.Cryptography.CryptoStream> Weitere Informationen zu finden `Dispose`Sie unter [Bereinigen von nicht verwalteten Ressourcen](~/docs/standard/garbage-collection/unmanaged.md) .  
   
  ]]></format>
         </remarks>
@@ -450,16 +450,16 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Methode wird aufgerufen, von der öffentlichen `Dispose()` Methode und die `Finalize` Methode. `Dispose()` Ruft die geschützte `Dispose(Boolean)` -Methode mit der disposing-Parameter festgelegt `true`. `Finalize` Ruft `Dispose` mit festgelegter Freigabe auf, um `false`.  
+ Diese Methode wird von der öffentlichen `Dispose()` -Methode und der `Finalize` -Methode aufgerufen. `Dispose()`Ruft die geschützte `Dispose(Boolean)` -Methode auf, wobei der disposing `true`-Parameter auf festgelegt ist. `Finalize`Ruft `Dispose` auf, wobei disposing `false`auf festgelegt ist.  
   
  Wenn der `disposing`-Parameter `true` ist, gibt diese Methode sämtliche Ressourcen frei, die für verwaltete Objekte reserviert sind, auf die dieser <xref:System.Security.Cryptography.CryptoStream> verweist. Diese Methode ruft die `Dispose()`-Methode aller Objekte auf, auf die verwiesen wird.  
   
  ]]></format>
         </remarks>
         <block subset="none" type="overrides"><para>
-            <see langword="Dispose" /> kann von anderen Objekten mehrmals aufgerufen werden. Beim Überschreiben von <see langword="Dispose(Boolean)" />, werden Sie darauf achten, nicht auf Objekte verweisen, die zuvor in einen früheren Aufruf von freigegeben wurden <see langword="Dispose" />. Weitere Informationen zur Implementierung <see langword="Dispose(Boolean)" />, finden Sie unter [Implementieren einer Dispose-Methode](~/docs/standard/garbage-collection/implementing-dispose.md).  
+            <see langword="Dispose" /> kann von anderen Objekten mehrmals aufgerufen werden. Achten Sie beim Überschreiben darauf <see langword="Dispose" /> ,nichtaufObjektezuverweisen,diezuvorineinemfrüheren-Aufrufpunktfreigegebenwurden.<see langword="Dispose(Boolean)" /> Weitere Informationen zum Implementieren <see langword="Dispose(Boolean)" />von finden Sie unter [Implementieren einer](~/docs/standard/garbage-collection/implementing-dispose.md)verwerfen-Methode.  
   
-Weitere Informationen zu <see langword="Dispose" /> und <see langword="Finalize" />, finden Sie unter [Bereinigen von nicht verwalteten Ressourcen](~/docs/standard/garbage-collection/unmanaged.md).</para></block>
+Weitere Informationen zu und <see langword="Dispose" /> <see langword="Finalize" />finden Sie unter [Bereinigen von nicht verwalteten Ressourcen](~/docs/standard/garbage-collection/unmanaged.md).</para></block>
         <related type="Article" href="~/docs/standard/security/cryptographic-services.md">Kryptografische Dienste</related>
       </Docs>
     </Member>
@@ -618,10 +618,10 @@ Weitere Informationen zu <see langword="Dispose" /> und <see langword="Finalize"
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Das Leeren der Datenstrom wird die zugrunde liegende Encoder nicht geleert, es sei denn, Sie explizit aufrufen, <xref:System.Security.Cryptography.CryptoStream.Flush%2A> oder <xref:System.IO.Stream.Close%2A>. Festlegen von <xref:System.IO.StreamWriter.AutoFlush%2A> zu `true` bedeutet, die Daten werden in den Stream, aus dem Puffer geleert werden, aber der Encoderzustand wird nicht geleert. Dadurch wird den Encoder auf seinen Zustand (partielle Zeichen) beibehalten, sodass den nächsten Block Zeichen richtig codiert werden können. Dieses Szenario betrifft, UTF8 und UTF7, in denen bestimmte Zeichen nur verschlüsselt werden können, nachdem der Encoder das bzw. der angrenzenden Zeichen empfangen.  
+ Das Leeren des Streams leert den zugrunde liegenden Encoder nicht, es <xref:System.Security.Cryptography.CryptoStream.Flush%2A> sei <xref:System.IO.Stream.Close%2A>denn, Sie haben explizit oder aufgerufen. Wenn <xref:System.IO.StreamWriter.AutoFlush%2A> auf`true` festgelegt wird, werden Daten aus dem Puffer in den Stream geleert, aber der Codierungs Zustand wird nicht geleert. Dies ermöglicht es dem Encoder, seinen Zustand (partielle Zeichen) beizubehalten, damit der nächste Zeichenblock ordnungsgemäß codiert werden kann. Dieses Szenario wirkt sich auf UTF8 und UTF7 aus, bei denen bestimmte Zeichen nur codiert werden können, nachdem der Encoder die angrenzenden Zeichen oder Zeichen empfangen hat.  
   
 > [!NOTE]
->  Rufen Sie entweder die <xref:System.IO.Stream.Close%2A> Methode oder der <xref:System.Security.Cryptography.CryptoStream.FlushFinalBlock%2A> Methode zum Leeren des Puffers abzuschließen.  
+>  Sie sollten entweder die <xref:System.IO.Stream.Close%2A> -Methode oder die <xref:System.Security.Cryptography.CryptoStream.FlushFinalBlock%2A> -Methode aufgerufen haben, um das Leeren des Puffers abzuschließen.  
   
  ]]></format>
         </remarks>
@@ -658,16 +658,16 @@ Weitere Informationen zu <see langword="Dispose" /> und <see langword="Finalize"
         <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" Index="0" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
       </Parameters>
       <Docs>
-        <param name="cancellationToken">Das Token zum Überwachen von Abbruchanforderungen. Der Standardwert ist <see cref="P:System.Threading.CancellationToken.None" />.</param>
+        <param name="cancellationToken">Das Token zum Überwachen von Abbruchanforderungen. Der Standardwert ist <see cref="P:System.Threading.CancellationToken.None" />sein.</param>
         <summary>Löscht alle Puffer für den aktuellen Stream asynchron und veranlasst die Ausgabe aller gepufferten Daten an das zugrunde liegende Gerät und überwacht Abbruchanforderungen.</summary>
         <returns>Eine Aufgabe, die die asynchrone Leerung darstellt.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Sie müssen den Aufruf von voranstellen <xref:System.Security.Cryptography.CryptoStream.FlushAsync%2A> mit der `await` (c#) oder `Await` (Visual Basic)-Operator, um die Ausführung der Methode anzuhalten, bis die Aufgabe abgeschlossen ist. Weitere Informationen finden Sie unter [Asynchrone Programmierung mit Async und Await](https://msdn.microsoft.com/library/db854f91-ccef-4035-ae4d-0911fde808c7).  
+ Sie müssen dem- <xref:System.Security.Cryptography.CryptoStream.FlushAsync%2A> Befehl mit dem-Operator (C#) `Await` oder dem `await` -Operator (Visual Basic) voranstellen, um die Ausführung der-Methode anzuhalten, bis die Aufgabe vollständig ist. Weitere Informationen finden Sie unter [Asynchrone Programmierung mit Async und Await](https://msdn.microsoft.com/library/db854f91-ccef-4035-ae4d-0911fde808c7).  
   
- Wenn der Vorgang abgebrochen wird, bevor er abgeschlossen wurde, enthält die zurückgegebene Aufgabe der <xref:System.Threading.Tasks.TaskStatus.Canceled> Wert für die <xref:System.Threading.Tasks.Task.Status%2A> Eigenschaft.  
+ Wenn der Vorgang abgebrochen wird, bevor er abgeschlossen ist, enthält die <xref:System.Threading.Tasks.TaskStatus.Canceled> zurückgegebene Aufgabe <xref:System.Threading.Tasks.Task.Status%2A> den Wert für die-Eigenschaft.  
   
  ]]></format>
         </remarks>
@@ -710,15 +710,15 @@ Weitere Informationen zu <see langword="Dispose" /> und <see langword="Finalize"
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Aufrufen der <xref:System.IO.Stream.Close%2A> Methodenaufruf wird <xref:System.Security.Cryptography.CryptoStream.FlushFinalBlock%2A>. Wenn Sie nicht aufrufen <xref:System.IO.Stream.Close%2A>, rufen Sie <xref:System.Security.Cryptography.CryptoStream.FlushFinalBlock%2A> zum Leeren des Puffers abzuschließen. Rufen Sie <xref:System.Security.Cryptography.CryptoStream.FlushFinalBlock%2A> nur wenn alle Datenstrom-Aktivität abgeschlossen ist.  
+ Durch Aufrufen <xref:System.IO.Stream.Close%2A> der-Methode <xref:System.Security.Cryptography.CryptoStream.FlushFinalBlock%2A>wird aufgerufen. Wenn Sie nicht aufzurufen <xref:System.IO.Stream.Close%2A>, wird <xref:System.Security.Cryptography.CryptoStream.FlushFinalBlock%2A> aufgerufen, um das Leeren des Puffers abzuschließen. Wird <xref:System.Security.Cryptography.CryptoStream.FlushFinalBlock%2A> nur aufgerufen, wenn die gesamte streamaktivität vollständig ist.  
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.Security.Cryptography.CryptographicException">Der Schlüssel ist beschädigt. die ungültigen Füllzeichen im Stream führen kann.</exception>
-        <exception cref="T:System.NotSupportedException">Der aktuelle Stream ist nicht beschreibbar.  
+        <exception cref="T:System.Security.Cryptography.CryptographicException">Der Schlüssel ist beschädigt. Dies kann zu ungültigen Füllzeichen im Stream führen.</exception>
+        <exception cref="T:System.NotSupportedException">Der aktuelle Stream ist nicht schreibbar.  
   
-- oder -  
-Der abschließende Block wurde bereits transformiert.</exception>
+- oder - 
+Der letzte Block wurde bereits transformiert.</exception>
         <related type="Article" href="~/docs/standard/security/cryptographic-services.md">Kryptografische Dienste</related>
       </Docs>
     </Member>
@@ -756,7 +756,7 @@ Der abschließende Block wurde bereits transformiert.</exception>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Eigenschaft wird festgelegt `true` bei der <xref:System.Security.Cryptography.CryptoStream.FlushFinalBlock%2A> Methode wird aufgerufen.  
+ Diese Eigenschaft wird fest `true` gelegt, <xref:System.Security.Cryptography.CryptoStream.FlushFinalBlock%2A> wenn die-Methode aufgerufen wird.  
   
  ]]></format>
         </remarks>
@@ -798,7 +798,7 @@ Der abschließende Block wurde bereits transformiert.</exception>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Eigenschaft vorhanden ist, nur um die Unterstützung der Vererbung von <xref:System.IO.Stream>, und kann nicht verwendet werden.  
+ Diese Eigenschaft wird nicht verwendet und steht lediglich für die Unterstützung der Vererbung von <xref:System.IO.Stream> bereit.  
   
  ]]></format>
         </remarks>
@@ -842,7 +842,7 @@ Der abschließende Block wurde bereits transformiert.</exception>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Eigenschaft vorhanden ist, nur um die Unterstützung der Vererbung von <xref:System.IO.Stream>, und kann nicht verwendet werden.  
+ Diese Eigenschaft wird nicht verwendet und steht lediglich für die Unterstützung der Vererbung von <xref:System.IO.Stream> bereit.  
   
  ]]></format>
         </remarks>
@@ -896,12 +896,12 @@ Der abschließende Block wurde bereits transformiert.</exception>
         <summary>Liest eine Bytesequenz aus dem aktuellen Stream und setzt die Position in diesem Stream um die Anzahl der gelesenen Bytes nach vorn.</summary>
         <returns>Die Gesamtanzahl der in den Puffer gelesenen Bytes. Dies kann weniger als die Anzahl der angeforderten Bytes sein, wenn diese Anzahl an Bytes derzeit nicht verfügbar ist, oder 0 (null), wenn das Streamende erreicht ist.</returns>
         <remarks>To be added.</remarks>
-        <exception cref="T:System.NotSupportedException">Die <see cref="T:System.Security.Cryptography.CryptoStreamMode" /> aktuelle zugeordnete <see cref="T:System.Security.Cryptography.CryptoStream" /> Objekt entspricht nicht den zugrunde liegenden Stream.  Beispielsweise diese Ausnahme wird ausgelöst, wenn <see cref="F:System.Security.Cryptography.CryptoStreamMode.Read" /> mit einem zugrunde liegenden Stream verwendet, die Zugriffsart Nur Schreiben gilt.</exception>
+        <exception cref="T:System.NotSupportedException">Der dem aktuellen <see cref="T:System.Security.Cryptography.CryptoStreamMode" />-Objekt zugeordnete <see cref="T:System.Security.Cryptography.CryptoStream" /> stimmt nicht mit dem zugrunde liegenden Stream überein.  Diese Ausnahme wird beispielsweise ausgelöst, wenn <see cref="F:System.Security.Cryptography.CryptoStreamMode.Read" /> mit einem zugrunde liegenden Stream verwendet wird, für den die Zugriffsart Nur Schreiben gilt.</exception>
         <exception cref="T:System.ArgumentOutOfRangeException">Die <paramref name="offset" />-Parameter ist kleiner als 0 (null).  
   
-- oder -  
+- oder - 
 Die <paramref name="count" />-Parameter ist kleiner als 0 (null).</exception>
-        <exception cref="T:System.ArgumentException">Die Summe der <paramref name="count" /> und <paramref name="offset" /> Parameter ist länger als die Länge des Puffers.</exception>
+        <exception cref="T:System.ArgumentException">Die Summe aus <paramref name="count" />-Parameter und <paramref name="offset" />-Parameter ist größer als die Länge des Puffers.</exception>
         <related type="Article" href="~/docs/standard/security/cryptographic-services.md">Kryptografische Dienste</related>
       </Docs>
     </Member>
@@ -941,16 +941,16 @@ Die <paramref name="count" />-Parameter ist kleiner als 0 (null).</exception>
         <param name="buffer">Der Puffer, in den die Daten geschrieben werden sollen.</param>
         <param name="offset">Der Byteoffset im <paramref name="buffer" />, ab dem Daten aus dem Stream geschrieben werden.</param>
         <param name="count">Die maximale Anzahl der zu lesenden Bytes.</param>
-        <param name="cancellationToken">Das Token zum Überwachen von Abbruchanforderungen. Der Standardwert ist <see cref="P:System.Threading.CancellationToken.None" />.</param>
+        <param name="cancellationToken">Das Token zum Überwachen von Abbruchanforderungen. Der Standardwert ist <see cref="P:System.Threading.CancellationToken.None" />sein.</param>
         <summary>Liest eine Folge von Bytes asynchron aus aktuellen Stream, erhöht die Position im Stream um die Anzahl der gelesenen Bytes und überwacht Abbruchanfragen.</summary>
         <returns>Eine Aufgabe, die den asynchronen Lesevorgang darstellt. Der Wert des <paramref name="TResult" />-Parameters des Aufgabenobjekts enthält die Gesamtzahl der Bytes, die in den Puffer gelesen werden. Das Ergebnis kann weniger als die Anzahl der angeforderten Bytes sein, wenn die Anzahl an derzeit verfügbaren Bytes kleiner ist als die angeforderte Anzahl, oder sie kann 0 (null) sein, wenn das Streamende erreicht ist.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Sie müssen den Aufruf von voranstellen <xref:System.Security.Cryptography.CryptoStream.ReadAsync%2A> mit der `await` (c#) oder `Await` (Visual Basic)-Operator, um die Ausführung der Methode anzuhalten, bis die Aufgabe abgeschlossen ist. Weitere Informationen finden Sie unter [Asynchrone Programmierung mit Async und Await](https://msdn.microsoft.com/library/db854f91-ccef-4035-ae4d-0911fde808c7).  
+ Sie müssen dem- <xref:System.Security.Cryptography.CryptoStream.ReadAsync%2A> Befehl mit dem-Operator (C#) `Await` oder dem `await` -Operator (Visual Basic) voranstellen, um die Ausführung der-Methode anzuhalten, bis die Aufgabe vollständig ist. Weitere Informationen finden Sie unter [Asynchrone Programmierung mit Async und Await](https://msdn.microsoft.com/library/db854f91-ccef-4035-ae4d-0911fde808c7).  
   
- Wenn der Vorgang abgebrochen wird, bevor er abgeschlossen wurde, enthält die zurückgegebene Aufgabe der <xref:System.Threading.Tasks.TaskStatus.Canceled> Wert für die <xref:System.Threading.Tasks.Task.Status%2A> Eigenschaft.  
+ Wenn der Vorgang abgebrochen wird, bevor er abgeschlossen ist, enthält die <xref:System.Threading.Tasks.TaskStatus.Canceled> zurückgegebene Aufgabe <xref:System.Threading.Tasks.Task.Status%2A> den Wert für die-Eigenschaft.  
   
  ]]></format>
         </remarks>
@@ -1035,7 +1035,7 @@ Die <paramref name="count" />-Parameter ist kleiner als 0 (null).</exception>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Methode gibt es nur um die Unterstützung der Vererbung von <xref:System.IO.Stream>, und kann nicht verwendet werden.  
+ Diese Methode ist nur zur Unterstützung der <xref:System.IO.Stream>Vererbung von und kann nicht verwendet werden.  
   
  ]]></format>
         </remarks>
@@ -1082,11 +1082,11 @@ Die <paramref name="count" />-Parameter ist kleiner als 0 (null).</exception>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Eigenschaft vorhanden ist, nur um die Unterstützung der Vererbung von <xref:System.IO.Stream>, und kann nicht verwendet werden.  
+ Diese Eigenschaft wird nicht verwendet und steht lediglich für die Unterstützung der Vererbung von <xref:System.IO.Stream> bereit.  
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.NotSupportedException">Diese Eigenschaft vorhanden ist, nur um die Unterstützung der Vererbung von <see cref="T:System.IO.Stream" />, und kann nicht verwendet werden.</exception>
+        <exception cref="T:System.NotSupportedException">Diese Eigenschaft wird nicht verwendet und steht lediglich für die Unterstützung der Vererbung von <see cref="T:System.IO.Stream" /> bereit.</exception>
         <related type="Article" href="~/docs/standard/security/cryptographic-services.md">Kryptografische Dienste</related>
       </Docs>
     </Member>
@@ -1165,12 +1165,12 @@ Die <paramref name="count" />-Parameter ist kleiner als 0 (null).</exception>
         <param name="count">Die Anzahl an Bytes, die in den aktuellen Stream geschrieben werden sollen.</param>
         <summary>Schreibt eine Folge von Bytes in den aktuellen <see cref="T:System.Security.Cryptography.CryptoStream" /> und verschiebt die aktuelle Position in diesem Stream um die Anzahl der geschriebenen Bytes nach vorn.</summary>
         <remarks>To be added.</remarks>
-        <exception cref="T:System.NotSupportedException">Die <see cref="T:System.Security.Cryptography.CryptoStreamMode" /> aktuelle zugeordnete <see cref="T:System.Security.Cryptography.CryptoStream" /> Objekt entspricht nicht den zugrunde liegenden Stream.  Beispielsweise diese Ausnahme wird ausgelöst, wenn <see cref="F:System.Security.Cryptography.CryptoStreamMode.Write" /> mit einem zugrunde liegenden Stream verwendet, die schreibgeschützt ist.</exception>
+        <exception cref="T:System.NotSupportedException">Der dem aktuellen <see cref="T:System.Security.Cryptography.CryptoStreamMode" />-Objekt zugeordnete <see cref="T:System.Security.Cryptography.CryptoStream" /> stimmt nicht mit dem zugrunde liegenden Stream überein.  Diese Ausnahme wird beispielsweise ausgelöst, wenn <see cref="F:System.Security.Cryptography.CryptoStreamMode.Write" /> mit einem zugrunde liegenden Stream verwendet wird, der schreibgeschützt ist.</exception>
         <exception cref="T:System.ArgumentOutOfRangeException">Die <paramref name="offset" />-Parameter ist kleiner als 0 (null).  
   
-- oder -  
+- oder - 
 Die <paramref name="count" />-Parameter ist kleiner als 0 (null).</exception>
-        <exception cref="T:System.ArgumentException">Die Summe der <paramref name="count" /> und <paramref name="offset" /> Parameter ist länger als die Länge des Puffers.</exception>
+        <exception cref="T:System.ArgumentException">Die Summe aus <paramref name="count" />-Parameter und <paramref name="offset" />-Parameter ist größer als die Länge des Puffers.</exception>
         <related type="Article" href="~/docs/standard/security/cryptographic-services.md">Kryptografische Dienste</related>
       </Docs>
     </Member>
@@ -1208,18 +1208,18 @@ Die <paramref name="count" />-Parameter ist kleiner als 0 (null).</exception>
       </Parameters>
       <Docs>
         <param name="buffer">Der Puffer, aus dem Daten geschrieben werden sollen.</param>
-        <param name="offset">Der nullbasierte Byteoffset im <paramref name="buffer" />, ab dem Bytes in den Stream kopiert werden.</param>
+        <param name="offset">Der nullbasierte Byteoffset im <paramref name="buffer" />, ab dem Bytes in den Stream geschrieben werden.</param>
         <param name="count">Die maximale Anzahl der zu schreibenden Bytes.</param>
-        <param name="cancellationToken">Das Token zum Überwachen von Abbruchanforderungen. Der Standardwert ist <see cref="P:System.Threading.CancellationToken.None" />.</param>
+        <param name="cancellationToken">Das Token zum Überwachen von Abbruchanforderungen. Der Standardwert ist <see cref="P:System.Threading.CancellationToken.None" />sein.</param>
         <summary>Schreibt eine Folge von Bytes asynchron in den aktuellen Stream und erhöht die aktuelle Position im Stream um die Anzahl der geschriebenen Bytes und überwacht Abbruchanforderungen.</summary>
         <returns>Eine Aufgabe, die den asynchronen Schreibvorgang darstellt.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Sie müssen den Aufruf von voranstellen <xref:System.Security.Cryptography.CryptoStream.WriteAsync%2A> mit der `await` (c#) oder `Await` (Visual Basic)-Operator, um die Ausführung der Methode anzuhalten, bis die Aufgabe abgeschlossen ist. Weitere Informationen finden Sie unter [Asynchrone Programmierung mit Async und Await](https://msdn.microsoft.com/library/db854f91-ccef-4035-ae4d-0911fde808c7).  
+ Sie müssen dem- <xref:System.Security.Cryptography.CryptoStream.WriteAsync%2A> Befehl mit dem-Operator (C#) `Await` oder dem `await` -Operator (Visual Basic) voranstellen, um die Ausführung der-Methode anzuhalten, bis die Aufgabe vollständig ist. Weitere Informationen finden Sie unter [Asynchrone Programmierung mit Async und Await](https://msdn.microsoft.com/library/db854f91-ccef-4035-ae4d-0911fde808c7).  
   
- Wenn der Vorgang abgebrochen wird, bevor er abgeschlossen wurde, enthält die zurückgegebene Aufgabe der <xref:System.Threading.Tasks.TaskStatus.Canceled> Wert für die <xref:System.Threading.Tasks.Task.Status%2A> Eigenschaft.  
+ Wenn der Vorgang abgebrochen wird, bevor er abgeschlossen ist, enthält die <xref:System.Threading.Tasks.TaskStatus.Canceled> zurückgegebene Aufgabe <xref:System.Threading.Tasks.Task.Status%2A> den Wert für die-Eigenschaft.  
   
  ]]></format>
         </remarks>

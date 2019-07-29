@@ -15,39 +15,39 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>Stellt eine <see cref="T:System.Windows.Media.Imaging.BitmapSource" /> , geschrieben und aktualisiert werden können.</summary>
+    <summary>Stellt eine <see cref="T:System.Windows.Media.Imaging.BitmapSource" /> bereit, in die geschrieben werden kann und die aktualisiert werden kann.</summary>
     <remarks>
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Verwenden der <xref:System.Windows.Media.Imaging.WriteableBitmap> Klasse zu aktualisieren und zu eine Bitmap auf pro-Frame zu rendern. Dies ist nützlich zum Generieren von algorithmische Inhalt, z. B. ein Fraktal-Image und für die datenvisualisierung, wie z. B. eine Schnellansicht für Musik.  
+ Verwenden Sie <xref:System.Windows.Media.Imaging.WriteableBitmap> die-Klasse, um eine Bitmap pro Frame zu aktualisieren und zu Rendering. Dies ist nützlich, um algorithmischen Inhalt, z. b. ein Dezimal Trennbild, und für die Datenvisualisierung (z. b. eine Musik Schnellansicht) zu erzeugen.  
   
- Die <xref:System.Windows.Media.Imaging.WriteableBitmap> -Klasse verwendet zwei Puffer. Die *Hintergrundpuffer* , die im Arbeitsspeicher zugeordnet ist und sammelt Inhalt, der derzeit nicht angezeigt wird. Die *Frontpuffer* im Arbeitsspeicher zugeordnet ist, und enthält den Inhalt, der derzeit angezeigt wird. Das rendernde System kopiert die Frontpuffer in den Videospeicher für die Anzeige.  
+ Die <xref:System.Windows.Media.Imaging.WriteableBitmap> -Klasse verwendet zwei Puffer. Der *Hintergrund Puffer* wird im Systemspeicher zugeordnet und sammelt Inhalte, die derzeit nicht angezeigt werden. Der *Front-Puffer* wird im Systemspeicher zugeordnet und enthält den aktuell angezeigten Inhalt. Das Renderingsystem kopiert den Vorder-Puffer für die Anzeige in den Videospeicher.  
   
- Zwei Threads verwenden diese Puffer. Die *Benutzeroberflächenthread (UI)* generiert die Benutzeroberfläche, aber nicht auf dem Bildschirm darstellen. Der UI-Thread reagiert auf Benutzereingaben, Timer und andere Ereignisse. Eine Anwendung kann mehrere UI-Threads verfügen. Die *Renderthread* Katalogobjekt erstellt und rendert Sie die Änderungen aus der UI-Thread. Es gibt nur eine Rendering-Thread pro Anwendung.  
+ Zwei Threads verwenden diese Puffer. Der *Benutzeroberflächen Thread generiert die Benutzeroberfläche* , stellt Sie jedoch nicht auf dem Bildschirm dar. Der UI-Thread antwortet auf Benutzereingaben, Timer und andere Ereignisse. Eine Anwendung kann mehrere UI-Threads aufweisen. Der *Renderthread* dient zum Erstellen und Rendern von Änderungen aus dem UI-Thread. Pro Anwendung ist nur ein Renderthread vorhanden.  
   
- Der UI-Thread schreibt den Inhalt auf den Hintergrundpuffer. Der Renderthread liest den Inhalt aus dem Front-Puffer und in den Videospeicher kopiert. Änderungen an den Hintergrundpuffer werden mit geänderten rechteckige Bereiche nachverfolgt.  
+ Der UI-Thread schreibt Inhalt in den Hintergrund Puffer. Der Renderthread liest Inhalt aus dem Vorder-Puffer und kopiert ihn in den Videospeicher. Änderungen am Hintergrund Puffer werden mit geänderten rechteckigen Bereichen nachverfolgt.  
   
- Rufen Sie eine der der <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A> Überladungen zum Aktualisieren und Anzeigen von Inhalt im Hintergrundpuffer automatisch.  
+ Aufrufen einer der <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A> -über Ladungen zum automatischen Aktualisieren und Anzeigen von Inhalten im Hintergrund Puffer.  
   
- Verwenden Sie um mehr Kontrolle über Updates, und für den Multithreadzugriff auf den Hintergrundpuffer den folgenden Workflow.  
+ Verwenden Sie den folgenden Workflow, um eine bessere Kontrolle über Updates und den Multithread-Zugriff auf den Hintergrund Puffer zu erhalten.  
   
-1.  Rufen Sie die <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> Methode den Hintergrundpuffer für Aktualisierungen zu reservieren.  
+1.  Ruft die <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> -Methode auf, um den Hintergrund Puffer für Updates zu reservieren.  
   
-2.  Erhalten Sie durch den Zugriff auf einen Zeiger auf den Hintergrundpuffer der <xref:System.Windows.Media.Imaging.WriteableBitmap.BackBuffer%2A> Eigenschaft.  
+2.  Rufen Sie einen Zeiger auf den Hintergrund Puffer ab, <xref:System.Windows.Media.Imaging.WriteableBitmap.BackBuffer%2A> indem Sie auf die-Eigenschaft zugreifen.  
   
-3.  Schreiben Sie Änderungen in den Hintergrundpuffer. Schreiben Sie andere Threads können Änderungen in den Hintergrund zu Puffern, wenn die <xref:System.Windows.Media.Imaging.WriteableBitmap> ist gesperrt.  
+3.  Schreiben Sie Änderungen in den Hintergrund Puffer. Andere Threads können Änderungen in den Hintergrund Puffer schreiben, wenn <xref:System.Windows.Media.Imaging.WriteableBitmap> der gesperrt ist.  
   
-4.  Rufen Sie die <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> Methode, um Bereiche anzugeben, die geändert wurden.  
+4.  Ruft die <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> -Methode auf, um Bereiche anzugeben, die sich geändert haben.  
   
-5.  Rufen Sie die <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> Methode den Hintergrundpuffer freizugeben und die Darstellung auf dem Bildschirm zu ermöglichen.  
+5.  Ruft die <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> -Methode auf, um den Hintergrund Puffer freizugeben und Präsentation auf dem Bildschirm zuzulassen.  
   
- Wenn Updates, der Rendering-Thread gesendet werden, kopiert das Renderingthread geänderte Rechtecke aus den Hintergrundpuffer auf den Front-Puffer an. Das rendernde System steuert dieses Austauschs zur Vermeidung von Deadlocks und -Elemente, z. B. "tearing" neu zu zeichnen.  
+ Wenn Updates an den Renderingthread gesendet werden, kopiert der Renderingthread die geänderten Rechtecke vom Hintergrund Puffer in den Vorder-Puffer. Das Renderingsystem steuert diesen Austausch, um Deadlocks zu vermeiden und Artefakte neu zu zeichnen, z. b. "zerreißen".  
   
    
   
 ## Examples  
- Im folgende Beispiel wird veranschaulicht, wie eine <xref:System.Windows.Media.Imaging.WriteableBitmap> als Quelle verwendet werden kann ein <xref:System.Windows.Controls.Image> zum Pixel zu zeichnen, wenn der Mauszeiger bewegt wird.  
+ Im folgenden Beispiel wird veranschaulicht <xref:System.Windows.Media.Imaging.WriteableBitmap> <xref:System.Windows.Controls.Image> , wie ein als Quelle eines verwendet werden kann, um Pixel zu zeichnen, wenn die Maus bewegt wird.  
   
  [!code-csharp[WriteableBitmap2#WriteableBitmapFullPage](~/samples/snippets/csharp/VS_Snippets_Wpf/WriteableBitmap2/CS/Program.cs#writeablebitmapfullpage)]  
   
@@ -87,19 +87,19 @@
         <Parameter Name="source" Type="System.Windows.Media.Imaging.BitmapSource" />
       </Parameters>
       <Docs>
-        <param name="source">Die <see cref="T:System.Windows.Media.Imaging.BitmapSource" /> , für die Initialisierung verwendet.</param>
-        <summary>Initialisiert eine neue Instanz der dem <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> -Klasse unter Verwendung der angegebenen <see cref="T:System.Windows.Media.Imaging.BitmapSource" />.</summary>
+        <param name="source">Die für die Initialisierung zu verwendende <see cref="T:System.Windows.Media.Imaging.BitmapSource" />.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />-Klasse mit dem angegebenen <see cref="T:System.Windows.Media.Imaging.BitmapSource" />.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die <xref:System.Windows.Media.Imaging.WriteableBitmap.%23ctor%28System.Int32%2CSystem.Int32%2CSystem.Double%2CSystem.Double%2CSystem.Windows.Media.PixelFormat%2CSystem.Windows.Media.Imaging.BitmapPalette%29> Konstruktor wird bevorzugt, über die Verwendung dieses Konstruktors.  
+ Der <xref:System.Windows.Media.Imaging.WriteableBitmap.%23ctor%28System.Int32%2CSystem.Int32%2CSystem.Double%2CSystem.Double%2CSystem.Windows.Media.PixelFormat%2CSystem.Windows.Media.Imaging.BitmapPalette%29> Konstruktor wird bevorzugt verwendet, wenn dieser Konstruktor verwendet wird.  
   
- Wenn `source` verwendet kein nativ unterstützten Bitmap-Format Format Konvertierungen werden angewendet, für die einzelnen Frame-Updates, die Leistung verringert.  
+ Wenn `source` kein nativ unterstütztes Bitmapformat verwendet, werden für jedes Frame Update Formatkonvertierungen angewendet, wodurch die Leistung beeinträchtigt wird.  
   
  ]]></format>
         </remarks>
-        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwalteten Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwaltete Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -130,20 +130,20 @@
       <Docs>
         <param name="pixelWidth">Die gewünschte Breite der Bitmap.</param>
         <param name="pixelHeight">Die gewünschte Höhe der Bitmap.</param>
-        <param name="dpiX">Die horizontale [!INCLUDE[TLA#tla_dpi](~/includes/tlasharptla-dpi-md.md)] der Bitmap.</param>
-        <param name="dpiY">Die vertikale [!INCLUDE[TLA#tla_dpi](~/includes/tlasharptla-dpi-md.md)] der Bitmap.</param>
-        <param name="pixelFormat">Die <see cref="T:System.Windows.Media.PixelFormat" /> der Bitmap.</param>
-        <param name="palette">Die <see cref="T:System.Windows.Media.Imaging.BitmapPalette" /> der Bitmap.</param>
+        <param name="dpiX">Die horizontalen [!INCLUDE[TLA#tla_dpi](~/includes/tlasharptla-dpi-md.md)] der Bitmap.</param>
+        <param name="dpiY">Die vertikalen [!INCLUDE[TLA#tla_dpi](~/includes/tlasharptla-dpi-md.md)] der Bitmap.</param>
+        <param name="pixelFormat">Das <see cref="T:System.Windows.Media.PixelFormat" /> der Bitmap.</param>
+        <param name="palette">Das <see cref="T:System.Windows.Media.Imaging.BitmapPalette" /> der Bitmap.</param>
         <summary>Initialisiert eine neue Instanz der <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />-Klasse mit den angegebenen Parametern.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die bevorzugten Werte für `pixelFormat` sind <xref:System.Windows.Media.PixelFormats.Bgr32%2A> und <xref:System.Windows.Media.PixelFormats.Pbgra32%2A>. Diese Formate werden nativ unterstützt, und eine Konvertierung ist nicht erforderlich. Andere `pixelFormat` Werte erfordern eine Konvertierung für jedes Update Frame, der Leistung verringert.  
+ Die bevorzugten Werte für `pixelFormat` sind <xref:System.Windows.Media.PixelFormats.Bgr32%2A> und <xref:System.Windows.Media.PixelFormats.Pbgra32%2A>. Diese Formate werden nativ unterstützt und erfordern keine Formatkonvertierung. Andere `pixelFormat` Werte erfordern eine Formatkonvertierung für jedes Frame Update, wodurch die Leistung reduziert wird.  
   
  ]]></format>
         </remarks>
-        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwalteten Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwaltete Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
       </Docs>
     </Member>
     <Member MemberName="AddDirtyRect">
@@ -171,30 +171,30 @@
         <Parameter Name="dirtyRect" Type="System.Windows.Int32Rect" />
       </Parameters>
       <Docs>
-        <param name="dirtyRect">Ein <see cref="T:System.Windows.Int32Rect" /> , die den geänderten Bereich darstellt. Dimensionen sind in Pixel.</param>
-        <summary>Gibt den Bereich der Bitmap, die sich geändert.</summary>
+        <param name="dirtyRect">Ein <see cref="T:System.Windows.Int32Rect" />, das den geänderten Bereich darstellt. Abmessungen werden in Pixel angegeben.</param>
+        <summary>Gibt den Bereich der Bitmap an, der geändert wurde.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Rufen Sie die <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> Methode, um die Änderungen weisen den Hintergrundpuffer Code vorgenommen hat.  
+ Ruft die <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> -Methode auf, um Änderungen anzugeben, die Ihr Code an den Hintergrund Puffer vorgenommen hat.  
   
- Wenn Sie diese Methode mehrmals aufrufen, werden die geänderten Bereiche in einer Darstellung ausreichend, aber nicht unbedingt sehr einfach gehalten und akkumuliert. Aus Effizienzgründen werden nur die Bereiche, die als fehlerhaft gekennzeichnet sind garantiert vorwärts in der Front-Puffer kopiert werden. Allerdings kann ein Teil der Bitmap, kopiert werden, deshalb Sie sicherstellen müssen, dass der gesamte Hintergrundpuffer immer gültig ist.  
+ Wenn Sie diese Methode mehrmals aufzurufen, werden die geänderten Bereiche in einer ausreichenden, aber nicht notwendigerweise minimalen Darstellung akkumuliert. Aus Effizienzgründen werden nur die Bereiche, die als geändert gekennzeichnet sind, sicher in den Vordergrund Puffer kopiert. Allerdings kann jeder Teil der Bitmap vorwärts kopiert werden, sodass Sie sicherstellen müssen, dass der gesamte backpuffer immer gültig ist.  
   
- Rufen Sie die <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> Methode nur zwischen den Aufrufen der <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> und <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> Methoden, wie in beschrieben die <xref:System.Windows.Media.Imaging.WriteableBitmap> Klasse "Hinweise".  
+ Rufen Sie <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> die-Methode nur zwischen Aufrufen <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> der <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> -Methode und der-Methode <xref:System.Windows.Media.Imaging.WriteableBitmap> auf, wie in den Klassen hinweisen beschrieben.  
   
    
   
 ## Examples  
- Im folgenden Codebeispiel wird veranschaulicht, wie an den Bereich im Puffer, die geändert, indem die <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> Methode.  
+ Im folgenden Codebeispiel wird gezeigt, wie der Bereich des backpuffers angegeben wird, der mithilfe <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> der-Methode geändert wurde.  
   
  [!code-csharp[WriteableBitmap2#2](~/samples/snippets/csharp/VS_Snippets_Wpf/WriteableBitmap2/CS/Program.cs#2)]  
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.InvalidOperationException">Die Bitmap nicht gesperrt durch einen Aufruf der <see cref="M:System.Windows.Media.Imaging.WriteableBitmap.Lock" /> oder <see cref="M:System.Windows.Media.Imaging.WriteableBitmap.TryLock(System.Windows.Duration)" /> Methoden.</exception>
-        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="dirtyRect" /> liegt außerhalb der Grenzen des das <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.</exception>
-        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwalteten Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <exception cref="T:System.InvalidOperationException">Die Bitmap wurde nicht durch einen Aufruf der <see cref="M:System.Windows.Media.Imaging.WriteableBitmap.Lock" />-Methode oder der <see cref="M:System.Windows.Media.Imaging.WriteableBitmap.TryLock(System.Windows.Duration)" />-Methode gesperrt.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="dirtyRect" /> liegt außerhalb der Grenzen von <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwaltete Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
       </Docs>
     </Member>
     <Member MemberName="BackBuffer">
@@ -222,20 +222,20 @@
         <ReturnType>System.IntPtr</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft einen Zeiger auf dem Hintergrundpuffer ab.</summary>
-        <value>Ein <see cref="T:System.IntPtr" /> , der auf die Basisadresse des Hintergrundpuffers zeigt.</value>
+        <summary>Ruft einen Zeiger auf den Hintergrundpuffer ab.</summary>
+        <value>Ein <see cref="T:System.IntPtr" />, der auf die Basisadresse des Hintergrundpuffers zeigt.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Der Hintergrundpuffer enthält im vom Benutzer angeforderte Pixelformat der Bitmapinhalt.  
+ Der Hintergrund Puffer enthält den Bitmapinhalt in dem vom Benutzer angeforderten Pixel Format.  
   
- Aktualisieren Sie den Hintergrundpuffer nur zwischen den Aufrufen der <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> und <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> Methoden. Wenn Sie nicht mit den Sperren/Entsperren-Workflow, die in beschriebenen Umsetzen der <xref:System.Windows.Media.Imaging.WriteableBitmap> Klasse Hinweise nicht definierten Verhalten, wie das Löschen, auftreten können.  
+ Aktualisieren Sie den Hintergrund Puffer nur zwischen Aufrufen der <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> - <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> Methode und der-Methode. Wenn Sie den in den Klassen Hinweisen beschriebenen Lock/Unlock-Workflow <xref:System.Windows.Media.Imaging.WriteableBitmap> nicht befolgen, können nicht definierte Verhalten wie z. b. das Zerreißen auftreten.  
   
- Die Adresse des Hintergrundpuffers wird nicht geändert werden.  
+ Die Adresse des backpuffers ändert sich nicht.  
   
 ## <a name="thread-safety"></a>Threadsicherheit  
- Können Sie übergeben die <xref:System.Windows.Media.Imaging.WriteableBitmap.BackBuffer%2A> Zeiger auf externe Komponenten und andere Threads für die Verarbeitung, aber wenn Sie dies tun, müssen Sie angeben Sie eigenen Thread Koordination. Insbesondere müssen Sie sicherstellen, dass der UI-Thread durch den Aufruf gibt geänderten Bereiche an, die <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> -Methode, und dass der UI-Thread hebt die Sperre des Puffers durch Aufrufen der <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> Methode.  
+ Sie können den <xref:System.Windows.Media.Imaging.WriteableBitmap.BackBuffer%2A> Zeiger an externe Komponenten und andere Threads zur Verarbeitung übergeben, aber wenn Sie dies tun, müssen Sie eine eigene Thread Koordination bereitstellen. Insbesondere müssen Sie sicherstellen, dass der UI-Thread geänderte Bereiche angibt, indem <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> Sie die-Methode aufrufen, und dass der UI-Thread den Puffer <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> durch Aufrufen der-Methode entsperrt.  
   
  ]]></format>
         </remarks>
@@ -258,7 +258,7 @@
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft einen Wert, der angibt, der Anzahl der Bytes in einer einzelnen Zeile der Pixeldaten.</summary>
+        <summary>Ruft einen Wert ab, der die Anzahl der Bytes in einer einzelnen Zeile der Pixeldaten angibt.</summary>
         <value>Eine ganze Zahl, die die Anzahl der Bytes in einer einzelnen Zeile der Pixeldaten angibt.</value>
         <remarks>To be added.</remarks>
       </Docs>
@@ -287,7 +287,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Methode wird verwendet, um änderbare Kopien zu erzeugen fixierten <xref:System.Windows.Freezable> Objekte (oder ein beliebiges <xref:System.Windows.Freezable> Objekt). Der Einfachheit halber führt Shadowing für diese Methode die geerbte Version mit einer Implementierung mit starker Typisierung.  
+ Diese Methode wird verwendet, um änderbare Kopien von <xref:System.Windows.Freezable> fixierten Objekten (oder einem beliebigen <xref:System.Windows.Freezable> Objekt) zu liefern. Aus Gründen der praktische überschattet diese Methode die geerbte Version durch eine stark typisierte Implementierung.  
   
  Weitere Informationen finden Sie unter <xref:System.Windows.Freezable.Clone%2A?displayProperty=nameWithType>.  
   
@@ -352,7 +352,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Methode wird verwendet, um änderbare Kopien zu erzeugen fixierten <xref:System.Windows.Freezable> Objekte (oder ein beliebiges <xref:System.Windows.Freezable> Objekt). Der Einfachheit halber führt Shadowing für diese Methode die geerbte Version mit einer Implementierung mit starker Typisierung.  
+ Diese Methode wird verwendet, um änderbare Kopien von <xref:System.Windows.Freezable> fixierten Objekten (oder einem beliebigen <xref:System.Windows.Freezable> Objekt) zu liefern. Aus Gründen der praktische überschattet diese Methode die geerbte Version durch eine stark typisierte Implementierung.  
   
  Weitere Informationen finden Sie unter <xref:System.Windows.Freezable.CloneCurrentValue%2A?displayProperty=nameWithType>.  
   
@@ -534,21 +534,21 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Reserviert den Hintergrundpuffer für Aktualisierungen an.</summary>
+        <summary>Reserviert den Hintergrundpuffer für Aktualisierungen.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> Methode wird der sperrzähler erhöht. Wenn eine <xref:System.Windows.Media.Imaging.WriteableBitmap> ist gesperrt, der Renderingsystem sendet keine Updates bis der <xref:System.Windows.Media.Imaging.WriteableBitmap> ist vollständig aufgehoben werden, indem die Aufrufe an die <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> Methode.  
+ Die <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> -Methode erhöht die Sperrenanzahl. Wenn eine <xref:System.Windows.Media.Imaging.WriteableBitmap> gesperrt ist, sendet das Renderingsystem keine Updates, <xref:System.Windows.Media.Imaging.WriteableBitmap> bis die durch Aufrufe der <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> -Methode vollständig entsperrt wird.  
   
- Sie können die <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> Methode, um Multithread-Implementierungen unterstützt. In diesen Szenarien wird der UI-Thread sperrt die Bitmap und macht den Hintergrundpuffer für andere Threads. Wenn der Arbeitsthread einen Frame abgeschlossen ist, wird der UI-Thread geänderte Rechtecke hinzugefügt und hebt die Sperre des Puffers.  
+ Sie können die <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> -Methode verwenden, um Multithreaded-Implementierungen zu unterstützen. In diesen Szenarien sperrt der UI-Thread die Bitmap und macht den Hintergrund Puffer für andere Threads verfügbar. Wenn der Arbeits Thread einen Frame abgeschlossen hat, fügt der UI-Thread geänderte Rechtecke hinzu und entsperrt den Puffer.  
   
- Wenn es sich bei der Renderthread den Hintergrundpuffer für Rollforward den Front-Puffer zu kopierenden sperrt, kann der UI-Thread blockieren. Wenn die Latenz von diesem Block zu lang ist, verwenden Sie die <xref:System.Windows.Media.Imaging.WriteableBitmap.TryLock%2A> Methode, um eine kurze Zeit warten und entsperren Sie dann auf den UI-Thread, um andere Aufgaben auszuführen, wenn der Hintergrundpuffer gesperrt ist.  
+ Der UI-Thread kann blockiert werden, wenn der Renderthread eine Sperre für den Hintergrund Puffer erhält, um ihn in den Vordergrund Puffer zu kopieren. Wenn die Latenz von diesem Block zu lang ist, verwenden Sie <xref:System.Windows.Media.Imaging.WriteableBitmap.TryLock%2A> die-Methode, um eine kurze Zeit zu warten, und Entsperren Sie dann den UI-Thread, um andere Aufgaben auszuführen, während der Hintergrund Puffer gesperrt ist.  
   
    
   
 ## Examples  
- Im folgenden Codebeispiel wird veranschaulicht, wie reserviert den Hintergrundpuffer mithilfe der <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> Methode.  
+ Im folgenden Codebeispiel wird gezeigt, wie der Hintergrund Puffer mithilfe der <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> -Methode reserviert wird.  
   
  [!code-csharp[WriteableBitmap2#2](~/samples/snippets/csharp/VS_Snippets_Wpf/WriteableBitmap2/CS/Program.cs#2)]  
   
@@ -583,19 +583,19 @@
         <Parameter Name="timeout" Type="System.Windows.Duration" />
       </Parameters>
       <Docs>
-        <param name="timeout">Ein <see cref="T:System.Windows.Duration" /> , die die Länge der Wartezeit darstellt. Der Wert 0 wird sofort zurückgegeben. Der Wert <see cref="P:System.Windows.Duration.Forever" /> auf unbestimmte Zeit blockiert.</param>
-        <summary>Versucht, die Bitmap zu sperren wartet nicht länger als die angegebene Zeitdauer.</summary>
-        <returns><see langword="true" /> Wenn die Sperre abgerufen wurde; andernfalls <see langword="false" />.</returns>
+        <param name="timeout">Eine <see cref="T:System.Windows.Duration" />, die die Zeitspanne für den Wartevorgang darstellt. Beim Wert 0 wird nicht gewartet. Bei einem Wert von <see cref="P:System.Windows.Duration.Forever" /> wird für unbegrenzte Zeit blockiert.</param>
+        <summary>Versucht, die Bitmap zu sperren, und wartet höchstens die angegebene Zeit.</summary>
+        <returns><see langword="true" />, wenn die Sperre erhalten wurde, andernfalls <see langword="false" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Wenn eine Sperre abgerufen wird, das Verhalten der <xref:System.Windows.Media.Imaging.WriteableBitmap.TryLock%2A> Methode ist identisch mit der <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> Methode.  
+ Wenn eine Sperre abgerufen wird, ist das Verhalten der <xref:System.Windows.Media.Imaging.WriteableBitmap.TryLock%2A> -Methode identisch mit der <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> -Methode.  
   
  ]]></format>
         </remarks>
         <exception cref="T:System.ArgumentOutOfRangeException">Für <paramref name="timeout" /> ist <see cref="P:System.Windows.Duration.Automatic" /> festgelegt.</exception>
-        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwalteten Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwaltete Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
         <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.Lock" />
         <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.Unlock" />
       </Docs>
@@ -623,24 +623,24 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Gibt den Hintergrundpuffer, um es für die Anzeige verfügbar zu machen.</summary>
+        <summary>Gibt den Hintergrundpuffer frei, um ihn für die Anzeige verfügbar zu machen.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> Methode verringert die Sperrenanzahl. Wenn die Anzahl der Sperren 0 erreicht, wird ein Rendervorgang angefordert, wenn die <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> -Methode aufgerufen wurde.  
+ Die <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> -Methode verringert die Sperrenanzahl. Wenn die Sperrenanzahl 0 erreicht, wird ein renderdurchlauf angefordert <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> , wenn die-Methode aufgerufen wurde.  
   
    
   
 ## Examples  
- Im folgenden Codebeispiel wird veranschaulicht, wie den Hintergrundpuffer mit Freigeben der <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> Methode.  
+ Im folgenden Codebeispiel wird veranschaulicht, wie der Hintergrund Puffer mithilfe der <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> -Methode freigegeben wird.  
   
  [!code-csharp[WriteableBitmap2#2](~/samples/snippets/csharp/VS_Snippets_Wpf/WriteableBitmap2/CS/Program.cs#2)]  
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.InvalidOperationException">Die Bitmap nicht gesperrt durch einen Aufruf der <see cref="M:System.Windows.Media.Imaging.WriteableBitmap.Lock" /> oder <see cref="M:System.Windows.Media.Imaging.WriteableBitmap.TryLock(System.Windows.Duration)" /> Methoden.</exception>
-        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwalteten Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <exception cref="T:System.InvalidOperationException">Die Bitmap wurde nicht durch einen Aufruf der <see cref="M:System.Windows.Media.Imaging.WriteableBitmap.Lock" />-Methode oder der <see cref="M:System.Windows.Media.Imaging.WriteableBitmap.TryLock(System.Windows.Duration)" />-Methode gesperrt.</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwaltete Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
         <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.Lock" />
         <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect(System.Windows.Int32Rect)" />
       </Docs>
@@ -651,7 +651,7 @@
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Docs>
-        <summary>Aktualisiert die Pixel der beschreibbare Bitmap.</summary>
+        <summary>Aktualisiert die Pixel der Bitmap, in die geschrieben werden kann.</summary>
       </Docs>
     </MemberGroup>
     <Member MemberName="WritePixels">
@@ -682,38 +682,38 @@
         <Parameter Name="offset" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="sourceRect">Das Rechteck der <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> aktualisieren.</param>
-        <param name="pixels">Das Pixelarray, die zum Aktualisieren der Bitmap verwendet wird.</param>
-        <param name="stride">Der Sprung des Aktualisierungsbereichs in <paramref name="pixels" />.</param>
+        <param name="sourceRect">Das Rechteck der zu aktualisierenden <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.</param>
+        <param name="pixels">Das Pixelarray, das zum Aktualisieren der Bitmap verwendet wird.</param>
+        <param name="stride">Der Schritt des Aktualisierungsbereichs in <paramref name="pixels" />.</param>
         <param name="offset">Der Offset des Eingabepuffers.</param>
         <summary>Aktualisiert die Pixel im angegebenen Bereich der Bitmap.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> und <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.IntPtr%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> Überladungen werden bevorzugt über die Verwendung dieser Methode.  
+ Die <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> - <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.IntPtr%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> und-über Ladungen werden bei der Verwendung dieser Methode bevorzugt.  
   
 > [!NOTE]
->  Verwenden Sie bei teilweiser Vertrauenswürdigkeit der <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> überladen.  
+>  Verwenden Sie bei teilweiser Vertrauens <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> Würdigkeit die-Überladung.  
   
    
   
 ## Examples  
- Im folgenden Codebeispiel wird veranschaulicht, wie ein Pixel im Hintergrundpuffer aktualisieren die <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A> Methode.  
+ Im folgenden Codebeispiel wird veranschaulicht, wie ein Pixel im Hintergrund Puffer mithilfe der <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A> -Methode aktualisiert wird.  
   
  [!code-csharp[WriteableBitmap2#3](~/samples/snippets/csharp/VS_Snippets_Wpf/WriteableBitmap2/CS/Program.cs#3)]  
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentOutOfRangeException">Eine oder mehrere der folgenden Bedingungen gilt.  
+        <exception cref="T:System.ArgumentOutOfRangeException">Mindestens eine der folgenden Bedingungen ist erfüllt.  
   
- <paramref name="sourceRect" /> liegt außerhalb der Grenzen des das <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.  
+ <paramref name="sourceRect" /> liegt außerhalb der Grenzen von <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.  
   
  <paramref name="stride" /> &lt; 1 
  <paramref name="offset" /> &lt; 0</exception>
         <exception cref="T:System.ArgumentNullException"><paramref name="pixels" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.ArgumentException"><paramref name="pixels" /> besitzt einen Rang ungleich 1 oder 2, oder seine Länge ist kleiner als oder gleich 0.</exception>
-        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwalteten Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <exception cref="T:System.ArgumentException"><paramref name="pixels" /> besitzt einen Rang ungleich 1 oder 2, oder seine Länge ist kleiner oder gleich 0.</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwaltete Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
       </Docs>
     </Member>
     <Member MemberName="WritePixels">
@@ -744,30 +744,30 @@
         <Parameter Name="stride" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="sourceRect">Das Rechteck der <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> aktualisieren.</param>
+        <param name="sourceRect">Das Rechteck der zu aktualisierenden <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.</param>
         <param name="buffer">Der Eingabepuffer, der zum Aktualisieren der Bitmap verwendet wird.</param>
         <param name="bufferSize">Die Größe des Eingabepuffers.</param>
-        <param name="stride">Der Sprung des Aktualisierungsbereichs in <paramref name="buffer" />.</param>
+        <param name="stride">Der Schritt des Aktualisierungsbereichs in <paramref name="buffer" />.</param>
         <summary>Aktualisiert die Pixel im angegebenen Bereich der Bitmap.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> und <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.IntPtr%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> Überladungen werden bevorzugt über die Verwendung dieser Methode.  
+ Die <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> - <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.IntPtr%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> und-über Ladungen werden bei der Verwendung dieser Methode bevorzugt.  
   
 > [!NOTE]
->  Verwenden Sie bei teilweiser Vertrauenswürdigkeit der <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> überladen.  
+>  Verwenden Sie bei teilweiser Vertrauens <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> Würdigkeit die-Überladung.  
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentOutOfRangeException">Eine oder mehrere der folgenden Bedingungen gilt.  
+        <exception cref="T:System.ArgumentOutOfRangeException">Mindestens eine der folgenden Bedingungen ist erfüllt.  
   
- <paramref name="sourceRect" /> liegt außerhalb der Grenzen des das <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.  
+ <paramref name="sourceRect" /> liegt außerhalb der Grenzen von <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.  
   
  <paramref name="bufferSize" /> &lt; 1 
  <paramref name="stride" /> &lt; 1</exception>
         <exception cref="T:System.ArgumentNullException"><paramref name="buffer" /> ist <see langword="null" />.</exception>
-        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwalteten Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwaltete Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
       </Docs>
     </Member>
     <Member MemberName="WritePixels">
@@ -799,33 +799,33 @@
         <Parameter Name="destinationY" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="sourceRect">Das Rechteck in <paramref name="sourceBuffer" /> kopieren.</param>
+        <param name="sourceRect">Das zu kopierende Rechteck in <paramref name="sourceBuffer" />.</param>
         <param name="sourceBuffer">Der Eingabepuffer, der zum Aktualisieren der Bitmap verwendet wird.</param>
         <param name="sourceBufferStride">Der Schritt des Eingabepuffers in Bytes.</param>
-        <param name="destinationX">Das Ziel X-Koordinate von der äußersten linken Pixel im Hintergrundpuffer.</param>
-        <param name="destinationY">Das Ziel y-Koordinate von der äußersten oberen Pixel im Hintergrundpuffer.</param>
+        <param name="destinationX">Die Ziel-x-Koordinate des äußersten linken Pixel im Hintergrundpuffer.</param>
+        <param name="destinationY">Die Ziel-y-Koordinate des äußersten oberen Pixel im Hintergrundpuffer.</param>
         <summary>Aktualisiert die Pixel im angegebenen Bereich der Bitmap.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Rufen Sie die <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A> -Methode zum Aktualisieren der <xref:System.Windows.Media.Imaging.WriteableBitmap> automatisch mit dem Inhalt der `sourceBuffer`. Das Aufrufen dieser Methode entspricht der Verwendung von der <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> und <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> Workflow beschrieben, der <xref:System.Windows.Media.Imaging.WriteableBitmap> Klasse "Hinweise".  
+ Ruft die <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A> -Methode auf, <xref:System.Windows.Media.Imaging.WriteableBitmap> um automatisch mit dem Inhalt `sourceBuffer`von zu aktualisieren. Das Aufrufen dieser Methode entspricht der Verwendung <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> des-und-Workflows, der in den <xref:System.Windows.Media.Imaging.WriteableBitmap> - <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> Klassen hinweisen beschrieben wird.  
   
 > [!NOTE]
 >  Verwenden Sie diese Überladung bei teilweiser Vertrauenswürdigkeit.  
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentOutOfRangeException">Eine oder mehrere der folgenden Bedingungen gilt.  
+        <exception cref="T:System.ArgumentOutOfRangeException">Mindestens eine der folgenden Bedingungen ist erfüllt.  
   
- <paramref name="sourceRect" /> liegt außerhalb der Grenzen des das <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.  
+ <paramref name="sourceRect" /> liegt außerhalb der Grenzen von <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.  
   
- <paramref name="destinationX" /> oder <paramref name="destinationY" /> außerhalb der Grenzen des ist der <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.  
+ <paramref name="destinationX" /> oder <paramref name="destinationY" /> liegen außerhalb der Grenzen von <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.  
   
  <paramref name="sourceBufferStride" /> &lt; 1</exception>
         <exception cref="T:System.ArgumentNullException"><paramref name="sourceBuffer" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.ArgumentException"><paramref name="sourceBuffer" /> besitzt einen Rang ungleich 1 oder 2, oder seine Länge ist kleiner als oder gleich 0.</exception>
-        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwalteten Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <exception cref="T:System.ArgumentException"><paramref name="sourceBuffer" /> besitzt einen Rang ungleich 1 oder 2, oder seine Länge ist kleiner oder gleich 0.</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwaltete Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
         <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.WritePixels(System.Windows.Int32Rect,System.IntPtr,System.Int32,System.Int32,System.Int32,System.Int32)" />
       </Docs>
     </Member>
@@ -859,34 +859,34 @@
         <Parameter Name="destinationY" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="sourceRect">Das Rechteck in <paramref name="sourceBuffer" /> kopieren.</param>
+        <param name="sourceRect">Das zu kopierende Rechteck in <paramref name="sourceBuffer" />.</param>
         <param name="sourceBuffer">Der Eingabepuffer, der zum Aktualisieren der Bitmap verwendet wird.</param>
         <param name="sourceBufferSize">Die Größe des Eingabepuffers.</param>
         <param name="sourceBufferStride">Der Schritt des Eingabepuffers in Bytes.</param>
-        <param name="destinationX">Das Ziel X-Koordinate von der äußersten linken Pixel im Hintergrundpuffer.</param>
-        <param name="destinationY">Das Ziel y-Koordinate von der äußersten oberen Pixel im Hintergrundpuffer.</param>
+        <param name="destinationX">Die Ziel-x-Koordinate des äußersten linken Pixel im Hintergrundpuffer.</param>
+        <param name="destinationY">Die Ziel-y-Koordinate des äußersten oberen Pixel im Hintergrundpuffer.</param>
         <summary>Aktualisiert die Pixel im angegebenen Bereich der Bitmap.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Rufen Sie die <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A> -Methode zum Aktualisieren der <xref:System.Windows.Media.Imaging.WriteableBitmap> automatisch mit dem Inhalt der `sourceBuffer`. Das Aufrufen dieser Methode entspricht der Verwendung von der <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> und <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> Workflow beschrieben, der <xref:System.Windows.Media.Imaging.WriteableBitmap> Klasse "Hinweise".  
+ Ruft die <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A> -Methode auf, <xref:System.Windows.Media.Imaging.WriteableBitmap> um automatisch mit dem Inhalt `sourceBuffer`von zu aktualisieren. Das Aufrufen dieser Methode entspricht der Verwendung <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> des-und-Workflows, der in den <xref:System.Windows.Media.Imaging.WriteableBitmap> - <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> Klassen hinweisen beschrieben wird.  
   
 > [!NOTE]
->  Verwenden Sie bei teilweiser Vertrauenswürdigkeit der <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> überladen.  
+>  Verwenden Sie bei teilweiser Vertrauens <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> Würdigkeit die-Überladung.  
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentOutOfRangeException">Eine oder mehrere der folgenden Bedingungen gilt.  
+        <exception cref="T:System.ArgumentOutOfRangeException">Mindestens eine der folgenden Bedingungen ist erfüllt.  
   
- <paramref name="sourceRect" /> liegt außerhalb der Grenzen des das <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.  
+ <paramref name="sourceRect" /> liegt außerhalb der Grenzen von <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.  
   
- <paramref name="destinationX" /> oder <paramref name="destinationY" /> außerhalb der Grenzen des ist der <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.  
+ <paramref name="destinationX" /> oder <paramref name="destinationY" /> liegen außerhalb der Grenzen von <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" />.  
   
  <paramref name="sourceBufferSize" /> &lt; 1 
  <paramref name="sourceBufferStride" /> &lt; 1</exception>
         <exception cref="T:System.ArgumentNullException"><paramref name="sourceBuffer" /> ist <see langword="null" />.</exception>
-        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwalteten Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugeordnete Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">für den Zugriff auf nicht verwaltete Ressourcen. Sicherheitsaktion: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumeration:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
         <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.WritePixels(System.Windows.Int32Rect,System.Array,System.Int32,System.Int32,System.Int32)" />
       </Docs>
     </Member>

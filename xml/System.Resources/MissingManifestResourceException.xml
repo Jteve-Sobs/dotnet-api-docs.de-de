@@ -43,48 +43,48 @@
     </Attribute>
   </Attributes>
   <Docs>
-    <summary>Die Ausnahme, die ausgelöst wird, wenn die Hauptassembly enthält keine Ressourcen für die neutrale Kultur, und eine entsprechende Satellitenassembly fehlt.</summary>
+    <summary>Die Ausnahme, die ausgelöst wird, wenn die Hauptassembly keine Ressourcen für die neutrale Kultur enthält, und eine entsprechende Satellitenassembly fehlt.</summary>
     <remarks>
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
   
-## <a name="net-apps"></a>.NET apps  
+## <a name="net-apps"></a>.Net-apps  
 
-In .NET Framework und .NET Core-apps <xref:System.Resources.MissingManifestResourceException> wird ausgelöst, wenn der Versuch zum Abrufen einer Ressource fehlschlägt, weil es sich bei der Ressourcensatz für die neutrale Kultur nicht aus einer bestimmten Assembly geladen werden konnte. Obwohl die Ausnahme ausgelöst wird, wenn Sie versuchen, eine bestimmte Ressource abzurufen, ist es an die Ressource zu suchen, statt den Ressourcensatz geladen zurückzuführen.  
+In .NET Framework und .net Core-apps <xref:System.Resources.MissingManifestResourceException> wird ausgelöst, wenn der Versuch, eine Ressource abzurufen, fehlschlägt, da der Ressourcen Satz für die neutrale Kultur nicht aus einer bestimmten Assembly geladen werden konnte. Obwohl die Ausnahme ausgelöst wird, wenn Sie versuchen, eine bestimmte Ressource abzurufen, wird Sie dadurch verursacht, dass der Ressourcen Satz nicht geladen wird, anstatt die Ressource zu finden.  
   
 > [!NOTE]
->  Weitere Informationen finden Sie im Abschnitt "Behandeln von einer MissingManifestResourceException-Ausnahme" in der <xref:System.Resources.ResourceManager> Thema-Klasse.  
+>  Weitere Informationen finden Sie im Abschnitt "Behandlung einer MissingManifestResourceException-Ausnahme" im <xref:System.Resources.ResourceManager> Thema zur-Klasse.  
   
- Hauptursachen für die Ausnahme, dass: die folgenden  
+ Die Hauptursache für die Ausnahme sind folgende:  
   
--   Ressourcensatz wird nicht durch den vollqualifizierten Namen identifiziert. Z. B. wenn die `baseName` Parameter im Aufruf der <xref:System.Resources.ResourceManager.%23ctor%28System.String%2CSystem.Reflection.Assembly%29?displayProperty=nameWithType> Methode gibt den Stammnamen der Ressource ohne Namespace festgelegt, aber der Ressourcensatz ein Namespace zugewiesen wird, wenn sie in der Assembly, die den Aufruf von gespeichert ist die <xref:System.Resources.ResourceManager.GetString%2A?displayProperty=nameWithType> Methode löst diese Ausnahme aus.  
+-   Der Ressourcen Satz wird nicht anhand seines voll qualifizierten Namens identifiziert. Wenn der `baseName` -Parameter im Aufrufen der <xref:System.Resources.ResourceManager.%23ctor%28System.String%2CSystem.Reflection.Assembly%29?displayProperty=nameWithType> -Methode z. b. den Stamm Namen des Ressourcen Satzes ohne einen Namespace angibt, dem Ressourcen Satz jedoch beim Speichern in der Assembly ein Namespace zugewiesen wird <xref:System.Resources.ResourceManager.GetString%2A?displayProperty=nameWithType> , wird der-Methode aufgerufen. löst diese Ausnahme aus.  
   
-     Wenn haben Sie die RESOURCES-Datei, die die Standardkultur in die ausführbare Datei Ressourcen eingebettet, und die app löst eine <xref:System.Resources.MissingManifestResourceException>, können Sie ein Reflektionstool wie z. B. die [IL-Disassembler (Ildasm.exe)](~/docs/framework/tools/ildasm-exe-il-disassembler.md) fest Der voll gekennzeichnete Name der Ressource. In Ildasm abrufen, doppelklicken klicken Sie auf der ausführbaren Datei **MANIFEST** Bezeichnung, öffnen Sie die **MANIFEST** Fenster. Ressourcen werden als `.mresource` Elemente und sind aufgeführt, nach externen Assemblyverweise und Attribute für benutzerdefinierte auf Assemblyebene. Sie können auch das folgende einfache Dienstprogramm, kompilieren, das die vollqualifizierten Namen von eingebetteten Ressourcen in der Assembly aufgelistet, deren Name als Befehlszeilenparameter übergeben wird.  
+     Wenn Sie die resources-Datei eingebettet haben, die die Ressourcen der Standard Kultur in der ausführbaren Datei enthält, und Ihre <xref:System.Resources.MissingManifestResourceException>App eine auslöst, können Sie ein reflektionstool wie den [IL-Disassembler (Ildasm. exe)](~/docs/framework/tools/ildasm-exe-il-disassembler.md) verwenden, um den voll qualifizierten der Name der Ressource. Doppelklicken Sie in ILDASM auf die **Manifest** -Bezeichnung der ausführbaren Datei, um das **Manifest** -Fenster zu öffnen. Ressourcen werden als `.mresource` Elemente angezeigt und nach externen Assemblyverweisen und benutzerdefinierten Attributen auf Assemblyebene aufgeführt. Sie können auch das folgende einfache Hilfsprogramm kompilieren, das die voll qualifizierten Namen eingebetteter Ressourcen in der Assembly auflistet, deren Name als Befehlszeilenparameter übergeben wird.  
   
      [!code-csharp[System.Resources.ResourceManager.Class#4](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.resources.resourcemanager.class/cs/resourcenames.cs#4)]
      [!code-vb[System.Resources.ResourceManager.Class#4](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.resources.resourcemanager.class/vb/resourcenames.vb#4)]  
   
--   Sie identifizieren, die Ressource, die über die Namen der Ressourcendatei (zusammen mit den optionalen Namespace) und seiner Dateierweiterung statt über den Dateinamen und ein Stammelementname allein festgelegt. Beispielsweise diese Ausnahme wird ausgelöst, wenn die neutrale Kultur Ressourcensatz heißt `GlobalResources` und geben Sie den Wert `GlobalResources.resources` (anstelle von `GlobalResources`) auf die `baseName` Parameter, der die <xref:System.Resources.ResourceManager.%23ctor%28System.String%2CSystem.Reflection.Assembly%29?displayProperty=nameWithType> Konstruktor.  
+-   Sie identifizieren die Ressource, die durch den Namen der Ressourcen Datei (zusammen mit Ihrem optionalen Namespace) und deren Dateierweiterung festgelegt wird, und nicht nur durch Ihren Namespace-und Stamm Dateinamen. Diese Ausnahme wird beispielsweise ausgelöst, wenn der Ressourcen Satz der neutralen `GlobalResources` Kultur benannt wird und Sie einen Wert von `GlobalResources.resources` (anstelle von `GlobalResources`) an den `baseName` -Parameter des <xref:System.Resources.ResourceManager.%23ctor%28System.String%2CSystem.Reflection.Assembly%29?displayProperty=nameWithType> Konstruktors übergeben.  
   
--   Festgelegtem kulturspezifische Ressource, die in einem Methodenaufruf angegeben wird, kann nicht gefunden werden, und die Fallbackressourcensatz kann nicht geladen werden. Beispielsweise wird, wenn Sie die Satellitenassemblys für die Russische Föderation (Russische Föderation)-Kulturen "und" Englisch (Vereinigte Staaten) erstellen aber Sie keinen Ressourcensatz für die neutrale Kultur angeben, diese Ausnahme ausgelöst, wenn Ihre app für die aktuelle Kultur "Englisch (Großbritannien)".  
+-   Der kulturspezifische Ressourcen Satz, der in einem Methoden Aufrufwert identifiziert wird, kann nicht gefunden werden, und der Fall Back Ressourcen Satz kann nicht geladen werden. Wenn Sie z. b. Satellitenassemblys für die Kulturen Englisch (USA) und Russische Föderation erstellen, aber keinen Ressourcen Satz für die neutrale Kultur bereitstellen, wird diese Ausnahme ausgelöst, wenn die aktuelle Kultur ihrer App Englisch (Großbritannien) ist.  
   
- <xref:System.Resources.MissingManifestResourceException> verwendet das HRESULT COR_E_MISSINGMANIFESTRESOURCE mit dem Wert 0 x 80131532 an.  
+ <xref:System.Resources.MissingManifestResourceException>verwendet das HRESULT-COR_E_MISSINGMANIFESTRESOURCE, das den Wert 0x80131532 aufweist.  
   
- <xref:System.Resources.MissingManifestResourceException> verwendet die standardmäßige <xref:System.Object.Equals%2A> -Implementierung, die auf Verweisgleichheit unterstützt.  
+ <xref:System.Resources.MissingManifestResourceException>verwendet die Standard <xref:System.Object.Equals%2A> Implementierung, die Verweis Gleichheit unterstützt.  
   
  Eine Liste der anfänglichen Eigenschaftswerte für eine Instanz von <xref:System.Resources.MissingManifestResourceException>, finden Sie unter den <xref:System.Resources.MissingManifestResourceException.%23ctor%2A> Konstruktoren.  
   
 > [!NOTE]
->  Es wird empfohlen, dass Sie eine neutrale Reihe von Ressourcen in Ihrer Hauptassembly, einschließen, damit Ihre app keine Fehler, wenn eine Assembly nicht verfügbar ist.  
+>  Es wird empfohlen, dass Sie einen neutralen Satz von Ressourcen in die Hauptassembly einschließen, sodass Ihre APP nicht fehlschlägt, wenn eine Satellitenassembly nicht verfügbar ist.  
   
-## <a name="universal-windows-platform-uwp-apps"></a>Universelle Windows-apps-Plattform (UWP) 
+## <a name="universal-windows-platform-uwp-apps"></a>Universelle Windows-Plattform-Apps (UWP) 
 
-UWP-apps Bereitstellen von Ressourcen für mehrere Kulturen, einschließlich der neutralen Kultur in einem einzelnen Paket ressourcenindexdatei (.pri). Daher in einer UWP-app, wenn Ressourcen für die bevorzugte Kultur nicht gefunden werden können die <xref:System.Resources.MissingManifestResourceException> wird in eine der folgenden Bedingungen ausgelöst:  
+UWP-apps stellen Ressourcen für mehrere Kulturen, einschließlich der neutralen Kultur, in einer einzelnen Paket Ressourcen Indexdatei (. PRI) bereit. Folglich <xref:System.Resources.MissingManifestResourceException> wird in einer UWP-APP, wenn keine Ressourcen für die bevorzugte Kultur gefunden werden können, unter einer der folgenden Bedingungen ausgelöst:  
   
-- Die app schließt eine PRI-Datei nicht, oder die PRI-Datei konnte nicht geöffnet werden.  
+- Die app enthält keine PRI-Datei, oder die PRI-Datei konnte nicht geöffnet werden.  
   
-- Der app PRI-Datei enthält keinen Ressourcensatz für den Namen des angegebenen Stamm.  
+- Die PRI-Datei der app enthält keinen Ressourcen Satz für den angegebenen Stamm Namen.  
   
  ]]></format>
     </remarks>
@@ -141,7 +141,7 @@ UWP-apps Bereitstellen von Ressourcen für mehrere Kulturen, einschließlich der
 |Eigenschaft|Wert|  
 |--------------|-----------|  
 |<xref:System.Exception.InnerException%2A>|`null`.|  
-|<xref:System.Exception.Message%2A>|Die lokalisierte Fehlermeldung für <xref:System.Resources.MissingManifestResourceException>.|  
+|<xref:System.Exception.Message%2A>|Die lokalisierte Fehlermeldung <xref:System.Resources.MissingManifestResourceException>für.|  
   
  ]]></format>
         </remarks>
@@ -230,7 +230,7 @@ UWP-apps Bereitstellen von Ressourcen für mehrere Kulturen, einschließlich der
       </Parameters>
       <Docs>
         <param name="info">Das Objekt, das die Daten des serialisierten Objekts enthält.</param>
-        <param name="context">Die Kontextinformationen zur Quelle oder Ziel der Ausnahme.</param>
+        <param name="context">Die Kontextinformationen über die Quelle oder das Ziel der Ausnahme.</param>
         <summary>Initialisiert anhand von serialisierten Daten eine neue Instanz der <see cref="T:System.Resources.MissingManifestResourceException" />-Klasse.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
