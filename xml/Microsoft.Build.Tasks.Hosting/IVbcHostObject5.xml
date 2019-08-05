@@ -38,7 +38,7 @@
     </Attribute>
   </Attributes>
   <Docs>
-    <summary>Definiert eine Schnittstelle, die ein Freethread-Hostobjekt anbietet, das Hintergrundthreads direkt aufrufen können (Marshalling an den UI-Thread wird vermieden.</summary>
+    <summary>Definiert eine Schnittstelle, die ein Freethread-Hostobjekt anbietet, mit dem Hintergrundthreads direkte Aufrufe ausführen können (das Marshalling zum Benutzeroberflächenthread wird dadurch vermieden).</summary>
     <remarks>To be added.</remarks>
   </Docs>
   <Members>
@@ -62,10 +62,10 @@
         <Parameter Name="buildFailedEvent" Type="System.IntPtr" RefType="out" />
       </Parameters>
       <Docs>
-        <param name="buildSucceededEvent">[out] das Build-erfolgreich-Ereignis.</param>
-        <param name="buildFailedEvent">[out] das Build-fehlgeschlagen-Ereignis.</param>
-        <summary>Dieser Code nur für den UI-Thread aufgerufen wird, und startet den tatsächlichen VB-build</summary>
-        <returns>Gibt 0 zurück, wenn die Methode erfolgreich war.</returns>
+        <param name="buildSucceededEvent">[out] Build-Erfolgreich-Ereignis.</param>
+        <param name="buildFailedEvent">[out] das Build-Fehlgeschlagen-Ereignis.</param>
+        <summary>Dieser Code wird nur im UI-Thread aufgerufen und entfernt den tatsächlichen VB-Build.</summary>
+        <returns>Gibt NULL zurück, wenn die Methode erfolgreich war.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -88,9 +88,9 @@
         <Parameter Name="buildSuccess" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="buildSuccess">Ein Flag, der angibt, ob der Build erfolgreich erstellt wurde. Wert ist <see langword="true" /> für Erfolg.</param>
-        <summary>Führt Funktionen am Ende der Kompilierung.</summary>
-        <returns>Gibt 0 zurück, wenn die Methode erfolgreich war.</returns>
+        <param name="buildSuccess">Der Flag, das angibt, ob der Build erfolgreich erstellt wurde. Der Wert ist <see langword="true" /> für Erfolg.</param>
+        <summary>Führt Aufgaben am Ende der Kompilierung aus.</summary>
+        <returns>Gibt NULL zurück, wenn die Methode erfolgreich war.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -111,7 +111,7 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Ruft ein Freethread-Hostobjekt, das Hintergrundthreads direkt aufrufen kann. Vermeiden Sie das Marshalling an den UI-Thread.</summary>
+        <summary>Ruft ein Freethreadhostobjekt ab, das Hintergrundthreads einen direkten Aufruf ermöglicht. Vermeidet, den UI-Thread zu marshallen.</summary>
         <returns>Das threadunabhängige Hostobjekt.</returns>
         <remarks>To be added.</remarks>
       </Docs>
@@ -137,7 +137,7 @@
       <Docs>
         <param name="highEntropyVA"><see langword="True" />, um <c>/ highentropyva</c> festzulegen, um die Unterstützung der Address Space Layout Randomization (ASLR) mit hoher Entropie festzulegen; andernfalls <see langword="False" />.</param>
         <summary>Legt den Wert <c>/highentropyva</c> wie festgelegt fest.</summary>
-        <returns><see langword="True" /> Wenn die Methode erfolgreich war.</returns>
+        <returns><see langword="True" />, wenn die Methode erfolgreich war.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -162,12 +162,12 @@
       <Docs>
         <param name="platformWith32BitPreference"><see langword="True" />, um den <c>/platform</c>-Wert auf <see langword="AnyCPU32BitPreferred" /> festzulegen, andernfalls <see langword="False" />.</param>
         <summary>Legt den Wert <c>/platform</c> auf <see langword="AnyCPU32BitPreferred" /> fest.</summary>
-        <returns>Gibt <see langword="True" /> , wenn die Methode erfolgreich war.</returns>
+        <returns>Gibt <see langword="True" /> zurück, wenn die Methode erfolgreich war.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Wenn die <xref:Microsoft.Build.Tasks.ManagedCompiler.Prefer32Bit%2A> -Eigenschaftensatz auf das Projekt, <xref:Microsoft.Build.Tasks.Hosting.IVbcHostObject5.SetPlatformWith32BitPreference%2A> Änderungen der `/platform` Wert `AnyCPU` oder den Standardwert für die Plattform (`null` oder ""), `AnyCPU32BitPreferred`. Weitere Informationen finden Sie unter [/Platform (Visual Basic)](~/docs/visual-basic/reference/command-line-compiler/platform.md). Die `AnyCPU` `/platform` Einstellung wechseln (`/platform:AnyCPU`) wird Ihre Anwendung ausgeführt wird, als 64-Bit-Prozess nach Möglichkeit Fallback auf 32-Bit für 32-Bit-only-Systeme. Allerdings ist es oft vorzuziehen, die sie als 64-Bit ausführen, da der 64-Bit-Anwendungen mehr Arbeitsspeicher nutzen können, die Ausführung von Anwendungen als 32-Bit. Die `AnyCPU32BitPreferred` Einstellung ähnelt `AnyCPU` mit dem Unterschied, dass Anwendungen im 32-Bit-Modus auf Systemen ausgeführt werden, die entweder 32-Bit oder 64-Bit-Modus unterstützen die Standardaktion ist.  Diese Einstellung gilt für zukünftige Prozessoren, die möglicherweise nicht über eine 32-Bit-fallback-Modus verfügen.  
+ Wenn die <xref:Microsoft.Build.Tasks.ManagedCompiler.Prefer32Bit%2A> Eigenschaft für das Projekt festgelegt ist <xref:Microsoft.Build.Tasks.Hosting.IVbcHostObject5.SetPlatformWith32BitPreference%2A> , ändert `/platform` den `AnyCPU` Wert oder den Standardwert der`null` Plattform (oder "" `AnyCPU32BitPreferred`) in. Weitere Informationen finden Sie unter [/Platform (Visual Basic)](~/docs/visual-basic/reference/command-line-compiler/platform.md). Die `AnyCPU` Switch-Einstellung`/platform:AnyCPU`() führt die `/platform` Anwendung als 64-Bit-Prozess aus, wenn dies möglich ist, und wird auf 32 Bit für Systeme mit nur 32 Bit zurückgesetzt. Das Ausführen von Anwendungen als 32-Bit-Version wird jedoch häufig als 64-Bit-Ausführung empfohlen, da 64-Bit-Anwendungen möglicherweise mehr Arbeitsspeicher beanspruchen. Die `AnyCPU32BitPreferred` -Einstellung ähnelt, `AnyCPU` mit der Ausnahme, dass es sich bei der Standardaktion um das Ausführen von Anwendungen im 32-Bit-Modus auf Systemen handelt, die den Modus 32-Bit oder 64-Bit unterstützen.  Diese Einstellung ist für zukünftige Prozessoren geeignet, für die möglicherweise kein Fall Back-32-Bit-Modus ausgeführt wird.  
   
  ]]></format>
         </remarks>
@@ -193,8 +193,8 @@
       </Parameters>
       <Docs>
         <param name="subsystemVersion">Die Version des Subsystems.</param>
-        <summary>Legt die Version des Subsystems wie angegeben fest.</summary>
-        <returns>Gibt <see langword="true" /> , wenn die Methode erfolgreich ist.</returns>
+        <summary>Legt die Version des Subsystems fest wie angegeben.</summary>
+        <returns>Gibt <see langword="true" /> zurück, wenn die Methode erfolgreich ist.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
