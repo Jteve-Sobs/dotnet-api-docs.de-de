@@ -1,5 +1,5 @@
 <Type Name="CryptoStream" FullName="System.Security.Cryptography.CryptoStream">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="7926cb2f266b315fb81634423124042712c2c009" /><Meta Name="ms.sourcegitcommit" Value="2767b5903996fbd7e2b81eda1114dfc9d0d9db63" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="05/02/2019" /><Meta Name="ms.locfileid" Value="64997378" /></Metadata><TypeSignature Language="C#" Value="public class CryptoStream : System.IO.Stream" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="c41b9b61de00807bad1df95c497d07afbcfec5f3" /><Meta Name="ms.sourcegitcommit" Value="0959d8d88abd48debd487e54e54df29d51634f7f" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/02/2019" /><Meta Name="ms.locfileid" Value="68731458" /></Metadata><TypeSignature Language="C#" Value="public class CryptoStream : System.IO.Stream" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit CryptoStream extends System.IO.Stream implements class System.IDisposable" />
   <TypeSignature Language="DocId" Value="T:System.Security.Cryptography.CryptoStream" />
   <TypeSignature Language="VB.NET" Value="Public Class CryptoStream&#xA;Inherits Stream" />
@@ -175,14 +175,35 @@
         <Parameter Name="state" Type="System.Object" Index="4" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
       </Parameters>
       <Docs>
-        <param name="buffer">To be added.</param>
-        <param name="offset">To be added.</param>
-        <param name="count">To be added.</param>
-        <param name="callback">To be added.</param>
-        <param name="state">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="buffer">Der Puffer, in den die Daten gelesen werden sollen.</param>
+        <param name="offset">Der Byteoffset im <paramref name="buffer" />, ab dem aus dem Stream gelesene Daten geschrieben werden.</param>
+        <param name="count">Die maximale Anzahl der zu lesenden Bytes.</param>
+        <param name="callback">Ein optionaler asynchroner Rückruf, der nach Abschluss des Lesevorgangs aufgerufen werden soll.</param>
+        <param name="state">Ein vom Benutzer bereitgestelltes Objekt, das diese asynchrone Leseanforderung von anderen Anforderungen unterscheidet.</param>
+        <summary>Beginnt einen asynchronen Lesevorgang. (Verwenden Sie stattdessen <see cref="Overload:System.Security.Cryptography.CryptoStream.ReadAsync" />.)</summary>
+        <returns>Ein <see cref="T:System.IAsyncResult" />, das den asynchronen Lesevorgang darstellt, der möglicherweise noch aussteht.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In .NET Framework 4 und vorherigen Versionen müssen Sie Methoden wie <xref:System.IO.Stream.BeginRead%2A> und <xref:System.IO.Stream.EndRead%2A> verwenden, um asynchrone E/A-Vorgänge zu implementieren. Diese Methoden sind weiterhin in .net verfügbar, um Legacy Code zu unterstützen. die neuen <xref:System.Security.Cryptography.CryptoStream.ReadAsync%2A>Async-Methoden, wie z. b., <xref:System.Security.Cryptography.CryptoStream.WriteAsync%2A>, <xref:System.Security.Cryptography.CryptoStream.FlushAsync%2A> <xref:System.IO.Stream.CopyToAsync%2A>und, unterstützen Sie jedoch bei der einfacheren Implementierung asynchroner e/a-Vorgänge.  
+  
+ Übergeben Sie `IAsyncResult` den Rückgabewert an <xref:System.Security.Cryptography.CryptoStream.EndRead%2A> die-Methode des Streams, um zu bestimmen, wie viele Bytes gelesen wurden, und um die zum Lesen verwendeten Betriebssystemressourcen freizugeben. <xref:System.Security.Cryptography.CryptoStream.EndRead%2A>muss für jeden Aufruf von <xref:System.Security.Cryptography.CryptoStream.BeginRead%2A>einmal aufgerufen werden. Hierfür können Sie den gleichen Code verwenden, der oder in einem `BeginRead` Rückruf aufgerufen hat, der an `BeginRead`übermittelt wurde.  
+  
+ Die aktuelle Position im Stream wird aktualisiert, wenn der asynchrone Lese-oder Schreibvorgang ausgegeben wird, und nicht, wenn der e/a-Vorgang abgeschlossen wird.  
+  
+ Durch mehrere gleichzeitige asynchrone Anforderungen wird die Reihenfolge der Anforderungs Vervollständigung unsicher.  
+  
+ Verwenden Sie <xref:System.Security.Cryptography.CryptoStream.CanRead%2A> die-Eigenschaft, um zu bestimmen, ob die aktuelle Instanz Lesevorgänge unterstützt  
+  
+ Wenn ein Stream geschlossen wird oder Sie ein ungültiges Argument übergeben, werden Ausnahmen sofort von `BeginRead`ausgelöst. Fehler, die während einer asynchronen Lese Anforderung auftreten, z. b. ein Datenträger Fehler während der e/a-Anforderung, treten im Thread Pool Thread auf `EndRead`und lösen Ausnahmen aus, wenn aufgerufen wird.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IO.IOException">Es wurde versucht, einen asynchronen Lesevorgang über das Ende des Streams hinaus durchzuführen, oder es ist ein Datenträgerfehler aufgetreten.</exception>
+        <exception cref="T:System.ArgumentException">Mindestens eines der Argumente ist ungültig.</exception>
+        <exception cref="T:System.ObjectDisposedException">Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.</exception>
+        <exception cref="T:System.NotSupportedException">Die aktuelle <see langword="Stream" />-Implementierung unterstützt den Lesevorgang nicht.</exception>
       </Docs>
     </Member>
     <Member MemberName="BeginWrite">
@@ -215,14 +236,35 @@
         <Parameter Name="state" Type="System.Object" Index="4" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
       </Parameters>
       <Docs>
-        <param name="buffer">To be added.</param>
-        <param name="offset">To be added.</param>
-        <param name="count">To be added.</param>
-        <param name="callback">To be added.</param>
-        <param name="state">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="buffer">Der Puffer, aus dem Daten geschrieben werden sollen.</param>
+        <param name="offset">Der Byteoffset im <paramref name="buffer" />, ab dem geschrieben werden soll.</param>
+        <param name="count">Die maximale Anzahl der zu schreibenden Bytes.</param>
+        <param name="callback">Ein optionaler asynchroner Rückruf, der nach Abschluss des Schreibvorgangs aufgerufen wird.</param>
+        <param name="state">Ein vom Benutzer bereitgestelltes Objekt, das diese asynchrone Schreibanforderung von anderen Anforderungen unterscheidet.</param>
+        <summary>Beginnt einen asynchronen Schreibvorgang. (Verwenden Sie stattdessen <see cref="Overload:System.Security.Cryptography.CryptoStream.WriteAsync" />.)</summary>
+        <returns>Ein <see langword="IAsyncResult" />, das den asynchronen Schreibvorgang darstellt, der möglicherweise noch aussteht.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In .NET Framework 4 und vorherigen Versionen müssen Sie Methoden wie <xref:System.Security.Cryptography.CryptoStream.BeginWrite%2A> und <xref:System.Security.Cryptography.CryptoStream.EndWrite%2A> verwenden, um asynchrone E/A-Vorgänge zu implementieren. Diese Methoden sind weiterhin in .net verfügbar, um Legacy Code zu unterstützen. die neuen <xref:System.Security.Cryptography.CryptoStream.ReadAsync%2A>Async-Methoden, wie z. b., <xref:System.Security.Cryptography.CryptoStream.WriteAsync%2A>, <xref:System.Security.Cryptography.CryptoStream.FlushAsync%2A> <xref:System.IO.Stream.CopyToAsync%2A>und, unterstützen Sie jedoch bei der einfacheren Implementierung asynchroner e/a-Vorgänge.  
+  
+ Übergeben Sie `IAsyncResult` den von der aktuellen Methode zurück <xref:System.Security.Cryptography.CryptoStream.EndWrite%2A> gegebenen an, um sicherzustellen, dass der Schreibvorgang abgeschlossen ist und Ressourcen entsprechend freigibt. <xref:System.Security.Cryptography.CryptoStream.EndWrite%2A>muss für jeden Aufruf von <xref:System.Security.Cryptography.CryptoStream.BeginWrite%2A>einmal aufgerufen werden. Hierfür können Sie den gleichen Code verwenden, der oder in einem `BeginWrite` Rückruf aufgerufen hat, der an `BeginWrite`übermittelt wurde. Wenn ein Fehler während eines asynchronen Schreibzugriffs auftritt, wird keine Ausnahme ausgelöst, solange `EndWrite` nicht mit der `IAsyncResult` von dieser Methode zurückgegebenen aufgerufen wird.  
+  
+ Wenn ein Datenstrom beschreibbar ist, wird der Stream durch Schreiben am Ende des Streams erweitert.  
+  
+ Die aktuelle Position im Stream wird aktualisiert, wenn Sie den asynchronen Lese-oder Schreibvorgang ausgeben, nicht, wenn der e/a-Vorgang abgeschlossen ist. Durch mehrere gleichzeitige asynchrone Anforderungen wird die Reihenfolge der Anforderungs Vervollständigung unsicher.  
+  
+ Verwenden Sie <xref:System.Security.Cryptography.CryptoStream.CanWrite%2A> die-Eigenschaft, um zu bestimmen, ob die aktuelle Instanz Schreibvorgänge unterstützt  
+  
+ Wenn ein Stream geschlossen wird oder Sie ein ungültiges Argument übergeben, werden Ausnahmen sofort von `BeginWrite`ausgelöst. Fehler, die während einer asynchronen Schreib Anforderung auftreten, z. b. ein Datenträger Fehler während der e/a-Anforderung, treten im Thread Pool Thread auf `EndWrite`und lösen Ausnahmen aus, wenn aufgerufen wird.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IO.IOException">Es wurde versucht, einen asynchronen Schreibvorgang über das Ende des Streams hinaus durchzuführen, oder es ist ein Datenträgerfehler aufgetreten.</exception>
+        <exception cref="T:System.ArgumentException">Mindestens eines der Argumente ist ungültig.</exception>
+        <exception cref="T:System.ObjectDisposedException">Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.</exception>
+        <exception cref="T:System.NotSupportedException">Die aktuelle <see langword="Stream" />-Implementierung unterstützt den Schreibvorgang nicht.</exception>
       </Docs>
     </Member>
     <Member MemberName="CanRead">
@@ -487,9 +529,20 @@ Weitere Informationen zu und <see langword="Dispose" /> <see langword="Finalize"
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Gibt die nicht verwalteten Ressourcen, die von der <see cref="T:System.Security.Cryptography.CryptoStream" /> verwendet werden, asynchron frei.</summary>
+        <returns>Eine Aufgabe, die den asynchronen Löschvorgang darstellt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Security.Cryptography.CryptoStream.DisposeAsync%2A> -Methode ermöglicht es Ihnen, einen ressourcenintensiven Löschvorgang auszuführen, ohne den Haupt Thread zu blockieren. Diese Überlegungen zur Leistung sind insbesondere in einer [!INCLUDE[win8_appname_long](~/includes/win8-appname-long-md.md)] -App oder [!INCLUDE[desktop_appname](~/includes/desktop-appname-md.md)] -App wichtig, bei der ein zeitaufwendiger Streamvorgang den UI-Thread blockieren kann und es dann den Anschein hat, dass Ihre App nicht funktioniert. Die Async-Methoden werden in Verbindung mit den `async` Schlüssel `await` Wörtern und in Visual Basic C#und verwendet. 
+ 
+ Diese Methode löscht den Datenstrom, indem alle Änderungen an den Sicherungs Speicher geschrieben und der Stream zum Freigeben von Ressourcen geschlossen wird.   
+  
+ Durch Aufrufen `DisposeAsync` von können die Ressourcen ,dievonverwendetwerden,fürandereZweckeneuzugeordnetwerden.<xref:System.Security.Cryptography.CryptoStream> Weitere Informationen finden Sie unter [Bereinigen von nicht verwalteten Ressourcen](~/docs/standard/garbage-collection/unmanaged.md).  
+  
+ ]]></format>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="EndRead">
@@ -518,10 +571,31 @@ Weitere Informationen zu und <see langword="Dispose" /> <see langword="Finalize"
         <Parameter Name="asyncResult" Type="System.IAsyncResult" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
       </Parameters>
       <Docs>
-        <param name="asyncResult">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="asyncResult">Der Verweis auf die ausstehende asynchrone Anforderung, die beendet werden soll.</param>
+        <summary>Wartet, bis der ausstehende asynchrone Lesevorgang abgeschlossen ist. (Verwenden Sie stattdessen <see cref="Overload:System.Security.Cryptography.CryptoStream.ReadAsync" />.)</summary>
+        <returns>Die Anzahl der aus dem Stream gelesenen Bytes. Diese Anzahl kann zwischen 0 und der Anzahl der angeforderten Bytes liegen. Streams geben nur am Ende des Streams 0 zurück, andernfalls sollten sie blockieren, bis mindestens 1 Byte verfügbar ist.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In .NET Framework 4 und vorherigen Versionen müssen Sie Methoden wie <xref:System.Security.Cryptography.CryptoStream.BeginRead%2A> und <xref:System.Security.Cryptography.CryptoStream.EndRead%2A> verwenden, um asynchrone E/A-Vorgänge zu implementieren. Diese Methoden sind weiterhin in .net verfügbar, um Legacy Code zu unterstützen. die neuen <xref:System.Security.Cryptography.CryptoStream.ReadAsync%2A>Async-Methoden, wie z. b., <xref:System.Security.Cryptography.CryptoStream.WriteAsync%2A>, <xref:System.Security.Cryptography.CryptoStream.FlushAsync%2A> <xref:System.IO.Stream.CopyToAsync%2A>und, unterstützen Sie jedoch bei der einfacheren Implementierung asynchroner e/a-Vorgänge.  
+  
+ Ruft `EndRead` auf, um zu bestimmen, wie viele Bytes aus dem Stream gelesen wurden.  
+  
+ `EndRead`kann bei jedem <xref:System.IAsyncResult> von <xref:System.Security.Cryptography.CryptoStream.BeginRead%2A>einmal aufgerufen werden.  
+  
+ Diese Methode blockiert, bis die E/A-Operation abgeschlossen ist.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="asyncResult" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException">Ein Handle für den ausstehenden Lesevorgang ist nicht verfügbar.  
+  
+ - oder -  
+  
+ Die anstehende Operation unterstützt keine Lesevorgänge.</exception>
+        <exception cref="T:System.InvalidOperationException"><paramref name="asyncResult" /> basiert nicht auf einer <see cref="M:System.Security.Cryptography.CryptoStream.BeginRead(System.Byte[],System.Int32,System.Int32,System.AsyncCallback,System.Object)" />-Methode im aktuellen Stream.</exception>
+        <exception cref="T:System.IO.IOException">Der Stream ist geschlossen, oder ein interner Fehler ist aufgetreten.</exception>
       </Docs>
     </Member>
     <Member MemberName="EndWrite">
@@ -550,9 +624,28 @@ Weitere Informationen zu und <see langword="Dispose" /> <see langword="Finalize"
         <Parameter Name="asyncResult" Type="System.IAsyncResult" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
       </Parameters>
       <Docs>
-        <param name="asyncResult">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="asyncResult">Ein Verweis auf die ausstehende asynchrone E/A-Anforderung.</param>
+        <summary>Beendet einen asynchronen Schreibvorgang. (Verwenden Sie stattdessen <see cref="Overload:System.Security.Cryptography.CryptoStream.WriteAsync" />.)</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In .NET Framework 4 und vorherigen Versionen müssen Sie Methoden wie <xref:System.Security.Cryptography.CryptoStream.BeginWrite%2A> und <xref:System.Security.Cryptography.CryptoStream.EndWrite%2A> verwenden, um asynchrone E/A-Vorgänge zu implementieren. Diese Methoden sind weiterhin in .net verfügbar, um Legacy Code zu unterstützen. die neuen <xref:System.Security.Cryptography.CryptoStream.ReadAsync%2A>Async-Methoden, wie z. b., <xref:System.Security.Cryptography.CryptoStream.WriteAsync%2A>, <xref:System.Security.Cryptography.CryptoStream.FlushAsync%2A> <xref:System.IO.Stream.CopyToAsync%2A>und, unterstützen Sie jedoch bei der einfacheren Implementierung asynchroner e/a-Vorgänge.  
+  
+ `EndWrite`muss bei jedem <xref:System.IAsyncResult> von <xref:System.Security.Cryptography.CryptoStream.BeginWrite%2A>genau einmal aufgerufen werden.  
+  
+ Diese Methode blockiert, bis die E/A-Operation abgeschlossen ist. Fehler, die während einer asynchronen Schreib Anforderung auftreten, z. b. ein Datenträger Fehler während der e/a-Anforderung, treten im Thread Pool Thread auf und werden `EndWrite`bei einem-Rückruf sichtbar. Ausnahmen, die vom Thread Pool Thread ausgelöst werden, sind beim Aufrufen `EndWrite`von nicht sichtbar.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="asyncResult" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException">Ein Handle für den ausstehenden Schreibvorgang ist nicht verfügbar.  
+  
+ - oder -  
+  
+ Die anstehende Operation unterstützt keine Schreibvorgänge.</exception>
+        <exception cref="T:System.InvalidOperationException"><paramref name="asyncResult" /> basiert nicht auf einer <see cref="M:System.IO.Stream.BeginWrite(System.Byte[],System.Int32,System.Int32,System.AsyncCallback,System.Object)" />-Methode im aktuellen Stream.</exception>
+        <exception cref="T:System.IO.IOException">Der Stream ist geschlossen, oder ein interner Fehler ist aufgetreten.</exception>
       </Docs>
     </Member>
     <Member MemberName="Finalize">
@@ -717,8 +810,9 @@ Weitere Informationen zu und <see langword="Dispose" /> <see langword="Finalize"
         <exception cref="T:System.Security.Cryptography.CryptographicException">Der Schlüssel ist beschädigt. Dies kann zu ungültigen Füllzeichen im Stream führen.</exception>
         <exception cref="T:System.NotSupportedException">Der aktuelle Stream ist nicht schreibbar.  
   
-- oder - 
-Der letzte Block wurde bereits transformiert.</exception>
+ - oder -  
+  
+ Der letzte Block wurde bereits transformiert.</exception>
         <related type="Article" href="~/docs/standard/security/cryptographic-services.md">Kryptografische Dienste</related>
       </Docs>
     </Member>
@@ -899,7 +993,7 @@ Der letzte Block wurde bereits transformiert.</exception>
         <exception cref="T:System.NotSupportedException">Der dem aktuellen <see cref="T:System.Security.Cryptography.CryptoStreamMode" />-Objekt zugeordnete <see cref="T:System.Security.Cryptography.CryptoStream" /> stimmt nicht mit dem zugrunde liegenden Stream überein.  Diese Ausnahme wird beispielsweise ausgelöst, wenn <see cref="F:System.Security.Cryptography.CryptoStreamMode.Read" /> mit einem zugrunde liegenden Stream verwendet wird, für den die Zugriffsart Nur Schreiben gilt.</exception>
         <exception cref="T:System.ArgumentOutOfRangeException">Die <paramref name="offset" />-Parameter ist kleiner als 0 (null).  
   
-- oder - 
+- oder - 
 Die <paramref name="count" />-Parameter ist kleiner als 0 (null).</exception>
         <exception cref="T:System.ArgumentException">Die Summe aus <paramref name="count" />-Parameter und <paramref name="offset" />-Parameter ist größer als die Länge des Puffers.</exception>
         <related type="Article" href="~/docs/standard/security/cryptographic-services.md">Kryptografische Dienste</related>
@@ -988,9 +1082,20 @@ Die <paramref name="count" />-Parameter ist kleiner als 0 (null).</exception>
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Liest ein Byte aus dem Stream und erhöht die Position im Stream um ein Byte, oder gibt -1 zurück, wenn das Ende des Streams erreicht ist.</summary>
+        <returns>Das Byte ohne Vorzeichen, umgewandelt in <see langword="Int32" />, oder -1, wenn das Ende des Streams erreicht ist.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Verwenden Sie <xref:System.Security.Cryptography.CryptoStream.CanRead%2A> die-Eigenschaft, um zu bestimmen, ob die aktuelle Instanz Lesevorgänge unterstützt  
+  
+ Versucht, den Datenstrom zu manipulieren, nachdem der Stream geschlossen wurde, <xref:System.ObjectDisposedException>könnte eine auslösen.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">Lesevorgänge werden vom Stream nicht unterstützt.</exception>
+        <exception cref="T:System.ObjectDisposedException">Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.</exception>
       </Docs>
     </Member>
     <Member MemberName="Seek">
@@ -1259,9 +1364,19 @@ Die <paramref name="count" />-Parameter ist kleiner als 0 (null).</exception>
         <Parameter Name="value" Type="System.Byte" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
       </Parameters>
       <Docs>
-        <param name="value">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="value">Das Byte, das in den Stream geschrieben werden soll.</param>
+        <summary>Schreibt ein Byte an die aktuellen Position im Stream und erhöht die aktuelle Position im Stream um ein Byte.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Verwenden Sie <xref:System.Security.Cryptography.CryptoStream.CanWrite%2A> die-Eigenschaft, um zu bestimmen, ob die aktuelle Instanz Schreibvorgänge unterstützt  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IO.IOException">Ein E/A-Fehler tritt auf.</exception>
+        <exception cref="T:System.NotSupportedException">Der Stream unterstützt keine Schreibvorgänge, oder er wurde bereits geschlossen.</exception>
+        <exception cref="T:System.ObjectDisposedException">Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.</exception>
       </Docs>
     </Member>
   </Members>

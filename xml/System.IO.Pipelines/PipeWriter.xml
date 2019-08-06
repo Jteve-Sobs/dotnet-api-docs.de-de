@@ -1,5 +1,5 @@
 <Type Name="PipeWriter" FullName="System.IO.Pipelines.PipeWriter">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="516bf85c50018c232baa1f57d372bb071e982018" /><Meta Name="ms.sourcegitcommit" Value="74239f3977d28923e5020663db2c4e91601bea79" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/24/2019" /><Meta Name="ms.locfileid" Value="68437782" /></Metadata><TypeSignature Language="C#" Value="public abstract class PipeWriter : System.Buffers.IBufferWriter&lt;byte&gt;" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="818fb4247b3b59e76e13e0f277dc8ccd9fee8a50" /><Meta Name="ms.sourcegitcommit" Value="7b48428cbeb3a3c0221a3a096013b2659d01348c" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/04/2019" /><Meta Name="ms.locfileid" Value="68776249" /></Metadata><TypeSignature Language="C#" Value="public abstract class PipeWriter : System.Buffers.IBufferWriter&lt;byte&gt;" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit PipeWriter extends System.Object implements class System.Buffers.IBufferWriter`1&lt;unsigned int8&gt;" />
   <TypeSignature Language="DocId" Value="T:System.IO.Pipelines.PipeWriter" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class PipeWriter&#xA;Implements IBufferWriter(Of Byte)" />
@@ -91,9 +91,9 @@
         <Parameter Name="leaveOpen" Type="System.Boolean" Index="0" FrameworkAlternate="dotnet-plat-ext-3.0" />
       </Parameters>
       <Docs>
-        <param name="leaveOpen">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="leaveOpen">Ein optionales Flag, das angibt, ob das Löschen des zurückgegebenen <see cref="T:System.IO.Stream" />-Elements <see cref="T:System.IO.Pipelines.PipeReader" /> geöffnet lässt (<see langword="true" />) oder <see cref="T:System.IO.Pipelines.PipeReader" /> abschließt (<see langword="false" />).</param>
+        <summary>Gibt den zugrunde liegenden <see cref="T:System.IO.Stream" /> mit <see cref="T:System.IO.Pipelines.PipeWriter" /> als Wrapper zurück.</summary>
+        <returns>Der zugrunde liegende Stream.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -213,9 +213,9 @@
         <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
       </Parameters>
       <Docs>
-        <param name="cancellationToken">To be added.</param>
+        <param name="cancellationToken">Das Token zum Überwachen von Abbruchanforderungen. Der Standardwert ist <see cref="T:System.Threading.CancellationToken.None" />sein.</param>
         <summary>Stellt geschriebene Bytes für <see cref="T:System.IO.Pipelines.PipeReader" /> zur Verfügung und führt eine <see cref="M:System.IO.Pipelines.PipeReader.ReadAsync(System.Threading.CancellationToken)" />-Fortsetzung aus.</summary>
-        <returns>To be added.</returns>
+        <returns>Ein Task, der den asynchronen Leerungsvorgang darstellt und als Wrapper für ihn dient.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -323,10 +323,19 @@ Sie müssen nach dem Aufruf von <xref:System.IO.Pipelines.PipeWriter.Advance(Sys
         <Parameter Name="state" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="callback">To be added.</param>
-        <param name="state">To be added.</param>
-        <summary>Registriert einen Rückruf, der ausgeführt wird, wenn die <see cref="T:System.IO.Pipelines.PipeReader" />-Site der Pipe abgeschlossen ist.</summary>
-        <remarks>To be added.</remarks>
+        <param name="callback">Der Rückruf, der registriert werden soll.</param>
+        <param name="state">Das Zustandsobjekt, das an <paramref name="callback" /> übergeben wird, wenn es aufgerufen wird.</param>
+        <summary>Registriert einen Rückruf, der ausgeführt wird, wenn die <see cref="T:System.IO.Pipelines.PipeReader" />-Komponente der Pipe abgeschlossen ist.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+> [!IMPORTANT]
+> `OnReaderCompleted`kann nicht für alle Implementierungen von <xref:System.IO.Pipelines.PipeWriter>aufgerufen werden. Diese Methode wird in einer zukünftigen Version entfernt.
+
+          ]]></format>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="WriteAsync">
@@ -349,10 +358,10 @@ Sie müssen nach dem Aufruf von <xref:System.IO.Pipelines.PipeWriter.Advance(Sys
         <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
       </Parameters>
       <Docs>
-        <param name="source">To be added.</param>
-        <param name="cancellationToken">To be added.</param>
-        <summary>Schreibt <paramref name="source" /> in die Pipe und ermöglicht den Zugriff auf Daten für <see cref="T:System.IO.Pipelines.PipeReader" />.</summary>
-        <returns>To be added.</returns>
+        <param name="source">Die schreibgeschützte Bytespeicherregion, die geschrieben werden soll.</param>
+        <param name="cancellationToken">Das Token zum Überwachen von Abbruchanforderungen. Der Standardwert ist <see cref="T:System.Threading.CancellationToken.None" />sein.</param>
+        <summary>Schreibt den angegebenen Bytespeicherbereich in die Pipe und macht die Daten für <see cref="T:System.IO.Pipelines.PipeReader" /> zugänglich.</summary>
+        <returns>Ein Task, der den asynchronen Schreibvorgang darstellt und für den asynchronen Leerungsvorgang als Wrapper dient.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
