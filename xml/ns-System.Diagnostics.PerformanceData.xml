@@ -1,51 +1,51 @@
 <Namespace Name="System.Diagnostics.PerformanceData">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="b1c5ad58fc8cb70eeab256e01ab98bfc4478c7cb" /><Meta Name="ms.sourcegitcommit" Value="7461f9e28c2f184bd1596e6f07c25a3f34984516" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="03/28/2019" /><Meta Name="ms.locfileid" Value="58559339" /></Metadata><Docs>
+  <Metadata><Meta Name="ms.openlocfilehash" Value="b1c5ad58fc8cb70eeab256e01ab98bfc4478c7cb" /><Meta Name="ms.sourcegitcommit" Value="08fc3691deb7adaf0dfd751b9d9d0b23a3d3a7b8" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/09/2019" /><Meta Name="ms.locfileid" Value="68908472" /></Metadata><Docs>
     <summary>Verwenden Sie die Klassen in diesem Namespace, um Zählerdaten bereitzustellen. Die Zähler werden verwendet, um Leistungsmetriken wie den Systemmonitor für Consumer verfügbar zu machen. Der Namespace enthält keine Klassen zum Verarbeiten der Zählerdaten. Eine vollständige Beschreibung der Leistungsindikatorenarchitektur finden Sie unter <see href="https://msdn.microsoft.com/library/windows/desktop/aa373083\(v=vs.85\">Performance Counters</see>.aspx) (Leistungsindikatoren).</summary>
     <remarks>
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die Klassen in diesem Namespace unterstützen die neue Architektur (Version 2.0) für die Leistungsindikatoren, die in Windows Vista eingeführt wurde. In der neuen Architektur und der Anbieter nicht mehr direkt auf Consumeranforderungen antwortet, jedoch stattdessen einfach die Indikatordaten verwaltet. Das System Fügt einen Thread in den Prozess des Anbieters, wenn der Anbieter eine Instanz des Indikatorensatzes erstellt; der Thread ist verantwortlich für die Verarbeitung von Consumeranforderungen.  
+ Die Klassen in diesem Namespace unterstützen die neue Architektur (Version 2,0) für Leistungsindikatoren, die in Windows Vista eingeführt wurden. In der neuen Architektur antwortet der Anbieter nicht mehr direkt auf Consumer-Anforderungen, sondern verwaltet die gegen Daten einfach. Das System fügt einen Thread in den Prozess des Anbieters ein, wenn der Anbieter eine Instanz des Counter Sets erstellt. der Thread ist für die Verarbeitung von Consumeranforderungen verantwortlich.  
   
- Die folgenden Schritte zeigen den Prozess zum Schreiben eines Anbieters Leistungsindikatoren.  
+ In den folgenden Schritten wird der Prozess zum Schreiben eines Indikatorenanbieters veranschaulicht.  
   
-1.  Die Leistungsindikatoren, die vom Anbieter wird in ein XML-basierten Manifest definiert ist. Die Leistungsindikatoren werden in Indikatorensätzen logisch gruppiert. Die Indikatoren in einem Indikatorensatz werden durch einen numerischen Bezeichner identifiziert, die innerhalb der Indikatorensatz eindeutig ist. Ein Anbieter kann eine oder mehrere Indikatorensätze definieren. Ein Indikatorensatz wird durch eine Guid identifiziert, die an einen Anbieter eindeutig ist. Beachten Sie, dass, wenn Sie diese Klassen verwenden, um Ihres Anbieters zu schreiben:  
+1.  Die vom Anbieter bereitgestellten Indikatoren werden in einem XML-basierten Manifest definiert. Die Indikatoren werden logisch in Indikatorensätze gruppiert. Die Indikatoren in einem Indikatorensatz werden durch einen numerischen Bezeichner identifiziert, der innerhalb des Indikatorensatzes eindeutig ist. Ein Anbieter kann einen oder mehrere Indikatorensätze definieren. Ein Resultset wird durch eine GUID identifiziert, die für einen Anbieter eindeutig ist. Beachten Sie Folgendes: Wenn Sie diese Klassen verwenden, um den Anbieter zu schreiben:  
   
-    -   Die Rückrufattribut des Anbieterelements wird ignoriert.  
+    -   Das Rückruf Attribut des Provider-Elements wird ignoriert.  
   
-    -   Der Verweiswert für das Namensattribut des CounterAttribute-Elements wird ignoriert.  
+    -   Der Verweis Wert für das Name-Attribut des counterAttribute-Elements wird ignoriert.  
   
-     Weitere Informationen zum Schreiben des Manifests finden Sie unter [Leistung Leistungsindikatorenschema](https://msdn.microsoft.com/library/windows/desktop/aa373092\(v=vs.85\).aspx).  
+     Ausführliche Informationen zum Schreiben des Manifests finden Sie unter [Leistungsindikator Schema](https://msdn.microsoft.com/library/windows/desktop/aa373092\(v=vs.85\).aspx).  
   
-2.  Verwenden Sie nach dem Schreiben des Manifests die [CTRPP](https://msdn.microsoft.com/library/windows/desktop/aa372128\(v=vs.85\).aspx) Tool, um das Manifest (Ctrpp provider.man) zu kompilieren. Das Tool generiert vier Dateien: h "," c "," RC, und * _r.h. Sie können die h- und c-Dateien ignorieren. Die RC-Datei enthält die lokalisierten Zeichenfolgen, die in Ihrem Manifest definiert. Sie verwenden die RC- und die Datei * _r.h-Dateien, um die kompilierte Ressourcendatei (. res) zu erstellen, die in Ihrem Projekt enthalten. Der folgende Aufruf veranschaulicht, wie die Ressourcendatei zu kompilieren:  
+2.  Nachdem Sie das Manifest geschrieben haben, kompilieren Sie das Manifest mit dem [ctrpp](https://msdn.microsoft.com/library/windows/desktop/aa372128\(v=vs.85\).aspx) -Tool (ctrpp Provider. man). Das Tool generiert vier Dateien: ". h", ". c", ". RC" und "* _r. h". Sie können die h-und c-Dateien ignorieren. Die RC-Datei enthält die lokalisierten Zeichen folgen, die im Manifest definiert sind. Verwenden Sie die RC-und * _r. h-Dateien, um die kompilierte Ressourcen Datei (. res) zu erstellen, die Sie in Ihr Projekt einschließen. Der folgende-Befehl zeigt, wie die Ressourcen Datei kompiliert wird:  
   
     ```console  
     rc /r /i "c:\Program Files\Microsoft SDKs\Windows\v6.0\Include" provider.rc  
     ```  
   
-     Wenn Sie eine Fehlermeldung erhalten, die sal.h verweist, kopieren Sie die sal.h-Datei aus Ihrer Microsoft Visual Studio, Visual C# include-Verzeichnis in das Verzeichnis, das Sie für den Schalter/i angeben.  
+     Wenn Sie eine Fehlermeldung erhalten, die auf Sal. h verweist, kopieren Sie die Datei SAL. h aus Ihrem Microsoft Visual Studio, Visual C include-Verzeichnis in das Verzeichnis, das Sie für den/i-Schalter angeben.  
   
-     Fügen Sie einen Pfad zu die kompilierte Ressourcendatei (. res) auf der Seite der Anwendungseigenschaften des Projekts hinzu.  
+     Fügen Sie der Anwendungseigenschaften Seite Ihres Projekts einen Pfad zur kompilierten Ressourcen Datei (. res) hinzu.  
   
-3.  Schreiben Sie den Anbieter. Die folgenden Schritte zeigen die Aufrufe von einem Anbieter:  
+3.  Schreiben Sie Ihren Anbieter. Die folgenden Schritte zeigen die Aufrufe eines Anbieters:  
   
-    1.  Rufen Sie die <xref:System.Diagnostics.PerformanceData.CounterSet.%23ctor%2A?displayProperty=nameWithType> Konstruktor zum Definieren eines Leistungsindikators. Rufen Sie diese Methode für jeden Leistungsindikator im Manifest definierten festgelegt.  
+    1.  Ruft den <xref:System.Diagnostics.PerformanceData.CounterSet.%23ctor%2A?displayProperty=nameWithType> Konstruktor auf, um den Counter-Satz zu definieren. Nennen Sie diese Methode für jeden im Manifest definierten Counter-Satz.  
   
-    2.  Für jeden Leistungsindikator, rufen Sie eine der der <xref:System.Diagnostics.PerformanceData.CounterSet.AddCounter%2A?displayProperty=nameWithType> Methoden, um die Indikatoren hinzufügen. Rufen Sie diese Methode für jeden Indikator in der Indikatorensatz definiert.  
+    2.  Für jeden Indikatorensatz wird eine der <xref:System.Diagnostics.PerformanceData.CounterSet.AddCounter%2A?displayProperty=nameWithType> -Methoden aufgerufen, um dem Satz die Leistungsindikatoren hinzuzufügen. Ruft diese Methode für jeden im Counter-Satz definierten Leistungswert auf.  
   
-    3.  Rufen Sie die <xref:System.Diagnostics.PerformanceData.CounterSet.CreateCounterSetInstance%2A?displayProperty=nameWithType> Methode, um eine Instanz des Indikatorensatzes erstellen (eine Instanz enthält die Indikatordaten). Rufen Sie für einzelne Instanz von Indikatorensätzen diese Methode nur einmal. Rufen Sie diese Methode für jede Instanz, die für die Sie um Zählerdaten bereitzustellen (verwenden einen eindeutigen Namen für jede Instanz) müssen für mehrere Instanz Indikatorensätze.  
+    3.  Rufen Sie <xref:System.Diagnostics.PerformanceData.CounterSet.CreateCounterSetInstance%2A?displayProperty=nameWithType> die-Methode auf, um eine Instanz des Counter-Sets zu erstellen (eine Instanz enthält die Zählerdaten). Bei einzelinstanzindikatorensätzen wird diese Methode einmal aufgerufen. Für mehrere Instanzen von Indikatorensätzen wird diese Methode für jede Instanz aufgerufen, für die Sie Indikatorendaten bereitstellen müssen (verwenden Sie für jede Instanz einen eindeutigen Namen).  
   
-    4.  Verwenden der <xref:System.Diagnostics.PerformanceData.CounterSetInstance.Counters%2A?displayProperty=nameWithType> Eigenschaft, um Zugriff auf und setzen Sie den Indikator für den Leistungsindikator.  
+    4.  Verwenden Sie <xref:System.Diagnostics.PerformanceData.CounterSetInstance.Counters%2A?displayProperty=nameWithType> die-Eigenschaft, um auf die Daten des Zählers zuzugreifen und diese festzulegen.  
   
-4.  Verwenden Sie nach Abschluss der Anbieter die [LodCtr](https://docs.microsoft.com/windows/desktop/perfctrs/adding-counter-names-and-descriptions-to-the-registry#running-the-lodctr-tool) Tool, um die Leistungsindikatoren auf dem Computer zu registrieren. Ein auf ein Objekt angewendeter  
+4.  Nachdem Sie den Anbieter abgeschlossen haben, registrieren Sie die Leistungsindikatoren mit dem [Lodctr](https://docs.microsoft.com/windows/desktop/perfctrs/adding-counter-names-and-descriptions-to-the-registry#running-the-lodctr-tool) -Tool auf dem Computer. Ein auf ein Objekt angewendeter  
   
     ```console  
     lodctr /m:provider.man  
     ```  
   
-     Im Beispiel wird vorausgesetzt, das Manifest, und ausführbaren Datei befinden sich im aktuellen Verzeichnis.  
+     Im Beispiel wird davon ausgegangen, dass sich das Manifest und die ausführbare Datei im aktuellen Verzeichnis befinden.  
   
- Sie können die Klassen in diesem Namespace auf Computern verwenden, die die Windows Vista und späteren Betriebssystemen ausgeführt werden.  
+ Sie können die Klassen in diesem Namespace auf Computern verwenden, auf denen Windows Vista und spätere Betriebssysteme ausgeführt werden.  
   
    
   
@@ -152,7 +152,7 @@
 </instrumentationManifest>  
 ```  
   
- Das folgende Beispiel zeigt einen einfachen anbieterimplementierung für das Manifest:  
+ Das folgende Beispiel zeigt eine einfache Anbieter Implementierung für das Manifest:  
   
 ```cs  
 using System.Diagnostics.PerformanceData;  
