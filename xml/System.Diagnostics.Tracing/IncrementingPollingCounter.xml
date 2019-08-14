@@ -1,5 +1,5 @@
 <Type Name="IncrementingPollingCounter" FullName="System.Diagnostics.Tracing.IncrementingPollingCounter">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="9e2d792cc1536329017b74f8eb16441c4d440546" /><Meta Name="ms.sourcegitcommit" Value="634678f7ccd2928c6b2cf792a301b079b63639af" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/26/2019" /><Meta Name="ms.locfileid" Value="68540104" /></Metadata><TypeSignature Language="C#" Value="public class IncrementingPollingCounter : System.Diagnostics.Tracing.DiagnosticCounter" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="f16c677e643b0fe62e8a53b24d243f411adb17dd" /><Meta Name="ms.sourcegitcommit" Value="08fc3691deb7adaf0dfd751b9d9d0b23a3d3a7b8" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/09/2019" /><Meta Name="ms.locfileid" Value="68906811" /></Metadata><TypeSignature Language="C#" Value="public class IncrementingPollingCounter : System.Diagnostics.Tracing.DiagnosticCounter" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit IncrementingPollingCounter extends System.Diagnostics.Tracing.DiagnosticCounter" />
   <TypeSignature Language="DocId" Value="T:System.Diagnostics.Tracing.IncrementingPollingCounter" />
   <TypeSignature Language="VB.NET" Value="Public Class IncrementingPollingCounter&#xA;Inherits DiagnosticCounter" />
@@ -17,8 +17,16 @@
     <summary>Stellt eine Variante von <see cref="T:System.Diagnostics.Tracing.EventCounter" /> für Variablen bereit, die ständig zunehmen, z.B. die Anzahl von Ausnahmen in der Runtime.</summary>
     <remarks>
       <format type="text/markdown"><![CDATA[  
-   
-`IncrementingPollingCounter`berechnet keine Statistiken wie Mean und Standardabweichung, da nur der Leistungswert des Zählers akkumuliert wird. Anders <see cref="T:System.Diagnostics.Tracing.IncrementingEventCounter" />als führt dies zu einem Abruf Rückruf, der aufgerufen werden kann, um eine eigene Metrik regelmäßig zu aktualisieren.
+
+## Remarks
+
+<xref:System.Diagnostics.Tracing.IncrementingPollingCounter>Objekte Leben so lange <xref:System.Diagnostics.Tracing.EventSource> , wie Sie an angefügt werden, sofern Sie nicht explizit verworfen werden.
+
+`totalValueProvider`ist eine Methode, mit der die Werte in dem vom Listener angegebenen Intervall abgerufen werden. Diese Methode gibt einen inkrementellen Gleit Komma Wert zurück. Andernfalls kann ein Inkrement eines negativen Werts gemeldet werden.
+
+`IncrementingPollingCounter`berechnet keine Statistiken wie Mean und Standardabweichung, da nur der Leistungswert des Zählers akkumuliert wird. Anders <xref:System.Diagnostics.Tracing.IncrementingEventCounter>als führt dies zu einem Abruf Rückruf, der aufgerufen werden kann, um eine eigene Metrik regelmäßig zu aktualisieren.
+
+Ein Beispiel für die Verwendung <xref:System.Diagnostics.Tracing.IncrementingPollingCounter> von innerhalb der Laufzeit wie für Lauf Zeit Leistungsindikatoren finden Sie in der CoreCLR-Quelle für [runtimeeventsource](https://github.com/dotnet/coreclr/blob/master/src/System.Private.CoreLib/src/System/Diagnostics/Eventing/RuntimeEventSource.cs) auf GitHub.
 
     ]]></format>
     </remarks>
@@ -42,16 +50,10 @@
       </Parameters>
       <Docs>
         <param name="name">Der Name für diese <see cref="T:System.Diagnostics.Tracing.IncrementingPollingCounter" />-Instanz.</param>
-        <param name="eventSource">Die Ereignisquelle.</param>
-        <param name="totalValueProvider">To be added.</param>
+        <param name="eventSource">Die Ereignisquelle, deren Teil diese Instanz ist.</param>
+        <param name="totalValueProvider">Eine Methode, die zum Abfragen des Werts verwendet wird.</param>
         <summary>Initialisiert eine neue Instanz der <see cref="T:System.Diagnostics.Tracing.IncrementingPollingCounter" />-Klasse.</summary>
-        <remarks>
-          <format type="text/markdown"><![CDATA[  
-
- <xref:System.Diagnostics.Tracing.IncrementingPollingCounter>Objekte Leben so lange <xref:System.Diagnostics.Tracing.EventSource> , wie Sie an angefügt werden, sofern Sie nicht explizit verworfen werden.
-
-        ]]></format>
-        </remarks>
+        <remarks>To be added.</remarks>
       </Docs>
     </Member>
     <Member MemberName="DisplayRateTimeScale">
@@ -70,9 +72,16 @@
         <ReturnType>System.TimeSpan</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Ruft die Häufigkeit ab, mit der diese Metrik angezeigt werden soll, oder legt sie fest.</summary>
+        <value>Die Rate, mit der diese Metrik angezeigt werden soll.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+## Remarks
+
+Der Wert der `DisplayRateTimeScale` Eigenschaft ist als Zeichenfolge in der Nutzlast enthalten.
+
+         ]]></format>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="ToString">
@@ -92,8 +101,8 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <summary>Gibt eine Zeichenfolgendarstellung der aktuellen inkrementierenden Abrufzählerinstanz zurück.</summary>
+        <returns>Der Name und das Inkrement des aktuellen inkrementierenden Abrufzählers.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
