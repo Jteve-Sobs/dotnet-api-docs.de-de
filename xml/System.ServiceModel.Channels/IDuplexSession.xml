@@ -1,5 +1,5 @@
 <Type Name="IDuplexSession" FullName="System.ServiceModel.Channels.IDuplexSession">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="8e2288779b884fb864395f74d1f1c86ad03976d4" /><Meta Name="ms.sourcegitcommit" Value="7461f9e28c2f184bd1596e6f07c25a3f34984516" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="03/28/2019" /><Meta Name="ms.locfileid" Value="58555412" /></Metadata><TypeSignature Language="C#" Value="public interface IDuplexSession : System.ServiceModel.Channels.IInputSession, System.ServiceModel.Channels.IOutputSession" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="4893578ce73fa37c40f4ed3571ed2e659faba7dc" /><Meta Name="ms.sourcegitcommit" Value="055a4a82a0b08bfbdc21bd1347fb71f7fe2c099e" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/15/2019" /><Meta Name="ms.locfileid" Value="69155864" /></Metadata><TypeSignature Language="C#" Value="public interface IDuplexSession : System.ServiceModel.Channels.IInputSession, System.ServiceModel.Channels.IOutputSession" />
   <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract IDuplexSession implements class System.ServiceModel.Channels.IInputSession, class System.ServiceModel.Channels.IOutputSession, class System.ServiceModel.Channels.ISession" />
   <TypeSignature Language="DocId" Value="T:System.ServiceModel.Channels.IDuplexSession" />
   <TypeSignature Language="VB.NET" Value="Public Interface IDuplexSession&#xA;Implements IInputSession, IOutputSession" />
@@ -190,7 +190,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Aufrufen von <xref:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession> signalisiert der anderen Seite der Sitzung, die sie zurückgeben soll `null` auf ausstehende oder folgende Aufrufe zu <xref:System.ServiceModel.Channels.IInputChannel.Receive%2A>. <xref:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession%2A> ist idempotent, d. h., ein erneuter Aufruf hat keine Auswirkungen.  
+ Der <xref:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession> Aufruf von signalisiert der anderen Seite der Sitzung, dass Sie von `null` ausstehenden oder nachfolgenden Aufrufen an <xref:System.ServiceModel.Channels.IInputChannel.Receive%2A>zurückgegeben werden soll. <xref:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession%2A> ist idempotent, d. h., ein erneuter Aufruf hat keine Auswirkungen.  
   
  Ein Beenden der ausgehenden Sitzung hat keinen Einfluss auf die eingehende Sitzung. Daher erfolgt keine Anweisung über die Verfügbarkeit des Nachrichtenempfangs auf der zum Eingabekanal gehörenden Sitzung.  
   
@@ -198,15 +198,15 @@
         </remarks>
         <block subset="none" type="overrides"><para>
             <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> ist eine Sitzungsmethode, die mit dem <see cref="T:System.ServiceModel.Channels.IDuplexSessionChannel" /> interagieren kann, der die Sitzung besitzt. Dies ist insbesondere der Fall, wenn Ihre Sitzungsdauer zur Kanallebensdauer hinzugefügt wird (wie bei TCP, zuverlässiger Sitzung und Sicherheit): 
--If <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> wird aufgerufen, bevor <see cref="M:System.ServiceModel.ICommunicationObject.Close" /> aufgerufen wird, auf dem Kanal <see cref="M:System.ServiceModel.ICommunicationObject.Close" /> warten soll <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> um den Vorgang abzuschließen.  
+-Wenn <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> aufgerufen wird, <see cref="M:System.ServiceModel.ICommunicationObject.Close" /> bevor auf dem <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> Kanal aufgerufen wird <see cref="M:System.ServiceModel.ICommunicationObject.Close" /> , sollte warten, bis abgeschlossen ist.  
   
-– Wenn der Kanal den <see cref="F:System.ServiceModel.CommunicationState.Created" /> oder <see cref="F:System.ServiceModel.CommunicationState.Opening" /> Zustand <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> sollte Auslösen einer <see cref="T:System.InvalidOperationException" />.  
+-Wenn sich der Kanal im- <see cref="F:System.ServiceModel.CommunicationState.Created" /> Zustand <see cref="F:System.ServiceModel.CommunicationState.Opening" /> oder im <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> -Zustand befindet <see cref="T:System.InvalidOperationException" />, sollte eine auslösen.  
   
-– Wenn der Kanal den <see cref="F:System.ServiceModel.CommunicationState.Faulted" /> Zustand <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> sollte Auslösen einer <see cref="T:System.ServiceModel.CommunicationObjectFaultedException" />.  
+-Wenn sich der Kanal im <see cref="F:System.ServiceModel.CommunicationState.Faulted" /> -Zustand befindet, <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> sollte eine <see cref="T:System.ServiceModel.CommunicationObjectFaultedException" />auslösen.  
   
--Der Kanal sollte fehlschlagen, wenn <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> auslöst.  
+-Der Kanal sollte einen Fehler <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> auslösen, wenn auslöst.  
   
-– Die Implementierung von <see cref="M:System.ServiceModel.ICommunicationObject.Close" /> auf dem Kanal sollte Aufrufen <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> und überprüfen Sie, ob <see cref="M:System.ServiceModel.Channels.IInputChannel.Receive" /> gibt <see langword="null" />, die angibt, dass <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> von der anderen Seite der Sitzung aus aufgerufen wurde.</para></block>
+-Die Implementierung von <see cref="M:System.ServiceModel.ICommunicationObject.Close" /> auf dem Kanal sollte aufrufen <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> und dann überprüfen <see cref="M:System.ServiceModel.Channels.IInputChannel.Receive" /> , <see langword="null" />dass zurückgibt, <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> wodurch angegeben wird, dass von der anderen Seite der Sitzung aufgerufen wurde.</para></block>
       </Docs>
     </Member>
     <Member MemberName="CloseOutputSession">
@@ -245,7 +245,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Aufrufen von <xref:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession%28System.TimeSpan%29> signalisiert der anderen Seite der Sitzung, die sie zurückgeben soll `null` auf ausstehende oder folgende Aufrufe zu <xref:System.ServiceModel.Channels.IInputChannel.Receive%2A>. <xref:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession%2A> ist idempotent, d. h., ein erneuter Aufruf hat keine Auswirkungen.  
+ Der <xref:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession%28System.TimeSpan%29> Aufruf von signalisiert der anderen Seite der Sitzung, dass Sie von `null` ausstehenden oder nachfolgenden Aufrufen an <xref:System.ServiceModel.Channels.IInputChannel.Receive%2A>zurückgegeben werden soll. <xref:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession%2A> ist idempotent, d. h., ein erneuter Aufruf hat keine Auswirkungen.  
   
  Ein Beenden der ausgehenden Sitzung hat keinen Einfluss auf die eingehende Sitzung. Daher erfolgt keine Anweisung über die Verfügbarkeit des Nachrichtenempfangs auf der zum Eingabekanal gehörenden Sitzung.  
   
@@ -253,15 +253,15 @@
         </remarks>
         <block subset="none" type="overrides"><para>
             <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> ist eine Sitzungsmethode, die mit dem <see cref="T:System.ServiceModel.Channels.IDuplexSessionChannel" /> interagieren kann, der die Sitzung besitzt. Dies ist insbesondere der Fall, wenn Ihre Sitzungsdauer zur Kanallebensdauer hinzugefügt wird (wie bei TCP, zuverlässiger Sitzung und Sicherheit): 
--If <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> wird aufgerufen, bevor <see cref="M:System.ServiceModel.ICommunicationObject.Close" /> aufgerufen wird, auf dem Kanal <see cref="M:System.ServiceModel.ICommunicationObject.Close" /> warten soll <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> um den Vorgang abzuschließen.  
+-Wenn <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> aufgerufen wird, <see cref="M:System.ServiceModel.ICommunicationObject.Close" /> bevor auf dem <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> Kanal aufgerufen wird <see cref="M:System.ServiceModel.ICommunicationObject.Close" /> , sollte warten, bis abgeschlossen ist.  
   
-– Wenn der Kanal den <see cref="F:System.ServiceModel.CommunicationState.Created" /> oder <see cref="F:System.ServiceModel.CommunicationState.Opening" /> Zustand <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> sollte Auslösen einer <see cref="T:System.InvalidOperationException" />.  
+-Wenn sich der Kanal im- <see cref="F:System.ServiceModel.CommunicationState.Created" /> Zustand <see cref="F:System.ServiceModel.CommunicationState.Opening" /> oder im <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> -Zustand befindet <see cref="T:System.InvalidOperationException" />, sollte eine auslösen.  
   
-– Wenn der Kanal den <see cref="F:System.ServiceModel.CommunicationState.Faulted" /> Zustand <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> sollte Auslösen einer <see cref="T:System.ServiceModel.CommunicationObjectFaultedException" />.  
+-Wenn sich der Kanal im <see cref="F:System.ServiceModel.CommunicationState.Faulted" /> -Zustand befindet, <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> sollte eine <see cref="T:System.ServiceModel.CommunicationObjectFaultedException" />auslösen.  
   
--Der Kanal sollte fehlschlagen, wenn <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> auslöst.  
+-Der Kanal sollte einen Fehler <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> auslösen, wenn auslöst.  
   
-– Die Implementierung von <see cref="M:System.ServiceModel.ICommunicationObject.Close" /> auf dem Kanal sollte Aufrufen <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> und überprüfen Sie, ob <see cref="M:System.ServiceModel.Channels.IInputChannel.Receive" /> gibt <see langword="null" />, um anzugeben, <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> von der anderen Seite der Sitzung aus aufgerufen wurde.</para></block>
+-Die Implementierung von <see cref="M:System.ServiceModel.ICommunicationObject.Close" /> auf dem Kanal sollte aufrufen <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> und dann überprüfen <see cref="M:System.ServiceModel.Channels.IInputChannel.Receive" /> , <see langword="null" />dass zurückgibt <see cref="M:System.ServiceModel.Channels.IDuplexSession.CloseOutputSession" /> , wodurch angegeben wird, dass von der anderen Seite der Sitzung aufgerufen wurde.</para></block>
       </Docs>
     </Member>
     <Member MemberName="EndCloseOutputSession">
@@ -294,7 +294,7 @@
         <Parameter Name="result" Type="System.IAsyncResult" />
       </Parameters>
       <Docs>
-        <param name="result">Das <see cref="T:System.IAsyncResult" />, das von einem Aufruf der <see cref="Overload:System.ServiceModel.Channels.IDuplexSession.BeginCloseOutputSession" />-Methoden zurückgegeben wurde.</param>
+        <param name="result"><see cref="T:System.IAsyncResult" />, das von einem Aufruf der <see cref="Overload:System.ServiceModel.Channels.IDuplexSession.BeginCloseOutputSession" />-Methoden zurückgegeben wurde.</param>
         <summary>Schließt einen asynchronen Vorgang ab, der die ausgehende Sitzung beendet, wobei angegeben wird, dass keine weiteren Nachrichten mehr von diesem Endpunkt aus auf dem zur Sitzung gehörenden Kanal versendet werden.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
