@@ -1,5 +1,5 @@
 <Type Name="TransferMode" FullName="System.ServiceModel.TransferMode">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="fe96e846f1fec0382eb0e85dc0cfc284bd62db43" /><Meta Name="ms.sourcegitcommit" Value="7461f9e28c2f184bd1596e6f07c25a3f34984516" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="03/28/2019" /><Meta Name="ms.locfileid" Value="58554951" /></Metadata><TypeSignature Language="C#" Value="public enum TransferMode" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="6015e2a83e57b0d2910508457fcf2e379a4b6cdd" /><Meta Name="ms.sourcegitcommit" Value="055a4a82a0b08bfbdc21bd1347fb71f7fe2c099e" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/15/2019" /><Meta Name="ms.locfileid" Value="69232263" /></Metadata><TypeSignature Language="C#" Value="public enum TransferMode" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed TransferMode extends System.Enum" />
   <TypeSignature Language="DocId" Value="T:System.ServiceModel.TransferMode" />
   <TypeSignature Language="VB.NET" Value="Public Enum TransferMode" />
@@ -29,13 +29,13 @@
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Windows Communication Foundation (WCF)-Transporte unterstützen zwei Modi zum Übertragen von Nachrichten in jeder Richtung:  
+ Windows Communication Foundation (WCF)-Transporte unterstützen zwei Modi für die Übertragung von Nachrichten in den einzelnen Richtungen:  
   
 -   Bei gepufferten Übertragungen wird die gesamte Nachricht in einem Puffer zwischengespeichert, bis die Übertragung abgeschlossen ist.  
   
 -   Bei Stream-Übertragungen werden lediglich die Nachrichtenheader gepuffert, und der Nachrichtentext wird als Stream verfügbar gemacht, aus dem jeweils kleinere Bestandteile gelesen werden können.  
   
- Festlegen des Übertragungsmodus auf Streamed ermöglicht kommunikationsstream in beide Richtungen. Festlegen des Übertragungsmodus StreamedRequest oder StreamedResponse ermöglicht kommunikationsstream nur in der angegebenen Richtung.  
+ Wenn Sie den Übertragungsmodus auf Streaming festlegen, wird die streamingkommunikation in beide Richtungen ermöglicht. Wenn Sie den Übertragungsmodus auf StreamedRequest oder StreamedResponse festlegen, wird die streamingkommunikation nur in der angegeben Richtung ermöglicht.  
   
  Stream-Übertragungen können die Skalierbarkeit eines Dienstes verbessern, indem sie große Speicherpuffer überflüssig machen. Ob die Änderung des Übertragungsmodus die Skalierbarkeit tatsächlich verbessert, hängt von der Größe der übertragenen Nachrichten ab. Verbesserungen der Skalierbarkeit sollten am deutlichsten zutage treten, wenn große Nachrichten Stream-Übertragungen anstelle gepufferter Übertragungen verwenden.  
   
@@ -45,22 +45,22 @@
   
  Die Entscheidung, ob Stream-Übertragungen oder gepufferte Übertragungen verwendet werden, ist eine lokale Entscheidung des Endpunkts für HTTP-Transporte. Bei HTTP-Übertragungen wird der Übertragungsmodus nicht über Verbindungen oder an Proxyserver oder andere Vermittler weitergegeben. Das Festlegen des Übertragungsmodus spiegelt sich nicht in der Beschreibung des Dienstvertrags wider. Nachdem Sie einen Proxy für einen Dienst erstellt haben, können Sie (dies ist zulässig, aber nicht erforderlich) die Konfigurationsdatei für Dienste bearbeiten, die mit Stream-Übertragungen verwendet werden sollen, um den Übertragungsmodus festzulegen. Bei TCP und Named Pipe-Transporten wird der Übertragungsmodus als Richtlinienassertion weitergegeben.  
   
- Verwenden den Übertragungsmodus Streamed bewirkt, dass die WCF-Laufzeit, um einige Einschränkungen zu erzwingen.  
+ Die Verwendung des gestreuten Übertragungsmodus bewirkt, dass die WCF-Laufzeit einige Einschränkungen durchsetzt.  
   
 -   Vorgänge, die in einem Stream-Transport erfolgen, können einen Vertrag mit höchstens einem Eingabeparameter und/oder einem Ausgabeparameter auf der Ebene des Programmiermodells haben. Der Parameter entspricht dem gesamten Nachrichtentext, und es muss sich um <xref:System.ServiceModel.Channels.Message>, einen Untertyp von <xref:System.IO.Stream> oder um eine <xref:System.Xml.Serialization.IXmlSerializable>-Implementierung handeln. Ein Rückgabewert für einen Vorgang entspricht einem Ausgabeparameter.  
   
--   Einige WCF-Funktionen wie zuverlässiges Messaging und Sicherheit für SOAP-Nachrichtenebene verwenden gepufferte Nachrichten für Übertragungen. Dadurch können mögliche Leistungsvorteile durch das Streaming reduziert oder zunichte gemacht werden. Um einen Stream-Transport zu sichern, verwenden Sie nur die Sicherheit auf Transportebene oder eine Mischmodussicherheit, die WS-Security-Ansprüche mit der Transportsicherheit verbindet.  
+-   Einige WCF-Funktionen wie zuverlässiges Messaging und SOAP-Sicherheit auf Nachrichten Ebene basieren auf Puffer Nachrichten für Übertragungen. Dadurch können mögliche Leistungsvorteile durch das Streaming reduziert oder zunichte gemacht werden. Um einen Stream-Transport zu sichern, verwenden Sie nur die Sicherheit auf Transportebene oder eine Mischmodussicherheit, die WS-Security-Ansprüche mit der Transportsicherheit verbindet.  
   
--   SOAP-Header werden immer gepuffert, auch wenn der Übertragungsmodus auf Streamed festgelegt ist. Die Header für eine Nachricht dürfen die Größe des MaxBufferSize-Transportkontingents nicht überschreiten, das in den verschiedenen Bindungen und Bindungselementen verfügbar gemacht wird.  
+-   SOAP-Header werden immer gepuffert, auch wenn der Übertragungsmodus auf Streaming festgelegt ist. Die Header für eine Nachricht dürfen die Größe des MaxBufferSize-Transportkontingents nicht überschreiten, das in den verschiedenen Bindungen und Bindungselementen verfügbar gemacht wird.  
   
- Änderung des Übertragungsmodus von gepufferte zu Streamed ändert sich auch die systemeigene kanalform von TCP- und named Pipe-Transporten. Die systemeigene Kanalform für gepufferte Übertragungen ist <xref:System.ServiceModel.Channels.IDuplexSessionChannel>. Die systemeigenen Kanäle für Streamingübertragungen sind <xref:System.ServiceModel.Channels.IRequestChannel> und <xref:System.ServiceModel.Channels.IReplyChannel>. Eine Folge davon ist, dass sitzungsbasierten Dienstverträge nicht mit Transportstreaming verwendet werden können.  
+ Wenn Sie den Übertragungsmodus von gepuffert in per Streaming ändern, wird auch die systemeigene Kanalform der TCP-und Named Pipe Transporte geändert. Die systemeigene Kanalform für gepufferte Übertragungen ist <xref:System.ServiceModel.Channels.IDuplexSessionChannel>. Die systemeigenen Kanäle für Streamingübertragungen sind <xref:System.ServiceModel.Channels.IRequestChannel> und <xref:System.ServiceModel.Channels.IReplyChannel>. Eine Folge davon ist, dass sitzungsbasierten Dienstverträge nicht mit Transportstreaming verwendet werden können.  
   
    
   
 ## Examples  
- Das folgende Codebeispiel zeigt die Einstellung der <xref:System.ServiceModel.TransferMode> Eigenschaft Streamed mithilfe von Code:  
+ Im folgenden Codebeispiel wird das Festlegen <xref:System.ServiceModel.TransferMode> der-Eigenschaft für das Streaming durch Code veranschaulicht:  
   
- **C#**  
+ **c#**  
   
 ```  
 TcpTransportBindingElement transport = new TcpTransportBindingElement();  
@@ -69,7 +69,7 @@ BinaryMessageEncodingBindingElement encoder = new BinaryMessageEncodingBindingEl
 CustomBinding binding = new CustomBinding(encoder, transport);  
 ```  
   
- Das folgende Beispiel zeigt <xref:System.ServiceModel.TransferMode.Streamed> Eigenschaft Streamed durch Konfiguration:  
+ Das folgende Beispiel zeigt <xref:System.ServiceModel.TransferMode.Streamed> eine Eigenschaft, die über die Konfiguration gestreamt wird:  
   
 ```  
 <customBinding>  
