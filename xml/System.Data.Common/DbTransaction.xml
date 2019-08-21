@@ -1,5 +1,5 @@
 <Type Name="DbTransaction" FullName="System.Data.Common.DbTransaction">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="cfac0a43db9245828a1b80b3f0781bfc0680e3b5" /><Meta Name="ms.sourcegitcommit" Value="bc24a3ba616ee1df8b858f9400cae4f058ea3a7e" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="06/19/2019" /><Meta Name="ms.locfileid" Value="67240753" /></Metadata><TypeSignature Language="C#" Value="public abstract class DbTransaction : MarshalByRefObject, IDisposable, System.Data.IDbTransaction" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="87827fdd1c66cef09e37f3edef5240adadebb78e" /><Meta Name="ms.sourcegitcommit" Value="cb4d218ffd5a459a5f921fe1d945c682d1e09aca" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/16/2019" /><Meta Name="ms.locfileid" Value="69539559" /></Metadata><TypeSignature Language="C#" Value="public abstract class DbTransaction : MarshalByRefObject, IDisposable, System.Data.IDbTransaction" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit DbTransaction extends System.MarshalByRefObject implements class System.Data.IDbTransaction, class System.IDisposable" />
   <TypeSignature Language="DocId" Value="T:System.Data.Common.DbTransaction" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class DbTransaction&#xA;Inherits MarshalByRefObject&#xA;Implements IDbTransaction, IDisposable" />
@@ -36,7 +36,7 @@
     </Interface>
   </Interfaces>
   <Docs>
-    <summary>Die Basisklasse für eine Transaktion.</summary>
+    <summary>Definiert das Kernverhalten der Datenbanktransaktionen und stellt eine Basisklasse für datenbankspezifische Transaktionen bereit</summary>
     <remarks>To be added.</remarks>
     <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
   </Docs>
@@ -70,7 +70,7 @@
       <Docs>
         <summary>Initialisiert ein neues <see cref="T:System.Data.Common.DbTransaction" />-Objekt.</summary>
         <remarks>To be added.</remarks>
-        <related type="Article" href="https://msdn.microsoft.com/library/f46570de-9e50-4fe6-8710-a8c31fa8569b">Transaktionen in ADO.NET</related>
+        <related type="Article" href="~/docs/framework/data/adonet/transactions-and-concurrency.md">Transaktionen und Parallelität (ADO.NET)</related>
         <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
       </Docs>
     </Member>
@@ -108,9 +108,9 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Führt einen Commit der Datenbanktransaktion aus.</summary>
+        <summary>Committet die Datenbanktransaktion beim Überschreiben in einer abgeleiteten Klasse.</summary>
         <remarks>To be added.</remarks>
-        <related type="Article" href="https://msdn.microsoft.com/library/f46570de-9e50-4fe6-8710-a8c31fa8569b">Transaktionen in ADO.NET</related>
+        <related type="Article" href="~/docs/framework/data/adonet/transactions-and-concurrency.md">Transaktionen und Parallelität (ADO.NET)</related>
         <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
       </Docs>
     </Member>
@@ -137,10 +137,19 @@
         <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" Index="0" FrameworkAlternate="netcore-3.0" />
       </Parameters>
       <Docs>
-        <param name="cancellationToken">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="cancellationToken">Ein Token zum Abbrechen des asynchronen Vorgangs.</param>
+        <summary>Führt einen asynchronen Commit der Datenbanktransaktion aus.</summary>
+        <returns>Eine <see cref="P:System.Threading.Tasks.Task" />, die den asynchronen Vorgang darstellt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standard Implementierung dieser asynchronen Methode delegiert an die synchrone Entsprechung und gibt einen `Task`abgeschlossenen zurück, der den aufrufenden Thread potenziell blockiert.
+ 
+ Datenanbieter, die die [asynchrone Programmierung](~/docs/framework/data/adonet/asynchronous-programming.md) unterstützen, sollten die Standard Implementierung mithilfe von asynchronen e/a-Vorgängen überschreiben.
+
+ ]]></format>
+        </remarks>        
       </Docs>
     </Member>
     <Member MemberName="Connection">
@@ -179,11 +188,11 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Eine einzelne Anwendung möglicherweise mehrere datenquellenverbindungen, jeweils mit NULL oder mehr Transaktionen. Dieser Eigenschaft können Sie bestimmen, das Verbindungsobjekt, das einer bestimmten Transaktion zugeordnet.  
+ Eine einzelne Anwendung kann über mehrere Datenquellen Verbindungen verfügen, von denen jede über NULL oder mehr Transaktionen verfügt. Mit dieser Eigenschaft können Sie das Verbindungs Objekt bestimmen, das einer bestimmten Transaktion zugeordnet ist.  
   
  ]]></format>
         </remarks>
-        <related type="Article" href="https://msdn.microsoft.com/library/f46570de-9e50-4fe6-8710-a8c31fa8569b">Transaktionen in ADO.NET</related>
+        <related type="Article" href="~/docs/framework/data/adonet/transactions-and-concurrency.md">Transaktionen und Parallelität (ADO.NET)</related>
         <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
       </Docs>
     </Member>
@@ -217,17 +226,17 @@
         <ReturnType>System.Data.Common.DbConnection</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gibt das <see cref="T:System.Data.Common.DbConnection" />-Objekt an, das der Transaktion zugeordnet ist.</summary>
+        <summary>Ruft beim Überschreiben in einer abgeleiteten Klasse das der Transaktion zugeordnete <see cref="T:System.Data.Common.DbConnection" />-Objekt ab.</summary>
         <value>Ein <see cref="T:System.Data.Common.DbConnection" />-Objekt, das der Transaktion zugeordnet ist.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Eine einzelne Anwendung möglicherweise mehrere datenquellenverbindungen, jeweils mit NULL oder mehr Transaktionen. Dieser Eigenschaft können Sie bestimmen, das Verbindungsobjekt, das einer bestimmten Transaktion zugeordnet.  
+ Eine einzelne Anwendung kann über mehrere Datenquellen Verbindungen verfügen, von denen jede über NULL oder mehr Transaktionen verfügt. Mit dieser Eigenschaft können Sie das Verbindungs Objekt bestimmen, das einer bestimmten Transaktion zugeordnet ist.  
   
  ]]></format>
         </remarks>
-        <related type="Article" href="https://msdn.microsoft.com/library/f46570de-9e50-4fe6-8710-a8c31fa8569b">Transaktionen in ADO.NET</related>
+        <related type="Article" href="~/docs/framework/data/adonet/transactions-and-concurrency.md">Transaktionen und Parallelität (ADO.NET)</related>
         <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
       </Docs>
     </Member>
@@ -242,11 +251,11 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Data.Common.DbTransaction.Dispose%2A> muss ein Rollback der Transaktion. Jedoch das Verhalten der <xref:System.Data.Common.DbTransaction.Dispose%2A> Anbieter spezifisch ist und nicht als Ersatz für Aufrufen <xref:System.Data.Common.DbTransaction.Rollback%2A>.  
+ <xref:System.Data.Common.DbTransaction.Dispose%2A>sollte für die Transaktion ein Rollback durchführen. Das Verhalten von ist jedoch <xref:System.Data.Common.DbTransaction.Dispose%2A> Anbieter spezifisch und sollte das Aufrufen <xref:System.Data.Common.DbTransaction.Rollback%2A>von nicht ersetzen.  
   
  ]]></format>
         </remarks>
-        <related type="Article" href="https://msdn.microsoft.com/library/f46570de-9e50-4fe6-8710-a8c31fa8569b">Transaktionen in ADO.NET</related>
+        <related type="Article" href="~/docs/framework/data/adonet/transactions-and-concurrency.md">Transaktionen und Parallelität (ADO.NET)</related>
         <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
       </Docs>
     </MemberGroup>
@@ -289,11 +298,11 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Data.Common.DbTransaction.Dispose%2A> muss ein Rollback der Transaktion. Jedoch das Verhalten der <xref:System.Data.Common.DbTransaction.Dispose%2A> Anbieter spezifisch ist und nicht als Ersatz für Aufrufen <xref:System.Data.Common.DbTransaction.Rollback%2A>.  
+ <xref:System.Data.Common.DbTransaction.Dispose%2A>sollte für die Transaktion ein Rollback durchführen. Das Verhalten von ist jedoch <xref:System.Data.Common.DbTransaction.Dispose%2A> Anbieter spezifisch und sollte das Aufrufen <xref:System.Data.Common.DbTransaction.Rollback%2A>von nicht ersetzen.  
   
  ]]></format>
         </remarks>
-        <related type="Article" href="https://msdn.microsoft.com/library/f46570de-9e50-4fe6-8710-a8c31fa8569b">Transaktionen in ADO.NET</related>
+        <related type="Article" href="~/docs/framework/data/adonet/transactions-and-concurrency.md">Transaktionen und Parallelität (ADO.NET)</related>
         <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
       </Docs>
     </Member>
@@ -336,11 +345,11 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Data.Common.DbTransaction.Dispose%2A> muss ein Rollback der Transaktion. Jedoch das Verhalten der <xref:System.Data.Common.DbTransaction.Dispose%2A> Anbieter spezifisch ist und nicht als Ersatz für Aufrufen <xref:System.Data.Common.DbTransaction.Rollback%2A>.  
+ <xref:System.Data.Common.DbTransaction.Dispose%2A>sollte für die Transaktion ein Rollback durchführen. Das Verhalten von ist jedoch <xref:System.Data.Common.DbTransaction.Dispose%2A> Anbieter spezifisch und sollte das Aufrufen <xref:System.Data.Common.DbTransaction.Rollback%2A>von nicht ersetzen.  
   
  ]]></format>
         </remarks>
-        <related type="Article" href="https://msdn.microsoft.com/library/f46570de-9e50-4fe6-8710-a8c31fa8569b">Transaktionen in ADO.NET</related>
+        <related type="Article" href="~/docs/framework/data/adonet/transactions-and-concurrency.md">Transaktionen und Parallelität (ADO.NET)</related>
         <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
       </Docs>
     </Member>
@@ -367,9 +376,19 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Stellt das Transaktionsobjekt asynchron bereit.</summary>
+        <returns>Eine <see cref="P:System.Threading.Tasks.ValueTask" />, die den asynchronen Vorgang darstellt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standard Implementierung dieser asynchronen Methode delegiert an die synchrone Entsprechung und gibt einen `ValueTask`abgeschlossenen zurück, der den aufrufenden Thread potenziell blockiert.
+ 
+ Datenanbieter, die die [asynchrone Programmierung](~/docs/framework/data/adonet/asynchronous-programming.md) unterstützen, sollten die Standard Implementierung mithilfe von asynchronen e/a-Vorgängen überschreiben.
+  
+ ]]></format>
+
+        </remarks>        
       </Docs>
     </Member>
     <Member MemberName="IsolationLevel">
@@ -405,10 +424,10 @@
         <ReturnType>System.Data.IsolationLevel</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gibt den <see cref="T:System.Data.IsolationLevel" /> für diese Transaktion an.</summary>
-        <value>Der <see cref="T:System.Data.IsolationLevel" /> für diese Transaktion.</value>
+        <summary>Ruft beim Überschreiben in einer abgeleiteten Klasse die Isolationsstufe für diese Transaktion ab.</summary>
+        <value>Die Isolationsstufe für diese Transaktion.</value>
         <remarks>To be added.</remarks>
-        <related type="Article" href="https://msdn.microsoft.com/library/f46570de-9e50-4fe6-8710-a8c31fa8569b">Transaktionen in ADO.NET</related>
+        <related type="Article" href="~/docs/framework/data/adonet/transactions-and-concurrency.md">Transaktionen und Parallelität (ADO.NET)</related>
         <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
       </Docs>
     </Member>
@@ -446,9 +465,9 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Führt einen Rollback für eine Transaktion aus einem ausstehenden Zustand durch.</summary>
+        <summary>Führt beim Überschreiben in einer abgeleiteten Klasse einen Rollback für eine Transaktion aus einem ausstehenden Zustand aus.</summary>
         <remarks>To be added.</remarks>
-        <related type="Article" href="https://msdn.microsoft.com/library/f46570de-9e50-4fe6-8710-a8c31fa8569b">Transaktionen in ADO.NET</related>
+        <related type="Article" href="~/docs/framework/data/adonet/transactions-and-concurrency.md">Transaktionen und Parallelität (ADO.NET)</related>
         <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
       </Docs>
     </Member>
@@ -475,10 +494,19 @@
         <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" Index="0" FrameworkAlternate="netcore-3.0" />
       </Parameters>
       <Docs>
-        <param name="cancellationToken">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="cancellationToken">Ein Token zum Abbrechen des asynchronen Vorgangs.</param>
+        <summary>Führt einen asynchronen Rollback für eine Transaktion aus einem ausstehenden Zustand durch.</summary>
+        <returns>Eine Aufgabe, die den asynchronen Vorgang darstellt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standard Implementierung dieser asynchronen Methode delegiert an die synchrone Entsprechung und gibt einen `Task`abgeschlossenen zurück, der den aufrufenden Thread potenziell blockiert.
+ 
+ Datenanbieter, die die [asynchrone Programmierung](~/docs/framework/data/adonet/asynchronous-programming.md) unterstützen, sollten die Standard Implementierung mithilfe von asynchronen e/a-Vorgängen überschreiben.
+  
+ ]]></format>
+        </remarks>        
       </Docs>
     </Member>
     <Member MemberName="System.Data.IDbTransaction.Connection">
@@ -516,7 +544,7 @@
         <summary>Ruft das der Transaktion zugeordnete <see cref="T:System.Data.Common.DbConnection" />-Objekt ab, oder einen NULL-Verweis, wenn die Transaktion nicht mehr gültig ist.</summary>
         <value>Ein <see cref="T:System.Data.Common.DbConnection" />-Objekt, das der Transaktion zugeordnet ist.</value>
         <remarks>To be added.</remarks>
-        <related type="Article" href="https://msdn.microsoft.com/library/f46570de-9e50-4fe6-8710-a8c31fa8569b">Transaktionen in ADO.NET</related>
+        <related type="Article" href="~/docs/framework/data/adonet/transactions-and-concurrency.md">Transaktionen und Parallelität (ADO.NET)</related>
         <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
       </Docs>
     </Member>
