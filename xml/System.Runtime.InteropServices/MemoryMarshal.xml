@@ -1,5 +1,5 @@
 <Type Name="MemoryMarshal" FullName="System.Runtime.InteropServices.MemoryMarshal">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="10291d94526466a6a071d4ad6764465616a0532c" /><Meta Name="ms.sourcegitcommit" Value="634678f7ccd2928c6b2cf792a301b079b63639af" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/26/2019" /><Meta Name="ms.locfileid" Value="68542991" /></Metadata><TypeSignature Language="C#" Value="public static class MemoryMarshal" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="061fde1ad6b10337c3320608dcc3a5dd94f4c8dc" /><Meta Name="ms.sourcegitcommit" Value="cb4d218ffd5a459a5f921fe1d945c682d1e09aca" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/16/2019" /><Meta Name="ms.locfileid" Value="69540068" /></Metadata><TypeSignature Language="C#" Value="public static class MemoryMarshal" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit MemoryMarshal extends System.Object" />
   <TypeSignature Language="DocId" Value="T:System.Runtime.InteropServices.MemoryMarshal" />
   <TypeSignature Language="VB.NET" Value="Public Class MemoryMarshal" />
@@ -380,7 +380,11 @@ Diese Methode wird nur auf Plattformen unterstützt, die einen falsch ausgericht
 
 Weder `TFrom` noch`TTo` können Zeiger oder Verweise enthalten. `TFrom`und `TTo` werden zur Laufzeit geprüft, um die Typsicherheit beizubehalten.  
 
-Die Umwandlung erfolgt in einem nicht überprüften Kontext. Wenn der Bereich von `TTo` kleiner als der Bereich von `TFrom`ist, kann ein Datenverlust auftreten. Wenn `TFrom` z. b. <xref:System.Int64>ist, einer der `ReadOnlySpan<Int32>` -Werte 0x100001111110s0f ist, `TTo` und <xref:System.Int32>ist, wird der resultierende Wert 11110-s0f fest.
+Wenn die Größe der beiden Typen unterschiedlich ist, kombiniert oder teilt die Umwandlung Werte, was zu einer Änderung der Länge führt.
+
+Wenn `TFrom` z. b. <xref:System.Int64>ist, `ReadOnlySpan<Int64>` enthält den einzelnen Wert, 0x0100001111110, `TTo` und ist <xref:System.Int32>, enthält die resultierende `ReadOnlySpan<Int32>` zwei Werte. Die Werte lauten 0x11110f 0F und 0x01000011 in einer Little-in-Architektur, z. b. x86. In einer Big-End-Architektur wird die Reihenfolge der beiden Werte umgekehrt, d. h. 0x01000011, gefolgt von 0x11110f 0F.
+
+Ein weiteres Beispiel: Wenn `TFrom` ist <xref:System.Int32>, `ReadOnlySpan<Int32>` enthält die Werte 1, 2 und 3, und `TTo` ist <xref:System.Int64>, das resultierende `ReadOnlySpan<Int64>` enthält einen einzelnen Wert: 0x0000000200000001 in einer Little-in-und 0x0000000100000002-Architektur für eine Big-in-Dian-Architektur.
 
 Diese Methode wird nur auf Plattformen unterstützt, die einen falsch ausgerichteten Speicherzugriff unterstützen, oder wenn der Speicherblock auf andere Weise ausgerichtet wird.
 
@@ -423,7 +427,7 @@ Diese Methode wird nur auf Plattformen unterstützt, die einen falsch ausgericht
         <param name="start">Der Index von <paramref name="array" />, bei dem der Speicherblock begonnen wird.</param>
         <param name="length">Die Anzahl der Elemente, die in den Speicherblock eingeschlossen werden sollen.</param>
         <summary>Erstellt einen neuen Speicherpuffer über dem Abschnitt des bereits angehefteten Zielarrays, der beim Index <paramref name="start" /> beginnt und aus <paramref name="length" />-Elementen besteht.</summary>
-        <returns>Ein Speicherblock über die angegebenen Elemente von <paramref name="array" />. Wenn <paramref name="array" /> <see langword="null" /> ist, oder wenn <paramref name="start" /> und <paramref name="length" /> 0 sind, gibt die Methode eine <see cref="T:System.Memory`1" /> Instanz von <see cref="System.Memory`1.Length" /> Null wieder.</returns>
+        <returns>Ein Speicherblock über die angegebenen Elemente von <paramref name="array" />. Wenn <paramref name="array" /> <see langword="null" /> ist, oder wenn <paramref name="start" /> und <paramref name="length" /> 0 sind, gibt die Methode eine <see cref="T:System.Memory`1" /> Instanz von <see cref="P:System.Memory`1.Length" /> Null wieder.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
