@@ -1,0 +1,926 @@
+<Type Name="Timer" FullName="System.Threading.Timer">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="3f12c8d0a6d83282f2eae4664ee9795c17d44928" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70515191" /></Metadata><TypeSignature Language="C#" Value="public sealed class Timer : MarshalByRefObject, IDisposable" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit Timer extends System.MarshalByRefObject implements class System.IDisposable" />
+  <TypeSignature Language="DocId" Value="T:System.Threading.Timer" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class Timer&#xA;Inherits MarshalByRefObject&#xA;Implements IDisposable" />
+  <TypeSignature Language="C++ CLI" Value="public ref class Timer sealed : MarshalByRefObject, IDisposable" />
+  <TypeSignature Language="F#" Value="type Timer = class&#xA;    inherit MarshalByRefObject&#xA;    interface IDisposable" />
+  <AssemblyInfo>
+    <AssemblyName>System.Threading.Timer</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>mscorlib</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+    <BaseTypeName FrameworkAlternate="netframework-4.5">System.MarshalByRefObject</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.IDisposable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes>
+    <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;dotnet-uwp-10.0">
+      <AttributeName>System.Runtime.InteropServices.ComVisible(true)</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>Stellt einen Mechanismus zum Ausführen einer Methode für einen Threadpoolthread in angegebenen Intervallen bereit. Diese Klasse kann nicht vererbt werden.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Verwenden Sie <xref:System.Threading.TimerCallback> einen Delegaten, um die Methode anzugeben <xref:System.Threading.Timer> , die Sie ausführen möchten. Die Signatur des <xref:System.Threading.TimerCallback> Delegaten lautet:  
+  
+```csharp  
+void TimerCallback(Object state)  
+```  
+  
+```cpp  
+void TimerCallback(Object state)  
+```  
+  
+```vb  
+Sub TimerCallback(state As Object)  
+```  
+  
+ Der Timer-Delegat wird angegeben, wenn der Timer erstellt wird, und kann nicht geändert werden. Die Methode wird nicht auf dem Thread ausgeführt, der den Timer erstellt hat. Sie wird in einem <xref:System.Threading.ThreadPool> vom System bereitgestellten Thread ausgeführt.  
+  
+> [!TIP]
+> .NET enthält vier Klassen mit `Timer`dem Namen, die jeweils unterschiedliche Funktionen bieten:  
+>
+> - <xref:System.Timers.Timer?displayProperty=nameWithType>, wodurch ein Ereignis ausgelöst und der Code in regelmäßigen Abständen in einem oder mehreren Ereignis senken ausgeführt wird. Die Klasse ist für den Einsatz als serverbasierte oder Dienstkomponente in einer Multithreadumgebung vorgesehen. Sie hat keine Benutzeroberfläche und ist zur Laufzeit nicht sichtbar.
+> - <xref:System.Threading.Timer?displayProperty=nameWithType>, die in regelmäßigen Abständen eine einzelne Rückruf Methode für einen Thread Pool Thread ausführt. Die Rückrufmethode wird definiert, wenn der Timer instanziiert wird, und kann nicht geändert werden. Wie die <xref:System.Timers.Timer?displayProperty=nameWithType>-Klasse ist diese Klasse für den Einsatz als serverbasierte oder Dienstkomponente in einer Multithreadumgebung vorgesehen. Sie hat keine Benutzeroberfläche und ist zur Laufzeit nicht sichtbar.
+> - <xref:System.Windows.Forms.Timer?displayProperty=nameWithType>(Nur .NET Framework), eine Windows Forms Komponente, die ein Ereignis auslöst und den Code in regelmäßigen Abständen in einem oder mehreren Ereignis senken ausführt. Die Komponente verfügt über keine Benutzeroberfläche und ist für die Verwendung in einer Single Thread-Umgebung konzipiert. Er wird im UI-Thread ausgeführt.
+> - <xref:System.Web.UI.Timer?displayProperty=nameWithType>(Nur .NET Framework), eine ASP.NET-Komponente, die in regelmäßigen Abständen asynchrone oder synchrone Webseiten Postbacks ausführt.
+  
+ Wenn Sie einen Timer erstellen, können Sie einen Zeitraum angeben, der vor der ersten Ausführung der Methode (Fälligkeits Zeit) und der Wartezeit zwischen nachfolgenden Ausführungen (Zeitraum) gewartet werden soll. Die <xref:System.Threading.Timer> -Klasse verfügt über dieselbe Auflösung wie die Systemuhr. Dies bedeutet Folgendes: Wenn der Zeitraum kleiner als die Auflösung der Systemuhr ist, wird <xref:System.Threading.TimerCallback> der Delegat in Intervallen ausgeführt, die durch die Auflösung der Systemuhr definiert werden, was ungefähr 15 Millisekunden auf Windows 7-und Windows 8-Systemen liegt. Mithilfe der <xref:System.Threading.Timer.Change%2A> -Methode können Sie die Fälligkeits Zeit und den Zeitraum ändern oder den Timer deaktivieren.  
+  
+> [!NOTE]
+>  Solange Sie einen <xref:System.Threading.Timer>verwenden, müssen Sie einen Verweis darauf beibehalten. Wie bei jedem verwalteten Objekt unterliegt <xref:System.Threading.Timer> ein Garbage Collection, wenn keine Verweise darauf vorhanden sind. Die Tatsache, dass <xref:System.Threading.Timer> eine noch aktiv ist, verhindert nicht, dass Sie gesammelt wird.  
+  
+ Wenn ein Timer nicht mehr benötigt wird, verwenden Sie <xref:System.Threading.Timer.Dispose%2A> die-Methode, um die vom Timer reservierten Ressourcen freizugeben. Beachten Sie, dass Rückrufe nach dem <xref:System.Threading.Timer.Dispose> Aufrufen der Methoden Überladung auftreten können, da der Timer die Rückrufe für die Ausführung durch Thread Pool-Threads anfordert. Sie können die <xref:System.Threading.Timer.Dispose%28System.Threading.WaitHandle%29> -Methoden Überladung verwenden, um zu warten, bis alle Rückrufe abgeschlossen sind.  
+  
+ Die vom Timer ausgeführte Rückruf Methode sollte Wiedereintritts fähig sein, da Sie für <xref:System.Threading.ThreadPool> Threads aufgerufen wird. Der Rückruf kann gleichzeitig für zwei Threadpoolthreads ausgeführt werden, wenn das Zeit Geber Intervall kleiner ist als die Zeit, die zum Ausführen des Rückrufs benötigt wird, oder wenn alle Thread Pool-Threads verwendet werden und der Rückruf mehrmals in die Warteschlange eingereiht wird.  
+  
+> [!NOTE]
+>  <xref:System.Threading.Timer?displayProperty=nameWithType>bei handelt es sich um einen einfachen, einfachen Timer, der Rückruf Methoden verwendet und von Thread Pool-Threads bedient wird. Es wird nicht empfohlen, mit Windows Forms zu verwenden, da die Rückrufe nicht im Benutzeroberflächen Thread auftreten. <xref:System.Windows.Forms.Timer?displayProperty=nameWithType>ist eine bessere Wahl für die Verwendung mit Windows Forms. Für serverbasierte Zeit Geber Funktionen sollten Sie ggf. <xref:System.Timers.Timer?displayProperty=nameWithType>verwenden, wodurch Ereignisse ausgelöst werden und zusätzliche Features verfügbar sind.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird eine `StatusChecker` -Klasse definiert, `CheckStatus` die eine-Methode einschließt, deren Signatur <xref:System.Threading.TimerCallback> mit dem-Delegaten identisch ist. Das `state` -Argument `CheckStatus` der-Methode ist <xref:System.Threading.AutoResetEvent> ein Objekt, das verwendet wird, um den Anwendungs Thread und den Thread Pool Thread zu synchronisieren, der den Rückruf Delegaten ausführt. Die `StatusChecker` -Klasse enthält auch zwei Zustandsvariablen:  
+  
+ `invokeCount`  
+ Gibt an, wie oft die Rückruf Methode aufgerufen wurde.  
+  
+ `maxCount`  
+ Bestimmt, wie oft die Rückruf Methode maximal aufgerufen werden soll.  
+  
+ Der Anwendungs Thread erstellt den Timer, der eine Sekunde wartet und dann alle 250 `CheckStatus` Millisekunden die Rückruf Methode ausführt. Der Anwendungs Thread wird dann blockiert, <xref:System.Threading.AutoResetEvent> bis das Objekt signalisiert wird. Wenn die `CheckStatus` Rückruf Methode Zeiten `maxCount` ausführt, ruft Sie die `AutoResetEvent.Set` -Methode auf, um den Zustand <xref:System.Threading.AutoResetEvent> des-Objekts auf "signalisiert" festzulegen. Wenn dies das erste Mal geschieht, ruft der Anwendungs Thread <xref:System.Threading.Timer.Change%28System.Int32%2CSystem.Int32%29> die-Methode auf, sodass die Rückruf Methode jetzt jede halbe Sekunde ausgeführt wird. Wenn das <xref:System.Threading.AutoResetEvent> Objekt signalisiert wird, wird es wieder blockiert. In diesem Fall wird der Timer durch Aufrufen seiner <xref:System.Threading.Timer.Dispose%2A> -Methode zerstört, und die Anwendung wird beendet.  
+  
+ [!code-cpp[System.Threading.Timer#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Timer/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Timer#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Timer/CS/source.cs#1)]
+ [!code-vb[System.Threading.Timer#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Timer/VB/source.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe>Dieser Typ ist threadsicher.</threadsafe>
+    <altmember cref="T:System.Threading.TimerCallback" />
+    <related type="Article" href="~/docs/standard/threading/timers.md">Timer</related>
+    <related type="Article" href="~/docs/standard/threading/the-managed-thread-pool.md">Verwalteter Threadpool</related>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see langword="Timer" />-Klasse.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Timer (System.Threading.TimerCallback callback);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Threading.TimerCallback callback) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.#ctor(System.Threading.TimerCallback)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (callback As TimerCallback)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Timer(System::Threading::TimerCallback ^ callback);" />
+      <MemberSignature Language="F#" Value="new System.Threading.Timer : System.Threading.TimerCallback -&gt; System.Threading.Timer" Usage="new System.Threading.Timer callback" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="callback" Type="System.Threading.TimerCallback" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="callback">Ein <see cref="T:System.Threading.TimerCallback" />-Delegat, der die auszuführende Methode darstellt.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Threading.Timer" />-Klasse mit einem unendlichen Zeitraum und einer unendlichen Vorlaufzeit, wobei das neu erstellte <see cref="T:System.Threading.Timer" />-Objekt als Zustandsobjekt verwendet wird.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Nennen Sie diesen Konstruktor, wenn Sie das <xref:System.Threading.Timer> Objekt selbst als Zustands Objekt verwenden möchten. Verwenden Sie nach dem Erstellen des Timers <xref:System.Threading.Timer.Change%2A> die-Methode, um das Intervall und die Fälligkeits Zeit festzulegen.  
+  
+ Dieser Konstruktor gibt eine unbegrenzte Zeitspanne vor dem ersten Rückruf und ein unendliches Intervall zwischen Rückrufen an, um zu verhindern, dass der erste Rückruf auftritt <xref:System.Threading.Timer> , bevor das Objekt dem Zustands Objekt zugewiesen wird.  
+  
+ Die für `callback` angegebene Methode sollte reentrant sein, da Sie für <xref:System.Threading.ThreadPool> Threads aufgerufen wird. Die-Methode kann gleichzeitig für zwei Threadpoolthreads ausgeführt werden, wenn das Zeit Geber Intervall kleiner ist als die Zeit, die zum Ausführen der Methode benötigt wird, oder wenn alle Thread Pool-Threads verwendet werden und die Methode mehrmals in die Warteschlange eingereiht wird.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird ein neuer Timer erstellt, wobei der Timer selbst als Zustands Objekt verwendet wird. Die <xref:System.Threading.Timer.Change%2A> -Methode wird verwendet, um den Timer zu starten. Wenn der Timer-Rückruf auftritt, wird das State-Objekt verwendet, um den Timer zu deaktivieren.  
+  
+ [!code-csharp[TimerSelfCtor#1](~/samples/snippets/csharp/VS_Snippets_Misc/timerSelfCtor/CS/source.cs#1)]
+ [!code-vb[TimerSelfCtor#1](~/samples/snippets/visualbasic/VS_Snippets_Misc/timerSelfCtor/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Timer (System.Threading.TimerCallback callback, object state, int dueTime, int period);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Threading.TimerCallback callback, object state, int32 dueTime, int32 period) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.#ctor(System.Threading.TimerCallback,System.Object,System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (callback As TimerCallback, state As Object, dueTime As Integer, period As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Timer(System::Threading::TimerCallback ^ callback, System::Object ^ state, int dueTime, int period);" />
+      <MemberSignature Language="F#" Value="new System.Threading.Timer : System.Threading.TimerCallback * obj * int * int -&gt; System.Threading.Timer" Usage="new System.Threading.Timer (callback, state, dueTime, period)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="callback" Type="System.Threading.TimerCallback" />
+        <Parameter Name="state" Type="System.Object" />
+        <Parameter Name="dueTime" Type="System.Int32" />
+        <Parameter Name="period" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="callback">Ein <see cref="T:System.Threading.TimerCallback" />-Delegat, der die auszuführende Methode darstellt.</param>
+        <param name="state">Ein Objekt, das die von der Rückrufmethode zu verwendenden Informationen enthält, oder <see langword="null" />.</param>
+        <param name="dueTime">Die in Millisekunden angegebene Zeitspanne, die gewartet werden soll, bis <paramref name="callback" /> aufgerufen wird. Geben Sie <see cref="F:System.Threading.Timeout.Infinite" /> an, um das Starten des Zeitgebers zu verhindern. Geben Sie 0 (null) an, um den Timer sofort zu starten.</param>
+        <param name="period">Das in Millisekunden angegebene Zeitintervall zwischen den Aufrufen von <paramref name="callback" />. Geben Sie <see cref="F:System.Threading.Timeout.Infinite" /> an, um periodisches Signalisieren zu deaktivieren.</param>
+        <summary>Initialisiert eine neue Instanz der <see langword="Timer" />-Klasse unter Verwendung einer 32-Bit-Ganzzahl mit Vorzeichen zum Angeben des Zeitintervalls.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Der Delegat, der `callback` durch den-Parameter angegeben `dueTime` wird, wird einmal nach Ablauf des `period` Zeitintervalls aufgerufen.  
+  
+ Wenn `dueTime` 0 (null) ist, `callback` wird sofort aufgerufen. `dueTime` <xref:System.Threading.Timer.Change%2A> Wenn den Wert `callback` hat, wird nicht aufgerufen. der Timer ist deaktiviert, kann jedoch durch Aufrufen der-Methode erneut aktiviert werden. <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>  
+  
+ Da die <xref:System.Threading.Timer> -Klasse dieselbe Auflösung wie die Systemuhr hat, die ungefähr 15 Millisekunden auf Windows 7-und Windows 8-Systemen beträgt `callback` , wird der Delegat in Intervallen ausgeführt, die durch die Auflösung der Systemuhr definiert sind, wenn `period`ist kleiner als die Auflösung der Systemuhr. Wenn `period` NULL (0) oder <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType> und `dueTime` nicht <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>ist, `callback` wird einmal aufgerufen. das periodische Verhalten des Timers ist deaktiviert, kann jedoch mithilfe der <xref:System.Threading.Timer.Change%2A> -Methode wieder aktiviert werden.  
+  
+ Die für `callback` angegebene Methode sollte reentrant sein, da Sie für <xref:System.Threading.ThreadPool> Threads aufgerufen wird. Die-Methode kann gleichzeitig für zwei Threadpoolthreads ausgeführt werden, wenn das Zeit Geber Intervall kleiner ist als die Zeit, die zum Ausführen der Methode benötigt wird, oder wenn alle Thread Pool-Threads verwendet werden und die Methode mehrmals in die Warteschlange eingereiht wird.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird gezeigt, wie ein `TimerCallback` Delegat erstellt und eine neue Instanz `Timer` der-Klasse initialisiert wird.  
+  
+ [!code-cpp[System.Threading.Timer#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Timer/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Timer#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Timer/CS/source.cs#1)]
+ [!code-vb[System.Threading.Timer#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Timer/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der <paramref name="dueTime" />-Parameter oder der <paramref name="period" />-Parameter ist negativ und ungleich <see cref="F:System.Threading.Timeout.Infinite" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der <paramref name="callback" />-Parameter ist <see langword="null" />.</exception>
+        <related type="Article" href="~/docs/standard/threading/timers.md">Timer</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Timer (System.Threading.TimerCallback callback, object state, long dueTime, long period);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Threading.TimerCallback callback, object state, int64 dueTime, int64 period) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.#ctor(System.Threading.TimerCallback,System.Object,System.Int64,System.Int64)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (callback As TimerCallback, state As Object, dueTime As Long, period As Long)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Timer(System::Threading::TimerCallback ^ callback, System::Object ^ state, long dueTime, long period);" />
+      <MemberSignature Language="F#" Value="new System.Threading.Timer : System.Threading.TimerCallback * obj * int64 * int64 -&gt; System.Threading.Timer" Usage="new System.Threading.Timer (callback, state, dueTime, period)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="callback" Type="System.Threading.TimerCallback" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="state" Type="System.Object" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="dueTime" Type="System.Int64" Index="2" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="period" Type="System.Int64" Index="3" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="callback">Ein <see cref="T:System.Threading.TimerCallback" />-Delegat, der die auszuführende Methode darstellt.</param>
+        <param name="state">Ein Objekt, das die von der Rückrufmethode zu verwendenden Informationen enthält, oder <see langword="null" />.</param>
+        <param name="dueTime">Die in Millisekunden angegebene Zeitspanne, die gewartet werden soll, bis <paramref name="callback" /> aufgerufen wird. Geben Sie <see cref="F:System.Threading.Timeout.Infinite" /> an, um das Starten des Zeitgebers zu verhindern. Geben Sie 0 (null) an, um den Timer sofort zu starten.</param>
+        <param name="period">Das in Millisekunden angegebene Zeitintervall zwischen den Aufrufen von <paramref name="callback" />. Geben Sie <see cref="F:System.Threading.Timeout.Infinite" /> an, um periodisches Signalisieren zu deaktivieren.</param>
+        <summary>Initialisiert eine neue Instanz der <see langword="Timer" />-Klasse unter Verwendung von 64-Bit-Ganzzahlen mit Vorzeichen zum Messen von Zeitintervallen.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Der Delegat, der `callback` durch den-Parameter angegeben `dueTime` wird, wird einmal nach Ablauf des `period` Zeitintervalls aufgerufen.  
+  
+ Wenn `dueTime` 0 (null) ist, `callback` wird sofort aufgerufen. `dueTime` <xref:System.Threading.Timer.Change%2A> Wenn den Wert `callback` hat, wird nicht aufgerufen. der Timer ist deaktiviert, kann jedoch durch Aufrufen der-Methode erneut aktiviert werden. <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>  
+  
+ Da die <xref:System.Threading.Timer> -Klasse dieselbe Auflösung wie die Systemuhr hat, die ungefähr 15 Millisekunden auf Windows 7-und Windows 8-Systemen beträgt `callback` , wird der Delegat in Intervallen ausgeführt, die durch die Auflösung der Systemuhr definiert sind, wenn `period`ist kleiner als die Auflösung der Systemuhr. Wenn `period` NULL (0) oder <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType> und `dueTime` nicht <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>ist, `callback` wird einmal aufgerufen. das periodische Verhalten des Timers ist deaktiviert, kann jedoch mithilfe der <xref:System.Threading.Timer.Change%2A> -Methode wieder aktiviert werden.  
+  
+ Die für `callback` angegebene Methode sollte reentrant sein, da Sie für <xref:System.Threading.ThreadPool> Threads aufgerufen wird. Die-Methode kann gleichzeitig für zwei Threadpoolthreads ausgeführt werden, wenn das Zeit Geber Intervall kleiner ist als die Zeit, die zum Ausführen der Methode benötigt wird, oder wenn alle Thread Pool-Threads verwendet werden und die Methode mehrmals in die Warteschlange eingereiht wird.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der <paramref name="dueTime" />-Parameter oder der <paramref name="period" />-Parameter ist negativ und ungleich <see cref="F:System.Threading.Timeout.Infinite" />.</exception>
+        <exception cref="T:System.NotSupportedException">Der <paramref name="dueTime" />-Parameter oder der <paramref name="period" />-Parameter ist größer als 4.294.967.294.</exception>
+        <related type="Article" href="~/docs/standard/threading/timers.md">Timer</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Timer (System.Threading.TimerCallback callback, object state, TimeSpan dueTime, TimeSpan period);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Threading.TimerCallback callback, object state, valuetype System.TimeSpan dueTime, valuetype System.TimeSpan period) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.#ctor(System.Threading.TimerCallback,System.Object,System.TimeSpan,System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (callback As TimerCallback, state As Object, dueTime As TimeSpan, period As TimeSpan)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Timer(System::Threading::TimerCallback ^ callback, System::Object ^ state, TimeSpan dueTime, TimeSpan period);" />
+      <MemberSignature Language="F#" Value="new System.Threading.Timer : System.Threading.TimerCallback * obj * TimeSpan * TimeSpan -&gt; System.Threading.Timer" Usage="new System.Threading.Timer (callback, state, dueTime, period)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="callback" Type="System.Threading.TimerCallback" />
+        <Parameter Name="state" Type="System.Object" />
+        <Parameter Name="dueTime" Type="System.TimeSpan" />
+        <Parameter Name="period" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="callback">Ein Delegat, der eine auszuführende Methode darstellt.</param>
+        <param name="state">Ein Objekt, das die von der Rückrufmethode zu verwendenden Informationen enthält, oder <see langword="null" />.</param>
+        <param name="dueTime">Die Zeitspanne, die gewartet werden soll, bis der <paramref name="callback" />-Parameter die zugehörigen Methoden aufruft. Geben Sie „-1“ Millisekunde an, um das Starten des Timers zu verhindern. Geben Sie 0 (null) an, um den Timer sofort zu starten.</param>
+        <param name="period">Das Zeitintervall zwischen Aufrufen der Methoden, auf die durch <paramref name="callback" /> verwiesen wird. Geben Sie -1 Millisekunde an, um periodisches Signalisieren zu deaktivieren.</param>
+        <summary>Initialisiert eine neue Instanz der <see langword="Timer" />-Klasse unter Verwendung von <see cref="T:System.TimeSpan" />-Werten zum Messen von Zeitintervallen.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Der Delegat, der `callback` durch den-Parameter angegeben `dueTime` wird, wird einmal nach Ablauf des `period` Zeitintervalls aufgerufen.  
+  
+ Wenn `dueTime` 0 (null) ist, `callback` wird sofort aufgerufen. Wenn `dueTime` eine negative (-1) Millisekunde ist, `callback` wird nicht aufgerufen. der Timer ist deaktiviert, kann jedoch durch Aufrufen der <xref:System.Threading.Timer.Change%2A> -Methode erneut aktiviert werden.  
+  
+ Da die <xref:System.Threading.Timer> -Klasse dieselbe Auflösung wie die Systemuhr hat, die ungefähr 15 Millisekunden auf Windows 7-und Windows 8-Systemen beträgt `callback` , wird der Delegat in Intervallen ausgeführt, die durch die Auflösung der Systemuhr definiert sind, wenn `period`ist kleiner als die Auflösung der Systemuhr. Wenn `period` NULL (0) oder negativ 1 (-1) Millisekunden und `dueTime` positiv ist, `callback` wird einmal aufgerufen. das periodische Verhalten des Timers ist deaktiviert, kann jedoch mit der <xref:System.Threading.Timer.Change%2A> -Methode wieder aktiviert werden.  
+  
+ Die für `callback` angegebene Methode sollte reentrant sein, da Sie für <xref:System.Threading.ThreadPool> Threads aufgerufen wird. Die-Methode kann gleichzeitig für zwei Threadpoolthreads ausgeführt werden, wenn das Zeit Geber Intervall kleiner ist als die Zeit, die zum Ausführen der Methode benötigt wird, oder wenn alle Thread Pool-Threads verwendet werden und die Methode mehrmals in die Warteschlange eingereiht wird.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird gezeigt, wie ein `TimerCallback` Delegat erstellt und eine neue Instanz `Timer` der-Klasse initialisiert wird.  
+  
+ [!code-cpp[System.Threading.Timer2#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Timer2/CPP/source2.cpp#1)]
+ [!code-csharp[System.Threading.Timer2#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Timer2/CS/source2.cs#1)]
+ [!code-vb[System.Threading.Timer2#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Timer2/VB/source2.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">Die Anzahl der Millisekunden im Wert von <paramref name="dueTime" /> oder <paramref name="period" /> ist negativ und ungleich <see cref="F:System.Threading.Timeout.Infinite" /> oder größer als <see cref="F:System.Int32.MaxValue" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der <paramref name="callback" />-Parameter ist <see langword="null" />.</exception>
+        <related type="Article" href="~/docs/standard/threading/timers.md">Timer</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Timer (System.Threading.TimerCallback callback, object state, uint dueTime, uint period);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Threading.TimerCallback callback, object state, unsigned int32 dueTime, unsigned int32 period) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.#ctor(System.Threading.TimerCallback,System.Object,System.UInt32,System.UInt32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (callback As TimerCallback, state As Object, dueTime As UInteger, period As UInteger)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Timer(System::Threading::TimerCallback ^ callback, System::Object ^ state, System::UInt32 dueTime, System::UInt32 period);" />
+      <MemberSignature Language="F#" Value="new System.Threading.Timer : System.Threading.TimerCallback * obj * uint32 * uint32 -&gt; System.Threading.Timer" Usage="new System.Threading.Timer (callback, state, dueTime, period)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-2.0;netcore-2.1;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="callback" Type="System.Threading.TimerCallback" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="state" Type="System.Object" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="dueTime" Type="System.UInt32" Index="2" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="period" Type="System.UInt32" Index="3" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="callback">Ein Delegat, der eine auszuführende Methode darstellt.</param>
+        <param name="state">Ein Objekt, das die von der Rückrufmethode zu verwendenden Informationen enthält, oder <see langword="null" />.</param>
+        <param name="dueTime">Die in Millisekunden angegebene Zeitspanne, die gewartet werden soll, bis <paramref name="callback" /> aufgerufen wird. Geben Sie <see cref="F:System.Threading.Timeout.Infinite" /> an, um das Starten des Zeitgebers zu verhindern. Geben Sie 0 (null) an, um den Timer sofort zu starten.</param>
+        <param name="period">Das in Millisekunden angegebene Zeitintervall zwischen den Aufrufen von <paramref name="callback" />. Geben Sie <see cref="F:System.Threading.Timeout.Infinite" /> an, um periodisches Signalisieren zu deaktivieren.</param>
+        <summary>Initialisiert eine neue Instanz der <see langword="Timer" />-Klasse unter Verwendung von 32-Bit-Ganzzahlen ohne Vorzeichen zum Messen von Zeitintervallen.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Der Delegat, der `callback` durch den-Parameter angegeben `dueTime` wird, wird einmal nach Ablauf des `period` Zeitintervalls aufgerufen.  
+  
+ Wenn `dueTime` 0 (null) ist, `callback` wird sofort aufgerufen. `dueTime` <xref:System.Threading.Timer.Change%2A> Wenn den Wert `callback` hat, wird nicht aufgerufen. der Timer ist deaktiviert, kann jedoch durch Aufrufen der-Methode erneut aktiviert werden. <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>  
+  
+ Da die <xref:System.Threading.Timer> -Klasse dieselbe Auflösung wie die Systemuhr hat, die ungefähr 15 Millisekunden auf Windows 7-und Windows 8-Systemen beträgt `callback` , wird der Delegat in Intervallen ausgeführt, die durch die Auflösung der Systemuhr definiert sind, wenn `period`ist kleiner als die Auflösung der Systemuhr. Wenn `period` NULL (0) oder <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType> und `dueTime` nicht <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>ist, `callback` wird einmal aufgerufen. das periodische Verhalten des Timers ist deaktiviert, kann jedoch mithilfe der <xref:System.Threading.Timer.Change%2A> -Methode wieder aktiviert werden.  
+  
+ Die für `callback` angegebene Methode sollte reentrant sein, da Sie für <xref:System.Threading.ThreadPool> Threads aufgerufen wird. Die-Methode kann gleichzeitig für zwei Threadpoolthreads ausgeführt werden, wenn das Zeit Geber Intervall kleiner ist als die Zeit, die zum Ausführen der Methode benötigt wird, oder wenn alle Thread Pool-Threads verwendet werden und die Methode mehrmals in die Warteschlange eingereiht wird.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der <paramref name="dueTime" />-Parameter oder der <paramref name="period" />-Parameter ist negativ und ungleich <see cref="F:System.Threading.Timeout.Infinite" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der <paramref name="callback" />-Parameter ist <see langword="null" />.</exception>
+        <related type="Article" href="~/docs/standard/threading/timers.md">Timer</related>
+      </Docs>
+    </Member>
+    <Member MemberName="ActiveCount">
+      <MemberSignature Language="C#" Value="public static long ActiveCount { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property int64 ActiveCount" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.Timer.ActiveCount" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly Property ActiveCount As Long" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static property long ActiveCount { long get(); };" />
+      <MemberSignature Language="F#" Value="member this.ActiveCount : int64" Usage="System.Threading.Timer.ActiveCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft die Anzahl der derzeit aktiven Timer ab. Ein aktiver Timer wird dafür registriert, zu einem späteren Zeitpunkt zu laufen, und dieser wurde noch nicht abgebrochen.</summary>
+        <value>Die Anzahl der derzeit aktiven Timer.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Change">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Ändert die Startzeit und das Intervall zwischen Methodenaufrufen für einen Zeitgeber.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Change">
+      <MemberSignature Language="C#" Value="public bool Change (int dueTime, int period);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool Change(int32 dueTime, int32 period) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.Change(System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function Change (dueTime As Integer, period As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool Change(int dueTime, int period);" />
+      <MemberSignature Language="F#" Value="member this.Change : int * int -&gt; bool" Usage="timer.Change (dueTime, period)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dueTime" Type="System.Int32" />
+        <Parameter Name="period" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="dueTime">Die in Millisekunden angegebene Zeitspanne, die gewartet werden soll, bis die beim Erstellen von <see cref="T:System.Threading.Timer" /> angegebene Rückrufmethode aufgerufen wird. Geben Sie <see cref="F:System.Threading.Timeout.Infinite" /> an, um den Neustart des Zeitgebers zu verhindern. Geben Sie 0 (null) an, um den Timer sofort neu zu starten.</param>
+        <param name="period">Das Zeitintervall zwischen den Aufrufen der beim Erstellen von <see cref="T:System.Threading.Timer" /> angegebenen Rückrufmethode in Millisekunden. Geben Sie <see cref="F:System.Threading.Timeout.Infinite" /> an, um periodisches Signalisieren zu deaktivieren.</param>
+        <summary>Ändert die Startzeit und das Intervall zwischen Methodenaufrufen für einen Timer unter Verwendung von 32-Bit-Ganzzahlen mit Vorzeichen zum Messen von Zeitintervallen.</summary>
+        <returns><see langword="true" />, wenn der Timer erfolgreich aktualisiert wurde, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Rückruf Methode wird einmal nach `dueTime` Ablauf von aufgerufen, und anschließend wird jedes Mal, wenn das von `period` angegebene Zeitintervall abläuft.  
+  
+ Wenn `dueTime` 0 (null) ist, wird die Rückruf Methode sofort aufgerufen. `dueTime` <xref:System.Threading.Timer.Change%2A> Wenn den Wert `dueTime`hat, wird die Rückruf Methode niemals aufgerufen. der Timer ist deaktiviert, kann jedoch durch Aufrufen von und durch Angabe eines positiven Werts für wieder aktiviert werden. <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>  
+  
+ Wenn `period` NULL (0) oder <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>ist, und `dueTime` nicht <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>ist, wird die Rückruf Methode einmal aufgerufen. das periodische Verhalten des Timers ist deaktiviert, kann jedoch durch Aufrufen <xref:System.Threading.Timer.Change%2A> von und durch Angabe eines positiven Werts für erneut aktiviert werden. `period`.  
+  
+ Die <xref:System.Threading.Timer.Change%2A> -Methode kann <xref:System.Threading.TimerCallback> vom-Delegaten aufgerufen werden.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie ein `Timer` gestartet wird und nach einer festgelegten Anzahl von Aufrufen dessen Zeitraum geändert wird.  
+  
+ [!code-cpp[System.Threading.Timer#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Timer/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Timer#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Timer/CS/source.cs#1)]
+ [!code-vb[System.Threading.Timer#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Timer/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">Der <see cref="T:System.Threading.Timer" /> wurde bereits freigegeben.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der <paramref name="dueTime" />-Parameter oder der <paramref name="period" />-Parameter ist negativ und ungleich <see cref="F:System.Threading.Timeout.Infinite" />.</exception>
+        <related type="Article" href="~/docs/standard/threading/timers.md">Timer</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Change">
+      <MemberSignature Language="C#" Value="public bool Change (long dueTime, long period);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool Change(int64 dueTime, int64 period) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.Change(System.Int64,System.Int64)" />
+      <MemberSignature Language="VB.NET" Value="Public Function Change (dueTime As Long, period As Long) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool Change(long dueTime, long period);" />
+      <MemberSignature Language="F#" Value="member this.Change : int64 * int64 -&gt; bool" Usage="timer.Change (dueTime, period)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dueTime" Type="System.Int64" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="period" Type="System.Int64" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="dueTime">Die in Millisekunden angegebene Zeitspanne, die gewartet werden soll, bis die beim Erstellen von <see cref="T:System.Threading.Timer" /> angegebene Rückrufmethode aufgerufen wird. Geben Sie <see cref="F:System.Threading.Timeout.Infinite" /> an, um den Neustart des Zeitgebers zu verhindern. Geben Sie 0 (null) an, um den Timer sofort neu zu starten.</param>
+        <param name="period">Das Zeitintervall zwischen den Aufrufen der beim Erstellen von <see cref="T:System.Threading.Timer" /> angegebenen Rückrufmethode in Millisekunden. Geben Sie <see cref="F:System.Threading.Timeout.Infinite" /> an, um periodisches Signalisieren zu deaktivieren.</param>
+        <summary>Ändert die Startzeit und das Intervall zwischen Methodenaufrufen für einen Zeitgeber unter Verwendung von 64-Bit-Ganzzahlen mit Vorzeichen zum Messen von Zeitintervallen.</summary>
+        <returns><see langword="true" />, wenn der Timer erfolgreich aktualisiert wurde, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Rückruf Methode wird einmal nach `dueTime` Ablauf von aufgerufen, und anschließend wird jedes Mal, wenn das von `period` angegebene Zeitintervall abläuft.  
+  
+ Wenn `dueTime` 0 (null) ist, wird die Rückruf Methode sofort aufgerufen. `dueTime` <xref:System.Threading.Timer.Change%2A> Wenn den Wert `dueTime`hat, wird die Rückruf Methode niemals aufgerufen. der Timer ist deaktiviert, kann jedoch durch Aufrufen von und durch Angabe eines positiven Werts für wieder aktiviert werden. <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>  
+  
+ Wenn `period` NULL (0) oder <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>ist, und `dueTime` nicht <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>ist, wird die Rückruf Methode einmal aufgerufen. das periodische Verhalten des Timers ist deaktiviert, kann jedoch durch Aufrufen <xref:System.Threading.Timer.Change%2A> von und durch Angabe eines positiven Werts für erneut aktiviert werden. `period`.  
+  
+ Die <xref:System.Threading.Timer.Change%2A> -Methode kann <xref:System.Threading.TimerCallback> vom-Delegaten aufgerufen werden.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">Der <see cref="T:System.Threading.Timer" /> wurde bereits freigegeben.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der <paramref name="dueTime" />-Parameter oder der <paramref name="period" />-Parameter ist kleiner als -1.</exception>
+        <exception cref="T:System.NotSupportedException">Der <paramref name="dueTime" />-Parameter oder der <paramref name="period" />-Parameter ist größer als 4.294.967.294.</exception>
+        <related type="Article" href="~/docs/standard/threading/timers.md">Timer</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Change">
+      <MemberSignature Language="C#" Value="public bool Change (TimeSpan dueTime, TimeSpan period);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool Change(valuetype System.TimeSpan dueTime, valuetype System.TimeSpan period) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.Change(System.TimeSpan,System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Function Change (dueTime As TimeSpan, period As TimeSpan) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool Change(TimeSpan dueTime, TimeSpan period);" />
+      <MemberSignature Language="F#" Value="member this.Change : TimeSpan * TimeSpan -&gt; bool" Usage="timer.Change (dueTime, period)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dueTime" Type="System.TimeSpan" />
+        <Parameter Name="period" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="dueTime">Eine <see cref="T:System.TimeSpan" /> zum Darstellen der Zeitspanne, die gewartet werden soll, bis die beim Erstellen von <see cref="T:System.Threading.Timer" /> angegebene Rückrufmethode aufgerufen wird. Geben Sie -1 Millisekunde an, um das erneute Starten des Zeitgebers zu verhindern. Geben Sie 0 (null) an, um den Timer sofort neu zu starten.</param>
+        <param name="period">Das Zeitintervall zwischen den Aufrufen der beim Erstellen von <see cref="T:System.Threading.Timer" /> angegebenen Rückrufmethode. Geben Sie -1 Millisekunde an, um periodisches Signalisieren zu deaktivieren.</param>
+        <summary>Ändert die Startzeit und das Intervall zwischen Methodenaufrufen für einen Zeitgeber unter Verwendung von <see cref="T:System.TimeSpan" />-Werten zum Messen von Zeitintervallen.</summary>
+        <returns><see langword="true" />, wenn der Timer erfolgreich aktualisiert wurde, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Rückruf Methode wird einmal nach `dueTime` Ablauf von aufgerufen, und anschließend wird jedes Mal, wenn das von `period` angegebene Zeitintervall abläuft.  
+  
+ Wenn `dueTime` 0 (null) ist, wird die Rückruf Methode sofort aufgerufen. Wenn `dueTime` eine negative (-1) Millisekunde ist, wird die Rückruf Methode niemals aufgerufen. der Timer ist deaktiviert, kann jedoch durch Aufrufen <xref:System.Threading.Timer.Change%2A> von und durch Angabe eines positiven Werts für `dueTime`erneut aktiviert werden.  
+  
+ Wenn `period` 0 (null) oder eine negative (-1) Millisekunde ist und `dueTime` positiv ist, wird die Rückruf Methode einmal aufgerufen. das periodische Verhalten des Timers ist deaktiviert, kann jedoch wieder aktiviert werden, indem aufgerufen <xref:System.Threading.Timer.Change%2A> und ein Wert größer als angegeben wird. NULL für `period`.  
+  
+ Die <xref:System.Threading.Timer.Change%2A> -Methode kann <xref:System.Threading.TimerCallback> vom-Delegaten aufgerufen werden.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie ein `Timer` gestartet wird und nach einer festgelegten Anzahl von Aufrufen dessen Zeitraum geändert wird.  
+  
+ [!code-cpp[System.Threading.Timer2#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Timer2/CPP/source2.cpp#1)]
+ [!code-csharp[System.Threading.Timer2#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Timer2/CS/source2.cs#1)]
+ [!code-vb[System.Threading.Timer2#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Timer2/VB/source2.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">Der <see cref="T:System.Threading.Timer" /> wurde bereits freigegeben.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der <paramref name="dueTime" />-Parameter oder der <paramref name="period" />-Parameter, angegeben in Millisekunden, ist kleiner als -1.</exception>
+        <exception cref="T:System.NotSupportedException">Der <paramref name="dueTime" />-Parameter oder der <paramref name="period" />-Parameter, angegeben in Millisekunden, ist größer als 4294967294.</exception>
+        <related type="Article" href="~/docs/standard/threading/timers.md">Timer</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Change">
+      <MemberSignature Language="C#" Value="public bool Change (uint dueTime, uint period);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool Change(unsigned int32 dueTime, unsigned int32 period) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.Change(System.UInt32,System.UInt32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function Change (dueTime As UInteger, period As UInteger) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool Change(System::UInt32 dueTime, System::UInt32 period);" />
+      <MemberSignature Language="F#" Value="member this.Change : uint32 * uint32 -&gt; bool" Usage="timer.Change (dueTime, period)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-2.0;netcore-2.1;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dueTime" Type="System.UInt32" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="period" Type="System.UInt32" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="dueTime">Die in Millisekunden angegebene Zeitspanne, die gewartet werden soll, bis die beim Erstellen von <see cref="T:System.Threading.Timer" /> angegebene Rückrufmethode aufgerufen wird. Geben Sie <see cref="F:System.Threading.Timeout.Infinite" /> an, um den Neustart des Zeitgebers zu verhindern. Geben Sie 0 (null) an, um den Timer sofort neu zu starten.</param>
+        <param name="period">Das Zeitintervall zwischen den Aufrufen der beim Erstellen von <see cref="T:System.Threading.Timer" /> angegebenen Rückrufmethode in Millisekunden. Geben Sie <see cref="F:System.Threading.Timeout.Infinite" /> an, um periodisches Signalisieren zu deaktivieren.</param>
+        <summary>Ändert die Startzeit und das Intervall zwischen Methodenaufrufen für einen Timer unter Verwendung von 32-Bit-Ganzzahlen ohne Vorzeichen zum Messen von Zeitintervallen.</summary>
+        <returns><see langword="true" />, wenn der Timer erfolgreich aktualisiert wurde, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Rückruf Methode wird einmal nach `dueTime` Ablauf von aufgerufen, und anschließend wird jedes Mal, wenn das von `period` angegebene Zeitintervall abläuft.  
+  
+ Wenn `dueTime` 0 (null) ist, wird die Rückruf Methode sofort aufgerufen. `dueTime` <xref:System.Threading.Timer.Change%2A> Wenn den Wert `dueTime`hat, wird die Rückruf Methode niemals aufgerufen. der Timer ist deaktiviert, kann jedoch durch Aufrufen von und durch Angabe eines positiven Werts für wieder aktiviert werden. <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>  
+  
+ Wenn `period` NULL (0) oder <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>ist, und `dueTime` nicht <xref:System.Threading.Timeout.Infinite?displayProperty=nameWithType>ist, wird die Rückruf Methode einmal aufgerufen. das periodische Verhalten des Timers ist deaktiviert, kann jedoch durch Aufrufen <xref:System.Threading.Timer.Change%2A> von und durch Angabe eines positiven Werts für erneut aktiviert werden. `period`.  
+  
+ Die <xref:System.Threading.Timer.Change%2A> -Methode kann <xref:System.Threading.TimerCallback> vom-Delegaten aufgerufen werden.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">Der <see cref="T:System.Threading.Timer" /> wurde bereits freigegeben.</exception>
+        <related type="Article" href="~/docs/standard/threading/timers.md">Timer</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Dispose">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Gibt alle von der aktuellen Instanz von <see cref="T:System.Threading.Timer" /> verwendeten Ressourcen frei.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Dispose">
+      <MemberSignature Language="C#" Value="public void Dispose ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void Dispose() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.Dispose" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Dispose ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void Dispose();" />
+      <MemberSignature Language="F#" Value="abstract member Dispose : unit -&gt; unit&#xA;override this.Dispose : unit -&gt; unit" Usage="timer.Dispose " />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.IDisposable.Dispose</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Gibt alle von der aktuellen Instanz von <see cref="T:System.Threading.Timer" /> verwendeten Ressourcen frei.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Durch Aufrufen `Dispose` von können die Ressourcen , die von verwendet werden, für andere Zwecke neu zugeordnet werden. <xref:System.Threading.Timer> Weitere Informationen zu finden `Dispose`Sie unter [Bereinigen von nicht verwalteten Ressourcen](~/docs/standard/garbage-collection/unmanaged.md).  
+  
+> [!NOTE]
+>  Rückrufe können nach dem Aufrufen <xref:System.Threading.Timer.Dispose> der Methoden Überladung auftreten, da der Timer für die Ausführung durch Thread Pool-Threads Rückrufe anfordert. Sie können die <xref:System.Threading.Timer.Dispose%28System.Threading.WaitHandle%29> -Methoden Überladung verwenden, um zu warten, bis alle Rückrufe abgeschlossen sind.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird gezeigt, wie die von einem `Timer`reservierten Ressourcen freigegeben werden.  
+  
+ [!code-cpp[System.Threading.Timer#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Timer/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Timer#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Timer/CS/source.cs#1)]
+ [!code-vb[System.Threading.Timer#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Timer/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/threading/timers.md">Timer</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Dispose">
+      <MemberSignature Language="C#" Value="public bool Dispose (System.Threading.WaitHandle notifyObject);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool Dispose(class System.Threading.WaitHandle notifyObject) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.Dispose(System.Threading.WaitHandle)" />
+      <MemberSignature Language="VB.NET" Value="Public Function Dispose (notifyObject As WaitHandle) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool Dispose(System::Threading::WaitHandle ^ notifyObject);" />
+      <MemberSignature Language="F#" Value="member this.Dispose : System.Threading.WaitHandle -&gt; bool" Usage="timer.Dispose notifyObject" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="notifyObject" Type="System.Threading.WaitHandle" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="notifyObject">Das zu signalisierende <see cref="T:System.Threading.WaitHandle" />, wenn der <see langword="Timer" /> freigegeben wurde.</param>
+        <summary>Gibt alle von der aktuellen Instanz von <see cref="T:System.Threading.Timer" /> verwendeten Ressourcen frei, und signalisiert das Freigeben des Zeitgebers.</summary>
+        <returns><see langword="true" />, wenn die Funktion erfolgreich ausgeführt wird, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Durch Aufrufen `Dispose` von können die Ressourcen , die von verwendet werden, für andere Zwecke neu zugeordnet werden. <xref:System.Threading.Timer> Weitere Informationen zu finden `Dispose`Sie unter [Bereinigen von nicht verwalteten Ressourcen](~/docs/standard/garbage-collection/unmanaged.md).  
+  
+ Wenn diese Methode abgeschlossen ist, signalisiert Sie <xref:System.Threading.WaitHandle> die, die `notifyObject` durch den-Parameter angegeben wird. Verwenden Sie diese über <xref:System.Threading.Timer.Dispose%2A> Ladung der-Methode, wenn Sie blockieren möchten, bis Sie sicher sind, dass der Timer verworfen wurde. Der Timer wird erst freigegeben, wenn alle derzeit in der Warteschlange befindlichen Rückrufe abgeschlossen sind.  
+  
+> [!NOTE]
+>  Wenn der Rückruf die- <xref:System.Threading.Timer.Change%2A> Methode verwendet, um `dueTime` den-Parameter auf 0 (null) festzulegen, <xref:System.Threading.Timer.Dispose%28System.Threading.WaitHandle%29> kann eine Racebedingung auftreten, wenn die Methoden Überladung aufgerufen wird: <xref:System.Threading.Timer.Dispose%28System.Threading.WaitHandle%29> wenn der Timer einen neuen Rückruf in die Warteschlange stellt, bevor die Methoden Überladung sind keine Rückrufe in der Warte <xref:System.Threading.Timer.Dispose%28System.Threading.WaitHandle%29> Schlange, werden weiterhin blockiert; andernfalls wird der Timer verworfen, während der neue Rückruf in die Warteschlange eingereiht wird, und eine <xref:System.ObjectDisposedException> wird ausgelöst, <xref:System.Threading.Timer.Change%2A> wenn der neue Rückruf die-Methode aufruft.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">Der <paramref name="notifyObject" />-Parameter ist <see langword="null" />.</exception>
+        <related type="Article" href="~/docs/standard/threading/timers.md">Timer</related>
+      </Docs>
+    </Member>
+    <Member MemberName="DisposeAsync">
+      <MemberSignature Language="C#" Value="public System.Threading.Tasks.ValueTask DisposeAsync ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance valuetype System.Threading.Tasks.ValueTask DisposeAsync() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.DisposeAsync" />
+      <MemberSignature Language="VB.NET" Value="Public Function DisposeAsync () As ValueTask" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::Threading::Tasks::ValueTask DisposeAsync();" />
+      <MemberSignature Language="F#" Value="abstract member DisposeAsync : unit -&gt; System.Threading.Tasks.ValueTask&#xA;override this.DisposeAsync : unit -&gt; System.Threading.Tasks.ValueTask" Usage="timer.DisposeAsync " />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.IAsyncDisposable.DisposeAsync</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Threading.Tasks.ValueTask</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Gibt alle von der aktuellen Instanz von <see cref="T:System.Threading.Timer" /> verwendeten Ressourcen frei.</summary>
+        <returns>Ein <see cref="T:System.Threading.Tasks.ValueTask" />, der abgeschlossen wird, wenn alle dem Timer zugeordneten Aufgaben ausgeführt wurden.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Finalize">
+      <MemberSignature Language="C#" Value="~Timer ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void Finalize() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Timer.Finalize" />
+      <MemberSignature Language="VB.NET" Value="Finalize ()" />
+      <MemberSignature Language="C++ CLI" Value="!Timer ()" />
+      <MemberSignature Language="F#" Value="override this.Finalize : unit -&gt; unit" Usage="timer.Finalize " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Timer</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Gibt einem Objekt Gelegenheit zu dem Versuch, Ressourcen freizugeben und andere Bereinigungen durchzuführen, bevor es von der Garbage Collection freigegeben wird.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
