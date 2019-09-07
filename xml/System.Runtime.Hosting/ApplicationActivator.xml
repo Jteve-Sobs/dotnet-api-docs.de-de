@@ -1,0 +1,215 @@
+<Type Name="ApplicationActivator" FullName="System.Runtime.Hosting.ApplicationActivator">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="9663fe80db8e01c1b37c486df84d988524775e9a" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70547471" /></Metadata><TypeSignature Language="C#" Value="public class ApplicationActivator" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit ApplicationActivator extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Runtime.Hosting.ApplicationActivator" />
+  <TypeSignature Language="VB.NET" Value="Public Class ApplicationActivator" />
+  <TypeSignature Language="C++ CLI" Value="public ref class ApplicationActivator" />
+  <TypeSignature Language="F#" Value="type ApplicationActivator = class" />
+  <AssemblyInfo>
+    <AssemblyName>mscorlib</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes>
+    <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+      <AttributeName>System.Runtime.InteropServices.ComVisible(true)</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>Stellt die Basisklasse für die Aktivierung manifestbasierter Assemblys bereit.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Es gibt eine einzelne festgelegte Instanz der <xref:System.Runtime.Hosting.ApplicationActivator> -Klasse <xref:System.AppDomain> , an die alle Aktivierungs Aufrufe weitergeleitet werden. Der <xref:System.AppDomainManager> für die aktuelle <xref:System.AppDomain> kann für diesen Zweck eine <xref:System.Runtime.Hosting.ApplicationActivator> eigene benutzerdefinierte bereitstellen. Wenn eine Benutzer <xref:System.Runtime.Hosting.ApplicationActivator> definierte nicht angegeben wird, wird eine Instanz der <xref:System.Runtime.Hosting.ApplicationActivator> Standard Instanz erstellt.  
+  
+ In den folgenden Schritten wird das Verhalten der Implementierung <xref:System.Runtime.Hosting.ApplicationActivator.CreateInstance%2A> der Standardmethode beschrieben:  
+  
+1.  Überprüft, ob <xref:System.ActivationContext> der des Add-Ins, das aktiviert werden soll <xref:System.ActivationContext> , mit der der aktuellen Domäne übereinstimmt. wenn nicht, wird mit Schritt 2 fortgefahren. Andernfalls führt die Assembly aus und gibt das in einem Objekt Handle umschließende Ergebnis zurück.  
+  
+2.  Aktiviert das Add-in in einem neuen <xref:System.AppDomain>. Die folgenden Schritte werden ausgeführt, um eine neue <xref:System.AppDomain> mit dem <xref:System.Runtime.Hosting.ActivationArguments> für das-Add-in zu initialisieren.  
+  
+    1.  Erstellt ein neues <xref:System.AppDomainSetup> -Objekt unter <xref:System.Runtime.Hosting.ActivationArguments> Verwendung eines-Objekts, das den Aktivierungs Kontext für das Add-in enthält.  
+  
+    2.  Ruft die <xref:System.Runtime.Hosting.ApplicationActivator.CreateInstanceHelper%2A> -Methode auf, um mit dem <xref:System.AppDomainSetup> -Objekt eine neue Domäne zu erstellen.  
+  
+    3.  Die <xref:System.Runtime.Hosting.ApplicationActivator.CreateInstanceHelper%2A> -Methode ruft <xref:System.Security.HostSecurityManager.DetermineApplicationTrust%2A?displayProperty=nameWithType> die-Methode auf <xref:System.Security.Policy.ApplicationTrust> , um ein-Objekt für das Add-in abzurufen. Wenn die <xref:System.Security.Policy.ApplicationTrust.IsApplicationTrustedToRun%2A> -Eigenschaft `true`zurückgibt, wird das Add-in ausgeführt. Wenn nicht, <xref:System.Runtime.Hosting.ApplicationActivator.CreateInstanceHelper%2A> wird eine <xref:System.Security.Policy.PolicyException> ausgelöst, die angibt, dass die Ausführungs Berechtigung nicht abgerufen werden konnte.  
+  
+    4.  Wenn das Add-in für die Ausführung vertrauenswürdig ist, wird <xref:System.AppDomain> ein neues erstellt und <xref:System.ActivationContext> für die des Add-Ins konfiguriert, und das Add-in wird geladen und ausgeführt.  
+  
+    5.  Das Ergebnis der Aktivierung des Add-Ins wird zurückgegeben und in einem Objekt Handle umschließt.  
+  
+ Ein benutzerdefinierter Aktivierer kann die Aktivierung eines Add-Ins auf einen bestimmten Satz von Umständen anpassen. Ein benutzerdefinierter Aktivierer könnte z. b. ein <xref:System.AppDomain> vorhandenes zum Aktivieren dieses Add-Ins finden, anstatt jedes Mal eine neue Domäne zu erstellen.  
+  
+ In den folgenden Schritten wird das Verhalten eines Benutzer <xref:System.Runtime.Hosting.ApplicationActivator> definierten beschrieben, das ein Add-in in <xref:System.AppDomain>einer vorhandenen aktiviert:  
+  
+1.  Der benutzerdefinierte Aktivierer findet eine Domäne, die das <xref:System.ActivationContext> gleiche ist wie das Add-in, das aktiviert wird.  
+  
+2.  Wenn der <xref:System.ActivationContext> im Prozess noch nie gesehen wurde, erstellt der benutzerdefinierte Aktivierer einen neuen <xref:System.AppDomain> für dieses <xref:System.ActivationContext> , indem er die <xref:System.AppDomain.CreateDomain%2A> -Methode direkt aufrufen oder diese Aktivität an den <xref:System.Runtime.Hosting.ApplicationActivator.CreateInstanceHelper%2A> in der-Basisklasse delegiert.  
+  
+3.  Wenn eine Domäne mit dem gleichen <xref:System.ActivationContext>vorhanden ist, kann der Aktivierer den <xref:System.Runtime.Hosting.ApplicationActivator.CreateInstance%2A> Methodenaufruf an den <xref:System.Runtime.Hosting.ApplicationActivator> in der Zieldomäne delegieren. Beachten Sie, dass es sich hierbei um <xref:System.Runtime.Hosting.ApplicationActivator> einen Domänen übergreifenden Aufrufsatz handelt, der sich im Ziel <xref:System.AppDomain>befindet.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie ein <xref:System.Runtime.Hosting.ApplicationActivator> -Objekt aus dem <xref:System.AppDomain.DomainManager%2A> aktuellen für eine Manifest-basierte Anwendung abgerufen wird.  
+  
+ [!code-csharp[System.Runtime.Hosting.ApplicationActivator#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Runtime.Hosting.ApplicationActivator/cs/program.cs#1)]
+ [!code-vb[System.Runtime.Hosting.ApplicationActivator#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Runtime.Hosting.ApplicationActivator/vb/program.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ApplicationActivator ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Hosting.ApplicationActivator.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; ApplicationActivator();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Runtime.Hosting.ApplicationActivator" />-Klasse.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="CreateInstance">
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Erstellt eine Instanz der zu aktivierenden Anwendung mit einem Aktivierungskontext, der die Anwendung identifiziert.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="CreateInstance">
+      <MemberSignature Language="C#" Value="public virtual System.Runtime.Remoting.ObjectHandle CreateInstance (ActivationContext activationContext);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Runtime.Remoting.ObjectHandle CreateInstance(class System.ActivationContext activationContext) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Hosting.ApplicationActivator.CreateInstance(System.ActivationContext)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::Runtime::Remoting::ObjectHandle ^ CreateInstance(ActivationContext ^ activationContext);" />
+      <MemberSignature Language="F#" Value="abstract member CreateInstance : ActivationContext -&gt; System.Runtime.Remoting.ObjectHandle&#xA;override this.CreateInstance : ActivationContext -&gt; System.Runtime.Remoting.ObjectHandle" Usage="applicationActivator.CreateInstance activationContext" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Runtime.Remoting.ObjectHandle</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="activationContext" Type="System.ActivationContext" />
+      </Parameters>
+      <Docs>
+        <param name="activationContext">Ein <see cref="T:System.ActivationContext" />, der die zu aktivierende Anwendung identifiziert.</param>
+        <summary>Erstellt eine Instanz der zu aktivierenden Anwendung mit dem angegebenen Aktivierungskontext.</summary>
+        <returns>Ein <see cref="T:System.Runtime.Remoting.ObjectHandle" />, das ein Wrapper für den Rückgabewert der Anwendungsausführung ist. Der Rückgabewert muss für den Zugriff auf das eigentliche Objekt entwrappt werden.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode ist für die manifestressourcenaktivierung von Anwendungen vorgesehen.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="activationContext" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="CreateInstance">
+      <MemberSignature Language="C#" Value="public virtual System.Runtime.Remoting.ObjectHandle CreateInstance (ActivationContext activationContext, string[] activationCustomData);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Runtime.Remoting.ObjectHandle CreateInstance(class System.ActivationContext activationContext, string[] activationCustomData) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Hosting.ApplicationActivator.CreateInstance(System.ActivationContext,System.String[])" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::Runtime::Remoting::ObjectHandle ^ CreateInstance(ActivationContext ^ activationContext, cli::array &lt;System::String ^&gt; ^ activationCustomData);" />
+      <MemberSignature Language="F#" Value="abstract member CreateInstance : ActivationContext * string[] -&gt; System.Runtime.Remoting.ObjectHandle&#xA;override this.CreateInstance : ActivationContext * string[] -&gt; System.Runtime.Remoting.ObjectHandle" Usage="applicationActivator.CreateInstance (activationContext, activationCustomData)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Runtime.Remoting.ObjectHandle</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="activationContext" Type="System.ActivationContext" />
+        <Parameter Name="activationCustomData" Type="System.String[]" />
+      </Parameters>
+      <Docs>
+        <param name="activationContext">Ein <see cref="T:System.ActivationContext" />, der die zu aktivierende Anwendung identifiziert.</param>
+        <param name="activationCustomData">Benutzerdefinierte Aktivierungsdaten.</param>
+        <summary>Erstellt eine Instanz der zu aktivierenden Anwendung mit dem angegebenen Aktivierungskontext und benutzerdefinierten Aktivierungsdaten.</summary>
+        <returns>Ein <see cref="T:System.Runtime.Remoting.ObjectHandle" />, das ein Wrapper für den Rückgabewert der Anwendungsausführung ist. Der Rückgabewert muss für den Zugriff auf das eigentliche Objekt entwrappt werden.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode ist für die manifestressourcenaktivierung von Anwendungen vorgesehen. Die Aktivierungsdaten bestehen aus Informationen wie z. b. dem Teil der Abfrage Zeichenfolge einer URL.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="activationContext" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="CreateInstanceHelper">
+      <MemberSignature Language="C#" Value="protected static System.Runtime.Remoting.ObjectHandle CreateInstanceHelper (AppDomainSetup adSetup);" />
+      <MemberSignature Language="ILAsm" Value=".method familystatic hidebysig class System.Runtime.Remoting.ObjectHandle CreateInstanceHelper(class System.AppDomainSetup adSetup) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Hosting.ApplicationActivator.CreateInstanceHelper(System.AppDomainSetup)" />
+      <MemberSignature Language="VB.NET" Value="Protected Shared Function CreateInstanceHelper (adSetup As AppDomainSetup) As ObjectHandle" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; static System::Runtime::Remoting::ObjectHandle ^ CreateInstanceHelper(AppDomainSetup ^ adSetup);" />
+      <MemberSignature Language="F#" Value="static member CreateInstanceHelper : AppDomainSetup -&gt; System.Runtime.Remoting.ObjectHandle" Usage="System.Runtime.Hosting.ApplicationActivator.CreateInstanceHelper adSetup" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Runtime.Remoting.ObjectHandle</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="adSetup" Type="System.AppDomainSetup" />
+      </Parameters>
+      <Docs>
+        <param name="adSetup">Ein <see cref="T:System.AppDomainSetup" />-Objekt, dessen <see cref="P:System.AppDomainSetup.ActivationArguments" />-Eigenschaft die zu aktivierende Anwendung identifiziert.</param>
+        <summary>Erstellt eine Instanz einer Anwendung mithilfe des angegebenen <see cref="T:System.AppDomainSetup" />-Objekts.</summary>
+        <returns>Ein <see cref="T:System.Runtime.Remoting.ObjectHandle" />, das ein Wrapper für den Rückgabewert der Anwendungsausführung ist. Der Rückgabewert muss für den Zugriff auf das eigentliche Objekt entwrappt werden.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode ist für die manifestressourcenaktivierung von Anwendungen vorgesehen.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Die <see cref="P:System.AppDomainSetup.ActivationArguments" />-Eigenschaft von <paramref name="adSetup" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.Security.Policy.PolicyException">Fehler beim Ausführen der Anwendungsinstanz, da die Richtlinieneinstellungen für die aktuelle Anwendungsdomäne keine Berechtigung für die Ausführung dieser Anwendung bereitstellen.</exception>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
