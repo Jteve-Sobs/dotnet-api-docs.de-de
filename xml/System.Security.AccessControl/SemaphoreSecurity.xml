@@ -1,0 +1,956 @@
+<Type Name="SemaphoreSecurity" FullName="System.Security.AccessControl.SemaphoreSecurity">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="dbaaedf80ead2c907ed593520cd66b949ee55078" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70414916" /></Metadata><TypeSignature Language="C#" Value="public sealed class SemaphoreSecurity : System.Security.AccessControl.NativeObjectSecurity" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit SemaphoreSecurity extends System.Security.AccessControl.NativeObjectSecurity" />
+  <TypeSignature Language="DocId" Value="T:System.Security.AccessControl.SemaphoreSecurity" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class SemaphoreSecurity&#xA;Inherits NativeObjectSecurity" />
+  <TypeSignature Language="C++ CLI" Value="public ref class SemaphoreSecurity sealed : System::Security::AccessControl::NativeObjectSecurity" />
+  <TypeSignature Language="F#" Value="type SemaphoreSecurity = class&#xA;    inherit NativeObjectSecurity" />
+  <AssemblyInfo>
+    <AssemblyName>System.Threading.AccessControl</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.2.0</AssemblyVersion>
+    <AssemblyVersion>4.0.3.0</AssemblyVersion>
+    <AssemblyVersion>4.0.4.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Security.AccessControl.NativeObjectSecurity</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes>
+    <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+      <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+    </Attribute>
+    <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1">
+      <AttributeName>System.Security.SecurityCritical</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>Stellt die Windows-Zugriffssteuerungssicherheit für ein benanntes Semaphor dar. Diese Klasse kann nicht vererbt werden.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Ein <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt gibt Zugriffsrechte für ein benanntes System Semaphor an und gibt außerdem an, wie Zugriffsversuche überwacht werden. Zugriffsrechte für das Semaphor werden als Regeln ausgedrückt, wobei jede Zugriffs Regel durch ein <xref:System.Security.AccessControl.SemaphoreAccessRule> -Objekt dargestellt wird. Jede Überwachungs Regel wird durch ein <xref:System.Security.AccessControl.SemaphoreAuditRule> -Objekt dargestellt.  
+  
+ Dies spiegelt das zugrunde liegende Windows-Sicherheitssystem wider, in dem jedes Sicherungs fähige Objekt höchstens eine freigegebene Zugriffs Steuerungs Liste (DACL) aufweist, die den Zugriff auf das gesicherte Objekt steuert, und höchstens eine System Zugriffs Steuerungs Liste (SACL), die den Zugriff angibt. Versuche werden überwacht. DACL und SACL sind geordnete Listen mit Zugriffs Steuerungs Einträgen (ACE), die den Zugriff und die Überwachung für Benutzer und Gruppen angeben. Ein <xref:System.Security.AccessControl.SemaphoreAccessRule> - <xref:System.Security.AccessControl.SemaphoreAuditRule> oder-Objekt kann mehr als einen ACE darstellen.  
+  
+> [!NOTE]
+>  Ein <xref:System.Threading.Semaphore> -Objekt kann ein lokales Semaphor oder ein benanntes System Semaphor darstellen. Die Windows-Zugriffs Steuerungs Sicherheit ist nur für benannte System Semaphoren sinnvoll.  
+  
+ Die <xref:System.Security.AccessControl.SemaphoreSecurity>Klassen <xref:System.Security.AccessControl.SemaphoreAccessRule>, und <xref:System.Security.AccessControl.SemaphoreAuditRule>  verbergen die Implementierungsdetails von ACLs und ACEs. Sie ermöglichen es Ihnen, die 17 verschiedenen ACE-Typen und die Komplexität der ordnungsgemäßen Beibehaltung der Vererbung und der Propagierung von Zugriffsrechten zu ignorieren. Diese Objekte sind ebenfalls so konzipiert, dass die folgenden allgemeinen Zugriffs Steuerungs Fehler vermieden werden:  
+  
+-   Erstellen einer Sicherheits Beschreibung mit einer NULL-DACL. Ein NULL-Verweis auf eine DACL ermöglicht jedem Benutzer das Hinzufügen von Zugriffsregeln zu einem Objekt, was potenziell zu einem Denial-of-Service-Angriff führt. Ein neues <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt beginnt immer mit einer leeren DACL, die allen Benutzern den Zugriff verweigert.  
+  
+-   Verstoß gegen die kanonische Reihenfolge von ACEs. Wenn die ACE-Liste in der DACL nicht in der kanonischen Reihenfolge beibehalten wird, erhalten Benutzer möglicherweise versehentlich Zugriff auf das gesicherte Objekt. Beispielsweise müssen verweigerte Zugriffsrechte immer vor zulässigen Zugriffsrechten angezeigt werden. <xref:System.Security.AccessControl.SemaphoreSecurity>-Objekte behalten die korrekte Reihenfolge intern bei.  
+  
+-   Manipulieren von Sicherheitsbeschreibungsflags, die nur unter dem Resource Manager-Steuerelement vorliegen sollten.  
+  
+-   Erstellen Ungültiger Kombinationen von ACE-Flags.  
+  
+-   Manipulieren von geerbten ACEs. Vererbung und Weitergabe werden vom Ressourcen-Manager als Reaktion auf Änderungen, die Sie an Zugriffs-und Überwachungsregeln vornehmen, verarbeitet.  
+  
+-   Einfügen von bedeutungslosen ACEs in ACLs.  
+  
+ Die einzigen Funktionen, die nicht von den .net-Sicherheits Objekten unterstützt werden, sind gefährliche Aktivitäten, die von den meisten Anwendungsentwicklern vermieden werden sollten, wie z. b. die folgenden:  
+  
+-   Aufgaben auf niedriger Ebene, die normalerweise vom Ressourcen-Manager ausgeführt werden.  
+  
+-   Hinzufügen oder Entfernen von Zugriffs Steuerungs Einträgen auf eine Weise, die die kanonische Reihenfolge nicht beibehält.  
+  
+ Zum Ändern der Windows-Zugriffs Steuerungs Sicherheit für ein benanntes Semaphor verwenden Sie <xref:System.Threading.Semaphore.GetAccessControl%2A?displayProperty=nameWithType> die <xref:System.Security.AccessControl.SemaphoreSecurity> -Methode, um das-Objekt zu erhalten. Ändern Sie das Sicherheits Objekt durch Hinzufügen und Entfernen von Regeln, und <xref:System.Threading.Semaphore.SetAccessControl%2A?displayProperty=nameWithType> verwenden Sie dann die-Methode, um es erneut anzufügen.  
+  
+> [!IMPORTANT]
+>  Änderungen, die Sie an <xref:System.Security.AccessControl.SemaphoreSecurity> einem-Objekt vornehmen, wirken sich nicht auf die Zugriffsebenen des benannten Semaphors <xref:System.Threading.Semaphore.SetAccessControl%2A?displayProperty=nameWithType> aus, bis Sie die-Methode aufrufen, um das geänderte Sicherheits Objekt dem benannten Semaphor zuzuweisen.  
+  
+ Um die Zugriffs Steuerungs Sicherheit von einem Semaphor in ein anderes zu kopieren <xref:System.Threading.Semaphore.GetAccessControl%2A?displayProperty=nameWithType> , verwenden Sie die <xref:System.Security.AccessControl.SemaphoreSecurity> -Methode, um ein-Objekt zu erhalten, das die Zugriffs-und Überwachungsregeln <xref:System.Threading.Semaphore.SetAccessControl%2A?displayProperty=nameWithType> für das erste Semaphor darstellt, und verwenden Sie dann die-Methode oder einen Konstruktor, der einen  <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt, um diese Regeln dem zweiten Semaphor zuzuweisen.  
+  
+ Benutzer mit einer Investition in die Security Deskriptor Definition Language (SDDL) können die <xref:System.Security.AccessControl.ObjectSecurity.SetSecurityDescriptorSddlForm%2A> -Methode verwenden, um Zugriffsregeln für ein benanntes Semaphor festzulegen, und die <xref:System.Security.AccessControl.ObjectSecurity.GetSecurityDescriptorSddlForm%2A> -Methode, um eine Zeichenfolge zu erhalten, die die Zugriffsregeln im SDDL-Format darstellt. Dies wird nicht für die neue Entwicklung empfohlen.  
+  
+> [!NOTE]
+>  Die Sicherheit von Synchronisierungs Objekten wird für Windows 98 oder Windows Millennium Edition nicht unterstützt.  
+  
+   
+  
+## Examples  
+ Das folgende Codebeispiel veranschaulicht die Trennung zwischen <xref:System.Security.AccessControl.AccessControlType.Allow> Regeln und <xref:System.Security.AccessControl.AccessControlType.Deny> Regeln und zeigt die Kombination der Rechte in kompatiblen Regeln. Im Beispiel wird ein <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt erstellt, Regeln hinzugefügt, die verschiedene Rechte für den aktuellen Benutzer zulassen und verweigern, und das resultierende paar von Regeln wird angezeigt. Das Beispiel ermöglicht dann neue Rechte für den aktuellen Benutzer und zeigt das Ergebnis an, das anzeigt, dass die neuen Rechte mit der <xref:System.Security.AccessControl.AccessControlType.Allow> vorhandenen Regel zusammengeführt werden.  
+  
+> [!NOTE]
+>  In diesem Beispiel wird das Sicherheits Objekt nicht an ein <xref:System.Threading.Semaphore> -Objekt angefügt. Beispiele zum Anfügen von Sicherheits Objekten finden Sie <xref:System.Threading.Semaphore.GetAccessControl%2A?displayProperty=nameWithType> unter <xref:System.Threading.Semaphore.SetAccessControl%2A?displayProperty=nameWithType>und.  
+  
+ [!code-csharp[System.Security.AccessControl.SemaphoreSecurity.AddAccessRule#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.AddAccessRule/CS/source.cs#1)]
+ [!code-vb[System.Security.AccessControl.SemaphoreSecurity.AddAccessRule#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.AddAccessRule/VB/source.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Security.AccessControl.SemaphoreAccessRule" />
+    <altmember cref="T:System.Security.AccessControl.SemaphoreAuditRule" />
+    <altmember cref="T:System.Security.AccessControl.SemaphoreRights" />
+    <altmember cref="M:System.Threading.Semaphore.GetAccessControl" />
+    <altmember cref="M:System.Threading.Semaphore.SetAccessControl(System.Security.AccessControl.SemaphoreSecurity)" />
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Security.AccessControl.SemaphoreSecurity" />-Klasse.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SemaphoreSecurity ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SemaphoreSecurity();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Security.AccessControl.SemaphoreSecurity" />-Klasse mit Standardwerten.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Ein neues <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt beginnt immer mit einer leeren DACL (freigegebene Zugriffsliste), die allen Benutzern den Zugriff verweigert.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">Diese Klasse wird unter Windows 98 oder Windows Millennium Edition nicht unterstützt.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SemaphoreSecurity (string name, System.Security.AccessControl.AccessControlSections includeSections);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string name, valuetype System.Security.AccessControl.AccessControlSections includeSections) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.#ctor(System.String,System.Security.AccessControl.AccessControlSections)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (name As String, includeSections As AccessControlSections)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SemaphoreSecurity(System::String ^ name, System::Security::AccessControl::AccessControlSections includeSections);" />
+      <MemberSignature Language="F#" Value="new System.Security.AccessControl.SemaphoreSecurity : string * System.Security.AccessControl.AccessControlSections -&gt; System.Security.AccessControl.SemaphoreSecurity" Usage="new System.Security.AccessControl.SemaphoreSecurity (name, includeSections)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="includeSections" Type="System.Security.AccessControl.AccessControlSections" />
+      </Parameters>
+      <Docs>
+        <param name="name">Der Name des Systemsemaphors, dessen Regeln für die Zugriffssteuerungssicherheit abgerufen werden sollen.</param>
+        <param name="includeSections">Eine Kombination von <see cref="T:System.Security.AccessControl.AccessControlSections" />-Flags, die die abzurufenden Abschnitte angeben.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Security.AccessControl.SemaphoreSecurity" />-Klasse mit den angegebenen Abschnitten der Regeln für die Zugriffssteuerungssicherheit aus dem Systemsemaphor mit dem angegebenen Namen.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Mit diesem Konstruktor können Sie die Zugriffs Steuerungs Sicherheit für ein benanntes System Semaphor abrufen, ohne <xref:System.Threading.Semaphore> zuerst ein-Objekt erstellen zu müssen.  
+  
+ Beim Arbeiten mit benannten System Objekten muss Vorsicht geboten werden. Wenn ein Systemobjekt mit dem Namen `name` vorhanden ist, das keine Semaphore ist, kann seine Steuerelement Zugriffssicherheit abgerufen werden.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">Diese Klasse wird unter Windows 98 oder Windows Millennium Edition nicht unterstützt.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="AccessRightType">
+      <MemberSignature Language="C#" Value="public override Type AccessRightType { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Type AccessRightType" />
+      <MemberSignature Language="DocId" Value="P:System.Security.AccessControl.SemaphoreSecurity.AccessRightType" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property AccessRightType As Type" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property Type ^ AccessRightType { Type ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.AccessRightType : Type" Usage="System.Security.AccessControl.SemaphoreSecurity.AccessRightType" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Type</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft die Enumeration ab, mit deren Hilfe die <see cref="T:System.Security.AccessControl.SemaphoreSecurity" />-Klasse Zugriffsrechte darstellt.</summary>
+        <value>Ein <see cref="T:System.Type" />-Objekt, das die <see cref="T:System.Security.AccessControl.SemaphoreRights" />-Enumeration darstellt.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Klassen, die von der <xref:System.Security.AccessControl.ObjectSecurity> -Klasse abgeleitet <xref:System.Security.AccessControl.ObjectSecurity.AccessRightType%2A> werden, überschreiben die-Eigenschaft und geben den Typ zurück, den Sie zum Darstellen von Zugriffsrechten Wenn Sie mit Arrays oder Auflistungen arbeiten, die mehrere Typen von Sicherheits Objekten enthalten, verwenden Sie diese Eigenschaft, um den korrekten Enumerationstyp zu bestimmen, der für jedes Sicherheits Objekt verwendet werden soll.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AccessRuleFactory">
+      <MemberSignature Language="C#" Value="public override System.Security.AccessControl.AccessRule AccessRuleFactory (System.Security.Principal.IdentityReference identityReference, int accessMask, bool isInherited, System.Security.AccessControl.InheritanceFlags inheritanceFlags, System.Security.AccessControl.PropagationFlags propagationFlags, System.Security.AccessControl.AccessControlType type);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Security.AccessControl.AccessRule AccessRuleFactory(class System.Security.Principal.IdentityReference identityReference, int32 accessMask, bool isInherited, valuetype System.Security.AccessControl.InheritanceFlags inheritanceFlags, valuetype System.Security.AccessControl.PropagationFlags propagationFlags, valuetype System.Security.AccessControl.AccessControlType type) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.AccessRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AccessControlType)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Security::AccessControl::AccessRule ^ AccessRuleFactory(System::Security::Principal::IdentityReference ^ identityReference, int accessMask, bool isInherited, System::Security::AccessControl::InheritanceFlags inheritanceFlags, System::Security::AccessControl::PropagationFlags propagationFlags, System::Security::AccessControl::AccessControlType type);" />
+      <MemberSignature Language="F#" Value="override this.AccessRuleFactory : System.Security.Principal.IdentityReference * int * bool * System.Security.AccessControl.InheritanceFlags * System.Security.AccessControl.PropagationFlags * System.Security.AccessControl.AccessControlType -&gt; System.Security.AccessControl.AccessRule" Usage="semaphoreSecurity.AccessRuleFactory (identityReference, accessMask, isInherited, inheritanceFlags, propagationFlags, type)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Security.AccessControl.AccessRule</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="identityReference" Type="System.Security.Principal.IdentityReference" />
+        <Parameter Name="accessMask" Type="System.Int32" />
+        <Parameter Name="isInherited" Type="System.Boolean" />
+        <Parameter Name="inheritanceFlags" Type="System.Security.AccessControl.InheritanceFlags" />
+        <Parameter Name="propagationFlags" Type="System.Security.AccessControl.PropagationFlags" />
+        <Parameter Name="type" Type="System.Security.AccessControl.AccessControlType" />
+      </Parameters>
+      <Docs>
+        <param name="identityReference">Eine <see cref="T:System.Security.Principal.IdentityReference" />, mit deren Hilfe der Benutzer oder die Gruppe angegeben wird, für den bzw. die die Regel gilt.</param>
+        <param name="accessMask">Eine bitweise Kombination von <see cref="T:System.Security.AccessControl.SemaphoreRights" />-Werten, die die zu verweigernden oder zu gewährenden Zugriffsrechte angibt (in eine ganze Zahl umgewandelt).</param>
+        <param name="isInherited">Besitzt keine Bedeutung für benannte Semaphore, da diese über keine Hierarchie verfügen.</param>
+        <param name="inheritanceFlags">Besitzt keine Bedeutung für benannte Semaphore, da diese über keine Hierarchie verfügen.</param>
+        <param name="propagationFlags">Besitzt keine Bedeutung für benannte Semaphore, da diese über keine Hierarchie verfügen.</param>
+        <param name="type">Einer der <see cref="T:System.Security.AccessControl.AccessControlType" />-Werte, mit denen angegeben wird, ob die Rechte gewährt oder verweigert werden.</param>
+        <summary>Erstellt eine neue Zugriffssteuerungsregel für den angegebenen Benutzer mit den angegebenen Zugriffsrechten und Flags sowie der angegebenen Zugriffssteuerung.</summary>
+        <returns>Ein <see cref="T:System.Security.AccessControl.SemaphoreAccessRule" />-Objekt, das die angegebenen Rechte für den angegebenen Benutzer darstellt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die empfohlene Vorgehensweise zum Erstellen von Zugriffs Steuerungs Regeln ist die Verwendung der Konstruktoren <xref:System.Security.AccessControl.SemaphoreAccessRule> der-Klasse.  
+  
+> [!NOTE]
+>  Obwohl Vererbungs-und Weitergabeflags für benannte Semaphoren bedeutungslos sind, ist es immer noch möglich, diese anzugeben, da die Wartung von Regeln unnötig kompliziert ist, beispielsweise durch eine Beeinträchtigung der Regel Kombination. , die andernfalls kompatibel wäre.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">Für <paramref name="accessMask" />, <paramref name="inheritanceFlags" />, <paramref name="propagationFlags" /> oder <paramref name="type" /> ist ein ungültiger Wert angegeben.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="identityReference" /> ist <see langword="null" />.  
+  
+- oder - 
+ <paramref name="accessMask" /> ist 0 (null).</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="identityReference" /> ist weder vom Typ <see cref="T:System.Security.Principal.SecurityIdentifier" /> noch von einem Typ wie etwa <see cref="T:System.Security.Principal.NTAccount" />, der in den <see cref="T:System.Security.Principal.SecurityIdentifier" />-Typ konvertiert werden kann.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="AccessRuleType">
+      <MemberSignature Language="C#" Value="public override Type AccessRuleType { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Type AccessRuleType" />
+      <MemberSignature Language="DocId" Value="P:System.Security.AccessControl.SemaphoreSecurity.AccessRuleType" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property AccessRuleType As Type" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property Type ^ AccessRuleType { Type ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.AccessRuleType : Type" Usage="System.Security.AccessControl.SemaphoreSecurity.AccessRuleType" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Type</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den Typ ab, mit dessen Hilfe die <see cref="T:System.Security.AccessControl.SemaphoreSecurity" />-Klasse die Zugriffsregeln darstellt.</summary>
+        <value>Ein <see cref="T:System.Type" />-Objekt, das die <see cref="T:System.Security.AccessControl.SemaphoreAccessRule" />-Klasse darstellt.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Klassen, die von der <xref:System.Security.AccessControl.ObjectSecurity> -Klasse abgeleitet <xref:System.Security.AccessControl.ObjectSecurity.AccessRuleType%2A> werden, überschreiben die-Eigenschaft und geben den Typ zurück, den Sie verwenden, um Zugriffsregeln Wenn Sie mit Arrays oder Auflistungen arbeiten, die mehrere Typen von Sicherheits Objekten enthalten, verwenden Sie diese Eigenschaft, um den korrekten Zugriffs Regeltyp zu bestimmen, der für jedes Sicherheits Objekt verwendet werden soll.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddAccessRule">
+      <MemberSignature Language="C#" Value="public void AddAccessRule (System.Security.AccessControl.SemaphoreAccessRule rule);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void AddAccessRule(class System.Security.AccessControl.SemaphoreAccessRule rule) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.AddAccessRule(System.Security.AccessControl.SemaphoreAccessRule)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub AddAccessRule (rule As SemaphoreAccessRule)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void AddAccessRule(System::Security::AccessControl::SemaphoreAccessRule ^ rule);" />
+      <MemberSignature Language="F#" Value="override this.AddAccessRule : System.Security.AccessControl.SemaphoreAccessRule -&gt; unit" Usage="semaphoreSecurity.AddAccessRule rule" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rule" Type="System.Security.AccessControl.SemaphoreAccessRule" />
+      </Parameters>
+      <Docs>
+        <param name="rule">Die hinzuzufügende Zugriffssteuerungsregel.</param>
+        <summary>Sucht nach einer übereinstimmenden Regel, mit der die neue Regel zusammengeführt werden kann. Wenn keine Regel gefunden wurde, wird die neue Regel hinzugefügt.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Security.AccessControl.SemaphoreSecurity.AddAccessRule%2A> -Methode sucht nach Regeln mit dem gleichen Benutzer oder der gleichen Gruppe <xref:System.Security.AccessControl.AccessControlType> und `rule`mit dem gleichen. Wenn keine gefunden werden, `rule` wird hinzugefügt. Wenn eine abgleichsregel gefunden wird, werden `rule` die Rechte in mit der vorhandenen Regel zusammengeführt.  
+  
+   
+  
+## Examples  
+ Das folgende Codebeispiel veranschaulicht die Trennung zwischen <xref:System.Security.AccessControl.AccessControlType.Allow> Regeln und <xref:System.Security.AccessControl.AccessControlType.Deny> Regeln und zeigt die Kombination der Rechte in kompatiblen Regeln. Im Beispiel wird ein <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt erstellt, Regeln hinzugefügt, die verschiedene Rechte für den aktuellen Benutzer zulassen und verweigern, und das resultierende paar von Regeln wird angezeigt. Das Beispiel ermöglicht dann neue Rechte für den aktuellen Benutzer und zeigt das Ergebnis an, das anzeigt, dass die neuen Rechte mit der <xref:System.Security.AccessControl.AccessControlType.Allow> vorhandenen Regel zusammengeführt werden.  
+  
+> [!NOTE]
+>  In diesem Beispiel wird das Sicherheits Objekt nicht an ein <xref:System.Threading.Semaphore> -Objekt angefügt. Beispiele zum Anfügen von Sicherheits Objekten finden Sie <xref:System.Threading.Semaphore.GetAccessControl%2A?displayProperty=nameWithType> unter <xref:System.Threading.Semaphore.SetAccessControl%2A?displayProperty=nameWithType>und.  
+  
+ [!code-csharp[System.Security.AccessControl.SemaphoreSecurity.AddAccessRule#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.AddAccessRule/CS/source.cs#1)]
+ [!code-vb[System.Security.AccessControl.SemaphoreSecurity.AddAccessRule#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.AddAccessRule/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rule" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="AddAuditRule">
+      <MemberSignature Language="C#" Value="public void AddAuditRule (System.Security.AccessControl.SemaphoreAuditRule rule);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void AddAuditRule(class System.Security.AccessControl.SemaphoreAuditRule rule) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.AddAuditRule(System.Security.AccessControl.SemaphoreAuditRule)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub AddAuditRule (rule As SemaphoreAuditRule)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void AddAuditRule(System::Security::AccessControl::SemaphoreAuditRule ^ rule);" />
+      <MemberSignature Language="F#" Value="override this.AddAuditRule : System.Security.AccessControl.SemaphoreAuditRule -&gt; unit" Usage="semaphoreSecurity.AddAuditRule rule" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rule" Type="System.Security.AccessControl.SemaphoreAuditRule" />
+      </Parameters>
+      <Docs>
+        <param name="rule">Die hinzuzufügende Überwachungsregel. Der von dieser Regel angegebene Benutzer bestimmt die Suche.</param>
+        <summary>Sucht nach einer Überwachungsregel, mit der die neue Regel zusammengeführt werden kann. Wenn keine Regel gefunden wurde, wird die neue Regel hinzugefügt.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Security.AccessControl.SemaphoreSecurity.AddAuditRule%2A> -Methode sucht nach Regeln mit dem gleichen Benutzer oder der `rule`gleichen Gruppe wie. Wenn keine gefunden werden, `rule` wird hinzugefügt. Wenn eine übereinstimmende Regel gefunden wird, werden `rule` die Flags in mit der vorhandenen Regel zusammengeführt.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AuditRuleFactory">
+      <MemberSignature Language="C#" Value="public override System.Security.AccessControl.AuditRule AuditRuleFactory (System.Security.Principal.IdentityReference identityReference, int accessMask, bool isInherited, System.Security.AccessControl.InheritanceFlags inheritanceFlags, System.Security.AccessControl.PropagationFlags propagationFlags, System.Security.AccessControl.AuditFlags flags);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Security.AccessControl.AuditRule AuditRuleFactory(class System.Security.Principal.IdentityReference identityReference, int32 accessMask, bool isInherited, valuetype System.Security.AccessControl.InheritanceFlags inheritanceFlags, valuetype System.Security.AccessControl.PropagationFlags propagationFlags, valuetype System.Security.AccessControl.AuditFlags flags) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.AuditRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AuditFlags)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Security::AccessControl::AuditRule ^ AuditRuleFactory(System::Security::Principal::IdentityReference ^ identityReference, int accessMask, bool isInherited, System::Security::AccessControl::InheritanceFlags inheritanceFlags, System::Security::AccessControl::PropagationFlags propagationFlags, System::Security::AccessControl::AuditFlags flags);" />
+      <MemberSignature Language="F#" Value="override this.AuditRuleFactory : System.Security.Principal.IdentityReference * int * bool * System.Security.AccessControl.InheritanceFlags * System.Security.AccessControl.PropagationFlags * System.Security.AccessControl.AuditFlags -&gt; System.Security.AccessControl.AuditRule" Usage="semaphoreSecurity.AuditRuleFactory (identityReference, accessMask, isInherited, inheritanceFlags, propagationFlags, flags)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Security.AccessControl.AuditRule</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="identityReference" Type="System.Security.Principal.IdentityReference" />
+        <Parameter Name="accessMask" Type="System.Int32" />
+        <Parameter Name="isInherited" Type="System.Boolean" />
+        <Parameter Name="inheritanceFlags" Type="System.Security.AccessControl.InheritanceFlags" />
+        <Parameter Name="propagationFlags" Type="System.Security.AccessControl.PropagationFlags" />
+        <Parameter Name="flags" Type="System.Security.AccessControl.AuditFlags" />
+      </Parameters>
+      <Docs>
+        <param name="identityReference">Eine <see cref="T:System.Security.Principal.IdentityReference" />, mit deren Hilfe der Benutzer oder die Gruppe angegeben wird, für den bzw. die die Regel gilt.</param>
+        <param name="accessMask">Eine bitweise Kombination von <see cref="T:System.Security.AccessControl.SemaphoreRights" />-Werten, die die zu überwachenden Zugriffsrechte angibt (in eine ganze Zahl umgewandelt).</param>
+        <param name="isInherited">Besitzt keine Bedeutung für benannte WaitHandles, da diese über keine Hierarchie verfügen.</param>
+        <param name="inheritanceFlags">Besitzt keine Bedeutung für benannte WaitHandles, da diese über keine Hierarchie verfügen.</param>
+        <param name="propagationFlags">Besitzt keine Bedeutung für benannte WaitHandles, da diese über keine Hierarchie verfügen.</param>
+        <param name="flags">Eine bitweise Kombination von <see cref="T:System.Security.AccessControl.AuditFlags" />-Werten, die angeben, ob erfolgreiche Zugriffsversuche und/oder fehlgeschlagene Zugriffsversuche überwacht werden sollen.</param>
+        <summary>Erstellt eine neue Überwachungsregel, die den Benutzer angibt, auf den diese Regel angewendet wird, sowie die zu überwachenden Zugriffsrechte und das Ergebnis, das die Überwachungsregel auslöst.</summary>
+        <returns>Ein <see cref="T:System.Security.AccessControl.SemaphoreAuditRule" />-Objekt, das die angegebene Überwachungsregel für den angegebenen Benutzer darstellt. Der Rückgabetyp der Methode entspricht der Basisklasse <see cref="T:System.Security.AccessControl.AuditRule" />, er kann jedoch problemlos in die abgeleitete Klasse umgewandelt werden.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die empfohlene Vorgehensweise zum Erstellen von Überwachungsregeln ist die Verwendung der Konstruktoren <xref:System.Security.AccessControl.SemaphoreAuditRule> der-Klasse.  
+  
+> [!NOTE]
+>  Obwohl Vererbungs-und Weitergabeflags für benannte Semaphoren bedeutungslos sind, ist es weiterhin möglich, Sie anzugeben. Dies wird nicht empfohlen, da dadurch die Wartung von Regeln unnötig erschwert wird, z. b. durch stören der Regel Kombination, die andernfalls kompatibel wäre.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">Für <paramref name="accessMask" />, <paramref name="inheritanceFlags" />, <paramref name="propagationFlags" /> oder <paramref name="flags" /> ist ein ungültiger Wert angegeben.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="identityReference" /> ist <see langword="null" />.  
+  
+- oder - 
+ <paramref name="accessMask" /> ist 0 (null).</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="identityReference" /> ist weder vom Typ <see cref="T:System.Security.Principal.SecurityIdentifier" /> noch von einem Typ wie etwa <see cref="T:System.Security.Principal.NTAccount" />, der in den <see cref="T:System.Security.Principal.SecurityIdentifier" />-Typ konvertiert werden kann.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="AuditRuleType">
+      <MemberSignature Language="C#" Value="public override Type AuditRuleType { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Type AuditRuleType" />
+      <MemberSignature Language="DocId" Value="P:System.Security.AccessControl.SemaphoreSecurity.AuditRuleType" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property AuditRuleType As Type" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property Type ^ AuditRuleType { Type ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.AuditRuleType : Type" Usage="System.Security.AccessControl.SemaphoreSecurity.AuditRuleType" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Type</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den Typ ab, mit dessen Hilfe die <see cref="T:System.Security.AccessControl.SemaphoreSecurity" />-Klasse Überwachungsregeln darstellt.</summary>
+        <value>Ein <see cref="T:System.Type" />-Objekt, das die <see cref="T:System.Security.AccessControl.SemaphoreAuditRule" />-Klasse darstellt.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Klassen, die von der <xref:System.Security.AccessControl.ObjectSecurity> -Klasse abgeleitet <xref:System.Security.AccessControl.ObjectSecurity.AuditRuleType%2A> werden, überschreiben die-Eigenschaft und geben den Typ zurück, den Sie zum Darstellen von Überwachungs rechten Wenn Sie mit Arrays oder Auflistungen arbeiten, die mehrere Typen von Sicherheits Objekten enthalten, verwenden Sie diese Eigenschaft, um den richtigen Überwachungs Regeltyp zu bestimmen, der für jedes Sicherheits Objekt verwendet werden soll.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveAccessRule">
+      <MemberSignature Language="C#" Value="public bool RemoveAccessRule (System.Security.AccessControl.SemaphoreAccessRule rule);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool RemoveAccessRule(class System.Security.AccessControl.SemaphoreAccessRule rule) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRule(System.Security.AccessControl.SemaphoreAccessRule)" />
+      <MemberSignature Language="VB.NET" Value="Public Function RemoveAccessRule (rule As SemaphoreAccessRule) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool RemoveAccessRule(System::Security::AccessControl::SemaphoreAccessRule ^ rule);" />
+      <MemberSignature Language="F#" Value="override this.RemoveAccessRule : System.Security.AccessControl.SemaphoreAccessRule -&gt; bool" Usage="semaphoreSecurity.RemoveAccessRule rule" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rule" Type="System.Security.AccessControl.SemaphoreAccessRule" />
+      </Parameters>
+      <Docs>
+        <param name="rule">Eine <see cref="T:System.Security.AccessControl.SemaphoreAccessRule" />, die den Benutzer und den <see cref="T:System.Security.AccessControl.AccessControlType" /> angibt, nach denen gesucht werden soll, sowie eine Reihe von Vererbungs- und Weitergabeflags, mit denen eine übereinstimmende Regel (falls vorhanden) kompatibel sein muss. Gibt die Rechte an, die aus der kompatiblen Regel entfernt werden sollen (falls vorhanden).</param>
+        <summary>Sucht nach einer Zugriffssteuerungsregel mit demselben Benutzer und demselben <see cref="T:System.Security.AccessControl.AccessControlType" /> (gewähren oder verweigern) wie die angegebene Regel sowie mit kompatiblen Vererbungs- und Weitergabeflags. Wenn eine solche Regel gefunden wird, werden die in der angegebenen Zugriffsregel enthaltenen Rechte daraus entfernt.</summary>
+        <returns><see langword="true" />, wenn eine kompatible Regel gefunden wurde, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die aktuelle <xref:System.Security.AccessControl.SemaphoreSecurity> wird nach einer Regel durchsucht, die denselben Benutzer und denselben <xref:System.Security.AccessControl.AccessControlType> Wert wie `rule`hat. Wenn keine solche Regel gefunden wird, wird keine Aktion durchgeführt, und die Methode `false`gibt zurück. Wenn übereinstimmende Regeln gefunden werden, werden deren Vererbungs-und Kompatibilitäts Flags auf Kompatibilität mit `rule`den in angegebenen Flags geprüft. Wenn keine kompatible Regel gefunden wird, wird keine Aktion durchgeführt, und die Methode `false`gibt zurück. Wenn eine Regel mit kompatiblen Flags gefunden wird, werden die in `rule` angegebenen Rechte aus der kompatiblen Regel entfernt, und die Methode gibt zurück. `true` Wenn `rule` Rechte angibt, die nicht in der kompatiblen Regel enthalten sind, wird in Bezug auf diese Rechte keine Aktion ausgeführt. Wenn alle Rechte aus der kompatiblen Regel entfernt werden, wird die gesamte Regel aus dem aktuellen <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt entfernt.  
+  
+> [!IMPORTANT]
+>  Obwohl Sie Vererbungs-und Weitergabeflags für Semaphor-Zugriffsregeln festlegen können, <xref:System.Security.AccessControl.SemaphoreSecurity.AccessRuleFactory%2A> indem Sie Sie mit der-Methode erstellen, wird dies nicht empfohlen. Vererbung und Weitergabe haben keine Bedeutung für benannte Semaphoren und vereinfachen die Wartung von Zugriffsregeln.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird die Verwendung <xref:System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRule%2A> der-Methode zum Entfernen von Rechten aus einer <xref:System.Security.AccessControl.AccessControlType.Allow> Regel in <xref:System.Security.AccessControl.SemaphoreSecurity> einem-Objekt veranschaulicht. Außerdem wird angezeigt, dass andere Rechte `rule` in ignoriert werden.  
+  
+ Im Beispiel wird ein <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt erstellt und Regeln hinzugefügt, mit denen verschiedene Rechte für den aktuellen Benutzer zugelassen und verweigert werden. Die zulässigen Rechte umfassen <xref:System.Security.AccessControl.SemaphoreRights.Modify>, <xref:System.Security.AccessControl.SemaphoreRights.ReadPermissions>und <xref:System.Security.AccessControl.SemaphoreRights.Synchronize>. Im Beispiel wird dann eine neue Regel für den aktuellen Benutzer erstellt, <xref:System.Security.AccessControl.SemaphoreRights.ReadPermissions> einschließlich <xref:System.Security.AccessControl.SemaphoreRights.TakeOwnership> der Rechte und. diese Regel wird mit <xref:System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRule%2A> der- <xref:System.Security.AccessControl.SemaphoreSecurity> Methode <xref:System.Security.AccessControl.SemaphoreRights.ReadPermissions> verwendet, <xref:System.Security.AccessControl.AccessControlType.Allow> um aus der Regel im-Objekt zu entfernen. Das überflüssige <xref:System.Security.AccessControl.SemaphoreRights.TakeOwnership> Recht in `rule` wird ignoriert.  
+  
+> [!NOTE]
+>  In diesem Beispiel wird das Sicherheits Objekt nicht an ein <xref:System.Threading.Semaphore> -Objekt angefügt. Beispiele zum Anfügen von Sicherheits Objekten finden Sie <xref:System.Threading.Semaphore.GetAccessControl%2A?displayProperty=nameWithType> unter <xref:System.Threading.Semaphore.SetAccessControl%2A?displayProperty=nameWithType>und.  
+  
+ [!code-csharp[System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRule#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.RemoveAccessRule/CS/source.cs#1)]
+ [!code-vb[System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRule#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.RemoveAccessRule/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rule" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveAccessRuleAll">
+      <MemberSignature Language="C#" Value="public void RemoveAccessRuleAll (System.Security.AccessControl.SemaphoreAccessRule rule);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void RemoveAccessRuleAll(class System.Security.AccessControl.SemaphoreAccessRule rule) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleAll(System.Security.AccessControl.SemaphoreAccessRule)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub RemoveAccessRuleAll (rule As SemaphoreAccessRule)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void RemoveAccessRuleAll(System::Security::AccessControl::SemaphoreAccessRule ^ rule);" />
+      <MemberSignature Language="F#" Value="override this.RemoveAccessRuleAll : System.Security.AccessControl.SemaphoreAccessRule -&gt; unit" Usage="semaphoreSecurity.RemoveAccessRuleAll rule" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rule" Type="System.Security.AccessControl.SemaphoreAccessRule" />
+      </Parameters>
+      <Docs>
+        <param name="rule">Eine <see cref="T:System.Security.AccessControl.SemaphoreAccessRule" />, die den Benutzer und den <see cref="T:System.Security.AccessControl.AccessControlType" /> angibt, nach denen gesucht werden soll. Alle von dieser Regel angegebenen Rechte werden ignoriert.</param>
+        <summary>Sucht nach allen Zugriffssteuerungsregeln mit demselben Benutzer und demselben <see cref="T:System.Security.AccessControl.AccessControlType" /> (gewähren oder verweigern) wie die angegebene Regel und entfernt diese (falls vorhanden).</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Das aktuelle <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt wird nach Regeln gesucht, die denselben Benutzer und denselben <xref:System.Security.AccessControl.AccessControlType> Wert wie `rule`aufweisen. Alle Rechte, die `rule` von angegeben werden, werden beim Durchführen dieser Suche ignoriert. Wenn keine übereinstimmenden Regeln gefunden werden, wird keine Aktion ausgeführt.  
+  
+   
+  
+## Examples  
+ Das folgende Codebeispiel zeigt, dass <xref:System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleAll%2A> die-Methode alle Regeln entfernt, die <xref:System.Security.AccessControl.AccessControlType>dem Benutzer und entsprechen, wobei die Rechte ignoriert werden.  
+  
+ Im Beispiel wird ein <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt erstellt, Regeln hinzugefügt, die verschiedene Rechte für den aktuellen Benutzer zulassen und verweigern, und anschließend werden <xref:System.Security.AccessControl.AccessControlType.Allow> zusätzliche Rechte in der Regel zusammengeführt. Im Beispiel wird dann eine neue Regel erstellt, die es dem aktuellen Benutzer ermöglicht, den Besitz zu übernehmen, und <xref:System.Security.AccessControl.AccessControlType.Allow> diese Regel verwendet <xref:System.Security.AccessControl.SemaphoreSecurity> , um die Regel aus dem-Objekt zu entfernen.  
+  
+> [!NOTE]
+>  In diesem Beispiel wird das Sicherheits Objekt nicht an ein <xref:System.Threading.Semaphore> -Objekt angefügt. Beispiele zum Anfügen von Sicherheits Objekten finden Sie <xref:System.Threading.Semaphore.GetAccessControl%2A?displayProperty=nameWithType> unter <xref:System.Threading.Semaphore.SetAccessControl%2A?displayProperty=nameWithType>und.  
+  
+ [!code-csharp[System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleAll#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleAll/CS/source.cs#1)]
+ [!code-vb[System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleAll#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleAll/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rule" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveAccessRuleSpecific">
+      <MemberSignature Language="C#" Value="public void RemoveAccessRuleSpecific (System.Security.AccessControl.SemaphoreAccessRule rule);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void RemoveAccessRuleSpecific(class System.Security.AccessControl.SemaphoreAccessRule rule) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleSpecific(System.Security.AccessControl.SemaphoreAccessRule)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub RemoveAccessRuleSpecific (rule As SemaphoreAccessRule)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void RemoveAccessRuleSpecific(System::Security::AccessControl::SemaphoreAccessRule ^ rule);" />
+      <MemberSignature Language="F#" Value="override this.RemoveAccessRuleSpecific : System.Security.AccessControl.SemaphoreAccessRule -&gt; unit" Usage="semaphoreSecurity.RemoveAccessRuleSpecific rule" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rule" Type="System.Security.AccessControl.SemaphoreAccessRule" />
+      </Parameters>
+      <Docs>
+        <param name="rule">Das zu entfernende <see cref="T:System.Security.AccessControl.SemaphoreAccessRule" />-Element.</param>
+        <summary>Sucht nach einer Zugriffssteuerungsregel, die genau mit der angegebenen Regel übereinstimmt, und entfernt diese (falls vorhanden).</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Regel wird nur entfernt, wenn Sie in `rule` allen Details genau übereinstimmt, einschließlich Flags. Andere Regeln mit demselben Benutzer und <xref:System.Security.AccessControl.AccessControlType> sind nicht betroffen.  
+  
+> [!IMPORTANT]
+>  Eine Regel stellt einen oder mehrere zugrunde liegende Zugriffs Steuerungs Einträge (Access Control Entries, ACE) dar, und diese Einträge werden nach Bedarf aufgeteilt oder kombiniert, wenn Sie die Zugriffs Sicherheitsregeln für einen Benutzer ändern. Folglich ist eine Regel möglicherweise nicht mehr in der spezifischen Form vorhanden, die Sie beim Hinzufügen hatte, und in diesem <xref:System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleSpecific%2A> Fall kann Sie von der Methode nicht entfernt werden.  
+  
+   
+  
+## Examples  
+ Das folgende Codebeispiel zeigt, dass <xref:System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleSpecific%2A> die-Methode eine genaue Entsprechung erfordert, um eine Regel zu entfernen, und dass Regeln zum zulassen und Verweigern von rechten voneinander unabhängig sind.  
+  
+ Im Beispiel wird ein <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt erstellt, Regeln hinzugefügt, mit denen verschiedene Rechte für den aktuellen Benutzer zugelassen und verweigert werden. anschließend <xref:System.Security.AccessControl.AccessControlType.Allow> werden zusätzliche Rechte in die Zugriffs Regel zusammengeführt. Im Beispiel wird dann die ursprüngliche <xref:System.Security.AccessControl.AccessControlType.Allow> Regel an die <xref:System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleSpecific%2A> -Methode weitergeleitet, und die Ergebnisse werden angezeigt, und es wird angezeigt, dass nichts gelöscht wird. Im Beispiel wird dann eine Regel erstellt, die <xref:System.Security.AccessControl.AccessControlType.Allow> der Regel <xref:System.Security.AccessControl.SemaphoreSecurity> im-Objekt entspricht, und die <xref:System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleSpecific%2A> -Methode wird verwendet, um die Regel zu entfernen.  
+  
+> [!NOTE]
+>  In diesem Beispiel wird das Sicherheits Objekt nicht an ein <xref:System.Threading.Semaphore> -Objekt angefügt. Beispiele zum Anfügen von Sicherheits Objekten finden Sie <xref:System.Threading.Semaphore.GetAccessControl%2A?displayProperty=nameWithType> unter <xref:System.Threading.Semaphore.SetAccessControl%2A?displayProperty=nameWithType>und.  
+  
+ [!code-csharp[System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleSpecific#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleSpecific/CS/source.cs#1)]
+ [!code-vb[System.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleSpecific#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.RemoveAccessRuleSpecific/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rule" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveAuditRule">
+      <MemberSignature Language="C#" Value="public bool RemoveAuditRule (System.Security.AccessControl.SemaphoreAuditRule rule);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool RemoveAuditRule(class System.Security.AccessControl.SemaphoreAuditRule rule) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.RemoveAuditRule(System.Security.AccessControl.SemaphoreAuditRule)" />
+      <MemberSignature Language="VB.NET" Value="Public Function RemoveAuditRule (rule As SemaphoreAuditRule) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool RemoveAuditRule(System::Security::AccessControl::SemaphoreAuditRule ^ rule);" />
+      <MemberSignature Language="F#" Value="override this.RemoveAuditRule : System.Security.AccessControl.SemaphoreAuditRule -&gt; bool" Usage="semaphoreSecurity.RemoveAuditRule rule" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rule" Type="System.Security.AccessControl.SemaphoreAuditRule" />
+      </Parameters>
+      <Docs>
+        <param name="rule">Eine <see cref="T:System.Security.AccessControl.SemaphoreAuditRule" />, die den zu suchenden Benutzer angibt, sowie eine Reihe von Vererbungs- und Weitergabeflags, mit denen eine übereinstimmende Regel (falls vorhanden) kompatibel sein muss. Gibt die Rechte an, die aus der kompatiblen Regel entfernt werden sollen (falls vorhanden).</param>
+        <summary>Sucht nach einer Überwachungssteuerungsregel mit demselben Benutzer wie die angegebene Regel und mit kompatiblen Vererbungs- und Weitergabeflags; wenn eine solche Regel gefunden wird, werden die in der angegebenen Regel enthaltenen Rechte daraus entfernt.</summary>
+        <returns><see langword="true" />, wenn eine kompatible Regel gefunden wurde, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die aktuelle <xref:System.Security.AccessControl.SemaphoreSecurity> wird nach einer Überwachungs Regel durchsucht, die denselben Benutzer wie `rule`hat. Wenn keine solche Regel gefunden wird, wird keine Aktion durchgeführt, und die Methode `false`gibt zurück. Wenn übereinstimmende Regeln gefunden werden, werden deren Vererbungs-und Kompatibilitäts Flags auf Kompatibilität mit `rule`den in angegebenen Flags geprüft. Wenn keine kompatible Regel gefunden wird, wird keine Aktion durchgeführt, und die Methode `false`gibt zurück. Wenn eine Regel mit kompatiblen Flags gefunden wird, werden die in `rule` angegebenen Rechte aus der kompatiblen Regel entfernt, und die Methode gibt zurück. `true` Wenn `rule` Rechte angibt, die nicht in der kompatiblen Regel enthalten sind, wird in Bezug auf diese Rechte keine Aktion ausgeführt. Wenn alle Rechte aus der kompatiblen Regel entfernt werden, wird die gesamte Regel aus dem aktuellen <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt entfernt.  
+  
+> [!IMPORTANT]
+>  Sie können auch Vererbungs-und Weitergabeflags für Semaphor-Überwachungsregeln angeben, <xref:System.Security.AccessControl.SemaphoreSecurity.AuditRuleFactory%2A> indem Sie Sie mit der-Methode erstellen. Dies wird jedoch nicht empfohlen. Vererbung und Weitergabe haben keine Bedeutung für benannte Semaphoren und vereinfachen die Wartung von Überwachungsregeln.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rule" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveAuditRuleAll">
+      <MemberSignature Language="C#" Value="public void RemoveAuditRuleAll (System.Security.AccessControl.SemaphoreAuditRule rule);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void RemoveAuditRuleAll(class System.Security.AccessControl.SemaphoreAuditRule rule) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.RemoveAuditRuleAll(System.Security.AccessControl.SemaphoreAuditRule)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub RemoveAuditRuleAll (rule As SemaphoreAuditRule)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void RemoveAuditRuleAll(System::Security::AccessControl::SemaphoreAuditRule ^ rule);" />
+      <MemberSignature Language="F#" Value="override this.RemoveAuditRuleAll : System.Security.AccessControl.SemaphoreAuditRule -&gt; unit" Usage="semaphoreSecurity.RemoveAuditRuleAll rule" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rule" Type="System.Security.AccessControl.SemaphoreAuditRule" />
+      </Parameters>
+      <Docs>
+        <param name="rule">Eine <see cref="T:System.Security.AccessControl.SemaphoreAuditRule" />, die den zu suchenden Benutzer angibt. Alle von dieser Regel angegebenen Rechte werden ignoriert.</param>
+        <summary>Sucht alle Überwachungsregeln, die denselben Benutzer wie die angegebene Regel aufweisen, und entfernt sie, sofern sie gefunden wurden.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die aktuelle <xref:System.Security.AccessControl.SemaphoreSecurity> wird nach Überwachungsregeln durchsucht, die denselben Benutzer wie `rule`haben. Alle Rechte, die `rule` von angegeben werden, werden beim Durchführen dieser Suche ignoriert. Alle abgleichsregeln werden entfernt. Wenn keine übereinstimmenden Regeln gefunden werden, wird keine Aktion ausgeführt.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rule" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveAuditRuleSpecific">
+      <MemberSignature Language="C#" Value="public void RemoveAuditRuleSpecific (System.Security.AccessControl.SemaphoreAuditRule rule);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void RemoveAuditRuleSpecific(class System.Security.AccessControl.SemaphoreAuditRule rule) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.RemoveAuditRuleSpecific(System.Security.AccessControl.SemaphoreAuditRule)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub RemoveAuditRuleSpecific (rule As SemaphoreAuditRule)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void RemoveAuditRuleSpecific(System::Security::AccessControl::SemaphoreAuditRule ^ rule);" />
+      <MemberSignature Language="F#" Value="override this.RemoveAuditRuleSpecific : System.Security.AccessControl.SemaphoreAuditRule -&gt; unit" Usage="semaphoreSecurity.RemoveAuditRuleSpecific rule" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rule" Type="System.Security.AccessControl.SemaphoreAuditRule" />
+      </Parameters>
+      <Docs>
+        <param name="rule">Das zu entfernende <see cref="T:System.Security.AccessControl.SemaphoreAuditRule" />-Element.</param>
+        <summary>Sucht nach einer Überwachungsregel, die genau mit der angegebenen Regel übereinstimmt, und entfernt diese (falls vorhanden).</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Regel wird nur entfernt, wenn Sie in `rule` allen Details genau übereinstimmt, einschließlich Flags. Andere Überwachungsregeln für denselben Benutzer sind nicht betroffen.  
+  
+> [!IMPORTANT]
+>  Eine Regel stellt einen oder mehrere zugrunde liegende Zugriffs Steuerungs Einträge (Access Control Entries, ACE) dar, und diese Einträge werden nach Bedarf aufgeteilt oder kombiniert, wenn Sie die Überwachungs Sicherheitsregeln für einen Benutzer ändern. Folglich ist eine Regel möglicherweise nicht mehr in der spezifischen Form vorhanden, die Sie beim Hinzufügen hatte, und in diesem <xref:System.Security.AccessControl.SemaphoreSecurity.RemoveAuditRuleSpecific%2A> Fall kann Sie von der Methode nicht entfernt werden.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rule" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ResetAccessRule">
+      <MemberSignature Language="C#" Value="public void ResetAccessRule (System.Security.AccessControl.SemaphoreAccessRule rule);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void ResetAccessRule(class System.Security.AccessControl.SemaphoreAccessRule rule) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.ResetAccessRule(System.Security.AccessControl.SemaphoreAccessRule)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub ResetAccessRule (rule As SemaphoreAccessRule)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void ResetAccessRule(System::Security::AccessControl::SemaphoreAccessRule ^ rule);" />
+      <MemberSignature Language="F#" Value="override this.ResetAccessRule : System.Security.AccessControl.SemaphoreAccessRule -&gt; unit" Usage="semaphoreSecurity.ResetAccessRule rule" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rule" Type="System.Security.AccessControl.SemaphoreAccessRule" />
+      </Parameters>
+      <Docs>
+        <param name="rule">Das hinzuzufügende <see cref="T:System.Security.AccessControl.SemaphoreAccessRule" />. Der von dieser Regel angegebene Benutzer bestimmt die Regeln, die vor dem Hinzufügen dieser Regel entfernt werden sollen.</param>
+        <summary>Entfernt alle Zugriffssteuerungsregeln mit demselben Benutzer wie in der angegebenen Regel, unabhängig von <see cref="T:System.Security.AccessControl.AccessControlType" />, und fügt anschließend die angegebene Regel hinzu.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn keine Zugriffsregeln vorhanden sind, deren Benutzer der angegebenen Regel entsprechen `rule` , wird hinzugefügt.  
+  
+   
+  
+## Examples  
+ Das folgende Codebeispiel zeigt, wie <xref:System.Security.AccessControl.SemaphoreSecurity.ResetAccessRule%2A> die-Methode alle Regeln für den übereinstimmenden Benutzer durch die für die Übereinstimmung angegebene Regel ersetzt.  
+  
+ Im Beispiel wird ein <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt erstellt und Regeln hinzugefügt, mit denen verschiedene Rechte für den aktuellen Benutzer zugelassen und verweigert werden. Im Beispiel wird dann eine neue Regel erstellt, die dem aktuellen Benutzer die vollständige Kontrolle ermöglicht <xref:System.Security.AccessControl.SemaphoreSecurity.ResetAccessRule%2A> und die-Methode verwendet, um die beiden vorhandenen Regeln durch die neue Regel zu ersetzen.  
+  
+> [!NOTE]
+>  In diesem Beispiel wird das Sicherheits Objekt nicht an ein <xref:System.Threading.Semaphore> -Objekt angefügt. Beispiele zum Anfügen von Sicherheits Objekten finden Sie <xref:System.Threading.Semaphore.GetAccessControl%2A?displayProperty=nameWithType> unter <xref:System.Threading.Semaphore.SetAccessControl%2A?displayProperty=nameWithType>und.  
+  
+ [!code-csharp[System.Security.AccessControl.SemaphoreSecurity.ResetAccessRule#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.ResetAccessRule/CS/source.cs#1)]
+ [!code-vb[System.Security.AccessControl.SemaphoreSecurity.ResetAccessRule#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.ResetAccessRule/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rule" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="SetAccessRule">
+      <MemberSignature Language="C#" Value="public void SetAccessRule (System.Security.AccessControl.SemaphoreAccessRule rule);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void SetAccessRule(class System.Security.AccessControl.SemaphoreAccessRule rule) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.SetAccessRule(System.Security.AccessControl.SemaphoreAccessRule)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub SetAccessRule (rule As SemaphoreAccessRule)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void SetAccessRule(System::Security::AccessControl::SemaphoreAccessRule ^ rule);" />
+      <MemberSignature Language="F#" Value="override this.SetAccessRule : System.Security.AccessControl.SemaphoreAccessRule -&gt; unit" Usage="semaphoreSecurity.SetAccessRule rule" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rule" Type="System.Security.AccessControl.SemaphoreAccessRule" />
+      </Parameters>
+      <Docs>
+        <param name="rule">Das hinzuzufügende <see cref="T:System.Security.AccessControl.SemaphoreAccessRule" />. Der Benutzer und der <see cref="T:System.Security.AccessControl.AccessControlType" /> dieser Regel bestimmen die Regeln, die vor dem Hinzufügen dieser Regel entfernt werden sollen.</param>
+        <summary>Entfernt alle Zugriffssteuerungsregeln mit demselben Benutzer und demselben <see cref="T:System.Security.AccessControl.AccessControlType" /> (gewähren oder verweigern) wie die angegebene Regel und fügt anschließend die angegebene Regel hinzu.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn die angegebene Regel <xref:System.Security.AccessControl.AccessControlType.Allow>ist, besteht die Auswirkung dieser Methode darauf, alle <xref:System.Security.AccessControl.AccessControlType.Allow> Regeln für den angegebenen Benutzer zu entfernen und Sie durch die angegebene Regel zu ersetzen. Wenn die angegebene Regel aufweist <xref:System.Security.AccessControl.AccessControlType.Deny>, werden <xref:System.Security.AccessControl.AccessControlType.Deny> alle Regeln für den angegebenen Benutzer durch die angegebene Regel ersetzt.  
+  
+ Wenn keine Regeln vorhanden sind, deren Benutzer <xref:System.Security.AccessControl.AccessControlType> der angegebenen Regel entsprechen, `rule` wird hinzugefügt.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, <xref:System.Security.AccessControl.SemaphoreSecurity.SetAccessRule%2A> wie die-Methode alle Regeln entfernt, die sowohl dem <xref:System.Security.AccessControl.AccessControlType> Benutzer `rule`als auch der von `rule`entsprechen. Diese werden durch ersetzt.  
+  
+ Im Beispiel wird ein <xref:System.Security.AccessControl.SemaphoreSecurity> -Objekt erstellt und Regeln hinzugefügt, mit denen verschiedene Rechte für den aktuellen Benutzer zugelassen und verweigert werden. Im Beispiel wird dann eine neue Regel erstellt, die dem aktuellen Benutzer die vollständige Kontrolle ermöglicht <xref:System.Security.AccessControl.SemaphoreSecurity.SetAccessRule%2A> und die vorhandene Zulassungs Regel durch die neue Regel ersetzt. Die Regel, die den Zugriff verweigert, ist nicht betroffen.  
+  
+> [!NOTE]
+>  In diesem Beispiel wird das Sicherheits Objekt nicht an ein <xref:System.Threading.Semaphore> -Objekt angefügt. Beispiele zum Anfügen von Sicherheits Objekten finden Sie <xref:System.Threading.Semaphore.GetAccessControl%2A?displayProperty=nameWithType> unter <xref:System.Threading.Semaphore.SetAccessControl%2A?displayProperty=nameWithType>und.  
+  
+ [!code-csharp[System.Security.AccessControl.SemaphoreSecurity.SetAccessRule#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.SetAccessRule/CS/source.cs#1)]
+ [!code-vb[System.Security.AccessControl.SemaphoreSecurity.SetAccessRule#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.AccessControl.SemaphoreSecurity.SetAccessRule/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rule" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="SetAuditRule">
+      <MemberSignature Language="C#" Value="public void SetAuditRule (System.Security.AccessControl.SemaphoreAuditRule rule);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void SetAuditRule(class System.Security.AccessControl.SemaphoreAuditRule rule) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.AccessControl.SemaphoreSecurity.SetAuditRule(System.Security.AccessControl.SemaphoreAuditRule)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub SetAuditRule (rule As SemaphoreAuditRule)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void SetAuditRule(System::Security::AccessControl::SemaphoreAuditRule ^ rule);" />
+      <MemberSignature Language="F#" Value="override this.SetAuditRule : System.Security.AccessControl.SemaphoreAuditRule -&gt; unit" Usage="semaphoreSecurity.SetAuditRule rule" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.AccessControl</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+        <AssemblyVersion>4.0.4.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rule" Type="System.Security.AccessControl.SemaphoreAuditRule" />
+      </Parameters>
+      <Docs>
+        <param name="rule">Das hinzuzufügende <see cref="T:System.Security.AccessControl.SemaphoreAuditRule" />. Der von dieser Regel angegebene Benutzer bestimmt die Regeln, die vor dem Hinzufügen dieser Regel entfernt werden sollen.</param>
+        <summary>Entfernt alle Überwachungsregeln mit demselben Benutzer wie in der angegebenen Regel, unabhängig vom <see cref="T:System.Security.AccessControl.AuditFlags" />-Wert, und fügt danach die angegebene Regel hinzu.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn keine Überwachungsregeln vorhanden sind, deren Benutzer der angegebenen Regel entsprechen `rule` , wird hinzugefügt.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rule" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
