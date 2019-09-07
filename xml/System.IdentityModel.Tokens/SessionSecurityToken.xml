@@ -1,0 +1,942 @@
+<Type Name="SessionSecurityToken" FullName="System.IdentityModel.Tokens.SessionSecurityToken">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="940ee78be7f56dda94ce6ce978c57572172452aa" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70437856" /></Metadata><TypeSignature Language="C#" Value="public class SessionSecurityToken : System.IdentityModel.Tokens.SecurityToken" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi serializable beforefieldinit SessionSecurityToken extends System.IdentityModel.Tokens.SecurityToken" />
+  <TypeSignature Language="DocId" Value="T:System.IdentityModel.Tokens.SessionSecurityToken" />
+  <TypeSignature Language="VB.NET" Value="Public Class SessionSecurityToken&#xA;Inherits SecurityToken" />
+  <TypeSignature Language="C++ CLI" Value="public ref class SessionSecurityToken : System::IdentityModel::Tokens::SecurityToken" />
+  <TypeSignature Language="F#" Value="type SessionSecurityToken = class&#xA;    inherit SecurityToken" />
+  <AssemblyInfo>
+    <AssemblyName>System.IdentityModel</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.IdentityModel.Tokens.SecurityToken</BaseTypeName>
+  </Base>
+  <Interfaces>
+  </Interfaces>
+  <Attributes>
+    <Attribute>
+      <AttributeName>System.Serializable</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>Definiert ein Sicherheitstoken, das die Daten enthält, die einer Sitzung zugeordnet sind.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Ein Sitzungs Token speichert den <xref:System.Security.Claims.ClaimsPrincipal> des Benutzers, der einer Sitzung zugeordnet ist, sowie andere Parameter, die die Sitzung definieren, z. b. die Start-und Endzeit der Sitzung.  
+  
+ In passiven Szenarien ruft <xref:System.IdentityModel.Services.WSFederationAuthenticationModule> <xref:System.IdentityModel.Services.SessionAuthenticationModule> den (Sam) von der Authentifizierungs Pipeline auf, um ein Sitzungs Token aus dem <xref:System.Security.Claims.ClaimsPrincipal> zu erstellen, das den authentifizierten Benutzer darstellt. Sam verwendet seine konfigurierte <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> zum Erstellen des Tokens und zum Serialisieren in ein Cookie (und zum Deserialisieren des Tokens von einem Cookie bei nachfolgenden Anforderungen). Sam verwendet eine Instanz der konfigurierten <xref:System.IdentityModel.Services.CookieHandler> -Klasse, um das Cookie zurück in die HTTP-Antwort zu schreiben. Dieses Cookie wird dann an den Client zurückgegeben, und bei nachfolgenden Anforderungen kann der Client das Cookie bereitstellen, anstatt einen Roundtrip zum Identitäts Anbieter durchführen zu müssen, um ein Sicherheits Token erneut abzurufen. Weitere Informationen zur Funktionsweise von Sitzungen mit WIF finden Sie unter [WIF-Sitzungsverwaltung](~/docs/framework/security/wif-session-management.md). Informationen zur Verwendung von Sitzungen in Webfarm Szenarios finden Sie unter [WIF und Webfarmen](~/docs/framework/security/wif-and-web-farms.md).  
+  
+ Ein Sitzungs Token kann entweder im Verweis Modus oder nicht verwendet werden. Wenn das Sitzungs Token nicht im Verweis Modus ausgeführt wird, wird das gesamte Token in das Sitzungs Cookie serialisiert, das auf dem Client gespeichert ist. Das serialisierte Sitzungs Token kann sehr groß sein. Daher kann das auf dem Client gespeicherte Cookie ebenfalls sehr umfangreich sein. Im Verweis Modus, anstatt das gesamte Sitzungs Token in das Cookie zu serialisieren, wird das Token in einem Sitzungs Sicherheits Token-Cache gespeichert, und nur die Informationen, die zum Generieren des Schlüssels verwendet werden, der zum Abrufen des Tokens aus dem Cache benötigt wird, werden im Cookie gespeichert. Dadurch kann die Größe des Cookies erheblich reduziert werden. Der Sitzungs Token-Cache wird von einer von <xref:System.IdentityModel.Tokens.SessionSecurityTokenCache> abgeleiteten Klasse implementiert, und der Cache Schlüssel wird von der <xref:System.IdentityModel.Tokens.SessionSecurityTokenCacheKey> -Klasse implementiert. Die Eigenschaften <xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyGeneration%2A> und werden <xref:System.IdentityModel.Tokens.SessionSecurityTokenCacheKey>  in der-Klasse verwendet, um den Cache Schlüssel zu generieren. <xref:System.IdentityModel.Tokens.SessionSecurityToken.ContextId%2A>  
+  
+ Die <xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A> -Eigenschaft bestimmt, ob sich das Sitzungs Token im Verweis Modus befindet oder nicht.  
+  
+> [!IMPORTANT]
+>  Zum Arbeiten im Verweis Modus empfiehlt Microsoft die Bereitstellung eines Handlers <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SessionSecurityTokenCreated?displayProperty=nameWithType> für das Ereignis in der Global.asax.cs-Datei <xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A> und das Festlegen der-Eigenschaft für <xref:System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs.SessionToken%2A?displayProperty=nameWithType> das Token, das in der-Eigenschaft weitergegeben wurde. Dadurch wird sichergestellt, dass das Sitzungs Token im Verweis Modus für jede Anforderung ausgeführt wird, und es wird <xref:System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode%2A?displayProperty=nameWithType> bevorzugt, wenn nur die Eigenschaft für das Sitzungs Authentifizierungs Modul festgelegt wird.  
+  
+ Die <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> mit WIF bereitgestellte Klasse serialisiert das Sitzungs Token als WS-Secure Conversation `<wsc:SecurityContextToken>` -Element.  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.IdentityModel.Tokens.SessionSecurityTokenCacheKey" />
+    <altmember cref="T:System.IdentityModel.Tokens.SessionSecurityTokenHandler" />
+    <altmember cref="T:System.IdentityModel.Tokens.SessionSecurityTokenCache" />
+    <altmember cref="T:System.IdentityModel.Services.SessionAuthenticationModule" />
+    <related type="Article" href="https://msdn.microsoft.com/library/98bce126-18a9-401b-b20d-67ee462a5f8a">WIF-Sitzungsverwaltung</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/fc3cd7fa-2b45-4614-a44f-8fa9b9d15284">WIF und Webfarmen</related>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" />-Klasse.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SessionSecurityToken (System.Security.Claims.ClaimsPrincipal claimsPrincipal);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Security.Claims.ClaimsPrincipal claimsPrincipal) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.SessionSecurityToken.#ctor(System.Security.Claims.ClaimsPrincipal)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SessionSecurityToken(System::Security::Claims::ClaimsPrincipal ^ claimsPrincipal);" />
+      <MemberSignature Language="F#" Value="new System.IdentityModel.Tokens.SessionSecurityToken : System.Security.Claims.ClaimsPrincipal -&gt; System.IdentityModel.Tokens.SessionSecurityToken" Usage="new System.IdentityModel.Tokens.SessionSecurityToken claimsPrincipal" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="claimsPrincipal" Type="System.Security.Claims.ClaimsPrincipal" />
+      </Parameters>
+      <Docs>
+        <param name="claimsPrincipal">Der Anspruchs-Prinzipal, von dem das Token zu initialisieren ist.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" />-Klasse des angegebenen Prinzipals.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In der folgenden Tabelle werden anfängliche Eigenschaftswerte für eine Instanz der <xref:System.IdentityModel.Tokens.SessionSecurityToken>-Klasse aufgeführt.  
+  
+|Eigenschaft|Anfangswert|  
+|--------------|-------------------|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ClaimsPrincipal%2A>|`claimsPrincipal`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Context%2A>|`null`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ContextId%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.EndpointId%2A>|<xref:System.String.Empty?displayProperty=nameWithType>|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Id%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsPersistent%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyEffectiveTime%2A>|<xref:System.DateTime.UtcNow%2A>|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyExpirationTime%2A>|<xref:System.DateTime.UtcNow%2A>Plus die <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.DefaultTokenLifetime%2A?displayProperty=nameWithType> -Eigenschaft.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyGeneration%2A>|`null`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.SecurityKeys%2A>|Enthält einen generierten 128-Bit-symmetrischen Schlüssel. **Hinweis:**  Die Standard Implementierung verwendet diese Eigenschaft nicht. Signatur-und Verschlüsselungsschlüssel werden von den cookietransformationen vorgegeben, <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> die von der verwendet werden, die das Token verarbeitet.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A>|<xref:System.DateTime.UtcNow%2A>|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A>|<xref:System.DateTime.UtcNow%2A>Plus die <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.DefaultTokenLifetime%2A?displayProperty=nameWithType> -Eigenschaft.|  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="claimsPrincipal" /> ist <see langword="null" />.  
+  
+- oder - 
+Die <see cref="P:System.Security.Claims.ClaimsPrincipal.Identities" />-Eigenschaft von <paramref name="claimsPrincipal" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected SessionSecurityToken (System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor(class System.Runtime.Serialization.SerializationInfo info, valuetype System.Runtime.Serialization.StreamingContext context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.SessionSecurityToken.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New (info As SerializationInfo, context As StreamingContext)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; SessionSecurityToken(System::Runtime::Serialization::SerializationInfo ^ info, System::Runtime::Serialization::StreamingContext context);" />
+      <MemberSignature Language="F#" Value="new System.IdentityModel.Tokens.SessionSecurityToken : System.Runtime.Serialization.SerializationInfo * System.Runtime.Serialization.StreamingContext -&gt; System.IdentityModel.Tokens.SessionSecurityToken" Usage="new System.IdentityModel.Tokens.SessionSecurityToken (info, context)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="info" Type="System.Runtime.Serialization.SerializationInfo" />
+        <Parameter Name="context" Type="System.Runtime.Serialization.StreamingContext" />
+      </Parameters>
+      <Docs>
+        <param name="info">Die serialisierten Objektdaten.</param>
+        <param name="context">Kontextbedingte Informationen über die Quelle.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" />-Klasse mit serialisierten Daten.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SessionSecurityToken (System.Security.Claims.ClaimsPrincipal claimsPrincipal, string context);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Security.Claims.ClaimsPrincipal claimsPrincipal, string context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.SessionSecurityToken.#ctor(System.Security.Claims.ClaimsPrincipal,System.String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SessionSecurityToken(System::Security::Claims::ClaimsPrincipal ^ claimsPrincipal, System::String ^ context);" />
+      <MemberSignature Language="F#" Value="new System.IdentityModel.Tokens.SessionSecurityToken : System.Security.Claims.ClaimsPrincipal * string -&gt; System.IdentityModel.Tokens.SessionSecurityToken" Usage="new System.IdentityModel.Tokens.SessionSecurityToken (claimsPrincipal, context)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="claimsPrincipal" Type="System.Security.Claims.ClaimsPrincipal" />
+        <Parameter Name="context" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="claimsPrincipal">Der Anspruchs-Prinzipal, der vom Bootstrap-Token generiert wurde.</param>
+        <param name="context">Eine optionale anwendungsspezifische, Kontextzeichenfolge.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" />-Klasse unter Verwendung der angegebenen Prinzipals und Bootstraptokens.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In der folgenden Tabelle werden anfängliche Eigenschaftswerte für eine Instanz der <xref:System.IdentityModel.Tokens.SessionSecurityToken>-Klasse aufgeführt.  
+  
+|Eigenschaft|Anfangswert|  
+|--------------|-------------------|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ClaimsPrincipal%2A>|`claimsPrincipal`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Context%2A>|`context`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ContextId%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.EndpointId%2A>|<xref:System.String.Empty?displayProperty=nameWithType>|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Id%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsPersistent%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyEffectiveTime%2A>|<xref:System.DateTime.UtcNow%2A>|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyExpirationTime%2A>|<xref:System.DateTime.UtcNow%2A>Plus die <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.DefaultTokenLifetime%2A?displayProperty=nameWithType> -Eigenschaft.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyGeneration%2A>|`null`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.SecurityKeys%2A>|Enthält einen generierten 128-Bit-symmetrischen Schlüssel. **Hinweis:**  Die Standard Implementierung verwendet diese Eigenschaft nicht. Signatur-und Verschlüsselungsschlüssel werden von den cookietransformationen vorgegeben, <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> die von der verwendet werden, die das Token verarbeitet.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A>|<xref:System.DateTime.UtcNow%2A>|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A>|<xref:System.DateTime.UtcNow%2A>Plus die <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.DefaultTokenLifetime%2A?displayProperty=nameWithType> -Eigenschaft.|  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="claimsPrincipal" /> ist <see langword="null" />.  
+  
+- oder - 
+Die <see cref="P:System.Security.Claims.ClaimsPrincipal.Identities" />-Eigenschaft von <paramref name="claimsPrincipal" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SessionSecurityToken (System.Security.Claims.ClaimsPrincipal claimsPrincipal, TimeSpan lifetime);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Security.Claims.ClaimsPrincipal claimsPrincipal, valuetype System.TimeSpan lifetime) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.SessionSecurityToken.#ctor(System.Security.Claims.ClaimsPrincipal,System.TimeSpan)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SessionSecurityToken(System::Security::Claims::ClaimsPrincipal ^ claimsPrincipal, TimeSpan lifetime);" />
+      <MemberSignature Language="F#" Value="new System.IdentityModel.Tokens.SessionSecurityToken : System.Security.Claims.ClaimsPrincipal * TimeSpan -&gt; System.IdentityModel.Tokens.SessionSecurityToken" Usage="new System.IdentityModel.Tokens.SessionSecurityToken (claimsPrincipal, lifetime)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="claimsPrincipal" Type="System.Security.Claims.ClaimsPrincipal" />
+        <Parameter Name="lifetime" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="claimsPrincipal">Der Anspruchs-Prinzipal, von dem das Token zu initialisieren ist.</param>
+        <param name="lifetime">Die Zeitspanne ab der aktuellen Uhrzeit, während der das Token gültig ist. Die <see cref="P:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom" />-Eigenschaft wird auf <see cref="P:System.DateTime.UtcNow" /> festgelegt, und die <see cref="P:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo" />-Eigenschaft wird auf <see cref="P:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom" /> festgelegt, plus des Zeitraums, der durch diesen Parameter angegeben ist.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" />-Klasse des angegebenen Prinzipals. Das neue Token ist ab <see cref="P:System.DateTime.UtcNow" /> für die angegebene Lebensdauer gültig.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In der folgenden Tabelle werden anfängliche Eigenschaftswerte für eine Instanz der <xref:System.IdentityModel.Tokens.SessionSecurityToken>-Klasse aufgeführt.  
+  
+|Eigenschaft|Anfangswert|  
+|--------------|-------------------|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ClaimsPrincipal%2A>|`claimsPrincipal`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Context%2A>|`null`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ContextId%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.EndpointId%2A>|<xref:System.String.Empty?displayProperty=nameWithType>|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Id%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsPersistent%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyEffectiveTime%2A>|<xref:System.DateTime.UtcNow%2A>|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyExpirationTime%2A>|<xref:System.DateTime.UtcNow%2A>und `lifetime`.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyGeneration%2A>|`null`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.SecurityKeys%2A>|Enthält einen generierten 128-Bit-symmetrischen Schlüssel. **Hinweis:**  Die Standard Implementierung verwendet diese Eigenschaft nicht. Signatur-und Verschlüsselungsschlüssel werden von den cookietransformationen vorgegeben, <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> die von der verwendet werden, die das Token verarbeitet.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A>|<xref:System.DateTime.UtcNow%2A>|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A>|<xref:System.DateTime.UtcNow%2A>und `lifetime`.|  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="claimsPrincipal" /> ist <see langword="null" />.  
+  
+- oder - 
+Die <see cref="P:System.Security.Claims.ClaimsPrincipal.Identities" />-Eigenschaft von <paramref name="claimsPrincipal" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.InvalidOperationException"><paramref name="lifetime" /> ist kleiner oder gleich <see cref="F:System.TimeSpan.Zero" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SessionSecurityToken (System.Security.Claims.ClaimsPrincipal claimsPrincipal, string context, Nullable&lt;DateTime&gt; validFrom, Nullable&lt;DateTime&gt; validTo);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Security.Claims.ClaimsPrincipal claimsPrincipal, string context, valuetype System.Nullable`1&lt;valuetype System.DateTime&gt; validFrom, valuetype System.Nullable`1&lt;valuetype System.DateTime&gt; validTo) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.SessionSecurityToken.#ctor(System.Security.Claims.ClaimsPrincipal,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime})" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SessionSecurityToken(System::Security::Claims::ClaimsPrincipal ^ claimsPrincipal, System::String ^ context, Nullable&lt;DateTime&gt; validFrom, Nullable&lt;DateTime&gt; validTo);" />
+      <MemberSignature Language="F#" Value="new System.IdentityModel.Tokens.SessionSecurityToken : System.Security.Claims.ClaimsPrincipal * string * Nullable&lt;DateTime&gt; * Nullable&lt;DateTime&gt; -&gt; System.IdentityModel.Tokens.SessionSecurityToken" Usage="new System.IdentityModel.Tokens.SessionSecurityToken (claimsPrincipal, context, validFrom, validTo)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="claimsPrincipal" Type="System.Security.Claims.ClaimsPrincipal" />
+        <Parameter Name="context" Type="System.String" />
+        <Parameter Name="validFrom" Type="System.Nullable&lt;System.DateTime&gt;" />
+        <Parameter Name="validTo" Type="System.Nullable&lt;System.DateTime&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="claimsPrincipal">Der Anspruchs-Prinzipal, der vom Bootstrap-Token generiert wurde.</param>
+        <param name="context">Eine optionale anwendungsspezifische, Kontextzeichenfolge.</param>
+        <param name="validFrom">Der Zeitpunkt, zu dem das Token gültig wird. <see langword="null" /> zur Angabe von <see cref="P:System.DateTime.UtcNow" />.</param>
+        <param name="validTo">Der Zeitpunkt, nachdem das Token nicht mehr gültig ist. <see langword="null" />, um anzugeben, dass der Wert bestimmt werden soll, indem der Wert der Eigenschaft <see cref="P:System.IdentityModel.Tokens.SessionSecurityTokenHandler.DefaultTokenLifetime" /> der Zeit hinzugefügt wird, die vom <paramref name="validFrom" />-Parameter angegeben wird.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" />-Klasse aus dem angegebenen Prinzipal- und Bootstrap-Token und mit der angegebenen Startzeit und Ablaufzeit.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In der folgenden Tabelle werden anfängliche Eigenschaftswerte für eine Instanz der <xref:System.IdentityModel.Tokens.SessionSecurityToken>-Klasse aufgeführt.  
+  
+|Eigenschaft|Anfangswert|  
+|--------------|-------------------|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ClaimsPrincipal%2A>|`claimsPrincipal`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Context%2A>|`context`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ContextId%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.EndpointId%2A>|<xref:System.String.Empty?displayProperty=nameWithType>|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Id%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsPersistent%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyEffectiveTime%2A>|Legen Sie auf den Wert <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A> der-Eigenschaft fest, wie `ValidFrom` vom-Parameter festgelegt.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyExpirationTime%2A>|Der Wert der <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A> Eigenschaft, wie `ValidTo` vom-Parameter festgelegt.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyGeneration%2A>|`null`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.SecurityKeys%2A>|Enthält einen generierten 128-Bit-symmetrischen Schlüssel. **Hinweis:**  Die Standard Implementierung verwendet diese Eigenschaft nicht. Signatur-und Verschlüsselungsschlüssel werden von den cookietransformationen vorgegeben, <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> die von der verwendet werden, die das Token verarbeitet.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A>|Der Wert des `validFrom` -Parameters oder `null`, wenn `validFrom` den Wert <xref:System.DateTime.UtcNow%2A>hat.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A>|Der Wert des `validFrom`-Parameters. Wenn `validFrom` ist `null` , der Wert <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.DefaultTokenLifetime%2A?displayProperty=nameWithType>  der- `validFrom` Eigenschaft (wie durch den-Parameter festgelegt) plus <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A>  die-Eigenschaft.|  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="claimsPrincipal" /> ist <see langword="null" />.  
+  
+- oder - 
+Die <see cref="P:System.Security.Claims.ClaimsPrincipal.Identities" />-Eigenschaft von <paramref name="claimsPrincipal" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Die <paramref name="validFrom" /> und <paramref name="validTo" />-Parameter können nicht überprüft werden; beispielsweise gibt <paramref name="validTo" /> eine Zeit an, die vor <paramref name="validFrom" /> liegt.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SessionSecurityToken (System.Security.Claims.ClaimsPrincipal claimsPrincipal, string context, string endpointId, Nullable&lt;DateTime&gt; validFrom, Nullable&lt;DateTime&gt; validTo);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Security.Claims.ClaimsPrincipal claimsPrincipal, string context, string endpointId, valuetype System.Nullable`1&lt;valuetype System.DateTime&gt; validFrom, valuetype System.Nullable`1&lt;valuetype System.DateTime&gt; validTo) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.SessionSecurityToken.#ctor(System.Security.Claims.ClaimsPrincipal,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime})" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SessionSecurityToken(System::Security::Claims::ClaimsPrincipal ^ claimsPrincipal, System::String ^ context, System::String ^ endpointId, Nullable&lt;DateTime&gt; validFrom, Nullable&lt;DateTime&gt; validTo);" />
+      <MemberSignature Language="F#" Value="new System.IdentityModel.Tokens.SessionSecurityToken : System.Security.Claims.ClaimsPrincipal * string * string * Nullable&lt;DateTime&gt; * Nullable&lt;DateTime&gt; -&gt; System.IdentityModel.Tokens.SessionSecurityToken" Usage="new System.IdentityModel.Tokens.SessionSecurityToken (claimsPrincipal, context, endpointId, validFrom, validTo)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="claimsPrincipal" Type="System.Security.Claims.ClaimsPrincipal" />
+        <Parameter Name="context" Type="System.String" />
+        <Parameter Name="endpointId" Type="System.String" />
+        <Parameter Name="validFrom" Type="System.Nullable&lt;System.DateTime&gt;" />
+        <Parameter Name="validTo" Type="System.Nullable&lt;System.DateTime&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="claimsPrincipal">Der Anspruchs-Prinzipal, der vom Bootstrap-Token generiert wurde.</param>
+        <param name="context">Eine optionale anwendungsspezifische, Kontextzeichenfolge.</param>
+        <param name="endpointId">Der Endpunkt, an das dieser Token gebunden ist. Eine leere Zeichenfolge erstellt ein Token ohne Bereichseinschränkung.</param>
+        <param name="validFrom">Der Zeitpunkt, zu dem das Token gültig wird. <see langword="null" /> zur Angabe von <see cref="P:System.DateTime.UtcNow" /></param>
+        <param name="validTo">Der Zeitpunkt, nachdem das Token nicht mehr gültig ist. <see langword="null" />, um anzugeben, dass der Wert bestimmt werden soll, indem der Wert der Eigenschaft <see cref="P:System.IdentityModel.Tokens.SessionSecurityTokenHandler.DefaultTokenLifetime" /> der Zeit hinzugefügt wird, die vom <paramref name="validFrom" />-Parameter angegeben wird.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" />-Klasse aus dem angegebenen Prinzipal- und Bootstrap-Token und mit der angegebenen Startzeit und Ablaufzeit. Das neue Token wird am angegebenen Endpunkt angewendet.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In der folgenden Tabelle werden anfängliche Eigenschaftswerte für eine Instanz der <xref:System.IdentityModel.Tokens.SessionSecurityToken>-Klasse aufgeführt.  
+  
+|Eigenschaft|Anfangswert|  
+|--------------|-------------------|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ClaimsPrincipal%2A>|`claimsPrincipal`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Context%2A>|`context`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ContextId%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.EndpointId%2A>|`endpointId`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Id%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsPersistent%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyEffectiveTime%2A>|Legen Sie auf den Wert <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A> der-Eigenschaft fest, wie `ValidFrom` vom-Parameter festgelegt.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyExpirationTime%2A>|Der Wert der <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A> Eigenschaft, wie `ValidTo` vom-Parameter festgelegt.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyGeneration%2A>|`null`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.SecurityKeys%2A>|Enthält einen generierten 128-Bit-symmetrischen Schlüssel. **Hinweis:**  Die Standard Implementierung verwendet diese Eigenschaft nicht. Signatur-und Verschlüsselungsschlüssel werden von den cookietransformationen vorgegeben, <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> die von der verwendet werden, die das Token verarbeitet.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A>|Der Wert des `validFrom` -Parameters oder `null`, wenn `validFrom` den Wert <xref:System.DateTime.UtcNow%2A>hat.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A>|Der Wert des `validFrom`-Parameters. Wenn `validFrom` ist `null` , der Wert <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.DefaultTokenLifetime%2A?displayProperty=nameWithType>  der- `validFrom` Eigenschaft (wie durch den-Parameter festgelegt) plus <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A>  die-Eigenschaft.|  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="claimsPrincipal" /> ist <see langword="null" />.  
+  
+- oder - 
+Die <see cref="P:System.Security.Claims.ClaimsPrincipal.Identities" />-Eigenschaft von <paramref name="claimsPrincipal" /> ist <see langword="null" />.  
+  
+- oder - 
+ <paramref name="endpointId" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Die <paramref name="validFrom" /> und <paramref name="validTo" />-Parameter können nicht überprüft werden; beispielsweise gibt <paramref name="validTo" /> eine Zeit an, die vor <paramref name="validFrom" /> liegt.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SessionSecurityToken (System.Security.Claims.ClaimsPrincipal claimsPrincipal, System.Xml.UniqueId contextId, string context, string endpointId, TimeSpan lifetime, System.IdentityModel.Tokens.SymmetricSecurityKey key);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Security.Claims.ClaimsPrincipal claimsPrincipal, class System.Xml.UniqueId contextId, string context, string endpointId, valuetype System.TimeSpan lifetime, class System.IdentityModel.Tokens.SymmetricSecurityKey key) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.SessionSecurityToken.#ctor(System.Security.Claims.ClaimsPrincipal,System.Xml.UniqueId,System.String,System.String,System.TimeSpan,System.IdentityModel.Tokens.SymmetricSecurityKey)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SessionSecurityToken(System::Security::Claims::ClaimsPrincipal ^ claimsPrincipal, System::Xml::UniqueId ^ contextId, System::String ^ context, System::String ^ endpointId, TimeSpan lifetime, System::IdentityModel::Tokens::SymmetricSecurityKey ^ key);" />
+      <MemberSignature Language="F#" Value="new System.IdentityModel.Tokens.SessionSecurityToken : System.Security.Claims.ClaimsPrincipal * System.Xml.UniqueId * string * string * TimeSpan * System.IdentityModel.Tokens.SymmetricSecurityKey -&gt; System.IdentityModel.Tokens.SessionSecurityToken" Usage="new System.IdentityModel.Tokens.SessionSecurityToken (claimsPrincipal, contextId, context, endpointId, lifetime, key)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="claimsPrincipal" Type="System.Security.Claims.ClaimsPrincipal" />
+        <Parameter Name="contextId" Type="System.Xml.UniqueId" />
+        <Parameter Name="context" Type="System.String" />
+        <Parameter Name="endpointId" Type="System.String" />
+        <Parameter Name="lifetime" Type="System.TimeSpan" />
+        <Parameter Name="key" Type="System.IdentityModel.Tokens.SymmetricSecurityKey" />
+      </Parameters>
+      <Docs>
+        <param name="claimsPrincipal">Der Anspruchs-Prinzipal, der der Sitzung zugeordnet ist.</param>
+        <param name="contextId">Der Kontextbezeichner, der mit diesem Token verknüpft ist.</param>
+        <param name="context">Eine optionale anwendungsspezifische, Kontextzeichenfolge.</param>
+        <param name="endpointId">Der Endpunkt, an das dieser Token gebunden ist. Eine leere Zeichenfolge erstellt ein Token ohne Bereichseinschränkung.</param>
+        <param name="lifetime">Die Lebensdauer des Sitzungstoken. Die <see cref="P:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom" />-Eigenschaft wird auf <see cref="P:System.DateTime.UtcNow" /> festgelegt, und die <see cref="P:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo" />-Eigenschaft wird auf <see cref="P:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom" /> festgelegt, plus des Zeitraums, der durch diesen Parameter angegeben ist.</param>
+        <param name="key">Ein optionaler symmetrischer Sitzungsschlüssel.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" />-Klasse unter Verwendung der angegebenen Werte für Prinzipal, Kontext-ID, Kontext, Endpunkt, Lebensdauer und Schlüssel.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In der folgenden Tabelle werden anfängliche Eigenschaftswerte für eine Instanz der <xref:System.IdentityModel.Tokens.SessionSecurityToken>-Klasse aufgeführt.  
+  
+|Eigenschaft|Anfangswert|  
+|--------------|-------------------|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ClaimsPrincipal%2A>|`claimsPrincipal`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Context%2A>|`context`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ContextId%2A>|`contextId`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.EndpointId%2A>|`endpointId`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Id%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsPersistent%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyEffectiveTime%2A>|<xref:System.DateTime.UtcNow%2A>|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyExpirationTime%2A>|<xref:System.DateTime.UtcNow%2A>ZZ`lifetime`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyGeneration%2A>|`null`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.SecurityKeys%2A>|Enthält ein einzelnes Element, das `key` entweder oder ist `key` , `null`wenn ist, ein generierter 128-Bit-symmetrischer Schlüssel. **Hinweis:**  Die Standard Implementierung verwendet diese Eigenschaft nicht. Signatur-und Verschlüsselungsschlüssel werden von den cookietransformationen vorgegeben, <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> die von der verwendet werden, die das Token verarbeitet.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A>|<xref:System.DateTime.UtcNow%2A>|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A>|<xref:System.DateTime.UtcNow%2A>ZZ`lifetime`|  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="claimsPrincipal" /> ist <see langword="null" />.  
+  
+- oder - 
+Die <see cref="P:System.Security.Claims.ClaimsPrincipal.Identities" />-Eigenschaft von <paramref name="claimsPrincipal" /> ist <see langword="null" />.  
+  
+- oder - 
+ <paramref name="contextId" /> ist <see langword="null" />.  
+  
+- oder - 
+ <paramref name="endpointId" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.InvalidOperationException"><paramref name="lifetime" /> ist kleiner oder gleich <see cref="F:System.TimeSpan.Zero" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SessionSecurityToken (System.Security.Claims.ClaimsPrincipal claimsPrincipal, System.Xml.UniqueId contextId, string context, string endpointId, DateTime validFrom, TimeSpan lifetime, System.IdentityModel.Tokens.SymmetricSecurityKey key);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Security.Claims.ClaimsPrincipal claimsPrincipal, class System.Xml.UniqueId contextId, string context, string endpointId, valuetype System.DateTime validFrom, valuetype System.TimeSpan lifetime, class System.IdentityModel.Tokens.SymmetricSecurityKey key) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.SessionSecurityToken.#ctor(System.Security.Claims.ClaimsPrincipal,System.Xml.UniqueId,System.String,System.String,System.DateTime,System.TimeSpan,System.IdentityModel.Tokens.SymmetricSecurityKey)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SessionSecurityToken(System::Security::Claims::ClaimsPrincipal ^ claimsPrincipal, System::Xml::UniqueId ^ contextId, System::String ^ context, System::String ^ endpointId, DateTime validFrom, TimeSpan lifetime, System::IdentityModel::Tokens::SymmetricSecurityKey ^ key);" />
+      <MemberSignature Language="F#" Value="new System.IdentityModel.Tokens.SessionSecurityToken : System.Security.Claims.ClaimsPrincipal * System.Xml.UniqueId * string * string * DateTime * TimeSpan * System.IdentityModel.Tokens.SymmetricSecurityKey -&gt; System.IdentityModel.Tokens.SessionSecurityToken" Usage="new System.IdentityModel.Tokens.SessionSecurityToken (claimsPrincipal, contextId, context, endpointId, validFrom, lifetime, key)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="claimsPrincipal" Type="System.Security.Claims.ClaimsPrincipal" />
+        <Parameter Name="contextId" Type="System.Xml.UniqueId" />
+        <Parameter Name="context" Type="System.String" />
+        <Parameter Name="endpointId" Type="System.String" />
+        <Parameter Name="validFrom" Type="System.DateTime" />
+        <Parameter Name="lifetime" Type="System.TimeSpan" />
+        <Parameter Name="key" Type="System.IdentityModel.Tokens.SymmetricSecurityKey" />
+      </Parameters>
+      <Docs>
+        <param name="claimsPrincipal">Der Anspruchs-Prinzipal, der der Sitzung zugeordnet ist.</param>
+        <param name="contextId">Der Kontextbezeichner, der mit diesem Token verknüpft ist.</param>
+        <param name="context">Eine optionale anwendungsspezifische, Kontextzeichenfolge.</param>
+        <param name="endpointId">Der Endpunkt, an das dieser Token gebunden ist. Eine leere Zeichenfolge erstellt ein Token ohne Bereichseinschränkung.</param>
+        <param name="validFrom">Der Zeitpunkt, zu dem das Token gültig wird.</param>
+        <param name="lifetime">Die Lebensdauer des Sitzungstoken. Die <see cref="P:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo" />-Eigenschaft wird auf <see cref="P:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom" /> festgelegt, plus des Zeitraums, der durch diesen Parameter festgelegt ist.</param>
+        <param name="key">Ein optionaler symmetrischer Sitzungsschlüssel.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" />-Klasse unter Verwendung der angegebenen Werte für Prinzipal, Kontext-ID, Kontext, Endpunkt, den gültigen Zeitstempel, Lebensdauer und Schlüssel.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In der folgenden Tabelle werden anfängliche Eigenschaftswerte für eine Instanz der <xref:System.IdentityModel.Tokens.SessionSecurityToken>-Klasse aufgeführt.  
+  
+|Eigenschaft|Anfangswert|  
+|--------------|-------------------|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ClaimsPrincipal%2A>|`claimsPrincipal`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Context%2A>|`context`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ContextId%2A>|`contextId`oder, wenn `contextId` ist `null`, eine generierte eindeutige ID.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.EndpointId%2A>|`endpointId`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Id%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsPersistent%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyEffectiveTime%2A>|`validFrom`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyExpirationTime%2A>|`validFrom`und `lifetime`.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyGeneration%2A>|`null`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.SecurityKeys%2A>|Enthält ein einzelnes Element, das `key` entweder oder ist `key` , `null`wenn ist, ein generierter 128-Bit-symmetrischer Schlüssel. **Hinweis:**  Die Standard Implementierung verwendet diese Eigenschaft nicht. Signatur-und Verschlüsselungsschlüssel werden von den cookietransformationen vorgegeben, <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> die von der verwendet werden, die das Token verarbeitet.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A>|`validFrom`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A>|`validFrom`und `lifetime`.|  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="claimsPrincipal" /> ist <see langword="null" />.  
+  
+- oder - 
+Die <see cref="P:System.Security.Claims.ClaimsPrincipal.Identities" />-Eigenschaft von <paramref name="claimsPrincipal" /> ist <see langword="null" />.  
+  
+- oder - 
+ <paramref name="contextId" /> ist <see langword="null" />.  
+  
+- oder - 
+ <paramref name="endpointId" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.InvalidOperationException"><paramref name="lifetime" /> ist kleiner oder gleich <see cref="F:System.TimeSpan.Zero" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SessionSecurityToken (System.Security.Claims.ClaimsPrincipal claimsPrincipal, System.Xml.UniqueId contextId, string context, string endpointId, Nullable&lt;DateTime&gt; validFrom, Nullable&lt;DateTime&gt; validTo, System.IdentityModel.Tokens.SymmetricSecurityKey key);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Security.Claims.ClaimsPrincipal claimsPrincipal, class System.Xml.UniqueId contextId, string context, string endpointId, valuetype System.Nullable`1&lt;valuetype System.DateTime&gt; validFrom, valuetype System.Nullable`1&lt;valuetype System.DateTime&gt; validTo, class System.IdentityModel.Tokens.SymmetricSecurityKey key) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.SessionSecurityToken.#ctor(System.Security.Claims.ClaimsPrincipal,System.Xml.UniqueId,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.IdentityModel.Tokens.SymmetricSecurityKey)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SessionSecurityToken(System::Security::Claims::ClaimsPrincipal ^ claimsPrincipal, System::Xml::UniqueId ^ contextId, System::String ^ context, System::String ^ endpointId, Nullable&lt;DateTime&gt; validFrom, Nullable&lt;DateTime&gt; validTo, System::IdentityModel::Tokens::SymmetricSecurityKey ^ key);" />
+      <MemberSignature Language="F#" Value="new System.IdentityModel.Tokens.SessionSecurityToken : System.Security.Claims.ClaimsPrincipal * System.Xml.UniqueId * string * string * Nullable&lt;DateTime&gt; * Nullable&lt;DateTime&gt; * System.IdentityModel.Tokens.SymmetricSecurityKey -&gt; System.IdentityModel.Tokens.SessionSecurityToken" Usage="new System.IdentityModel.Tokens.SessionSecurityToken (claimsPrincipal, contextId, context, endpointId, validFrom, validTo, key)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="claimsPrincipal" Type="System.Security.Claims.ClaimsPrincipal" />
+        <Parameter Name="contextId" Type="System.Xml.UniqueId" />
+        <Parameter Name="context" Type="System.String" />
+        <Parameter Name="endpointId" Type="System.String" />
+        <Parameter Name="validFrom" Type="System.Nullable&lt;System.DateTime&gt;" />
+        <Parameter Name="validTo" Type="System.Nullable&lt;System.DateTime&gt;" />
+        <Parameter Name="key" Type="System.IdentityModel.Tokens.SymmetricSecurityKey" />
+      </Parameters>
+      <Docs>
+        <param name="claimsPrincipal">Der Anspruchs-Prinzipal, der der Sitzung zugeordnet ist.</param>
+        <param name="contextId">Der Kontextbezeichner, der mit diesem Token verknüpft ist.</param>
+        <param name="context">Eine optionale anwendungsspezifische, Kontextzeichenfolge.</param>
+        <param name="endpointId">Der Endpunkt, an das dieser Token gebunden ist. Eine leere Zeichenfolge erstellt ein Token ohne Bereichseinschränkung.</param>
+        <param name="validFrom">Der Zeitpunkt, zu dem das Token gültig wird. <see langword="null" /> zur Angabe von <see cref="P:System.DateTime.UtcNow" />.</param>
+        <param name="validTo">Der Zeitpunkt, nachdem das Token nicht mehr gültig ist. <see langword="null" />, um anzugeben, dass der Wert bestimmt werden soll, indem der Wert der Eigenschaft <see cref="P:System.IdentityModel.Tokens.SessionSecurityTokenHandler.DefaultTokenLifetime" /> der Zeit hinzugefügt wird, die vom <paramref name="validFrom" />-Parameter angegeben wird.</param>
+        <param name="key">Ein optionaler symmetrischer Sitzungsschlüssel.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" />-Klasse unter Verwendung der angegebenen Werte für Prinzipal, Kontext-ID, Kontext, Endpunkt, Startzeit, Ablaufzeit und Schlüssel.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In der folgenden Tabelle werden anfängliche Eigenschaftswerte für eine Instanz der <xref:System.IdentityModel.Tokens.SessionSecurityToken>-Klasse aufgeführt.  
+  
+|Eigenschaft|Anfangswert|  
+|--------------|-------------------|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ClaimsPrincipal%2A>|`claimsPrincipal`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Context%2A>|`context`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ContextId%2A>|`contextId`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.EndpointId%2A>|`endpointId`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.Id%2A>|Legen Sie auf eine generierte eindeutige ID fest.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsPersistent%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A>|`false`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyEffectiveTime%2A>|Legen Sie auf den Wert <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A> der-Eigenschaft fest, wie `ValidFrom` vom-Parameter festgelegt.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyExpirationTime%2A>|Der Wert der <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A> Eigenschaft, wie `ValidTo` vom-Parameter festgelegt.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyGeneration%2A>|`null`|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.SecurityKeys%2A>|Enthält ein einzelnes Element, das `key` entweder oder ist `key` , `null`wenn ist, ein generierter 128-Bit-symmetrischer Schlüssel. **Hinweis:**  Die Standard Implementierung verwendet diese Eigenschaft nicht. Signatur-und Verschlüsselungsschlüssel werden von den cookietransformationen vorgegeben, <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> die von der verwendet werden, die das Token verarbeitet.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A>|Der Wert des `validFrom` -Parameters oder `null`, wenn `validFrom` den Wert <xref:System.DateTime.UtcNow%2A>hat.|  
+|<xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A>|Der Wert des `validFrom`-Parameters. Wenn `validFrom` ist `null` , der Wert <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.DefaultTokenLifetime%2A?displayProperty=nameWithType>  der- `validFrom` Eigenschaft (wie durch den-Parameter festgelegt) plus <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A>  die-Eigenschaft.|  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="claimsPrincipal" /> ist <see langword="null" />.  
+  
+- oder - 
+Die <see cref="P:System.Security.Claims.ClaimsPrincipal.Identities" />-Eigenschaft von <paramref name="claimsPrincipal" /> ist <see langword="null" />.  
+  
+- oder - 
+ <paramref name="contextId" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="validFrom" /> ist größer gleich <paramref name="validTo" />.  
+  
+- oder - 
+ <paramref name="validTo" /> ist kleiner als die aktuelle Zeit.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ClaimsPrincipal">
+      <MemberSignature Language="C#" Value="public System.Security.Claims.ClaimsPrincipal ClaimsPrincipal { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Security.Claims.ClaimsPrincipal ClaimsPrincipal" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.ClaimsPrincipal" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property ClaimsPrincipal As ClaimsPrincipal" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Security::Claims::ClaimsPrincipal ^ ClaimsPrincipal { System::Security::Claims::ClaimsPrincipal ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.ClaimsPrincipal : System.Security.Claims.ClaimsPrincipal" Usage="System.IdentityModel.Tokens.SessionSecurityToken.ClaimsPrincipal" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Security.Claims.ClaimsPrincipal</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den AnspruchsPrinzipal ab, der der Sitzung zugeordnet ist.</summary>
+        <value>Der Anspruchs-Prinzipal.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Context">
+      <MemberSignature Language="C#" Value="public string Context { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Context" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.Context" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Context As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ Context { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Context : string" Usage="System.IdentityModel.Tokens.SessionSecurityToken.Context" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Benutzer angegebenen Kontextwert ab.</summary>
+        <value>Der vom Benutzer angegebene Kontextwert.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Sie können diese Eigenschaft verwenden, um anwendungsspezifischen Kontext zu speichern.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ContextId">
+      <MemberSignature Language="C#" Value="public System.Xml.UniqueId ContextId { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Xml.UniqueId ContextId" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.ContextId" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property ContextId As UniqueId" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Xml::UniqueId ^ ContextId { System::Xml::UniqueId ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.ContextId : System.Xml.UniqueId" Usage="System.IdentityModel.Tokens.SessionSecurityToken.ContextId" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Xml.UniqueId</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den Kontextbezeichner der Sitzung ab.</summary>
+        <value>Der Kontextbezeichner der Sitzung.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Der Kontext Bezeichner ist in allen Sitzungs Token eindeutig.  
+  
+ Die <xref:System.IdentityModel.Tokens.SessionSecurityTokenCacheKey> -Klasse verwendet sowohl die Kontext-ID als auch die Schlüsselgenerierung, um einen Schlüssel für das <xref:System.IdentityModel.Tokens.SessionSecurityTokenCache>Token in der zu generieren.  
+  
+ Diese <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> Eigenschaft wird von der-Klasse als `<Identifier>` untergeordnetes Element des `<wsc:SecurityContextToken>` -Elements serialisiert. Weitere Informationen finden Sie in der Dokumentation für die <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.WriteToken%2A?displayProperty=nameWithType> -Methode.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.IdentityModel.Tokens.SessionSecurityTokenCacheKey" />
+      </Docs>
+    </Member>
+    <Member MemberName="EndpointId">
+      <MemberSignature Language="C#" Value="public string EndpointId { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string EndpointId" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.EndpointId" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property EndpointId As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ EndpointId { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.EndpointId : string" Usage="System.IdentityModel.Tokens.SessionSecurityToken.EndpointId" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft die ID des Endpunkts ab, auf den dieses Token beschränkt ist.</summary>
+        <value>Die ID des Endpunkts.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!IMPORTANT]
+>  Wenn die <xref:System.IdentityModel.Tokens.SessionSecurityToken.EndpointId%2A> -Eigenschaft `null`ist, wird das Sitzungs Token von der <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> -Klasse als globaler Bereich behandelt. Dies kann ein potenzielles Sicherheitsrisiko darstellen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetObjectData">
+      <MemberSignature Language="C#" Value="public virtual void GetObjectData (System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void GetObjectData(class System.Runtime.Serialization.SerializationInfo info, valuetype System.Runtime.Serialization.StreamingContext context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.SessionSecurityToken.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Sub GetObjectData (info As SerializationInfo, context As StreamingContext)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void GetObjectData(System::Runtime::Serialization::SerializationInfo ^ info, System::Runtime::Serialization::StreamingContext context);" />
+      <MemberSignature Language="F#" Value="abstract member GetObjectData : System.Runtime.Serialization.SerializationInfo * System.Runtime.Serialization.StreamingContext -&gt; unit&#xA;override this.GetObjectData : System.Runtime.Serialization.SerializationInfo * System.Runtime.Serialization.StreamingContext -&gt; unit" Usage="sessionSecurityToken.GetObjectData (info, context)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="info" Type="System.Runtime.Serialization.SerializationInfo" />
+        <Parameter Name="context" Type="System.Runtime.Serialization.StreamingContext" />
+      </Parameters>
+      <Docs>
+        <param name="info">Die serialisierten Objektdaten.</param>
+        <param name="context">Die Kontextinformationen zur Quelle bzw. zum Ziel.</param>
+        <summary>Legt die <see cref="T:System.Runtime.Serialization.SerializationInfo" /> mit den Informationen fest, die erforderlich sind, um das Sitzungssicherheitstoken zu serialisieren.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Id">
+      <MemberSignature Language="C#" Value="public override string Id { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Id" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.Id" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property Id As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ Id { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Id : string" Usage="System.IdentityModel.Tokens.SessionSecurityToken.Id" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den eindeutigen Bezeichner dieses Tokens ab.</summary>
+        <value>Die Token-ID.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> Eigenschaft wird von der-Klasse als `Id` das-Attribut `<wsc:SecurityContextToken>` des-Elements serialisiert. Weitere Informationen finden Sie in der Dokumentation für die <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.WriteToken%2A?displayProperty=nameWithType> -Methode.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsPersistent">
+      <MemberSignature Language="C#" Value="public bool IsPersistent { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsPersistent" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.IsPersistent" />
+      <MemberSignature Language="VB.NET" Value="Public Property IsPersistent As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsPersistent { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.IsPersistent : bool with get, set" Usage="System.IdentityModel.Tokens.SessionSecurityToken.IsPersistent" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab oder legt einen Wert fest, der angibt, ob das Cookie, das von diesem Token dargestellt wird, permanent ist.</summary>
+        <value><see langword="true" />, wenn das Cookie permanent ist; andernfalls <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn die <xref:System.IdentityModel.Tokens.SessionSecurityToken.IsPersistent%2A> -Eigenschaft `true`ist, wird das Cookie als dauerhaftes Cookie geschrieben. Persistente Cookies bleiben nach dem Schließen des Browsers gültig, bis Sie ablaufen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsReferenceMode">
+      <MemberSignature Language="C#" Value="public bool IsReferenceMode { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsReferenceMode" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode" />
+      <MemberSignature Language="VB.NET" Value="Public Property IsReferenceMode As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsReferenceMode { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.IsReferenceMode : bool with get, set" Usage="System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab oder legt einen Wert fest, der angibt, ob das Sitzungstoken im Verweismodus ausgeführt wird.</summary>
+        <value><see langword="true" />, wenn das Token im Sitzungsmodus funktioniert; andernfalls <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Im Verweis Modus wird bei der Serialisierung ein einfaches artefaktelement erstellt, und das tokenmaterial wird im Tokencache gespeichert, der dem Tokenhandler zugeordnet ist. Der Tokencache ist eine Instanz einer Klasse, die von <xref:System.IdentityModel.Tokens.SessionSecurityTokenCache>abgeleitet wird. Bei Webfarm Szenarios muss der Tokencache über alle Knoten in der Farm hinweg ausgeführt werden.  
+  
+> [!IMPORTANT]
+>  Zum Arbeiten im Verweis Modus empfiehlt Microsoft die Bereitstellung eines Handlers <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SessionSecurityTokenCreated?displayProperty=nameWithType> für das Ereignis in der Global.asax.cs-Datei <xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A> und das Festlegen der-Eigenschaft für <xref:System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs.SessionToken%2A?displayProperty=nameWithType> das Token, das in der-Eigenschaft weitergegeben wurde. Dadurch wird sichergestellt, dass das Sitzungs Token im Verweis Modus für jede Anforderung ausgeführt wird, und es wird <xref:System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode%2A?displayProperty=nameWithType> bevorzugt, wenn nur die Eigenschaft für das Sitzungs Authentifizierungs Modul festgelegt wird.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.IdentityModel.Tokens.SessionSecurityTokenCache" />
+        <altmember cref="T:System.IdentityModel.Tokens.SessionSecurityTokenHandler" />
+        <altmember cref="P:System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode" />
+      </Docs>
+    </Member>
+    <Member MemberName="KeyEffectiveTime">
+      <MemberSignature Language="C#" Value="public DateTime KeyEffectiveTime { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.DateTime KeyEffectiveTime" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.KeyEffectiveTime" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property KeyEffectiveTime As DateTime" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property DateTime KeyEffectiveTime { DateTime get(); };" />
+      <MemberSignature Language="F#" Value="member this.KeyEffectiveTime : DateTime" Usage="System.IdentityModel.Tokens.SessionSecurityToken.KeyEffectiveTime" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den Zeitpunkt ab, abb dem der Schlüssel in diesem Token gültig ist.</summary>
+        <value>Der Zeitpunkt, ab dem der Schlüssel wirksam ist.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="KeyExpirationTime">
+      <MemberSignature Language="C#" Value="public DateTime KeyExpirationTime { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.DateTime KeyExpirationTime" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.KeyExpirationTime" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property KeyExpirationTime As DateTime" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property DateTime KeyExpirationTime { DateTime get(); };" />
+      <MemberSignature Language="F#" Value="member this.KeyExpirationTime : DateTime" Usage="System.IdentityModel.Tokens.SessionSecurityToken.KeyExpirationTime" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den Zeitpunkt ab, nachdem der Schlüssel in diesem Token nicht mehr gültig ist.</summary>
+        <value>Der Zeitpunkt, zu dem der Schlüssel abläuft.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="KeyGeneration">
+      <MemberSignature Language="C#" Value="public System.Xml.UniqueId KeyGeneration { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Xml.UniqueId KeyGeneration" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.KeyGeneration" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property KeyGeneration As UniqueId" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Xml::UniqueId ^ KeyGeneration { System::Xml::UniqueId ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.KeyGeneration : System.Xml.UniqueId" Usage="System.IdentityModel.Tokens.SessionSecurityToken.KeyGeneration" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Xml.UniqueId</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den eindeutigen Bezeichner für die Schlüsselgenerierung in diesem Token ab.</summary>
+        <value>Der eindeutige Bezeichner für die Schlüsselgenerierung in diesem Token.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.IdentityModel.Tokens.SessionSecurityToken.KeyGeneration%2A> -Eigenschaft ist innerhalb eines Sitzungs Tokens eindeutig. Wenn ein Sitzungs Token ausgestellt wird, verfügt es nur über eine Kontext-ID, auf die <xref:System.IdentityModel.Tokens.SessionSecurityToken.ContextId%2A> über die-Eigenschaft zugegriffen werden kann. Wenn das Sitzungs Token erneuert wird, wird die Schlüsselgenerierung hinzugefügt.  
+  
+ Die <xref:System.IdentityModel.Tokens.SessionSecurityTokenCacheKey> -Klasse verwendet sowohl die Kontext-ID als auch die Schlüsselgenerierung, um einen Schlüssel für das <xref:System.IdentityModel.Tokens.SessionSecurityTokenCache>Token in der zu generieren.  
+  
+ Diese <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> Eigenschaft wird von der-Klasse als `<Instance>` untergeordnetes Element des `<wsc:SecurityContextToken>` -Elements serialisiert. Weitere Informationen finden Sie in der Dokumentation für die <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.WriteToken%2A?displayProperty=nameWithType> -Methode.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.IdentityModel.Tokens.SessionSecurityTokenCacheKey" />
+      </Docs>
+    </Member>
+    <Member MemberName="SecureConversationVersion">
+      <MemberSignature Language="C#" Value="public Uri SecureConversationVersion { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Uri SecureConversationVersion" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.SecureConversationVersion" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property SecureConversationVersion As Uri" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property Uri ^ SecureConversationVersion { Uri ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.SecureConversationVersion : Uri" Usage="System.IdentityModel.Tokens.SessionSecurityToken.SecureConversationVersion" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Uri</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen URI ab, der die Version von WS-SecureConversation identifiziert, die verwendet wird, um dieses Sitzungssicherheitstoken zu serialisieren.</summary>
+        <value>Ein URI, der die Version von WS-SecureConversation identifiziert, die verwendet wird, um dieses Token zu serialisieren.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> -Basisklasse unterstützt WS-Secure Conversation Feb2005 und WS-Secure Conversation 1,3. Die URIs für diese Versionen von WS-Secure Conversation sind jeweils<http://schemas.xmlsoap.org/ws/2005/02/sc>"" und<http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512>"".  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SecurityKeys">
+      <MemberSignature Language="C#" Value="public override System.Collections.ObjectModel.ReadOnlyCollection&lt;System.IdentityModel.Tokens.SecurityKey&gt; SecurityKeys { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Collections.ObjectModel.ReadOnlyCollection`1&lt;class System.IdentityModel.Tokens.SecurityKey&gt; SecurityKeys" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.SecurityKeys" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property SecurityKeys As ReadOnlyCollection(Of SecurityKey)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Collections::ObjectModel::ReadOnlyCollection&lt;System::IdentityModel::Tokens::SecurityKey ^&gt; ^ SecurityKeys { System::Collections::ObjectModel::ReadOnlyCollection&lt;System::IdentityModel::Tokens::SecurityKey ^&gt; ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.SecurityKeys : System.Collections.ObjectModel.ReadOnlyCollection&lt;System.IdentityModel.Tokens.SecurityKey&gt;" Usage="System.IdentityModel.Tokens.SessionSecurityToken.SecurityKeys" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.ObjectModel.ReadOnlyCollection&lt;System.IdentityModel.Tokens.SecurityKey&gt;</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft die dieser Transaktion zugeordneten Schlüssel ab. Dies ist normalerweise ein einzelner Schlüssel.</summary>
+        <value>Die Schlüssel, die der Sitzung zugeordnet sind. Es gibt in der Regel eine einzelnen Schlüssel.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Die Standard Implementierung verwendet diese Eigenschaft nicht. Signatur-und Verschlüsselungsschlüssel werden von den cookietransformationen vorgegeben, <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> die von der verwendet werden, die das Token verarbeitet.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ValidFrom">
+      <MemberSignature Language="C#" Value="public override DateTime ValidFrom { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.DateTime ValidFrom" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property ValidFrom As DateTime" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property DateTime ValidFrom { DateTime get(); };" />
+      <MemberSignature Language="F#" Value="member this.ValidFrom : DateTime" Usage="System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den Zeitpunkt ab, von dem das Token gültig ist.</summary>
+        <value>Der Zeitpunkt, ab dem das Token gültig ist.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ValidTo">
+      <MemberSignature Language="C#" Value="public override DateTime ValidTo { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.DateTime ValidTo" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property ValidTo As DateTime" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property DateTime ValidTo { DateTime get(); };" />
+      <MemberSignature Language="F#" Value="member this.ValidTo : DateTime" Usage="System.IdentityModel.Tokens.SessionSecurityToken.ValidTo" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den Zeitpunkt ab, nachdem das Token ist nicht mehr gültig.</summary>
+        <value>Die Zeit, nach der das Token nicht mehr gültig ist.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
