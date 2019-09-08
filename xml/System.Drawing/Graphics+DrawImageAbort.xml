@@ -1,0 +1,89 @@
+<Type Name="Graphics+DrawImageAbort" FullName="System.Drawing.Graphics+DrawImageAbort">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="897738808f3fec2c7d9699cff736ff2dea3df00a" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70605772" /></Metadata><TypeSignature Language="C#" Value="public delegate bool Graphics.DrawImageAbort(IntPtr callbackdata);" />
+  <TypeSignature Language="ILAsm" Value=".class nested public auto ansi sealed Graphics/DrawImageAbort extends System.MulticastDelegate" />
+  <TypeSignature Language="DocId" Value="T:System.Drawing.Graphics.DrawImageAbort" />
+  <TypeSignature Language="VB.NET" Value="Public Delegate Function Graphics.DrawImageAbort(callbackdata As IntPtr) As Boolean " />
+  <TypeSignature Language="C++ CLI" Value="public: delegate bool Graphics::DrawImageAbort(IntPtr callbackdata);" />
+  <TypeSignature Language="F#" Value="type Graphics.DrawImageAbort = delegate of nativeint -&gt; bool" />
+  <AssemblyInfo>
+    <AssemblyName>System.Drawing</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Drawing.Common</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.1</AssemblyVersion>
+    <AssemblyVersion>4.0.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Delegate</BaseTypeName>
+  </Base>
+  <Attributes>
+    <Attribute FrameworkAlternate="netframework-1.1">
+      <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Parameters>
+    <Parameter Name="callbackdata" Type="System.IntPtr" />
+  </Parameters>
+  <ReturnValue>
+    <ReturnType>System.Boolean</ReturnType>
+  </ReturnValue>
+  <Docs>
+    <param name="callbackdata">Interner Zeiger, der die Daten für die Rückrufmethode angibt. Dieser Parameter wird nicht von allen <see cref="Overload:System.Drawing.Graphics.DrawImage" />-Überladungen übergeben. Sie können feststellen, dass dieser nicht vorhanden ist, wenn der Wert <see cref="F:System.IntPtr.Zero" /> ist.</param>
+    <summary>Stellt eine Rückrufmethode bereit, mit der bestimmt wird, wann die <see cref="Overload:System.Drawing.Graphics.DrawImage" />-Methode die Ausführung vorzeitig abbrechen und aufhören soll, ein Bild zu zeichnen.</summary>
+    <returns>Diese Methode gibt <see langword="true" /> zurück, wenn die <see cref="Overload:System.Drawing.Graphics.DrawImage" />-Methode die Ausführung vorzeitig abbrechen soll. Andernfalls wird <see langword="false" /> zurückgegeben, um anzugeben, dass die <see cref="Overload:System.Drawing.Graphics.DrawImage" />-Methode die Ausführung fortsetzen soll.</returns>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode wird in Verbindung mit der <xref:System.Drawing.Graphics.DrawImage%2A> -Methode <xref:System.Drawing.Graphics> der-Klasse verwendet. Bestimmte über Ladungen der <xref:System.Drawing.Graphics.DrawImage%2A> -Methode rufen eine Anwendungs definierte Rückruf Methode dieses Typs auf, um herauszufinden, ob die über Ladungen die Ausführung beenden oder fortsetzen sollen.  
+  
+ Während der Ausführung rufen die <xref:System.Drawing.Graphics.DrawImage%2A> relevanten über Ladungen diese Rückruf Methode häufig auf, um herauszufinden, ob Sie das Zeichnen des angegebenen Bilds anhalten oder das Zeichnen des Bilds fortsetzen sollen. Die <xref:System.Drawing.Graphics.DrawImageAbort> Rückruf Methode kann ermitteln, ob basierend auf einem in ihr enthaltenen Algorithmus fortgefahren werden soll, und optional die Daten verwenden, die an ihn durch den callBackData-Parameter übergeben werden. Beispielsweise kann ein Algorithmus ermitteln, ob das Bild vom Bildschirm entfernt wurde, und einen Abbruch der Methode signalisieren <xref:System.Drawing.Graphics.DrawImage%2A> , um das Zeichnen zu beenden.  
+  
+ Eine Benutzer Deklaration dieser Ereignis Behandlungsmethode muss die gleichen Parameter wie die <xref:System.Drawing.Graphics.DrawImageAbort> Delegatdeklaration aufweisen.  
+  
+   
+  
+## Examples  
+ Bei diesem Beispiel handelt es sich um eine <xref:System.Drawing.Graphics.DrawImageAbort> vereinfachte Implementierung des-Delegaten. Es wird lediglich überprüft, ob die <xref:System.Drawing.Graphics.DrawImage%2A> Methode Daten mithilfe des callBackData-Parameters übergeben hat. (Einige <xref:System.Drawing.Graphics.DrawImage%2A> über Ladungen verfügen nur über `DrawImageAbort` einen Parameter und übergeben keine Daten; `DrawImageAbort` einige über Ladungen verfügen über `callbackdata` die Parameter und und können Daten übergeben.) Wenn keine Daten übermittelt wurden, wird `true` zurückgegeben, um an <xref:System.Drawing.Graphics.DrawImage%2A> die aufrufenden Methode zu signalisieren, dass die Zeichnung abgebrochen werden soll. Wenn Daten übermittelt wurden, wird `false` zurückgegeben, um zu signalisieren, dass das Zeichnen fortgesetzt werden  
+  
+ Eine realistische Implementierung dieses Rückrufs beinhaltet die tatsächliche Überprüfung einiger Kriterien, um die Ausführung abzubrechen oder fortzusetzen.  
+  
+```vb  
+Private Function DrawImageCallback(callBackData As IntPtr) As Boolean  
+     ' Test for call that passes callBackData parameter.  
+     If callBackData.Equals(IntPtr.Zero) Then  
+         ' If no callBackData passed, abort DrawImage method.  
+         Return True  
+     Else  
+         ' If callBackData passed, continue DrawImage method.  
+         Return False  
+     End If  
+ End Function 'DrawImageCallback  
+```  
+  
+```csharp  
+// Define DrawImageAbort callback method.  
+ private bool DrawImageCallback(IntPtr callbackdata)  
+ {  
+    // Test for call that passes callBackData parameter.  
+    if(callbackdata==IntPtr.Zero)  
+    {  
+       // If no callbackdata passed, cancel DrawImage method.  
+       return true;  
+    }  
+    else  
+    {  
+       // If callbackdata passed, continue DrawImage method.  
+       return false;  
+    }  
+ }  
+```  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+</Type>

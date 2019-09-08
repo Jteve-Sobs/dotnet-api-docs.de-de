@@ -1,0 +1,149 @@
+<Type Name="SpeechUI" FullName="System.Speech.Recognition.SpeechUI">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="f0dd771dd080109af3696f24ea2b3f91e1630c52" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70683612" /></Metadata><TypeSignature Language="C#" Value="public class SpeechUI" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit SpeechUI extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Speech.Recognition.SpeechUI" />
+  <TypeSignature Language="VB.NET" Value="Public Class SpeechUI" />
+  <TypeSignature Language="C++ CLI" Value="public ref class SpeechUI" />
+  <TypeSignature Language="F#" Value="type SpeechUI = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Speech</AssemblyName>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>Stellt Text- und Statusinformationen für Erkennungsvorgänge bereit, die in der Sprachplattformbenutzeroberfläche angezeigt werden sollen.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Member der <xref:System.Speech.Recognition.SpeechUI> -Klasse können verwendet werden, um das exakte Feedback für den Endbenutzer über die sprach Erkennungs Benutzeroberfläche anzugeben. Eine Anwendung kann mithilfe dieser Klasse beliebige Text-und Erfolgs-/Fehlerinformationen zurückgeben.  
+  
+   
+  
+## Examples  
+ Das folgende Beispiel ist ein-Handler für <xref:System.Speech.Recognition.Grammar.SpeechRecognized> das-Ereignis. Dieses Ereignis wird von einem <xref:System.Speech.Recognition.Grammar> verwendet, der für die Behandlung von Kenn Wort Eingaben in der Form "mein Kennwort ist..." vorgesehen ist.  
+  
+ Wenn ein Kennwort nicht vorhanden oder ungültig ist, <xref:System.Speech.Recognition.SpeechUI.SendTextFeedback%2A> sendet Fehlerinformationen an die Benutzeroberfläche der Sprachplattform.  
+  
+```  
+  
+grammar.SpeechRecognized +=   
+delegate(object sender, SpeechRecognizedEventArgs eventArgs)   
+{  
+  SemanticValue semantics = eventArgs.Result.Semantics;  
+  RecognitionResult result=eventArgs.Result;  
+  
+  if (!semantics.ContainsKey("Password"))   
+  {  
+    SpeechUI.SendTextFeedback(eventArgs.Result, "No Password Provided", false);  
+  }  
+  else   
+  {  
+    RecognizedAudio pwdAudio = result.GetAudioForWordRange(  
+                  result.Words[3],  
+                  result.Words[result.Words.Count - 1]);  
+    MemoryStream pwdMemoryStream = new MemoryStream();  
+    pwdAudio.WriteToAudioStream(pwdMemoryStream);  
+    if (!IsValidPwd(pwdMemoryStream))   
+    {  
+      string badPwd = System.IO.Path.GetTempPath() +   
+              "BadPwd" + (new Random()).Next().ToString() + ".wav";  
+      FileStream waveStream = new FileStream(badPwd, FileMode.Create);  
+      pwdAudio.WriteToWaveStream(waveStream);  
+      waveStream.Flush();  
+      waveStream.Close();  
+      SpeechUI.SendTextFeedback(eventArgs.Result, "Invalid Password", false);  
+    }  
+  }  
+};  
+```  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="SendTextFeedback">
+      <MemberSignature Language="C#" Value="public static bool SendTextFeedback (System.Speech.Recognition.RecognitionResult result, string feedback, bool isSuccessfulAction);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool SendTextFeedback(class System.Speech.Recognition.RecognitionResult result, string feedback, bool isSuccessfulAction) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Speech.Recognition.SpeechUI.SendTextFeedback(System.Speech.Recognition.RecognitionResult,System.String,System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function SendTextFeedback (result As RecognitionResult, feedback As String, isSuccessfulAction As Boolean) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool SendTextFeedback(System::Speech::Recognition::RecognitionResult ^ result, System::String ^ feedback, bool isSuccessfulAction);" />
+      <MemberSignature Language="F#" Value="static member SendTextFeedback : System.Speech.Recognition.RecognitionResult * string * bool -&gt; bool" Usage="System.Speech.Recognition.SpeechUI.SendTextFeedback (result, feedback, isSuccessfulAction)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="result" Type="System.Speech.Recognition.RecognitionResult" />
+        <Parameter Name="feedback" Type="System.String" />
+        <Parameter Name="isSuccessfulAction" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="result">Eine gültige <see cref="T:System.Speech.Recognition.RecognitionResult" />-Instanz.</param>
+        <param name="feedback">Ein <see cref="T:System.String" />, das einen Kommentar zum Erkennungsvorgang enthält, der das <see cref="T:System.Speech.Recognition.RecognitionResult" /><paramref name="result" /> erzeugt hat.</param>
+        <param name="isSuccessfulAction">Ein <see langword="bool" />, der angibt, ob die Anwendung den Erkennungsvorgang als ein Erfolg bewertet.</param>
+        <summary>Sendet Status und beschreibenden Text zur Benutzeroberfläche der Sprachplattform über den Status eines Erkennungsvorgangs.</summary>
+        <returns><see langword="true" />, wenn die Informationen, die für die Methode bereitgestellt wurden (<paramref name="Feedback" /> und <paramref name="isSuccessfulAction" />) erfolgreich für die Spracheplattformbenutzeroberfläche verfügbar gemacht wurde, und <see langword="false" />, wenn der Vorgang fehlgeschlagen ist.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Speech.Recognition.SpeechUI.SendTextFeedback%2A>kann verwendet werden, um anzugeben, dass ein Erkennungs Vorgang bestimmte Kriterien nicht erfüllen konnte, auch wenn die Eingabe erkannt wurde.  
+  
+ Ein Beispiel hierfür ist die Überprüfung von Sicherheitscode Informationen, bei denen die Eingabe vollständig erkannt wurde, die Überprüfungs Informationen aber falsch waren.  
+  
+   
+  
+## Examples  
+ Das folgende Beispiel ist ein-Handler für <xref:System.Speech.Recognition.Grammar.SpeechRecognized> ein-Ereignis. Dieses Ereignis wird von einem <xref:System.Speech.Recognition.Grammar> verwendet, der zum Verarbeiten von Kenn Wort Eingaben im Format "mein Kennwort ist..." dient.  
+  
+ Wenn ein Kennwort nicht vorhanden oder ungültig ist, wird **SendTextFeedback** zum Senden von Fehlerinformationen an die Benutzeroberfläche der Sprachplattform verwendet.  
+  
+```  
+  
+grammar.SpeechRecognized +=  
+delegate(object sender, SpeechRecognizedEventArgs eventArgs)   
+{  
+  SemanticValue semantics = eventArgs.Result.Semantics;  
+  RecognitionResult result=eventArgs.Result;  
+  
+  if (!semantics.ContainsKey("Password"))   
+  {  
+    SpeechUI.SendTextFeedback(eventArgs.Result, "No Password Provided", false);  
+  }  
+  else  
+  {  
+    RecognizedAudio pwdAudio = result.GetAudioForWordRange(  
+              result.Words[3],  
+              result.Words[result.Words.Count - 1]);  
+    MemoryStream pwdMemoryStream = new MemoryStream();  
+    pwdAudio.WriteToAudioStream(pwdMemoryStream);  
+    if (!IsValidPwd(pwdMemoryStream))   
+    {  
+      string badPwd = System.IO.Path.GetTempPath() + "BadPwd" +   
+               (new Random()).Next().ToString() + ".wav";  
+      FileStream waveStream = new FileStream(badPwd, FileMode.Create);  
+      pwdAudio.WriteToWaveStream(waveStream);  
+      waveStream.Flush();  
+      waveStream.Close();  
+      SpeechUI.SendTextFeedback(eventArgs.Result, "Invalid Password", false);  
+    }  
+  }  
+};  
+```  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
