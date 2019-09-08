@@ -1,0 +1,609 @@
+<Type Name="ServiceInstaller" FullName="System.ServiceProcess.ServiceInstaller">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="6e6765d4baec8d048456f421424ebdc9a9b90ced" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70564211" /></Metadata><TypeSignature Language="C#" Value="public class ServiceInstaller : System.Configuration.Install.ComponentInstaller" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit ServiceInstaller extends System.Configuration.Install.ComponentInstaller" />
+  <TypeSignature Language="DocId" Value="T:System.ServiceProcess.ServiceInstaller" />
+  <TypeSignature Language="VB.NET" Value="Public Class ServiceInstaller&#xA;Inherits ComponentInstaller" />
+  <TypeSignature Language="C++ CLI" Value="public ref class ServiceInstaller : System::Configuration::Install::ComponentInstaller" />
+  <TypeSignature Language="F#" Value="type ServiceInstaller = class&#xA;    inherit ComponentInstaller" />
+  <AssemblyInfo>
+    <AssemblyName>System.ServiceProcess</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Configuration.Install.ComponentInstaller</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary><span data-ttu-id="3b68f-101">Installiert eine Klasse, die <see cref="T:System.ServiceProcess.ServiceBase" /> für die Implementierung eines Dienstes erweitert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-101">Installs a class that extends <see cref="T:System.ServiceProcess.ServiceBase" /> to implement a service.</span></span> <span data-ttu-id="3b68f-102">Diese Klasse wird vom Installationsdienstprogramm beim Installieren einer Dienstanwendung aufgerufen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-102">This class is called by the install utility when installing a service application.</span></span></summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-103">Der <xref:System.ServiceProcess.ServiceInstaller> funktioniert speziell für den Dienst, dem er zugeordnet ist.</span><span class="sxs-lookup"><span data-stu-id="3b68f-103">The <xref:System.ServiceProcess.ServiceInstaller> does work specific to the service with which it is associated.</span></span> <span data-ttu-id="3b68f-104">Sie wird vom Installationsprogramm verwendet, um dem Dienst zugeordnete Registrierungs Werte einem Unterschlüssel im Registrierungsschlüssel HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services zu schreiben.</span><span class="sxs-lookup"><span data-stu-id="3b68f-104">It is used by the installation utility to write registry values associated with the service to a subkey within the HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services registry key.</span></span> <span data-ttu-id="3b68f-105">Der Dienst wird durch seinen Dienstnamen in diesem Unterschlüssel identifiziert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-105">The service is identified by its ServiceName within this subkey.</span></span> <span data-ttu-id="3b68f-106">Der Unterschlüssel enthält auch den Namen der ausführbaren Datei oder DLL-Datei, zu der der Dienst gehört.</span><span class="sxs-lookup"><span data-stu-id="3b68f-106">The subkey also includes the name of the executable or .dll to which the service belongs.</span></span>  
+  
+ <span data-ttu-id="3b68f-107">Um einen Dienst zu installieren, erstellen Sie eine projektinstallerklasse, die <xref:System.Configuration.Install.Installer> von der-Klasse erbt, und legen Sie `true`das <xref:System.ComponentModel.RunInstallerAttribute> -Attribut für die-Klasse auf fest.</span><span class="sxs-lookup"><span data-stu-id="3b68f-107">To install a service, create a project installer class that inherits from the <xref:System.Configuration.Install.Installer> class, and set the <xref:System.ComponentModel.RunInstallerAttribute> attribute on the class to `true`.</span></span> <span data-ttu-id="3b68f-108">Erstellen Sie in Ihrem Projekt eine <xref:System.ServiceProcess.ServiceProcessInstaller> Instanz pro Dienst Anwendung und eine <xref:System.ServiceProcess.ServiceInstaller> Instanz für jeden Dienst in der Anwendung.</span><span class="sxs-lookup"><span data-stu-id="3b68f-108">Within your project, create one <xref:System.ServiceProcess.ServiceProcessInstaller> instance per service application, and one <xref:System.ServiceProcess.ServiceInstaller> instance for each service in the application.</span></span> <span data-ttu-id="3b68f-109">Legen Sie in Ihrem projekttinstallationskonstruktor die Installations Eigenschaften für den Dienst <xref:System.ServiceProcess.ServiceProcessInstaller> mithilfe <xref:System.ServiceProcess.ServiceInstaller> der-Instanz und der-Instanz fest <xref:System.Configuration.Install.Installer.Installers%2A> , und fügen Sie die-Instanzen der-Auflistung hinzu.</span><span class="sxs-lookup"><span data-stu-id="3b68f-109">Within your project installer class constructor, set the installation properties for the service using the <xref:System.ServiceProcess.ServiceProcessInstaller> and <xref:System.ServiceProcess.ServiceInstaller> instances, and add the instances to the <xref:System.Configuration.Install.Installer.Installers%2A> collection.</span></span>  
+  
+> [!NOTE]
+>  <span data-ttu-id="3b68f-110">Es wird empfohlen, dass Sie den-Konstruktor zum Hinzufügen von Installer-Instanzen verwenden. Wenn Sie jedoch der-Auflistung in der <xref:System.Configuration.Install.Installer.Installers%2A> <xref:System.ServiceProcess.ServiceInstaller.Install%2A> -Methode hinzufügen müssen, achten Sie darauf, dass Sie die gleichen Ergänzungen der-Auflistung <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> in der-Methode ausführen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-110">It is recommended that you use the constructor for adding installer instances; however, if you need to add to the <xref:System.Configuration.Install.Installer.Installers%2A> collection in the <xref:System.ServiceProcess.ServiceInstaller.Install%2A> method, be sure to perform the same additions to the collection in the <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> method.</span></span>  
+  
+ <span data-ttu-id="3b68f-111">Für alle Klassen, die von <xref:System.Configuration.Install.Installer> der-Klasse abgeleitet werden, <xref:System.Configuration.Install.Installer.Installers%2A> muss der Status der Auflistung in den <xref:System.ServiceProcess.ServiceInstaller.Install%2A> Methoden <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> und identisch sein.</span><span class="sxs-lookup"><span data-stu-id="3b68f-111">For all classes deriving from the <xref:System.Configuration.Install.Installer> class, the state of the <xref:System.Configuration.Install.Installer.Installers%2A> collection must be the same in the <xref:System.ServiceProcess.ServiceInstaller.Install%2A> and <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> methods.</span></span> <span data-ttu-id="3b68f-112">Allerdings können Sie die Wartung der Auflistung in den <xref:System.ServiceProcess.ServiceInstaller.Install%2A> Methoden und <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> vermeiden, wenn Sie der <xref:System.Configuration.Install.Installer.Installers%2A> Auflistung in Ihrem benutzerdefinierten installerklassenkonstruktor Installations Instanzen hinzufügen. Wenn das Installations Hilfsprogramm aufgerufen wird, sucht es nach <xref:System.ComponentModel.RunInstallerAttribute> dem-Attribut.</span><span class="sxs-lookup"><span data-stu-id="3b68f-112">However, you can avoid the maintenance of the collection across the <xref:System.ServiceProcess.ServiceInstaller.Install%2A> and <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> methods if you add installer instances to the <xref:System.Configuration.Install.Installer.Installers%2A> collection in your custom installer class constructor.When the install utility is called, it looks for the <xref:System.ComponentModel.RunInstallerAttribute> attribute.</span></span> <span data-ttu-id="3b68f-113">Wenn das-Attribut `true`ist, installiert das-Hilfsprogramm alle Dienste, die der <xref:System.Configuration.Install.Installer.Installers%2A> -Auflistung hinzugefügt wurden, die dem Projekt Installationsprogramm zugeordnet wurden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-113">If the attribute is `true`, the utility installs all the services that were added to the <xref:System.Configuration.Install.Installer.Installers%2A> collection that were associated with your project installer.</span></span> <span data-ttu-id="3b68f-114">Wenn <xref:System.ComponentModel.RunInstallerAttribute> ist `false` oder nicht vorhanden ist, ignoriert das Installations Dienstprogramm das Projekt Installationsprogramm.</span><span class="sxs-lookup"><span data-stu-id="3b68f-114">If <xref:System.ComponentModel.RunInstallerAttribute> is `false` or does not exist, the install utility ignores the project installer.</span></span>  
+  
+ <span data-ttu-id="3b68f-115">Der <xref:System.ServiceProcess.ServiceProcessInstaller> , der der Projekt Installationsklasse zugeordnet ist, installiert Informationen <xref:System.ServiceProcess.ServiceInstaller> , die allen Instanzen im Projekt gemeinsam sind.</span><span class="sxs-lookup"><span data-stu-id="3b68f-115">The <xref:System.ServiceProcess.ServiceProcessInstaller> associated with your project installation class installs information common to all <xref:System.ServiceProcess.ServiceInstaller> instances in the project.</span></span> <span data-ttu-id="3b68f-116">Wenn für diesen Dienst etwas von den anderen Diensten im Installationsprojekt getrennt ist, werden diese Dienst spezifischen Informationen von dieser Methode installiert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-116">If this service has anything that separates it from the other services in the installation project, that service-specific information is installed by this method.</span></span>  
+  
+> [!NOTE]
+>  <span data-ttu-id="3b68f-117">Es ist von entscheidender Bedeutung <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> , dass identisch mit <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> der der Klasse ist, die <xref:System.ServiceProcess.ServiceBase>Sie von abgeleitet haben.</span><span class="sxs-lookup"><span data-stu-id="3b68f-117">It is crucial that the <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> be identical to the <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> of the class you derived from <xref:System.ServiceProcess.ServiceBase>.</span></span> <span data-ttu-id="3b68f-118">Normalerweise wird der Wert der <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> -Eigenschaft für den Dienst innerhalb der Main ()-Funktion der ausführbaren Datei der Dienst Anwendung festgelegt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-118">Normally, the value of the <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> property for the service is set within the Main() function of the service application's executable.</span></span> <span data-ttu-id="3b68f-119">Der Dienststeuerungs-Manager verwendet <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A?displayProperty=nameWithType> die-Eigenschaft, um den Dienst innerhalb dieser ausführbaren Datei zu suchen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-119">The Service Control Manager uses the <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A?displayProperty=nameWithType> property to locate the service within this executable.</span></span>  
+  
+ <span data-ttu-id="3b68f-120">Sie können andere Eigenschaften von <xref:System.ServiceProcess.ServiceInstaller> entweder vor oder nach dem <xref:System.Configuration.Install.Installer.Installers%2A> hinzufügen zur-Auflistung Ihres projektinstallers ändern.</span><span class="sxs-lookup"><span data-stu-id="3b68f-120">You can modify other properties on the <xref:System.ServiceProcess.ServiceInstaller> either before or after adding it to the <xref:System.Configuration.Install.Installer.Installers%2A> collection of your project installer.</span></span> <span data-ttu-id="3b68f-121">Beispielsweise <xref:System.ServiceProcess.ServiceInstaller.StartType%2A> kann ein Dienst so festgelegt werden, dass der Dienst beim Neustart automatisch gestartet wird, oder ein Benutzer muss den Dienst manuell starten.</span><span class="sxs-lookup"><span data-stu-id="3b68f-121">For example, a service's <xref:System.ServiceProcess.ServiceInstaller.StartType%2A> may be set to start the service automatically at reboot or require a user to start the service manually.</span></span>  
+  
+ <span data-ttu-id="3b68f-122">Normalerweise werden Sie die Methoden <xref:System.ServiceProcess.ServiceInstaller> nicht innerhalb Ihres Codes aufrufen. Sie werden in der Regel nur vom Installations Dienstprogramm aufgerufen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-122">Normally, you will not call the methods on <xref:System.ServiceProcess.ServiceInstaller> within your code; they are generally called only by the install utility.</span></span> <span data-ttu-id="3b68f-123">Das Installationsprogramm ruft während des <xref:System.ServiceProcess.ServiceProcessInstaller.Install%2A?displayProperty=nameWithType> Installations <xref:System.ServiceProcess.ServiceInstaller.Install%2A?displayProperty=nameWithType> Vorgangs automatisch die-Methode und die-Methode auf.</span><span class="sxs-lookup"><span data-stu-id="3b68f-123">The install utility automatically calls the <xref:System.ServiceProcess.ServiceProcessInstaller.Install%2A?displayProperty=nameWithType> and <xref:System.ServiceProcess.ServiceInstaller.Install%2A?displayProperty=nameWithType> methods during the installation process.</span></span> <span data-ttu-id="3b68f-124">Sie werden ggf. Fehler durch Aufrufen <xref:System.ServiceProcess.ServiceProcessInstaller.Rollback%2A> von (oder <xref:System.ServiceProcess.ServiceInstaller.Rollback%2A?displayProperty=nameWithType>) für alle zuvor installierten Komponenten gesichert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-124">It backs out failures, if necessary, by calling <xref:System.ServiceProcess.ServiceProcessInstaller.Rollback%2A> (or <xref:System.ServiceProcess.ServiceInstaller.Rollback%2A?displayProperty=nameWithType>) on all previously installed components.</span></span>  
+  
+ <span data-ttu-id="3b68f-125">Vom Installationsprogramm wird <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> aufgerufen, um das Objekt zu entfernen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-125">The installation utility calls <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> to remove the object.</span></span>  
+  
+ <span data-ttu-id="3b68f-126">Mit der Installationsroutine einer Anwendung werden Informationen zu den bereits installierten Komponenten automatisch verwaltet. dabei werden die <xref:System.Configuration.Install.Installer.Context%2A?displayProperty=nameWithType>-Installationsdateien des Projekts verwendet.</span><span class="sxs-lookup"><span data-stu-id="3b68f-126">An application's install routine maintains information automatically about the components already installed, using the project installer's <xref:System.Configuration.Install.Installer.Context%2A?displayProperty=nameWithType>.</span></span> <span data-ttu-id="3b68f-127">Diese Zustandsinformationen werden fortlaufend als <xref:System.ServiceProcess.ServiceProcessInstaller> -Instanz aktualisiert, und jede <xref:System.ServiceProcess.ServiceInstaller> Instanz wird vom-Hilfsprogramm installiert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-127">This state information is continuously updated as the <xref:System.ServiceProcess.ServiceProcessInstaller> instance, and each <xref:System.ServiceProcess.ServiceInstaller> instance is installed by the utility.</span></span> <span data-ttu-id="3b68f-128">Es ist in der Regel nicht erforderlich, dass der Code Zustandsinformationen explizit ändert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-128">It is usually unnecessary for your code to modify state information explicitly.</span></span>  
+  
+ <span data-ttu-id="3b68f-129">Wenn die Installation durchgeführt wird, wird automatisch ein <xref:System.Diagnostics.EventLogInstaller> erstellt, um die Ereignisprotokoll Quelle zu installieren <xref:System.ServiceProcess.ServiceBase> , die der abgeleiteten Klasse zugeordnet ist.</span><span class="sxs-lookup"><span data-stu-id="3b68f-129">When the installation is performed, it automatically creates an <xref:System.Diagnostics.EventLogInstaller> to install the event log source associated with the <xref:System.ServiceProcess.ServiceBase> derived class.</span></span> <span data-ttu-id="3b68f-130">Die <xref:System.Diagnostics.EventLog.Log%2A> -Eigenschaft für diese Quelle wird <xref:System.ServiceProcess.ServiceInstaller.%23ctor%2A> vom-Konstruktor auf das Anwendungsprotokoll des Computers festgelegt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-130">The <xref:System.Diagnostics.EventLog.Log%2A> property for this source is set by the <xref:System.ServiceProcess.ServiceInstaller.%23ctor%2A> constructor to the computer's Application log.</span></span> <span data-ttu-id="3b68f-131">Wenn <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> Sie die <xref:System.ServiceProcess.ServiceInstaller> der (die mit dem <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> des-Dienstanbieter identisch sein sollte) festlegen, <xref:System.Diagnostics.EventLog.Source%2A> wird automatisch auf denselben Wert festgelegt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-131">When you set the <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> of the <xref:System.ServiceProcess.ServiceInstaller> (which should be identical to the <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> of the service), the <xref:System.Diagnostics.EventLog.Source%2A> is automatically set to the same value.</span></span> <span data-ttu-id="3b68f-132">Bei einem Installationsfehler wird die Quell Installation zusammen mit den zuvor installierten Diensten rückgängig gemacht.</span><span class="sxs-lookup"><span data-stu-id="3b68f-132">In an installation failure, the source's installation is rolled-back along with previously installed services.</span></span>  
+  
+ <span data-ttu-id="3b68f-133">Die <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> -Methode versucht, den Dienst anzuhalten, wenn er ausgeführt wird.</span><span class="sxs-lookup"><span data-stu-id="3b68f-133">The <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> method tries to stop the service if it is running.</span></span> <span data-ttu-id="3b68f-134">Gibt an, ob dies erfolgreich <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> ist oder nicht, die von <xref:System.ServiceProcess.ServiceInstaller.Install%2A>vorgenommenen Änderungen werden von</span><span class="sxs-lookup"><span data-stu-id="3b68f-134">Whether this succeeds or not, <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> undoes the changes made by <xref:System.ServiceProcess.ServiceInstaller.Install%2A>.</span></span> <span data-ttu-id="3b68f-135">Wenn für die Ereignisprotokollierung eine neue Quelle erstellt wurde, wird die Quelle gelöscht.</span><span class="sxs-lookup"><span data-stu-id="3b68f-135">If a new source was created for event logging, the source is deleted.</span></span>  
+  
+   
+  
+## Examples  
+ <span data-ttu-id="3b68f-136">Im folgenden Beispiel wird ein Projekt-Installer namens `MyProjectInstaller`erstellt, der von <xref:System.Configuration.Install.Installer>erbt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-136">The following example creates a project installer, called `MyProjectInstaller`, which inherits from <xref:System.Configuration.Install.Installer>.</span></span> <span data-ttu-id="3b68f-137">Es wird davon ausgegangen, dass es eine ausführbare Dienst Datei gibt, die zwei Dienste enthält: "Hello-World Service 1" und "Hello-World Service 2".</span><span class="sxs-lookup"><span data-stu-id="3b68f-137">It is assumed there is a service executable that contains two services, "Hello-World Service 1" and "Hello-World Service 2".</span></span> <span data-ttu-id="3b68f-138">Innerhalb des Konstruktors für `MyProjectInstaller` (der vom Installations Dienstprogramm aufgerufen wird <xref:System.ServiceProcess.ServiceInstaller> ) werden-Objekte für jeden dieser Dienste erstellt, und für die Ausführ <xref:System.ServiceProcess.ServiceProcessInstaller> Bare Datei wird ein erstellt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-138">Within the constructor for `MyProjectInstaller` (which would be called by the install utility), <xref:System.ServiceProcess.ServiceInstaller> objects are created for each of these services, and a <xref:System.ServiceProcess.ServiceProcessInstaller> is created for the executable.</span></span> <span data-ttu-id="3b68f-139">Damit das Installations Dienstprogramm als `MyProjectInstaller` gültiges Installationsprogramm erkannt wird, <xref:System.ComponentModel.RunInstallerAttribute> wird das-Attribut `true`auf festgelegt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-139">For the install utility to recognize `MyProjectInstaller` as a valid installer, the <xref:System.ComponentModel.RunInstallerAttribute> attribute is set to `true`.</span></span>  
+  
+ <span data-ttu-id="3b68f-140">Optionale Eigenschaften werden für das prozessinstallations Programm und die Dienst Installationsprogramme festgelegt, bevor die Installations <xref:System.Configuration.Install.Installer.Installers%2A> Programme der Auflistung hinzugefügt werden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-140">Optional properties are set on the process installer and the service installers before the installers are added to the <xref:System.Configuration.Install.Installer.Installers%2A> collection.</span></span> <span data-ttu-id="3b68f-141">Wenn das Installations Hilfsprogramm `MyProjectInstaller`zugreift, werden die Objekte <xref:System.Configuration.Install.Installer.Installers%2A> , die der Auflistung durch <xref:System.Configuration.Install.InstallerCollection.Add%2A?displayProperty=nameWithType> einen-Aufrufvorgang hinzugefügt werden, nacheinander installiert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-141">When the install utility accesses `MyProjectInstaller`, the objects added to the <xref:System.Configuration.Install.Installer.Installers%2A> collection through a call to <xref:System.Configuration.Install.InstallerCollection.Add%2A?displayProperty=nameWithType> will be installed in turn.</span></span> <span data-ttu-id="3b68f-142">Während des Vorgangs verwaltet das Installationsprogramm Zustandsinformationen, die angeben, welche Objekte installiert wurden. jede kann bei einem Installationsfehler wiederum gesichert werden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-142">During the process, the installer maintains state information indicating which objects have been installed, so each can be backed out in turn, if an installation failure occurs.</span></span>  
+  
+ <span data-ttu-id="3b68f-143">Normalerweise würden Sie keine Instanz der projektinstallerklasse explizit erstellen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-143">Normally, you would not create an instance of your project installer class explicitly.</span></span> <span data-ttu-id="3b68f-144">Sie würden Sie erstellen und der Syntax <xref:System.ComponentModel.RunInstallerAttribute> das-Attribut hinzufügen, aber es ist das Installations Dienstprogramm, das tatsächlich aufruft und daher die-Klasse instanziiert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-144">You would create it and add the <xref:System.ComponentModel.RunInstallerAttribute> attribute to the syntax, but it is the install utility that actually calls, and therefore instantiates, the class.</span></span>  
+  
+ [!code-cpp[Classic ServiceInstaller Example#1](~/samples/snippets/cpp/VS_Snippets_CLR_Classic/classic ServiceInstaller Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic ServiceInstaller Example#1](~/samples/snippets/csharp/VS_Snippets_CLR_Classic/classic ServiceInstaller Example/CS/source.cs#1)]
+ [!code-vb[Classic ServiceInstaller Example#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_Classic/classic ServiceInstaller Example/VB/source.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="P:System.ServiceProcess.ServiceBase.ServiceName" />
+    <altmember cref="T:System.ServiceProcess.ServiceProcessInstaller" />
+    <altmember cref="T:System.ServiceProcess.ServiceBase" />
+    <altmember cref="P:System.ServiceProcess.ServiceBase.EventLog" />
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ServiceInstaller ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.ServiceProcess.ServiceInstaller.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; ServiceInstaller();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.ServiceProcess</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><span data-ttu-id="3b68f-145">Initialisiert eine neue Instanz der <see cref="T:System.ServiceProcess.ServiceInstaller" />-Klasse.</span><span class="sxs-lookup"><span data-stu-id="3b68f-145">Initializes a new instance of the <see cref="T:System.ServiceProcess.ServiceInstaller" /> class.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-146">Um einen Dienst zu installieren, erstellen Sie eine projektinstallerklasse, die <xref:System.Configuration.Install.Installer> von der-Klasse erbt, und legen Sie `true`das <xref:System.ComponentModel.RunInstallerAttribute> -Attribut für die-Klasse auf fest.</span><span class="sxs-lookup"><span data-stu-id="3b68f-146">To install a service, create a project installer class that inherits from the <xref:System.Configuration.Install.Installer> class, and set the <xref:System.ComponentModel.RunInstallerAttribute> attribute on the class to `true`.</span></span> <span data-ttu-id="3b68f-147">Erstellen Sie in Ihrem Projekt eine <xref:System.ServiceProcess.ServiceProcessInstaller> Instanz pro Dienst Anwendung und eine <xref:System.ServiceProcess.ServiceInstaller> Instanz für jeden Dienst in der Anwendung.</span><span class="sxs-lookup"><span data-stu-id="3b68f-147">Within your project, create one <xref:System.ServiceProcess.ServiceProcessInstaller> instance per service application, and one <xref:System.ServiceProcess.ServiceInstaller> instance for each service in the application.</span></span> <span data-ttu-id="3b68f-148">Legen Sie in Ihrem projekttinstallationskonstruktor die Installations Eigenschaften für den Dienst <xref:System.ServiceProcess.ServiceProcessInstaller> mithilfe <xref:System.ServiceProcess.ServiceInstaller> der-Instanz und der-Instanz fest <xref:System.Configuration.Install.Installer.Installers%2A> , und fügen Sie die-Instanzen der-Auflistung hinzu.</span><span class="sxs-lookup"><span data-stu-id="3b68f-148">Within your project installer class constructor, set the installation properties for the service using the <xref:System.ServiceProcess.ServiceProcessInstaller> and <xref:System.ServiceProcess.ServiceInstaller> instances, and add the instances to the <xref:System.Configuration.Install.Installer.Installers%2A> collection.</span></span>  
+  
+ <span data-ttu-id="3b68f-149">Der <xref:System.ServiceProcess.ServiceInstaller.%23ctor%2A> Konstruktor generiert automatisch eine Ereignisprotokoll Quelle, <xref:System.Diagnostics.EventLog.Log%2A> deren-Eigenschaft auf das Anwendungsprotokoll des Computers und einen <xref:System.Diagnostics.EventLogInstaller>festgelegt ist.</span><span class="sxs-lookup"><span data-stu-id="3b68f-149">The <xref:System.ServiceProcess.ServiceInstaller.%23ctor%2A> constructor automatically generates an event log source whose <xref:System.Diagnostics.EventLog.Log%2A> property is set to the computer's Application log, and an <xref:System.Diagnostics.EventLogInstaller>.</span></span> <span data-ttu-id="3b68f-150">Wenn <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> Sie die <xref:System.ServiceProcess.ServiceInstaller>der-Eigenschaft festlegen, die mit dem <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> des-Dienstanbieter identisch sein <xref:System.Diagnostics.EventLog.Source%2A> soll, wird die-Eigenschaft des Ereignis Protokolls automatisch auf denselben Wert festgelegt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-150">When you set the <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> of the <xref:System.ServiceProcess.ServiceInstaller>, which should be identical to the <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> of the service, the <xref:System.Diagnostics.EventLog.Source%2A> property of the event log is automatically set to the same value.</span></span> <span data-ttu-id="3b68f-151">Die Quelle wird im Falle eines Installations Fehlers automatisch gelöscht.</span><span class="sxs-lookup"><span data-stu-id="3b68f-151">The source is deleted automatically in the case of an installation failure.</span></span>  
+  
+ <span data-ttu-id="3b68f-152">Der <xref:System.ServiceProcess.ServiceInstaller.%23ctor%2A> -Konstruktor legt <xref:System.ServiceProcess.ServiceInstaller.StartType%2A> die- `ServiceStartMode.Manual` Eigenschaft auf fest, um anzugeben, dass ein Benutzer den Dienst startet.</span><span class="sxs-lookup"><span data-stu-id="3b68f-152">The <xref:System.ServiceProcess.ServiceInstaller.%23ctor%2A> constructor sets the <xref:System.ServiceProcess.ServiceInstaller.StartType%2A> property to `ServiceStartMode.Manual` to specify that a user start the service.</span></span> <span data-ttu-id="3b68f-153">Sie können die-Eigenschaft auf `ServiceStartMode.Automatic` zurücksetzen, um anzugeben, dass der Dienst gestartet wird, wenn der Computer neu gestartet wird.</span><span class="sxs-lookup"><span data-stu-id="3b68f-153">You can reset the property to `ServiceStartMode.Automatic` to specify that the service start when the computer reboots.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Diagnostics.EventLog" />
+        <altmember cref="T:System.ServiceProcess.ServiceStartMode" />
+      </Docs>
+    </Member>
+    <Member MemberName="CopyFromComponent">
+      <MemberSignature Language="C#" Value="public override void CopyFromComponent (System.ComponentModel.IComponent component);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void CopyFromComponent(class System.ComponentModel.IComponent component) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.ServiceProcess.ServiceInstaller.CopyFromComponent(System.ComponentModel.IComponent)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub CopyFromComponent (component As IComponent)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void CopyFromComponent(System::ComponentModel::IComponent ^ component);" />
+      <MemberSignature Language="F#" Value="override this.CopyFromComponent : System.ComponentModel.IComponent -&gt; unit" Usage="serviceInstaller.CopyFromComponent component" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.ServiceProcess</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="component" Type="System.ComponentModel.IComponent" />
+      </Parameters>
+      <Docs>
+        <param name="component"><span data-ttu-id="3b68f-154">Die <see cref="T:System.ComponentModel.IComponent" />, aus der kopiert werden soll.</span><span class="sxs-lookup"><span data-stu-id="3b68f-154">The <see cref="T:System.ComponentModel.IComponent" /> from which to copy.</span></span></param>
+        <summary><span data-ttu-id="3b68f-155">Kopiert Eigenschaften aus einer Instanz von <see cref="T:System.ServiceProcess.ServiceBase" /> in dieses Installationsprogramm.</span><span class="sxs-lookup"><span data-stu-id="3b68f-155">Copies properties from an instance of <see cref="T:System.ServiceProcess.ServiceBase" /> to this installer.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-156">Diese Methode wird nur selten innerhalb Ihres Codes aufgerufen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-156">This method will rarely be called within your code.</span></span> <span data-ttu-id="3b68f-157"><xref:System.ServiceProcess.ServiceInstaller.CopyFromComponent%2A>wird in der Regel nur von Designern aufgerufen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-157"><xref:System.ServiceProcess.ServiceInstaller.CopyFromComponent%2A> is usually called only by designers.</span></span>  
+  
+ <span data-ttu-id="3b68f-158"><xref:System.ServiceProcess.ServiceInstaller.CopyFromComponent%2A>speichert den Dienstnamen des `component` Parameters in der <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> der <xref:System.ServiceProcess.ServiceInstaller> -Instanz.</span><span class="sxs-lookup"><span data-stu-id="3b68f-158"><xref:System.ServiceProcess.ServiceInstaller.CopyFromComponent%2A> saves the service name of the `component` parameter to the <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> of the <xref:System.ServiceProcess.ServiceInstaller> instance.</span></span> <span data-ttu-id="3b68f-159">(Da der-Parameter eine Instanz einer Klasse sein muss, die von <xref:System.ServiceProcess.ServiceBase>abgeleitet `component` wird, verfügt über eine <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> -Eigenschaft.)</span><span class="sxs-lookup"><span data-stu-id="3b68f-159">(Because the parameter must be an instance of a class that derives from <xref:System.ServiceProcess.ServiceBase>, `component` is guaranteed to have a <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> property.)</span></span>  
+  
+> [!NOTE]
+>  <span data-ttu-id="3b68f-160">Wenn Sie den Visual Studio-Designer verwenden, wird diese Methode zur Entwurfszeit aufgerufen, wenn der Benutzer `Add Installer` auf eine Komponente klickt, von der diese Klasse als Installer angegeben wurde.</span><span class="sxs-lookup"><span data-stu-id="3b68f-160">If you are using the Visual Studio designer, this method is called at design time when the user clicks `Add Installer` on a component that specified this class as its installer.</span></span> <span data-ttu-id="3b68f-161">Das Installationsprogramm übernimmt alle Informationen, die es aus der Live Komponente haben kann, und speichert es zur Verwendung zur Installationszeit.</span><span class="sxs-lookup"><span data-stu-id="3b68f-161">The installer takes all information it can from the live component and stores it for use at install time.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><span data-ttu-id="3b68f-162">Die Komponente, die Sie mit diesem Installationsprogramm verknüpft haben, erbt nicht von <see cref="T:System.ServiceProcess.ServiceBase" />.</span><span class="sxs-lookup"><span data-stu-id="3b68f-162">The component you are associating with this installer does not inherit from <see cref="T:System.ServiceProcess.ServiceBase" />.</span></span></exception>
+        <altmember cref="M:System.ServiceProcess.ServiceProcessInstaller.CopyFromComponent(System.ComponentModel.IComponent)" />
+      </Docs>
+    </Member>
+    <Member MemberName="DelayedAutoStart">
+      <MemberSignature Language="C#" Value="public bool DelayedAutoStart { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool DelayedAutoStart" />
+      <MemberSignature Language="DocId" Value="P:System.ServiceProcess.ServiceInstaller.DelayedAutoStart" />
+      <MemberSignature Language="VB.NET" Value="Public Property DelayedAutoStart As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool DelayedAutoStart { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.DelayedAutoStart : bool with get, set" Usage="System.ServiceProcess.ServiceInstaller.DelayedAutoStart" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.ServiceProcess</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ComponentModel.DefaultValue(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ServiceProcess.ServiceProcessDescription("ServiceInstallerDelayedAutoStart")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="3b68f-163">Ruft einen Wert ab, der angibt, ob der Start des Diensts verzögert werden soll, bis andere automatisch gestartete Dienste ausgeführt werden, oder legt ihn fest.</span><span class="sxs-lookup"><span data-stu-id="3b68f-163">Gets or sets a value that indicates whether the service should be delayed from starting until other automatically started services are running.</span></span></summary>
+        <value><span data-ttu-id="3b68f-164"><see langword="true" />, um den automatischen Start des Diensts zu verzögern, andernfalls <see langword="false" />.</span><span class="sxs-lookup"><span data-stu-id="3b68f-164"><see langword="true" /> to delay automatic start of the service; otherwise, <see langword="false" />.</span></span> <span data-ttu-id="3b68f-165">Die Standardeinstellung ist <see langword="false" />.</span><span class="sxs-lookup"><span data-stu-id="3b68f-165">The default is <see langword="false" />.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-166">Die <xref:System.ServiceProcess.ServiceInstaller.DelayedAutoStart%2A> -Eigenschaft kann auf jeden Dienst angewendet werden, Sie wird jedoch ignoriert, es sei denn, der <xref:System.ServiceProcess.ServiceStartMode.Automatic>Start Modus des dienstangs ist.</span><span class="sxs-lookup"><span data-stu-id="3b68f-166">The <xref:System.ServiceProcess.ServiceInstaller.DelayedAutoStart%2A> property can be applied to any service, but it is ignored unless the service's start mode is <xref:System.ServiceProcess.ServiceStartMode.Automatic>.</span></span> <span data-ttu-id="3b68f-167">Wenn das System das nächste Mal neu gestartet wird, wird die Einstellung wirksam.</span><span class="sxs-lookup"><span data-stu-id="3b68f-167">The setting takes effect the next time the system is restarted.</span></span> <span data-ttu-id="3b68f-168">Der Dienststeuerungs-Manager garantiert keine bestimmte Startzeit für den Dienst.</span><span class="sxs-lookup"><span data-stu-id="3b68f-168">The Service Control Manager does not guarantee a specific start time for the service.</span></span>  
+  
+ <span data-ttu-id="3b68f-169">Ein verzögerter automatischer Start Dienst kann nicht Mitglied einer Gruppe für die Lade Reihenfolge sein, aber er kann von einem anderen automatischen Start Dienst abhängen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-169">A delayed automatic start service cannot be a member of a load ordering group, but it can depend on another automatic start service.</span></span> <span data-ttu-id="3b68f-170">Wenn eine Anwendung einen verzögerten automatischen Start Dienst aufruft, bevor Sie geladen wird, schlägt der Aufruf fehl.</span><span class="sxs-lookup"><span data-stu-id="3b68f-170">If an application calls a delayed automatic start service before it is loaded, the call fails.</span></span>  
+  
+ <span data-ttu-id="3b68f-171">Unter Betriebssystemen, die verzögerten automatischen Start nicht unterstützen, hat das Festlegen dieser Eigenschaft keine Auswirkung.</span><span class="sxs-lookup"><span data-stu-id="3b68f-171">On operating systems that do not support delayed automatic start, setting this property has no effect.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Description">
+      <MemberSignature Language="C#" Value="public string Description { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Description" />
+      <MemberSignature Language="DocId" Value="P:System.ServiceProcess.ServiceInstaller.Description" />
+      <MemberSignature Language="VB.NET" Value="Public Property Description As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ Description { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.Description : string with get, set" Usage="System.ServiceProcess.ServiceInstaller.Description" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.ServiceProcess</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ComponentModel.DefaultValue("")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ServiceProcess.ServiceProcessDescription("ServiceInstallerDescription")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="3b68f-172">Ruft die Beschreibung des Dienstes ab oder legt diese fest.</span><span class="sxs-lookup"><span data-stu-id="3b68f-172">Gets or sets the description for the service.</span></span></summary>
+        <value><span data-ttu-id="3b68f-173">Die Beschreibung des Dienstes.</span><span class="sxs-lookup"><span data-stu-id="3b68f-173">The description of the service.</span></span> <span data-ttu-id="3b68f-174">Der Standardwert ist eine leere Zeichenfolge ("").</span><span class="sxs-lookup"><span data-stu-id="3b68f-174">The default is an empty string ("").</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-175">Verwenden Sie <xref:System.ServiceProcess.ServiceInstaller.Description%2A> die-Eigenschaft, um den Zweck des installierten Dienstanbieter für den Benutzer zu beschreiben.</span><span class="sxs-lookup"><span data-stu-id="3b68f-175">Use the <xref:System.ServiceProcess.ServiceInstaller.Description%2A> property to describe the purpose of the installed service to the user.</span></span> <span data-ttu-id="3b68f-176">Der Benutzer kann die Dienst Beschreibung in Anwendungen anzeigen, in denen Details zu den installierten Diensten angezeigt werden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-176">The user can view the service description in applications that display details for installed services.</span></span>  
+  
+ <span data-ttu-id="3b68f-177">Beispielsweise können Sie mithilfe von Windows XP die Dienst Beschreibung mit dem Dienststeuerungs-Befehlszeilen Dienstprogramm (SC. exe) anzeigen, oder Sie können die Dienst Beschreibung innerhalb des Knotens **Dienste** der **Computer Verwaltungs** Konsole anzeigen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-177">For example, using Windows XP, you can view the service description with the Service Control command-line utility (Sc.exe) or you can view the service description within the **Services** node of the **Computer Management** console.</span></span>  
+  
+   
+  
+## Examples  
+ <span data-ttu-id="3b68f-178">Im folgenden Codebeispiel werden die Installations Eigenschaften für eine neue Windows-Dienst Anwendung festgelegt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-178">The following code example sets the installation properties for a new Windows service application.</span></span> <span data-ttu-id="3b68f-179">Im Beispiel wird der Dienst Name zusammen mit dem anzeigen Amen und der Beschreibung festgelegt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-179">The example sets the service name, along with the display name and description.</span></span> <span data-ttu-id="3b68f-180"><xref:System.ServiceProcess.ServiceInstaller> Nachdem <xref:System.Configuration.Install.Installer.Installers%2A>  Sie die Installations Eigenschaften für den Dienst zugewiesen haben, wird das-Objekt in diesem Beispiel der-Auflistung hinzugefügt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-180">After assigning the installation properties for the service, the example adds the <xref:System.ServiceProcess.ServiceInstaller> object to the <xref:System.Configuration.Install.Installer.Installers%2A> collection.</span></span>  
+  
+ [!code-csharp[ServiceProcess_ServiceInstaller#3](~/samples/snippets/csharp/VS_Snippets_CLR/ServiceProcess_serviceinstaller/CS/simpleserviceinstaller.cs#3)]
+ [!code-vb[ServiceProcess_ServiceInstaller#3](~/samples/snippets/visualbasic/VS_Snippets_CLR/ServiceProcess_serviceinstaller/VB/service1.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.ServiceProcess.ServiceInstaller.ServiceName" />
+        <altmember cref="P:System.ServiceProcess.ServiceInstaller.DisplayName" />
+      </Docs>
+    </Member>
+    <Member MemberName="DisplayName">
+      <MemberSignature Language="C#" Value="public string DisplayName { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string DisplayName" />
+      <MemberSignature Language="DocId" Value="P:System.ServiceProcess.ServiceInstaller.DisplayName" />
+      <MemberSignature Language="VB.NET" Value="Public Property DisplayName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ DisplayName { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.DisplayName : string with get, set" Usage="System.ServiceProcess.ServiceInstaller.DisplayName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.ServiceProcess</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue("")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ServiceProcess.ServiceProcessDescription("ServiceInstallerDisplayName")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="3b68f-181">Gibt den angezeigten Namen an, der den Dienst für den Benutzer identifiziert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-181">Indicates the friendly name that identifies the service to the user.</span></span></summary>
+        <value><span data-ttu-id="3b68f-182">Der dem Dienst zugeordnete Name, der häufig für interaktive Tools verwendet wird.</span><span class="sxs-lookup"><span data-stu-id="3b68f-182">The name associated with the service, used frequently for interactive tools.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-183"><xref:System.ServiceProcess.ServiceInstaller.DisplayName%2A> Wird beispielsweise im Dienststeuerungs-Manager verwendet, um einen Benutzer lesbaren beschreibenden Namen für den Dienst bereitzustellen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-183">The <xref:System.ServiceProcess.ServiceInstaller.DisplayName%2A> is used, for example, in the Service Control Manager to provide a user-readable descriptive name for the service.</span></span> <span data-ttu-id="3b68f-184">Bei <xref:System.ServiceProcess.ServiceInstaller.DisplayName%2A> handelt es sich um einen Registrierungs Wert, der jedoch nie als Registrierungsschlüssel verwendet wird.</span><span class="sxs-lookup"><span data-stu-id="3b68f-184">The <xref:System.ServiceProcess.ServiceInstaller.DisplayName%2A> is a registry value, but is never used as a registry key.</span></span> <span data-ttu-id="3b68f-185">Daher gelten keine Einschränkungen für <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> den Eigenschafts Wert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-185">Therefore, restrictions on the <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> property value do not apply.</span></span> <span data-ttu-id="3b68f-186"><xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A>wird als HKEY_LOCAL_MACHINES\System\CurrentControlSet\Services-Registrierungsschlüssel verwendet, sodass er eingeschränkt ist.</span><span class="sxs-lookup"><span data-stu-id="3b68f-186"><xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> is used as the HKEY_LOCAL_MACHINES\System\CurrentControlSet\Services registry key, so it is restricted.</span></span>  
+  
+ <span data-ttu-id="3b68f-187">Der Anzeige Name wird nie vom Installations Dienstprogramm verwendet, um den Dienst zu identifizieren. Daher gibt es keine Einschränkungen bezüglich der Auswahl des Namens, wie es bei <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> der-Eigenschaft der Fall ist.</span><span class="sxs-lookup"><span data-stu-id="3b68f-187">The display name is never used by the install utility to identify the service, so there are no restrictions on the choice of name, as there is for the <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> property.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.ServiceProcess.ServiceInstaller.ServiceName" />
+        <altmember cref="P:System.ServiceProcess.ServiceInstaller.Description" />
+      </Docs>
+    </Member>
+    <Member MemberName="Install">
+      <MemberSignature Language="C#" Value="public override void Install (System.Collections.IDictionary stateSaver);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Install(class System.Collections.IDictionary stateSaver) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.ServiceProcess.ServiceInstaller.Install(System.Collections.IDictionary)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Install (stateSaver As IDictionary)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Install(System::Collections::IDictionary ^ stateSaver);" />
+      <MemberSignature Language="F#" Value="override this.Install : System.Collections.IDictionary -&gt; unit" Usage="serviceInstaller.Install stateSaver" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.ServiceProcess</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="stateSaver" Type="System.Collections.IDictionary" />
+      </Parameters>
+      <Docs>
+        <param name="stateSaver"><span data-ttu-id="3b68f-188">Ein <see cref="T:System.Collections.IDictionary" /> mit Kontextinformationen für die Installation.</span><span class="sxs-lookup"><span data-stu-id="3b68f-188">An <see cref="T:System.Collections.IDictionary" /> that contains the context information associated with the installation.</span></span></param>
+        <summary><span data-ttu-id="3b68f-189">Installiert den Dienst, indem Dienstanwendungsdaten in die Registrierung geschrieben werden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-189">Installs the service by writing service application information to the registry.</span></span> <span data-ttu-id="3b68f-190">Diese Methode ist nur für die Verwendung durch Installationstools vorgesehen, die die entsprechenden Methoden automatisch verarbeiten.</span><span class="sxs-lookup"><span data-stu-id="3b68f-190">This method is meant to be used by installation tools, which process the appropriate methods automatically.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-191">Normalerweise werden Sie die Methoden <xref:System.ServiceProcess.ServiceInstaller> nicht innerhalb Ihres Codes aufrufen. Sie werden in der Regel nur vom Installations Dienstprogramm aufgerufen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-191">Normally, you will not call the methods on <xref:System.ServiceProcess.ServiceInstaller> within your code; they are generally called only by the install utility.</span></span> <span data-ttu-id="3b68f-192">Das Installationsprogramm ruft während der <xref:System.ServiceProcess.ServiceInstaller.Install%2A> Installation automatisch die-Methode auf.</span><span class="sxs-lookup"><span data-stu-id="3b68f-192">The install utility automatically calls the <xref:System.ServiceProcess.ServiceInstaller.Install%2A> method during installation.</span></span> <span data-ttu-id="3b68f-193">Es sichert ggf. Fehler, indem für das <xref:System.ServiceProcess.ServiceInstaller.Rollback%2A> Objekt aufgerufen wird, das die Ausnahme generiert hat.</span><span class="sxs-lookup"><span data-stu-id="3b68f-193">It backs out failures, if necessary, by calling <xref:System.ServiceProcess.ServiceInstaller.Rollback%2A> on the object that generated the exception.</span></span>  
+  
+ <span data-ttu-id="3b68f-194">Mit der Installationsroutine einer Anwendung werden automatisch Informationen zu den Komponenten, die bereits installiert wurden, mithilfe der Projekt <xref:System.Configuration.Install.Installer.Context%2A?displayProperty=nameWithType>Installationsprogramme verwaltet.</span><span class="sxs-lookup"><span data-stu-id="3b68f-194">An application's install routine maintains information automatically about the components that were already installed, using the project installer's <xref:System.Configuration.Install.Installer.Context%2A?displayProperty=nameWithType>.</span></span> <span data-ttu-id="3b68f-195">Diese <xref:System.ServiceProcess.ServiceInstaller.Install%2A> Zustandsinformationen, die `stateSaver` als-Parameter übergeben werden, werden fortlaufend aktualisiert <xref:System.ServiceProcess.ServiceProcessInstaller> , wenn die <xref:System.ServiceProcess.ServiceInstaller> -Instanz und jede Instanz vom-Hilfsprogramm installiert wird.</span><span class="sxs-lookup"><span data-stu-id="3b68f-195">This state information, passed into <xref:System.ServiceProcess.ServiceInstaller.Install%2A> as the `stateSaver` parameter, is continuously updated as the <xref:System.ServiceProcess.ServiceProcessInstaller> instance and each <xref:System.ServiceProcess.ServiceInstaller> instance is installed by the utility.</span></span> <span data-ttu-id="3b68f-196">Es ist in der Regel nicht erforderlich, dass Ihr Code diese Zustandsinformationen explizit ändert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-196">It is usually unnecessary for your code to modify this state information explicitly.</span></span>  
+  
+ <span data-ttu-id="3b68f-197">Der <xref:System.ServiceProcess.ServiceProcessInstaller> , der der Projekt Installationsklasse zugeordnet ist, installiert Informationen <xref:System.ServiceProcess.ServiceInstaller> , die allen Instanzen im Projekt gemeinsam sind.</span><span class="sxs-lookup"><span data-stu-id="3b68f-197">The <xref:System.ServiceProcess.ServiceProcessInstaller> associated with your project installation class installs information common to all <xref:System.ServiceProcess.ServiceInstaller> instances in the project.</span></span> <span data-ttu-id="3b68f-198">Wenn für diesen Dienst etwas von den anderen Diensten im Installationsprojekt getrennt ist, werden diese Dienst spezifischen Informationen von dieser Methode installiert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-198">If this service has anything that separates it from the other services in the installation project, that service-specific information is installed by this method.</span></span>  
+  
+ <span data-ttu-id="3b68f-199">Um einen Dienst zu installieren, erstellen Sie eine projektinstallerklasse, die <xref:System.Configuration.Install.Installer> von der-Klasse erbt, und legen Sie `true`das <xref:System.ComponentModel.RunInstallerAttribute> -Attribut für die-Klasse auf fest.</span><span class="sxs-lookup"><span data-stu-id="3b68f-199">To install a service, create a project installer class that inherits from the <xref:System.Configuration.Install.Installer> class, and set the <xref:System.ComponentModel.RunInstallerAttribute> attribute on the class to `true`.</span></span> <span data-ttu-id="3b68f-200">Erstellen Sie in Ihrem Projekt eine <xref:System.ServiceProcess.ServiceProcessInstaller> Instanz pro Dienst Anwendung und eine <xref:System.ServiceProcess.ServiceInstaller> Instanz für jeden Dienst in der Anwendung.</span><span class="sxs-lookup"><span data-stu-id="3b68f-200">Within your project, create one <xref:System.ServiceProcess.ServiceProcessInstaller> instance per service application, and one <xref:System.ServiceProcess.ServiceInstaller> instance for each service in the application.</span></span> <span data-ttu-id="3b68f-201">Legen Sie in Ihrem projekttinstallationskonstruktor die Installations Eigenschaften für den Dienst <xref:System.ServiceProcess.ServiceProcessInstaller> mithilfe <xref:System.ServiceProcess.ServiceInstaller> der-Instanz und der-Instanz fest <xref:System.Configuration.Install.Installer.Installers%2A> , und fügen Sie die-Instanzen der-Auflistung hinzu.</span><span class="sxs-lookup"><span data-stu-id="3b68f-201">Within your project installer class constructor, set the installation properties for the service using the <xref:System.ServiceProcess.ServiceProcessInstaller> and <xref:System.ServiceProcess.ServiceInstaller> instances, and add the instances to the <xref:System.Configuration.Install.Installer.Installers%2A> collection.</span></span>  
+  
+> [!NOTE]
+>  <span data-ttu-id="3b68f-202">Es wird empfohlen, dass Sie den-Konstruktor zum Hinzufügen von Installer-Instanzen verwenden. Wenn Sie jedoch der-Auflistung in der <xref:System.Configuration.Install.Installer.Installers%2A> <xref:System.ServiceProcess.ServiceInstaller.Install%2A> -Methode hinzufügen müssen, achten Sie darauf, dass Sie die gleichen Ergänzungen der-Auflistung <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> in der-Methode ausführen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-202">It is recommended that you use the constructor for adding installer instances; however, if you need to add to the <xref:System.Configuration.Install.Installer.Installers%2A> collection in the <xref:System.ServiceProcess.ServiceInstaller.Install%2A> method, be sure to perform the same additions to the collection in the <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> method.</span></span>  
+  
+ <span data-ttu-id="3b68f-203">Für alle Klassen, die von <xref:System.Configuration.Install.Installer> der-Klasse abgeleitet werden, <xref:System.Configuration.Install.Installer.Installers%2A> muss der Status der Auflistung in den <xref:System.ServiceProcess.ServiceInstaller.Install%2A> Methoden <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> und identisch sein.</span><span class="sxs-lookup"><span data-stu-id="3b68f-203">For all classes deriving from the <xref:System.Configuration.Install.Installer> class, the state of the <xref:System.Configuration.Install.Installer.Installers%2A> collection must be the same in the <xref:System.ServiceProcess.ServiceInstaller.Install%2A> and <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> methods.</span></span> <span data-ttu-id="3b68f-204">Allerdings können Sie die Wartung der Auflistung in den <xref:System.ServiceProcess.ServiceInstaller.Install%2A> Methoden und <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> vermeiden, wenn Sie der <xref:System.Configuration.Install.Installer.Installers%2A> Auflistung in Ihrem benutzerdefinierten installerklassenkonstruktor Installations Instanzen hinzufügen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-204">However, you can avoid the maintenance of the collection across the <xref:System.ServiceProcess.ServiceInstaller.Install%2A> and <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> methods if you add installer instances to the <xref:System.Configuration.Install.Installer.Installers%2A> collection in your custom installer class constructor.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException"><span data-ttu-id="3b68f-205">Die Installation enthält keinen <see cref="T:System.ServiceProcess.ServiceProcessInstaller" /> für die ausführbare Datei.</span><span class="sxs-lookup"><span data-stu-id="3b68f-205">The installation does not contain a <see cref="T:System.ServiceProcess.ServiceProcessInstaller" /> for the executable.</span></span>  
+  
+<span data-ttu-id="3b68f-206">- oder -</span><span class="sxs-lookup"><span data-stu-id="3b68f-206">-or-</span></span> 
+<span data-ttu-id="3b68f-207">Der Dateiname für die Assembly ist <see langword="null" /> oder eine leere Zeichenfolge.</span><span class="sxs-lookup"><span data-stu-id="3b68f-207">The file name for the assembly is <see langword="null" /> or an empty string.</span></span>  
+  
+<span data-ttu-id="3b68f-208">- oder -</span><span class="sxs-lookup"><span data-stu-id="3b68f-208">-or-</span></span> 
+<span data-ttu-id="3b68f-209">Der Dienstname ist ungültig.</span><span class="sxs-lookup"><span data-stu-id="3b68f-209">The service name is invalid.</span></span>  
+  
+<span data-ttu-id="3b68f-210">- oder -</span><span class="sxs-lookup"><span data-stu-id="3b68f-210">-or-</span></span> 
+<span data-ttu-id="3b68f-211">Der Dienststeuerungs-Manager konnte nicht geöffnet werden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-211">The Service Control Manager could not be opened.</span></span></exception>
+        <exception cref="T:System.ArgumentException"><span data-ttu-id="3b68f-212">Der Anzeigename für den Dienst ist über 255 Zeichen lang.</span><span class="sxs-lookup"><span data-stu-id="3b68f-212">The display name for the service is more than 255 characters in length.</span></span></exception>
+        <exception cref="T:System.ComponentModel.Win32Exception"><span data-ttu-id="3b68f-213">Das System konnte kein Handle für den Dienst generieren.</span><span class="sxs-lookup"><span data-stu-id="3b68f-213">The system could not generate a handle to the service.</span></span>  
+  
+ <span data-ttu-id="3b68f-214">- oder -</span><span class="sxs-lookup"><span data-stu-id="3b68f-214">-or-</span></span>  
+  
+ <span data-ttu-id="3b68f-215">Ein Dienst mit diesem Namen ist bereits installiert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-215">A service with that name is already installed.</span></span></exception>
+        <altmember cref="T:System.ServiceProcess.ServiceProcessInstaller" />
+        <altmember cref="M:System.ServiceProcess.ServiceInstaller.Rollback(System.Collections.IDictionary)" />
+        <altmember cref="M:System.Configuration.Install.Installer.Commit(System.Collections.IDictionary)" />
+        <altmember cref="M:System.ServiceProcess.ServiceInstaller.Uninstall(System.Collections.IDictionary)" />
+        <altmember cref="T:System.Diagnostics.EventLogInstaller" />
+        <altmember cref="M:System.Diagnostics.EventLogInstaller.#ctor" />
+      </Docs>
+    </Member>
+    <Member MemberName="IsEquivalentInstaller">
+      <MemberSignature Language="C#" Value="public override bool IsEquivalentInstaller (System.Configuration.Install.ComponentInstaller otherInstaller);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool IsEquivalentInstaller(class System.Configuration.Install.ComponentInstaller otherInstaller) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.ServiceProcess.ServiceInstaller.IsEquivalentInstaller(System.Configuration.Install.ComponentInstaller)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function IsEquivalentInstaller (otherInstaller As ComponentInstaller) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override bool IsEquivalentInstaller(System::Configuration::Install::ComponentInstaller ^ otherInstaller);" />
+      <MemberSignature Language="F#" Value="override this.IsEquivalentInstaller : System.Configuration.Install.ComponentInstaller -&gt; bool" Usage="serviceInstaller.IsEquivalentInstaller otherInstaller" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.ServiceProcess</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="otherInstaller" Type="System.Configuration.Install.ComponentInstaller" />
+      </Parameters>
+      <Docs>
+        <param name="otherInstaller"><span data-ttu-id="3b68f-216">Ein <see cref="T:System.Configuration.Install.ComponentInstaller" />, mit dem das aktuelle Installationsprogramm verglichen wird.</span><span class="sxs-lookup"><span data-stu-id="3b68f-216">A <see cref="T:System.Configuration.Install.ComponentInstaller" /> to which you are comparing the current installer.</span></span></param>
+        <summary><span data-ttu-id="3b68f-217">Gibt an, ob zwei Installationsprogramme den gleichen Dienst installieren.</span><span class="sxs-lookup"><span data-stu-id="3b68f-217">Indicates whether two installers would install the same service.</span></span></summary>
+        <returns><span data-ttu-id="3b68f-218"><see langword="true" />, wenn der Aufruf von <see cref="M:System.ServiceProcess.ServiceInstaller.Install(System.Collections.IDictionary)" /> für beide Installationsprogramme zur Installation desselben Dienstes führen würden, andernfalls <see langword="false" />.</span><span class="sxs-lookup"><span data-stu-id="3b68f-218"><see langword="true" /> if calling <see cref="M:System.ServiceProcess.ServiceInstaller.Install(System.Collections.IDictionary)" /> on both of these installers would result in installing the same service; otherwise, <see langword="false" />.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-219"><xref:System.ServiceProcess.ServiceInstaller.IsEquivalentInstaller%2A>gibt beispielsweise an, ob zwei Installationsprogramme denselben Dienst unter demselben Benutzerkonto installieren würden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-219"><xref:System.ServiceProcess.ServiceInstaller.IsEquivalentInstaller%2A> indicates, for example, whether two installers would install the same service under the same user account.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.ServiceProcess.ServiceInstaller.CopyFromComponent(System.ComponentModel.IComponent)" />
+        <altmember cref="T:System.Configuration.Install.ComponentInstaller" />
+      </Docs>
+    </Member>
+    <Member MemberName="Rollback">
+      <MemberSignature Language="C#" Value="public override void Rollback (System.Collections.IDictionary savedState);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Rollback(class System.Collections.IDictionary savedState) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.ServiceProcess.ServiceInstaller.Rollback(System.Collections.IDictionary)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Rollback (savedState As IDictionary)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Rollback(System::Collections::IDictionary ^ savedState);" />
+      <MemberSignature Language="F#" Value="override this.Rollback : System.Collections.IDictionary -&gt; unit" Usage="serviceInstaller.Rollback savedState" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.ServiceProcess</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="savedState" Type="System.Collections.IDictionary" />
+      </Parameters>
+      <Docs>
+        <param name="savedState"><span data-ttu-id="3b68f-220">Ein <see cref="T:System.Collections.IDictionary" /> mit Kontextinformationen für die Installation.</span><span class="sxs-lookup"><span data-stu-id="3b68f-220">An <see cref="T:System.Collections.IDictionary" /> that contains the context information associated with the installation.</span></span></param>
+        <summary><span data-ttu-id="3b68f-221">Führt ein Rollback der Informationen über Dienstanwendungen durch, die bei der Installation in die Registrierung geschrieben wurden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-221">Rolls back service application information written to the registry by the installation procedure.</span></span> <span data-ttu-id="3b68f-222">Diese Methode ist nur für die Verwendung durch Installationstools vorgesehen, die die entsprechenden Methoden automatisch verarbeiten.</span><span class="sxs-lookup"><span data-stu-id="3b68f-222">This method is meant to be used by installation tools, which process the appropriate methods automatically.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-223">Normalerweise werden Sie die Methoden <xref:System.ServiceProcess.ServiceInstaller> nicht innerhalb Ihres Codes aufrufen. Sie werden in der Regel nur vom Installations Dienstprogramm aufgerufen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-223">Normally, you will not call the methods on <xref:System.ServiceProcess.ServiceInstaller> within your code; they are generally called only by the install utility.</span></span> <span data-ttu-id="3b68f-224">Das Installationsprogramm ruft während des <xref:System.ServiceProcess.ServiceInstaller.Install%2A> Installationsvorgangs automatisch die-Methode auf.</span><span class="sxs-lookup"><span data-stu-id="3b68f-224">The install utility automatically calls the <xref:System.ServiceProcess.ServiceInstaller.Install%2A> method during the installation process.</span></span> <span data-ttu-id="3b68f-225">Es sichert ggf. Fehler, indem für das <xref:System.ServiceProcess.ServiceInstaller.Rollback%2A> Objekt aufgerufen wird, das die Ausnahme generiert hat.</span><span class="sxs-lookup"><span data-stu-id="3b68f-225">It backs out failures, if necessary, by calling <xref:System.ServiceProcess.ServiceInstaller.Rollback%2A> on the object that generated the exception.</span></span>  
+  
+ <span data-ttu-id="3b68f-226">Mit der Installationsroutine einer Anwendung werden Informationen zu den bereits installierten Komponenten automatisch verwaltet. dabei werden die <xref:System.Configuration.Install.Installer.Context%2A?displayProperty=nameWithType>-Installationsdateien des Projekts verwendet.</span><span class="sxs-lookup"><span data-stu-id="3b68f-226">An application's install routine maintains information automatically about the components already installed, using the project installer's <xref:System.Configuration.Install.Installer.Context%2A?displayProperty=nameWithType>.</span></span> <span data-ttu-id="3b68f-227">Diese <xref:System.ServiceProcess.ServiceInstaller.Rollback%2A> Zustandsinformationen, die `savedState` als-Parameter übergeben werden, werden fortlaufend aktualisiert <xref:System.ServiceProcess.ServiceProcessInstaller> , wenn die <xref:System.ServiceProcess.ServiceInstaller> -Instanz und jede Instanz vom-Hilfsprogramm installiert wird.</span><span class="sxs-lookup"><span data-stu-id="3b68f-227">This state information, passed into <xref:System.ServiceProcess.ServiceInstaller.Rollback%2A> as the `savedState` parameter, is continuously updated as the <xref:System.ServiceProcess.ServiceProcessInstaller> instance and each <xref:System.ServiceProcess.ServiceInstaller> instance is installed by the utility.</span></span> <span data-ttu-id="3b68f-228">Es ist in der Regel nicht erforderlich, dass Ihr Code diese Zustandsinformationen explizit ändert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-228">It is usually unnecessary for your code to modify this state information explicitly.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.ServiceProcess.ServiceProcessInstaller.Rollback(System.Collections.IDictionary)" />
+        <altmember cref="M:System.ServiceProcess.ServiceInstaller.Install(System.Collections.IDictionary)" />
+        <altmember cref="M:System.Configuration.Install.Installer.Commit(System.Collections.IDictionary)" />
+        <altmember cref="M:System.ServiceProcess.ServiceInstaller.Uninstall(System.Collections.IDictionary)" />
+      </Docs>
+    </Member>
+    <Member MemberName="ServiceName">
+      <MemberSignature Language="C#" Value="public string ServiceName { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string ServiceName" />
+      <MemberSignature Language="DocId" Value="P:System.ServiceProcess.ServiceInstaller.ServiceName" />
+      <MemberSignature Language="VB.NET" Value="Public Property ServiceName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ ServiceName { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.ServiceName : string with get, set" Usage="System.ServiceProcess.ServiceInstaller.ServiceName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.ServiceProcess</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue("")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ServiceProcess.ServiceProcessDescription("ServiceInstallerServiceName")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-1.1">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="3b68f-229">Gibt den Namen an, mit dem das System diesen Dienst identifiziert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-229">Indicates the name used by the system to identify this service.</span></span> <span data-ttu-id="3b68f-230">Diese Eigenschaft muss mit dem <see cref="P:System.ServiceProcess.ServiceBase.ServiceName" /> des zu installierenden Dienstes übereinstimmen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-230">This property must be identical to the <see cref="P:System.ServiceProcess.ServiceBase.ServiceName" /> of the service you want to install.</span></span></summary>
+        <value><span data-ttu-id="3b68f-231">Der Name des zu installierenden Dienstes.</span><span class="sxs-lookup"><span data-stu-id="3b68f-231">The name of the service to be installed.</span></span> <span data-ttu-id="3b68f-232">Dieser Wert muss festgelegt werden, bevor das Installationsprogramm den Dienst installiert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-232">This value must be set before the install utility attempts to install the service.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-233">Es ist von entscheidender Bedeutung <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> , dass identisch mit <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> der der Klasse ist, die <xref:System.ServiceProcess.ServiceBase>Sie von abgeleitet haben.</span><span class="sxs-lookup"><span data-stu-id="3b68f-233">It is crucial that the <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> be identical to the <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> of the class you derived from <xref:System.ServiceProcess.ServiceBase>.</span></span> <span data-ttu-id="3b68f-234">Normalerweise wird der Wert der <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> -Eigenschaft für den Dienst innerhalb der Main ()-Funktion der ausführbaren Datei der Dienst Anwendung festgelegt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-234">Normally, the value of the <xref:System.ServiceProcess.ServiceBase.ServiceName%2A?displayProperty=nameWithType> property for the service is set within the Main() function of the service application's executable.</span></span> <span data-ttu-id="3b68f-235">Der Dienststeuerungs-Manager verwendet <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A?displayProperty=nameWithType> die-Eigenschaft, um den Dienst innerhalb dieser ausführbaren Datei zu suchen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-235">The Service Control Manager uses the <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A?displayProperty=nameWithType> property to locate the service within this executable.</span></span>  
+  
+ <span data-ttu-id="3b68f-236">Wenn Sie <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> für das Dienst Installationsprogramm festlegen, wird <xref:System.Diagnostics.EventLog.Source%2A> der des zugeordneten Ereignis Protokolls auf denselben Wert festgelegt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-236">When you set the <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> of the service installer, the <xref:System.Diagnostics.EventLog.Source%2A> of the associated event log is set to the same value.</span></span> <span data-ttu-id="3b68f-237">Dadurch kann der Dienst automatisch Dienst Befehle (z. b. Start-und Start Aufrufe) des Anwendungs Protokolls auf dem Computer protokollieren.</span><span class="sxs-lookup"><span data-stu-id="3b68f-237">This allows the service to automatically log service commands (such as Start and Stop) calls to the Application log on the computer.</span></span>  
+  
+> [!NOTE]
+>  <span data-ttu-id="3b68f-238">Wenn eine Quelle mit demselben Namen bereits auf dem Computer vorhanden ist, aber in einem anderen Protokoll als dem Anwendungsprotokoll, wird eine Ausnahme ausgelöst.</span><span class="sxs-lookup"><span data-stu-id="3b68f-238">If a source by the same name already exists on the computer, but in a log other than the Application log, an exception will be thrown.</span></span> <span data-ttu-id="3b68f-239">Wenn die Quelle vorhanden ist und dem Anwendungsprotokoll zugeordnet ist, wird diese Quelle zum Melden von Befehls aufrufen an den Dienst verwendet, und es wird keine Ausnahme ausgelöst.</span><span class="sxs-lookup"><span data-stu-id="3b68f-239">If the source exists and is associated with the Application log, that source is used to report command calls to the service, and no exception is thrown.</span></span>  
+  
+ <span data-ttu-id="3b68f-240">Der <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> darf `null`  nicht oder die Länge 0 (null) aufweisen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-240">The <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> cannot be `null` or have zero length.</span></span> <span data-ttu-id="3b68f-241">Die maximale Größe beträgt 256 Zeichen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-241">Its maximum size is 256 characters.</span></span> <span data-ttu-id="3b68f-242">Sie darf auch keine vorwärts-oder rückwärts Schrägstriche, '/' oder\\' ', oder Zeichen aus dem ASCII-Zeichensatz mit einem Wert kleiner als Dezimalwert 32 enthalten.</span><span class="sxs-lookup"><span data-stu-id="3b68f-242">It also cannot contain forward or backward slashes, '/' or '\\', or characters from the ASCII character set with value less than decimal value 32.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><span data-ttu-id="3b68f-243">Der Wert der <see cref="P:System.ServiceProcess.ServiceInstaller.ServiceName" />-Eigenschaft ist ungültig.</span><span class="sxs-lookup"><span data-stu-id="3b68f-243">The <see cref="P:System.ServiceProcess.ServiceInstaller.ServiceName" /> property is invalid.</span></span></exception>
+        <altmember cref="P:System.ServiceProcess.ServiceBase.ServiceName" />
+        <altmember cref="P:System.ServiceProcess.ServiceInstaller.DisplayName" />
+      </Docs>
+    </Member>
+    <Member MemberName="ServicesDependedOn">
+      <MemberSignature Language="C#" Value="public string[] ServicesDependedOn { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string[] ServicesDependedOn" />
+      <MemberSignature Language="DocId" Value="P:System.ServiceProcess.ServiceInstaller.ServicesDependedOn" />
+      <MemberSignature Language="VB.NET" Value="Public Property ServicesDependedOn As String()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property cli::array &lt;System::String ^&gt; ^ ServicesDependedOn { cli::array &lt;System::String ^&gt; ^ get(); void set(cli::array &lt;System::String ^&gt; ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.ServicesDependedOn : string[] with get, set" Usage="System.ServiceProcess.ServiceInstaller.ServicesDependedOn" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.ServiceProcess</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ServiceProcess.ServiceProcessDescription("ServiceInstallerServicesDependedOn")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String[]</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="3b68f-244">Gibt an, welche Dienste ausgeführt werden müssen, damit dieser Dienst ausgeführt werden kann.</span><span class="sxs-lookup"><span data-stu-id="3b68f-244">Indicates the services that must be running for this service to run.</span></span></summary>
+        <value><span data-ttu-id="3b68f-245">Ein Array von Diensten, die ausgeführt werden müssen, bevor der diesem Installationsprogramm zugeordnete Dienst ausgeführt werden kann.</span><span class="sxs-lookup"><span data-stu-id="3b68f-245">An array of services that must be running before the service associated with this installer can run.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-246">Ein Dienst kann erfordern, dass andere Dienste ausgeführt werden, bevor er gestartet werden kann.</span><span class="sxs-lookup"><span data-stu-id="3b68f-246">A service can require other services to be running before it can start.</span></span> <span data-ttu-id="3b68f-247">Die Informationen aus dieser Eigenschaft werden in einen Schlüssel in der Registrierung geschrieben.</span><span class="sxs-lookup"><span data-stu-id="3b68f-247">The information from this property is written to a key in the registry.</span></span> <span data-ttu-id="3b68f-248">Wenn der Benutzer (oder das System im Fall eines automatischen Starts) versucht, den Dienst auszuführen, wird vom Dienststeuerungs-Manager (Service Control Manager, SCM) überprüft, ob alle Dienste im Array bereits gestartet wurden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-248">When the user (or the system, in the case of automatic startup) tries to run the service, the Service Control Manager (SCM) verifies that each of the services in the array has already been started.</span></span>  
+  
+ <span data-ttu-id="3b68f-249">Wenn ein Dienst im Array nicht ausgeführt wird, versucht der SCM, Sie zu starten.</span><span class="sxs-lookup"><span data-stu-id="3b68f-249">If any service in the array is not running then, the SCM tries to start them.</span></span> <span data-ttu-id="3b68f-250">Dies schließt Dienste mit `Manual` <xref:System.ServiceProcess.ServiceInstaller.StartType%2A>ein.</span><span class="sxs-lookup"><span data-stu-id="3b68f-250">This includes services with `Manual`<xref:System.ServiceProcess.ServiceInstaller.StartType%2A>.</span></span>  
+  
+ <span data-ttu-id="3b68f-251">Wenn ein Dienst, von dem dieser Dienst abhängt, nicht gestartet werden kann, wird dieser Dienst nicht gestartet.</span><span class="sxs-lookup"><span data-stu-id="3b68f-251">If any service upon which this service depends fails to start, this service will not start.</span></span> <span data-ttu-id="3b68f-252">Eine Ausnahme wird nicht ausgelöst, wenn das System nicht gestartet wurde, weil auf der Systemebene keine Ausnahmebehandlung vorhanden ist, um dies zu erkennen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-252">An exception is not thrown if the system is not started because there is no exception handling at the system level to detect this.</span></span> <span data-ttu-id="3b68f-253">Entscheiden Sie, wie Dienst Start Fehler behandelt und in Ihrem Code implementiert werden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-253">Decide how to handle service start failures and implement this in your code.</span></span> <span data-ttu-id="3b68f-254">In der Regel wird dem Benutzer beim Start ein Dialogfeld angezeigt, wenn ein Dienst nicht gestartet werden kann.</span><span class="sxs-lookup"><span data-stu-id="3b68f-254">Typically, a dialog appears to the user at startup if a service fails to start.</span></span>  
+  
+ <span data-ttu-id="3b68f-255">Wenn der Dienst nicht gestartet wird, wird ein Eintrag in das Anwendungs Ereignisprotokoll geschrieben.</span><span class="sxs-lookup"><span data-stu-id="3b68f-255">If the service does not start, an entry is written to the Application event log.</span></span>  
+  
+ <span data-ttu-id="3b68f-256">Die Dienste, von denen dieser Dienst abhängt, müssen sich nicht in derselben ausführbaren Datei befinden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-256">The services upon which this service depends do not need to be in the same executable.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.ServiceProcess.ServiceInstaller.StartType" />
+      </Docs>
+    </Member>
+    <Member MemberName="StartType">
+      <MemberSignature Language="C#" Value="public System.ServiceProcess.ServiceStartMode StartType { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.ServiceProcess.ServiceStartMode StartType" />
+      <MemberSignature Language="DocId" Value="P:System.ServiceProcess.ServiceInstaller.StartType" />
+      <MemberSignature Language="VB.NET" Value="Public Property StartType As ServiceStartMode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::ServiceProcess::ServiceStartMode StartType { System::ServiceProcess::ServiceStartMode get(); void set(System::ServiceProcess::ServiceStartMode value); };" />
+      <MemberSignature Language="F#" Value="member this.StartType : System.ServiceProcess.ServiceStartMode with get, set" Usage="System.ServiceProcess.ServiceInstaller.StartType" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.ServiceProcess</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(Mono.Cecil.CustomAttributeArgument)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ServiceProcess.ServiceProcessDescription("ServiceInstallerStartType")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.ServiceProcess.ServiceStartMode</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="3b68f-257">Gibt an, wie und wann dieser Dienst gestartet wird.</span><span class="sxs-lookup"><span data-stu-id="3b68f-257">Indicates how and when this service is started.</span></span></summary>
+        <value><span data-ttu-id="3b68f-258">Ein <see cref="T:System.ServiceProcess.ServiceStartMode" />, der die Art und Weise des Dienststarts darstellt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-258">A <see cref="T:System.ServiceProcess.ServiceStartMode" /> that represents the way the service is started.</span></span> <span data-ttu-id="3b68f-259">Die Standardeinstellung <see langword="Manual" /> gibt an, dass der Dienst nach einem Neustart des Computers nicht automatisch gestartet wird.</span><span class="sxs-lookup"><span data-stu-id="3b68f-259">The default is <see langword="Manual" />, which specifies that the service will not automatically start after reboot.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-260">Legen Sie <xref:System.ServiceProcess.ServiceInstaller.StartType%2A> den Wert fest, um anzugeben, dass der Dienst nach dem Neustart automatisch gestartet werden soll oder ob der Dienst manuell von einem Benutzer gestartet werden muss.</span><span class="sxs-lookup"><span data-stu-id="3b68f-260">Set the <xref:System.ServiceProcess.ServiceInstaller.StartType%2A> to specify either that the service be started automatically after reboot or that a user must manually start the service.</span></span> <span data-ttu-id="3b68f-261">Ein Dienst kann auch deaktiviert werden. er gibt an, dass er entweder manuell oder Programm gesteuert gestartet werden kann, bis er aktiviert ist.</span><span class="sxs-lookup"><span data-stu-id="3b68f-261">A service can also be disabled, specifying that it cannot be started, either manually or programmatically, until it is enabled.</span></span>  
+  
+ <span data-ttu-id="3b68f-262">Eigenschaftswerte <xref:System.ServiceProcess.ServiceInstaller> können nach der Installation nicht mehr geändert werden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-262">You cannot change <xref:System.ServiceProcess.ServiceInstaller> property values after installation.</span></span> <span data-ttu-id="3b68f-263">Um das <xref:System.ServiceProcess.ServiceInstaller.StartType%2A>zu ändern, müssen Sie entweder den Dienst deinstallieren und neu installieren oder die Einstellung manuell mithilfe des Dienststeuerungs-Managers ändern.</span><span class="sxs-lookup"><span data-stu-id="3b68f-263">To change the <xref:System.ServiceProcess.ServiceInstaller.StartType%2A>, you either have to uninstall and reinstall your service, or manually change the setting using the Service Control Manager.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"><span data-ttu-id="3b68f-264">Der Startmodus ist kein Wert der <see cref="T:System.ServiceProcess.ServiceStartMode" />-Enumeration.</span><span class="sxs-lookup"><span data-stu-id="3b68f-264">The start mode is not a value of the <see cref="T:System.ServiceProcess.ServiceStartMode" /> enumeration.</span></span></exception>
+        <altmember cref="P:System.ServiceProcess.ServiceProcessInstaller.Account" />
+      </Docs>
+    </Member>
+    <Member MemberName="Uninstall">
+      <MemberSignature Language="C#" Value="public override void Uninstall (System.Collections.IDictionary savedState);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Uninstall(class System.Collections.IDictionary savedState) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.ServiceProcess.ServiceInstaller.Uninstall(System.Collections.IDictionary)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Uninstall (savedState As IDictionary)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Uninstall(System::Collections::IDictionary ^ savedState);" />
+      <MemberSignature Language="F#" Value="override this.Uninstall : System.Collections.IDictionary -&gt; unit" Usage="serviceInstaller.Uninstall savedState" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.ServiceProcess</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="savedState" Type="System.Collections.IDictionary" />
+      </Parameters>
+      <Docs>
+        <param name="savedState"><span data-ttu-id="3b68f-265">Ein <see cref="T:System.Collections.IDictionary" /> mit Kontextinformationen für die Installation.</span><span class="sxs-lookup"><span data-stu-id="3b68f-265">An <see cref="T:System.Collections.IDictionary" /> that contains the context information associated with the installation.</span></span></param>
+        <summary><span data-ttu-id="3b68f-266">Deinstalliert den Dienst, indem die entsprechenden Daten aus der Registrierung entfernt werden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-266">Uninstalls the service by removing information about it from the registry.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="3b68f-267">Deinstallieren Sie zuerst den Dienst, bevor Sie ihn deinstallieren.</span><span class="sxs-lookup"><span data-stu-id="3b68f-267">Uninstall first attempts to stop the service before uninstalling it.</span></span> <span data-ttu-id="3b68f-268">Wenn der Dienst nicht beendet werden kann, wird keine Ausnahme abgefangen, und die Methode wird mit dem Entfernen des Dienstanbieter fortgesetzt.</span><span class="sxs-lookup"><span data-stu-id="3b68f-268">If the service cannot be stopped, no exception is caught, and the method continues with the removal of the service.</span></span>  
+  
+ <span data-ttu-id="3b68f-269">Normalerweise werden Sie die Methoden <xref:System.ServiceProcess.ServiceInstaller> nicht innerhalb Ihres Codes aufrufen. Sie werden in der Regel nur vom Installations Dienstprogramm aufgerufen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-269">Normally, you will not call the methods on <xref:System.ServiceProcess.ServiceInstaller> within your code; they are generally called only by the install utility.</span></span> <span data-ttu-id="3b68f-270">Mit Installutil werden Dienste deinstalliert und installiert. beim Deinstallieren von wird ein Switch in den Befehlszeilen aufzurufen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-270">InstallUtil is used to uninstall services as well as install them; uninstalling takes a switch in the command line call.</span></span>  
+  
+ <span data-ttu-id="3b68f-271">Mit der Deinstallations Routine einer Anwendung werden automatisch Informationen zu den Komponenten, die deinstalliert werden, <xref:System.Configuration.Install.Installer.Context%2A?displayProperty=nameWithType>mithilfe des Projekt Installationsprogramms verwaltet.</span><span class="sxs-lookup"><span data-stu-id="3b68f-271">An application's uninstall routine maintains information automatically about the components being uninstalled, using the project installer's <xref:System.Configuration.Install.Installer.Context%2A?displayProperty=nameWithType>.</span></span> <span data-ttu-id="3b68f-272">Diese <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> Zustandsinformationen, die `savedState` als-Parameter übergeben werden, werden fortlaufend aktualisiert <xref:System.ServiceProcess.ServiceProcessInstaller> , wenn die <xref:System.ServiceProcess.ServiceInstaller> -Instanz und jede Instanz vom-Hilfsprogramm installiert wird.</span><span class="sxs-lookup"><span data-stu-id="3b68f-272">This state information, passed into <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> as the `savedState` parameter, is continuously updated as the <xref:System.ServiceProcess.ServiceProcessInstaller> instance and each <xref:System.ServiceProcess.ServiceInstaller> instance is installed by the utility.</span></span> <span data-ttu-id="3b68f-273">Es ist in der Regel nicht erforderlich, dass Ihr Code diese Zustandsinformationen explizit ändert.</span><span class="sxs-lookup"><span data-stu-id="3b68f-273">It is usually unnecessary for your code to modify this state information explicitly.</span></span>  
+  
+ <span data-ttu-id="3b68f-274">Für alle Klassen, die von <xref:System.Configuration.Install.Installer> der-Klasse abgeleitet werden, <xref:System.Configuration.Install.Installer.Installers%2A> muss der Status der Auflistung in den <xref:System.ServiceProcess.ServiceInstaller.Install%2A> Methoden <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> und identisch sein.</span><span class="sxs-lookup"><span data-stu-id="3b68f-274">For all classes deriving from the <xref:System.Configuration.Install.Installer> class, the state of the <xref:System.Configuration.Install.Installer.Installers%2A> collection must be the same in the <xref:System.ServiceProcess.ServiceInstaller.Install%2A> and <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> methods.</span></span> <span data-ttu-id="3b68f-275">Allerdings können Sie die Wartung der Auflistung in den <xref:System.ServiceProcess.ServiceInstaller.Install%2A> Methoden und <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> vermeiden, wenn Sie der <xref:System.Configuration.Install.Installer.Installers%2A> Auflistung in Ihrem benutzerdefinierten installerklassenkonstruktor Installations Instanzen hinzufügen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-275">However, you can avoid the maintenance of the collection across the <xref:System.ServiceProcess.ServiceInstaller.Install%2A> and <xref:System.ServiceProcess.ServiceInstaller.Uninstall%2A> methods if you add installer instances to the <xref:System.Configuration.Install.Installer.Installers%2A> collection in your custom installer class constructor.</span></span>  
+  
+ <span data-ttu-id="3b68f-276">Es ist kein Rollback-Mechanismus für die Deinstallation vorhanden. Wenn also ein Dienst nicht deinstalliert werden kann, wirkt sich dies nicht auf die anderen Dienste (normalerweise innerhalb desselben Installations Projekts) aus, die deinstalliert werden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-276">There is no rollback mechanism for uninstalling, so if one service fails to uninstall, this does not affect the other services (usually within the same installation project) being uninstalled.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ComponentModel.Win32Exception"><span data-ttu-id="3b68f-277">Der Dienststeuerungs-Manager konnte nicht geöffnet werden.</span><span class="sxs-lookup"><span data-stu-id="3b68f-277">The Service Control Manager could not be opened.</span></span>  
+  
+ <span data-ttu-id="3b68f-278">- oder -</span><span class="sxs-lookup"><span data-stu-id="3b68f-278">-or-</span></span>  
+  
+ <span data-ttu-id="3b68f-279">Das System konnte kein Handle für den Dienst abrufen.</span><span class="sxs-lookup"><span data-stu-id="3b68f-279">The system could not get a handle to the service.</span></span></exception>
+        <altmember cref="M:System.ServiceProcess.ServiceInstaller.Install(System.Collections.IDictionary)" />
+      </Docs>
+    </Member>
+  </Members>
+</Type>
