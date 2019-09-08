@@ -1,0 +1,1237 @@
+<Type Name="SqlCommandBuilder" FullName="System.Data.SqlClient.SqlCommandBuilder">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="c73e1f310be857a9d1632ca6c3cd57f39415883c" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70720505" /></Metadata><TypeSignature Language="C#" Value="public sealed class SqlCommandBuilder : System.Data.Common.DbCommandBuilder" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit SqlCommandBuilder extends System.Data.Common.DbCommandBuilder" />
+  <TypeSignature Language="DocId" Value="T:System.Data.SqlClient.SqlCommandBuilder" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class SqlCommandBuilder&#xA;Inherits DbCommandBuilder" />
+  <TypeSignature Language="C++ CLI" Value="public ref class SqlCommandBuilder sealed : System::Data::Common::DbCommandBuilder" />
+  <TypeSignature Language="F#" Value="type SqlCommandBuilder = class&#xA;    inherit DbCommandBuilder" />
+  <AssemblyInfo>
+    <AssemblyName>System.Data</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Data.SqlClient</AssemblyName>
+    <AssemblyVersion>4.4.0.0</AssemblyVersion>
+    <AssemblyVersion>4.5.0.0</AssemblyVersion>
+    <AssemblyVersion>4.6.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Data.Common.DbCommandBuilder</BaseTypeName>
+    <BaseTypeName FrameworkAlternate="netframework-1.1">System.ComponentModel.Component</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>Generiert automatisch Befehle für einzelne Tabellen, durch die an einem <see cref="T:System.Data.DataSet" /> vorgenommene Änderungen mit der zugeordneten SQL Server-Datenbank abgeglichen werden. Diese Klasse kann nicht vererbt werden.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Der <xref:System.Data.SqlClient.SqlDataAdapter> generiert nicht automatisch die Transact-SQL-Anweisungen, die erforderlich sind, um an <xref:System.Data.DataSet> einem vorgenommene Änderungen mit der zugeordneten Instanz von SQL Server abzustimmen. Sie können jedoch ein <xref:System.Data.SqlClient.SqlCommandBuilder> -Objekt erstellen, um automatisch Transact-SQL-Anweisungen für Aktualisierungen in einer Tabelle zu generieren, wenn Sie die <xref:System.Data.SqlClient.SqlDataAdapter> <xref:System.Data.SqlClient.SqlDataAdapter.SelectCommand%2A> -Eigenschaft von festlegen. Anschließend werden alle weiteren Transact-SQL-Anweisungen, die Sie nicht festlegen, von <xref:System.Data.SqlClient.SqlCommandBuilder>generiert.  
+  
+ Die <xref:System.Data.SqlClient.SqlCommandBuilder> registriert sich selbst als Listener für <xref:System.Data.SqlClient.SqlDataAdapter.RowUpdating> Ereignisse, wenn Sie die <xref:System.Data.SqlClient.SqlCommandBuilder.DataAdapter%2A> -Eigenschaft festlegen. Sie können jeweils nur ein <xref:System.Data.SqlClient.SqlDataAdapter> oder <xref:System.Data.SqlClient.SqlCommandBuilder> ein Objekt gleichzeitig zuordnen.  
+  
+ Zum Generieren von INSERT-, Update-oder DELETE- <xref:System.Data.SqlClient.SqlCommandBuilder> Anweisungen <xref:System.Data.SqlClient.SqlDataAdapter.SelectCommand%2A> verwendet die-Eigenschaft, um einen erforderlichen Satz von Metadaten automatisch abzurufen. Wenn Sie das <xref:System.Data.SqlClient.SqlDataAdapter.SelectCommand%2A> nach dem Abrufen der Metadaten ändern, z. b. nach dem ersten Update, sollten Sie die <xref:System.Data.Common.DbCommandBuilder.RefreshSchema%2A> -Methode zum Aktualisieren der Metadaten abrufen.  
+  
+ Der `SelectCommand` muss außerdem mindestens einen Primärschlüssel oder eine eindeutige Spalte zurückgeben. Wenn keines vorhanden ist, wird eine **InvalidOperation** -Ausnahme generiert, und die Befehle werden nicht generiert.  
+  
+ Der <xref:System.Data.SqlClient.SqlCommandBuilder> verwendet auch die <xref:System.Data.SqlClient.SqlCommand.Connection%2A>Eigenschaften <xref:System.Data.SqlClient.SqlCommand.CommandTimeout%2A>, und <xref:System.Data.SqlClient.SqlCommand.Transaction%2A> , auf die von <xref:System.Data.SqlClient.SqlDataAdapter.SelectCommand%2A>verwiesen wird. Der Benutzer sollte anrufen <xref:System.Data.Common.DbCommandBuilder.RefreshSchema%2A> , wenn eine oder mehrere dieser Eigenschaften geändert werden, oder wenn der <xref:System.Data.SqlClient.SqlDataAdapter.SelectCommand%2A> selbst ersetzt wird. Andernfalls behalten <xref:System.Data.SqlClient.SqlDataAdapter.InsertCommand%2A>die <xref:System.Data.SqlClient.SqlDataAdapter.UpdateCommand%2A>Eigenschaften, <xref:System.Data.SqlClient.SqlDataAdapter.DeleteCommand%2A> und Ihre vorherigen Werte bei.  
+  
+ Wenn Sie aufzurufen <xref:System.ComponentModel.Component.Dispose%2A>, <xref:System.Data.SqlClient.SqlCommandBuilder> <xref:System.Data.SqlClient.SqlDataAdapter>wird die Zuordnung der aufgehoben, und die generierten Befehle werden nicht mehr verwendet.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel <xref:System.Data.SqlClient.SqlCommand>werden, zusammen <xref:System.Data.SqlClient.SqlDataAdapter> und <xref:System.Data.SqlClient.SqlConnection>, verwendet, um Zeilen aus einer Datenquelle auszuwählen. Dem Beispiel wird eine Verbindungs Zeichenfolge, eine Abfrage Zeichenfolge, die eine SELECT-Anweisung von Transact-SQL ist, und eine Zeichenfolge, die den Namen der Datenbanktabelle ist, Im Beispiel wird dann ein <xref:System.Data.SqlClient.SqlCommandBuilder>erstellt.  
+  
+ [!code-csharp[Classic WebData SqlCommandBuilder#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData SqlCommandBuilder/CS/Source.cs#1)]
+ [!code-vb[Classic WebData SqlCommandBuilder#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData SqlCommandBuilder/VB/Source.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Abrufen und Ändern von Daten in ADO.NET</related>
+    <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">SQL Server und ADO.NET</related>
+    <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Data.SqlClient.SqlCommandBuilder" />-Klasse.</summary>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SqlCommandBuilder ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SqlCommandBuilder();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Data.SqlClient.SqlCommandBuilder" />-Klasse.</summary>
+        <remarks>To be added.</remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SqlCommandBuilder (System.Data.SqlClient.SqlDataAdapter adapter);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Data.SqlClient.SqlDataAdapter adapter) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.#ctor(System.Data.SqlClient.SqlDataAdapter)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (adapter As SqlDataAdapter)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SqlCommandBuilder(System::Data::SqlClient::SqlDataAdapter ^ adapter);" />
+      <MemberSignature Language="F#" Value="new System.Data.SqlClient.SqlCommandBuilder : System.Data.SqlClient.SqlDataAdapter -&gt; System.Data.SqlClient.SqlCommandBuilder" Usage="new System.Data.SqlClient.SqlCommandBuilder adapter" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="adapter" Type="System.Data.SqlClient.SqlDataAdapter" />
+      </Parameters>
+      <Docs>
+        <param name="adapter">Der Name des <see cref="T:System.Data.SqlClient.SqlDataAdapter" />.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Data.SqlClient.SqlCommandBuilder" />-Klasse mit dem zugeordneten <see cref="T:System.Data.SqlClient.SqlDataAdapter" />-Objekt.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Registriert sich selbst als Listener für <xref:System.Data.SqlClient.SqlDataAdapter.RowUpdating> Ereignisse <xref:System.Data.SqlClient.SqlDataAdapter> , die vom angegebenen in dieser Eigenschaft generiert werden. <xref:System.Data.SqlClient.SqlCommandBuilder>  
+  
+ Wenn Sie eine neue Instanz von <xref:System.Data.SqlClient.SqlCommandBuilder>erstellen, werden alle vorhandenen <xref:System.Data.SqlClient.SqlCommandBuilder> , die <xref:System.Data.SqlClient.SqlDataAdapter> diesem zugeordnet sind, freigegeben.  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="ApplyParameterInfo">
+      <MemberSignature Language="C#" Value="protected override void ApplyParameterInfo (System.Data.Common.DbParameter parameter, System.Data.DataRow datarow, System.Data.StatementType statementType, bool whereClause);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void ApplyParameterInfo(class System.Data.Common.DbParameter parameter, class System.Data.DataRow datarow, valuetype System.Data.StatementType statementType, bool whereClause) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.ApplyParameterInfo(System.Data.Common.DbParameter,System.Data.DataRow,System.Data.StatementType,System.Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override void ApplyParameterInfo(System::Data::Common::DbParameter ^ parameter, System::Data::DataRow ^ datarow, System::Data::StatementType statementType, bool whereClause);" />
+      <MemberSignature Language="F#" Value="override this.ApplyParameterInfo : System.Data.Common.DbParameter * System.Data.DataRow * System.Data.StatementType * bool -&gt; unit" Usage="sqlCommandBuilder.ApplyParameterInfo (parameter, datarow, statementType, whereClause)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="parameter" Type="System.Data.Common.DbParameter" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="datarow" Type="System.Data.DataRow" Index="1" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="statementType" Type="System.Data.StatementType" Index="2" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="whereClause" Type="System.Boolean" Index="3" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="parameter">To be added.</param>
+        <param name="datarow">To be added.</param>
+        <param name="statementType">To be added.</param>
+        <param name="whereClause">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CatalogLocation">
+      <MemberSignature Language="C#" Value="public override System.Data.Common.CatalogLocation CatalogLocation { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Data.Common.CatalogLocation CatalogLocation" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlCommandBuilder.CatalogLocation" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Property CatalogLocation As CatalogLocation" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Data::Common::CatalogLocation CatalogLocation { System::Data::Common::CatalogLocation get(); void set(System::Data::Common::CatalogLocation value); };" />
+      <MemberSignature Language="F#" Value="member this.CatalogLocation : System.Data.Common.CatalogLocation with get, set" Usage="System.Data.SqlClient.SqlCommandBuilder.CatalogLocation" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.Browsable(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;xamarinandroid-7.1;xamarinios-10.8;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0">
+          <AttributeName>System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;xamarinandroid-7.1;xamarinios-10.8;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0">
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Data.Common.CatalogLocation</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Legt die <see cref="T:System.Data.Common.CatalogLocation" /> für eine Instanz der <see cref="T:System.Data.SqlClient.SqlCommandBuilder" />-Klasse fest oder ruft diese ab.</summary>
+        <value>Ein <see cref="T:System.Data.Common.CatalogLocation" />-Objekt.</value>
+        <remarks>To be added.</remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="CatalogSeparator">
+      <MemberSignature Language="C#" Value="public override string CatalogSeparator { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string CatalogSeparator" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlCommandBuilder.CatalogSeparator" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Property CatalogSeparator As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ CatalogSeparator { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.CatalogSeparator : string with get, set" Usage="System.Data.SqlClient.SqlCommandBuilder.CatalogSeparator" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.Browsable(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;xamarinandroid-7.1;xamarinios-10.8;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0">
+          <AttributeName>System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;xamarinandroid-7.1;xamarinios-10.8;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0">
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Legt eine Zeichenfolge als Katalogtrennzeichen für eine Instanz der <see cref="T:System.Data.SqlClient.SqlCommandBuilder" />-Klasse fest oder ruft diese ab.</summary>
+        <value>Eine Zeichenfolge, die das Katalogtrennzeichen zur Verwendung mit einer Instanz der <see cref="T:System.Data.SqlClient.SqlCommandBuilder" />-Klasse angibt.</value>
+        <remarks>To be added.</remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="DataAdapter">
+      <MemberSignature Language="C#" Value="public System.Data.SqlClient.SqlDataAdapter DataAdapter { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Data.SqlClient.SqlDataAdapter DataAdapter" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlCommandBuilder.DataAdapter" />
+      <MemberSignature Language="VB.NET" Value="Public Property DataAdapter As SqlDataAdapter" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Data::SqlClient::SqlDataAdapter ^ DataAdapter { System::Data::SqlClient::SqlDataAdapter ^ get(); void set(System::Data::SqlClient::SqlDataAdapter ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.DataAdapter : System.Data.SqlClient.SqlDataAdapter with get, set" Usage="System.Data.SqlClient.SqlCommandBuilder.DataAdapter" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.DefaultValue(null)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-1.1">
+          <AttributeName>System.Data.DataSysDescription("SqlCommandBuilder_DataAdapter")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Data.SqlClient.SqlDataAdapter</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft ein <see cref="T:System.Data.SqlClient.SqlDataAdapter" />-Objekt ab, für das automatisch Transact-SQL-Anweisungen generiert werden, oder legt dieses fest.</summary>
+        <value>Ein <see cref="T:System.Data.SqlClient.SqlDataAdapter" />-Objekt.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Registriert sich selbst als Listener für <xref:System.Data.SqlClient.SqlDataAdapter.RowUpdating> Ereignisse <xref:System.Data.SqlClient.SqlDataAdapter> , die vom angegebenen in dieser Eigenschaft generiert werden. <xref:System.Data.SqlClient.SqlCommandBuilder>  
+  
+ Wenn Sie eine neue Instanz von <xref:System.Data.SqlClient.SqlCommandBuilder>erstellen, werden alle vorhandenen <xref:System.Data.SqlClient.SqlCommandBuilder> , die <xref:System.Data.SqlClient.SqlDataAdapter> diesem zugeordnet sind, freigegeben.  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="DeriveParameters">
+      <MemberSignature Language="C#" Value="public static void DeriveParameters (System.Data.SqlClient.SqlCommand command);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void DeriveParameters(class System.Data.SqlClient.SqlCommand command) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.DeriveParameters(System.Data.SqlClient.SqlCommand)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub DeriveParameters (command As SqlCommand)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void DeriveParameters(System::Data::SqlClient::SqlCommand ^ command);" />
+      <MemberSignature Language="F#" Value="static member DeriveParameters : System.Data.SqlClient.SqlCommand -&gt; unit" Usage="System.Data.SqlClient.SqlCommandBuilder.DeriveParameters command" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="command" Type="System.Data.SqlClient.SqlCommand" />
+      </Parameters>
+      <Docs>
+        <param name="command">Der <see cref="T:System.Data.SqlClient.SqlCommand" />, der auf die gespeicherte Prozedur verweist, von der die Parameterinformationen abgeleitet werden sollen. Die abgeleiteten Parameter werden der <see cref="P:System.Data.SqlClient.SqlCommand.Parameters" />-Auflistung von <see cref="T:System.Data.SqlClient.SqlCommand" /> hinzugefügt.</param>
+        <summary>Ruft Parameterinformationen aus der im <see cref="T:System.Data.SqlClient.SqlCommand" /> angegebenen gespeicherten Prozedur ab und füllt die <see cref="P:System.Data.SqlClient.SqlCommand.Parameters" />-Auflistung des angegebenen <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekts auf.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ `DeriveParameters`überschreibt alle vorhandenen Parameterinformationen für den `SqlDbCommand`.  
+  
+ `DeriveParameters`erfordert einen zusätzlichen Daten Bank Abruf, um die Informationen zu erhalten. Wenn die Parameterinformationen im Voraus bekannt sind, ist es effizienter, die Parameter Auflistung aufzufüllen, indem die Informationen explizit festgelegt werden.  
+  
+ Sie können nur mit `DeriveParameters` gespeicherten Prozeduren verwenden. Sie können nicht `DeriveParameters` mit erweiterten gespeicherten Prozeduren verwenden. Sie können nicht `DeriveParameters` verwenden, um <xref:System.Data.SqlClient.SqlParameterCollection> mit beliebigen Transact-SQL-Anweisungen, z. b. eine parametrisierte SELECT-Anweisung, aufzufüllen.  
+  
+ Weitere Informationen finden Sie unter [Konfigurieren von Parametern und Parameter Datentypen](~/docs/framework/data/adonet/configuring-parameters-and-parameter-data-types.md).  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">Der Befehlstext ist kein gültiger gespeicherter Prozedurname.</exception>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Dispose">
+      <MemberSignature Language="C#" Value="protected override void Dispose (bool disposing);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void Dispose(bool disposing) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.Dispose(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Sub Dispose (disposing As Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override void Dispose(bool disposing);" />
+      <MemberSignature Language="F#" Value="override this.Dispose : bool -&gt; unit" Usage="sqlCommandBuilder.Dispose disposing" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="disposing" Type="System.Boolean" Index="0" FrameworkAlternate="netframework-1.1" />
+      </Parameters>
+      <Docs>
+        <param name="disposing">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="GetDeleteCommand">
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Ruft das automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt ab, das für die Ausführung von Löschvorgängen in der Datenbank erforderlich ist.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Eine Anwendung kann die <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A> -Methode zu Informationszwecken oder zur Problembehandlung verwenden, da Sie das <xref:System.Data.SqlClient.SqlCommand> auszuführende Objekt zurückgibt.  
+  
+ Sie können auch als <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A> Grundlage für einen geänderten Befehl verwenden. Beispielsweise können Sie den <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A> <xref:System.Data.SqlClient.SqlCommand.CommandTimeout%2A> -Wert aufzurufen und ändern und ihn dann <xref:System.Data.SqlClient.SqlDataAdapter>explizit auf festlegen.  
+  
+ Nachdem die SQL-Anweisung erstmalig generiert wurde, muss die <xref:System.Data.Common.DbCommandBuilder.RefreshSchema%2A> Anwendung explizit aufzurufen, wenn Sie die-Anweisung in beliebiger Weise ändert. Andernfalls verwendet das <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A> weiterhin Informationen aus der vorherigen Anweisung, die möglicherweise nicht korrekt sind. Die SQL-Anweisungen werden zuerst generiert, wenn die Anwendung <xref:System.Data.Common.DbDataAdapter.Update%2A> entweder <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A>oder aufruft.  
+  
+ Weitere Informationen finden Sie unter [Erstellen von Befehlen mit CommandBuilder](~/docs/framework/data/adonet/generating-commands-with-commandbuilders.md).  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="GetDeleteCommand">
+      <MemberSignature Language="C#" Value="public System.Data.SqlClient.SqlCommand GetDeleteCommand ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Data.SqlClient.SqlCommand GetDeleteCommand() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetDeleteCommand () As SqlCommand" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::SqlClient::SqlCommand ^ GetDeleteCommand();" />
+      <MemberSignature Language="F#" Value="override this.GetDeleteCommand : unit -&gt; System.Data.SqlClient.SqlCommand" Usage="sqlCommandBuilder.GetDeleteCommand " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.SqlClient.SqlCommand</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Ruft das automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt ab, das für die Ausführung von Löschvorgängen in der Datenbank erforderlich ist.</summary>
+        <returns>Das für Löschvorgänge erforderliche, automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Eine Anwendung kann die <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A> -Methode zu Informationszwecken oder zur Problembehandlung verwenden, da Sie das <xref:System.Data.SqlClient.SqlCommand> auszuführende Objekt zurückgibt.  
+  
+ Sie können auch als <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A> Grundlage für einen geänderten Befehl verwenden. Beispielsweise können Sie den <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A> <xref:System.Data.SqlClient.SqlCommand.CommandTimeout%2A> -Wert aufzurufen und ändern und ihn dann <xref:System.Data.SqlClient.SqlDataAdapter>explizit auf festlegen.  
+  
+ Nachdem die SQL-Anweisung erstmalig generiert wurde, muss die <xref:System.Data.Common.DbCommandBuilder.RefreshSchema%2A> Anwendung explizit aufzurufen, wenn Sie die-Anweisung in beliebiger Weise ändert. Andernfalls verwendet das <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A> weiterhin Informationen aus der vorherigen Anweisung, die möglicherweise nicht korrekt sind. Die SQL-Anweisungen werden zuerst generiert, wenn die Anwendung <xref:System.Data.Common.DbDataAdapter.Update%2A> entweder <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A>oder aufruft.  
+  
+ Weitere Informationen finden Sie unter [Erstellen von Befehlen mit CommandBuilder](~/docs/framework/data/adonet/generating-commands-with-commandbuilders.md).  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetDeleteCommand">
+      <MemberSignature Language="C#" Value="public System.Data.SqlClient.SqlCommand GetDeleteCommand (bool useColumnsForParameterNames);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Data.SqlClient.SqlCommand GetDeleteCommand(bool useColumnsForParameterNames) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetDeleteCommand (useColumnsForParameterNames As Boolean) As SqlCommand" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::SqlClient::SqlCommand ^ GetDeleteCommand(bool useColumnsForParameterNames);" />
+      <MemberSignature Language="F#" Value="override this.GetDeleteCommand : bool -&gt; System.Data.SqlClient.SqlCommand" Usage="sqlCommandBuilder.GetDeleteCommand useColumnsForParameterNames" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.SqlClient.SqlCommand</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="useColumnsForParameterNames" Type="System.Boolean" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="useColumnsForParameterNames">Generiert beim Wert <see langword="true" /> Parameternamen, die den Spaltennamen entsprechen (falls möglich). Bei <see langword="false" /> wird <c>@p1</c>, <c>@p2</c> usw. generiert.</param>
+        <summary>Ruft das automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt ab, das für die Ausführung von Löschvorgängen in der Datenbank erforderlich ist.</summary>
+        <returns>Das für Löschvorgänge erforderliche, automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Eine Anwendung kann die <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A> -Methode zu Informationszwecken oder zur Problembehandlung verwenden, da Sie das <xref:System.Data.SqlClient.SqlCommand> auszuführende Objekt zurückgibt.  
+  
+ Sie können auch als <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A> Grundlage für einen geänderten Befehl verwenden. Beispielsweise können Sie den <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A> <xref:System.Data.SqlClient.SqlCommand.CommandTimeout%2A> -Wert aufzurufen und ändern und ihn dann <xref:System.Data.SqlClient.SqlDataAdapter>explizit auf festlegen.  
+  
+ Nachdem die SQL-Anweisung erstmalig generiert wurde, muss die <xref:System.Data.Common.DbCommandBuilder.RefreshSchema%2A> Anwendung explizit aufzurufen, wenn Sie die-Anweisung in beliebiger Weise ändert. Andernfalls verwendet das <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A> weiterhin Informationen aus der vorherigen Anweisung, die möglicherweise nicht korrekt sind. Die SQL-Anweisungen werden zuerst generiert, wenn die Anwendung <xref:System.Data.Common.DbDataAdapter.Update%2A> entweder <xref:System.Data.SqlClient.SqlCommandBuilder.GetDeleteCommand%2A>oder aufruft.  
+  
+ Das Standardverhalten bei der Erstellung von Parameternamen besteht darin, `@p1`, `@p2`usw. für die verschiedenen Parameter zu verwenden. Wenn `true` Sie für `useColumnsForParameterNames` den- <xref:System.Data.OleDb.OleDbCommandBuilder> Parameter übergeben, können Sie erzwingen, dass Parameter auf der Grundlage der Spaltennamen generieren. Dies ist nur erfolgreich, wenn die folgenden Bedingungen erfüllt sind:  
+  
+-   Der <xref:System.Data.Common.DbMetaDataColumnNames.ParameterNameMaxLength> , der vom **GetSchema** -Methoden Aufrufwert zurück <xref:System.Data.Common.DbMetaDataCollectionNames.DataSourceInformation> gegeben und in der Auflistung gefunden wurde, wurde angegeben, und seine Länge ist gleich oder größer als der generierte Parameter Name.  
+  
+-   Der generierte Parameter Name erfüllt die Kriterien, die in <xref:System.Data.Common.DbMetaDataColumnNames.ParameterNamePattern> der von der **GetSchema** -Methode zurückgegebenen enthalten sind <xref:System.Data.Common.DbMetaDataCollectionNames.DataSourceInformation> und im regulären Ausdruck der Auflistung enthalten sind.  
+  
+-   Ein <xref:System.Data.Common.DbMetaDataColumnNames.ParameterMarkerFormat> , der vom **GetSchema** -Methoden Aufrufwert zurück <xref:System.Data.Common.DbMetaDataCollectionNames.DataSourceInformation> gegeben und in der Auflistung gefunden wird, wird angegeben.  
+  
+ Weitere Informationen finden Sie unter [Erstellen von Befehlen mit CommandBuilder](~/docs/framework/data/adonet/generating-commands-with-commandbuilders.md).  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="GetInsertCommand">
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Ruft das automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt ab, das für das Ausführen von Einfügevorgängen in der Datenbank erforderlich ist.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Eine Anwendung kann die <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A> -Methode zu Informationszwecken oder zur Problembehandlung verwenden, da Sie das <xref:System.Data.SqlClient.SqlCommand> auszuführende Objekt zurückgibt.  
+  
+ Sie können auch als <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A> Grundlage für einen geänderten Befehl verwenden. Beispielsweise können Sie den <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A> <xref:System.Data.SqlClient.SqlCommand.CommandTimeout%2A> -Wert aufzurufen und ändern und ihn dann <xref:System.Data.SqlClient.SqlDataAdapter>explizit auf festlegen.  
+  
+ Nachdem die Transact-SQL-Anweisung erstmalig generiert wurde, muss die <xref:System.Data.Common.DbCommandBuilder.RefreshSchema%2A> Anwendung explizit aufzurufen, wenn Sie die-Anweisung in beliebiger Weise ändert. Andernfalls verwendet das <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A> weiterhin Informationen aus der vorherigen Anweisung, die möglicherweise nicht korrekt sind. Die Transact-SQL-Anweisungen werden zuerst generiert, wenn die Anwendung <xref:System.Data.Common.DbDataAdapter.Update%2A> entweder <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A>oder aufruft.  
+  
+ Weitere Informationen finden Sie unter [Erstellen von Befehlen mit CommandBuilder](~/docs/framework/data/adonet/generating-commands-with-commandbuilders.md).  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="GetInsertCommand">
+      <MemberSignature Language="C#" Value="public System.Data.SqlClient.SqlCommand GetInsertCommand ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Data.SqlClient.SqlCommand GetInsertCommand() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetInsertCommand () As SqlCommand" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::SqlClient::SqlCommand ^ GetInsertCommand();" />
+      <MemberSignature Language="F#" Value="override this.GetInsertCommand : unit -&gt; System.Data.SqlClient.SqlCommand" Usage="sqlCommandBuilder.GetInsertCommand " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.SqlClient.SqlCommand</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Ruft das automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt ab, das für das Ausführen von Einfügevorgängen in der Datenbank erforderlich ist.</summary>
+        <returns>Das für Einfügevorgänge erforderliche, automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Eine Anwendung kann die <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A> -Methode zu Informationszwecken oder zur Problembehandlung verwenden, da Sie das <xref:System.Data.SqlClient.SqlCommand> auszuführende Objekt zurückgibt.  
+  
+ Sie können auch als <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A> Grundlage für einen geänderten Befehl verwenden. Beispielsweise können Sie den <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A> <xref:System.Data.SqlClient.SqlCommand.CommandTimeout%2A> -Wert aufzurufen und ändern und ihn dann <xref:System.Data.SqlClient.SqlDataAdapter>explizit auf festlegen.  
+  
+ Nachdem die Transact-SQL-Anweisung erstmalig generiert wurde, muss die <xref:System.Data.Common.DbCommandBuilder.RefreshSchema%2A> Anwendung explizit aufzurufen, wenn Sie die-Anweisung in beliebiger Weise ändert. Andernfalls verwendet das <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A> weiterhin Informationen aus der vorherigen Anweisung, die möglicherweise nicht korrekt sind. Die Transact-SQL-Anweisungen werden zuerst generiert, wenn die Anwendung <xref:System.Data.Common.DbDataAdapter.Update%2A> entweder <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A>oder aufruft.  
+  
+ Weitere Informationen finden Sie unter [Erstellen von Befehlen mit CommandBuilder](~/docs/framework/data/adonet/generating-commands-with-commandbuilders.md).  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetInsertCommand">
+      <MemberSignature Language="C#" Value="public System.Data.SqlClient.SqlCommand GetInsertCommand (bool useColumnsForParameterNames);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Data.SqlClient.SqlCommand GetInsertCommand(bool useColumnsForParameterNames) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetInsertCommand (useColumnsForParameterNames As Boolean) As SqlCommand" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::SqlClient::SqlCommand ^ GetInsertCommand(bool useColumnsForParameterNames);" />
+      <MemberSignature Language="F#" Value="override this.GetInsertCommand : bool -&gt; System.Data.SqlClient.SqlCommand" Usage="sqlCommandBuilder.GetInsertCommand useColumnsForParameterNames" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.SqlClient.SqlCommand</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="useColumnsForParameterNames" Type="System.Boolean" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="useColumnsForParameterNames">Generiert beim Wert <see langword="true" /> Parameternamen, die den Spaltennamen entsprechen (falls möglich). Bei <see langword="false" /> wird <c>@p1</c>, <c>@p2</c> usw. generiert.</param>
+        <summary>Ruft das automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt ab, das für das Ausführen von Einfügevorgängen in der Datenbank erforderlich ist.</summary>
+        <returns>Das für Einfügevorgänge erforderliche, automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Eine Anwendung kann die <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A> -Methode zu Informationszwecken oder zur Problembehandlung verwenden, da Sie das <xref:System.Data.SqlClient.SqlCommand> auszuführende Objekt zurückgibt.  
+  
+ Sie können auch als <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A> Grundlage für einen geänderten Befehl verwenden. Beispielsweise können Sie den <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A> <xref:System.Data.SqlClient.SqlCommand.CommandTimeout%2A> -Wert aufzurufen und ändern und ihn dann <xref:System.Data.SqlClient.SqlDataAdapter>explizit auf festlegen.  
+  
+ Nachdem die Transact-SQL-Anweisung erstmalig generiert wurde, muss die <xref:System.Data.Common.DbCommandBuilder.RefreshSchema%2A> Anwendung explizit aufzurufen, wenn Sie die-Anweisung in beliebiger Weise ändert. Andernfalls verwendet das <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A> weiterhin Informationen aus der vorherigen Anweisung, die möglicherweise nicht korrekt sind. Die Transact-SQL-Anweisungen werden zuerst generiert, wenn die Anwendung <xref:System.Data.Common.DbDataAdapter.Update%2A> entweder <xref:System.Data.SqlClient.SqlCommandBuilder.GetInsertCommand%2A>oder aufruft.  
+  
+ Das Standardverhalten bei der Erstellung von Parameternamen besteht darin, `@p1`, `@p2`usw. für die verschiedenen Parameter zu verwenden. Wenn `true` Sie für `useColumnsForParameterNames` den- <xref:System.Data.OleDb.OleDbCommandBuilder> Parameter übergeben, können Sie erzwingen, dass Parameter auf der Grundlage der Spaltennamen generieren. Dies ist nur erfolgreich, wenn die folgenden Bedingungen erfüllt sind:  
+  
+-   Der <xref:System.Data.Common.DbMetaDataColumnNames.ParameterNameMaxLength> , der vom **GetSchema** -Methoden Aufrufwert zurück <xref:System.Data.Common.DbMetaDataCollectionNames.DataSourceInformation> gegeben und in der Auflistung gefunden wurde, wurde angegeben, und seine Länge ist gleich oder größer als der generierte Parameter Name.  
+  
+-   Der generierte Parameter Name erfüllt die Kriterien, die in <xref:System.Data.Common.DbMetaDataColumnNames.ParameterNamePattern> der von der **GetSchema** -Methode zurückgegebenen enthalten sind <xref:System.Data.Common.DbMetaDataCollectionNames.DataSourceInformation> und im regulären Ausdruck der Auflistung enthalten sind.  
+  
+-   Ein <xref:System.Data.Common.DbMetaDataColumnNames.ParameterMarkerFormat> , der vom **GetSchema** -Methoden Aufrufwert zurück <xref:System.Data.Common.DbMetaDataCollectionNames.DataSourceInformation> gegeben und in der Auflistung gefunden wird, wird angegeben.  
+  
+ Weitere Informationen finden Sie unter [Erstellen von Befehlen mit CommandBuilder](~/docs/framework/data/adonet/generating-commands-with-commandbuilders.md).  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetParameterName">
+      <MemberSignature Language="C#" Value="protected override string GetParameterName (int parameterOrdinal);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance string GetParameterName(int32 parameterOrdinal) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.GetParameterName(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Function GetParameterName (parameterOrdinal As Integer) As String" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override System::String ^ GetParameterName(int parameterOrdinal);" />
+      <MemberSignature Language="F#" Value="override this.GetParameterName : int -&gt; string" Usage="sqlCommandBuilder.GetParameterName parameterOrdinal" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="parameterOrdinal" Type="System.Int32" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="parameterOrdinal">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetParameterName">
+      <MemberSignature Language="C#" Value="protected override string GetParameterName (string parameterName);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance string GetParameterName(string parameterName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.GetParameterName(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Function GetParameterName (parameterName As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override System::String ^ GetParameterName(System::String ^ parameterName);" />
+      <MemberSignature Language="F#" Value="override this.GetParameterName : string -&gt; string" Usage="sqlCommandBuilder.GetParameterName parameterName" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="parameterName" Type="System.String" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="parameterName">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetParameterPlaceholder">
+      <MemberSignature Language="C#" Value="protected override string GetParameterPlaceholder (int parameterOrdinal);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance string GetParameterPlaceholder(int32 parameterOrdinal) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.GetParameterPlaceholder(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Function GetParameterPlaceholder (parameterOrdinal As Integer) As String" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override System::String ^ GetParameterPlaceholder(int parameterOrdinal);" />
+      <MemberSignature Language="F#" Value="override this.GetParameterPlaceholder : int -&gt; string" Usage="sqlCommandBuilder.GetParameterPlaceholder parameterOrdinal" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="parameterOrdinal" Type="System.Int32" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="parameterOrdinal">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetSchemaTable">
+      <MemberSignature Language="C#" Value="protected override System.Data.DataTable GetSchemaTable (System.Data.Common.DbCommand srcCommand);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance class System.Data.DataTable GetSchemaTable(class System.Data.Common.DbCommand srcCommand) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.GetSchemaTable(System.Data.Common.DbCommand)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Function GetSchemaTable (srcCommand As DbCommand) As DataTable" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override System::Data::DataTable ^ GetSchemaTable(System::Data::Common::DbCommand ^ srcCommand);" />
+      <MemberSignature Language="F#" Value="override this.GetSchemaTable : System.Data.Common.DbCommand -&gt; System.Data.DataTable" Usage="sqlCommandBuilder.GetSchemaTable srcCommand" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.DataTable</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="srcCommand" Type="System.Data.Common.DbCommand" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="srcCommand">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="GetUpdateCommand">
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Ruft das automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt ab, das für das Ausführen von Aktualisierungen in der Datenbank erforderlich ist.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Eine Anwendung kann die <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A> -Methode zu Informationszwecken oder zur Problembehandlung verwenden, da Sie das <xref:System.Data.SqlClient.SqlCommand> auszuführende Objekt zurückgibt.  
+  
+ Sie können auch als <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A> Grundlage für einen geänderten Befehl verwenden. Beispielsweise können Sie den <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A> <xref:System.Data.SqlClient.SqlCommand.CommandTimeout%2A> -Wert aufzurufen und ändern und ihn dann <xref:System.Data.SqlClient.SqlDataAdapter>explizit auf festlegen.  
+  
+ Nachdem die Transact-SQL-Anweisung erstmalig generiert wurde, muss die <xref:System.Data.Common.DbCommandBuilder.RefreshSchema%2A> Anwendung explizit aufzurufen, wenn Sie die-Anweisung in beliebiger Weise ändert. Andernfalls verwendet das <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A> weiterhin Informationen aus der vorherigen Anweisung, die möglicherweise nicht korrekt sind. Die Transact-SQL-Anweisungen werden zuerst generiert, wenn die Anwendung <xref:System.Data.Common.DbDataAdapter.Update%2A> entweder <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A>oder aufruft.  
+  
+ Weitere Informationen finden Sie unter [Erstellen von Befehlen mit CommandBuilder](~/docs/framework/data/adonet/generating-commands-with-commandbuilders.md).  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="GetUpdateCommand">
+      <MemberSignature Language="C#" Value="public System.Data.SqlClient.SqlCommand GetUpdateCommand ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Data.SqlClient.SqlCommand GetUpdateCommand() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetUpdateCommand () As SqlCommand" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::SqlClient::SqlCommand ^ GetUpdateCommand();" />
+      <MemberSignature Language="F#" Value="override this.GetUpdateCommand : unit -&gt; System.Data.SqlClient.SqlCommand" Usage="sqlCommandBuilder.GetUpdateCommand " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.SqlClient.SqlCommand</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Ruft das automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt ab, das für das Ausführen von Aktualisierungen in der Datenbank erforderlich ist.</summary>
+        <returns>Das für Aktualisierungen erforderliche, automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Eine Anwendung kann die <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A> -Methode zu Informationszwecken oder zur Problembehandlung verwenden, da Sie das <xref:System.Data.SqlClient.SqlCommand> auszuführende Objekt zurückgibt.  
+  
+ Sie können auch als <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A> Grundlage für einen geänderten Befehl verwenden. Beispielsweise können Sie den <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A> <xref:System.Data.SqlClient.SqlCommand.CommandTimeout%2A> -Wert aufzurufen und ändern und ihn dann <xref:System.Data.SqlClient.SqlDataAdapter>explizit auf festlegen.  
+  
+ Nachdem die Transact-SQL-Anweisung erstmalig generiert wurde, muss die <xref:System.Data.Common.DbCommandBuilder.RefreshSchema%2A> Anwendung explizit aufzurufen, wenn Sie die-Anweisung in beliebiger Weise ändert. Andernfalls verwendet das <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A> weiterhin Informationen aus der vorherigen Anweisung, die möglicherweise nicht korrekt sind. Die Transact-SQL-Anweisungen werden zuerst generiert, wenn die Anwendung <xref:System.Data.Common.DbDataAdapter.Update%2A> entweder <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A>oder aufruft.  
+  
+ Weitere Informationen finden Sie unter [Erstellen von Befehlen mit CommandBuilder](~/docs/framework/data/adonet/generating-commands-with-commandbuilders.md).  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetUpdateCommand">
+      <MemberSignature Language="C#" Value="public System.Data.SqlClient.SqlCommand GetUpdateCommand (bool useColumnsForParameterNames);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Data.SqlClient.SqlCommand GetUpdateCommand(bool useColumnsForParameterNames) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetUpdateCommand (useColumnsForParameterNames As Boolean) As SqlCommand" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::SqlClient::SqlCommand ^ GetUpdateCommand(bool useColumnsForParameterNames);" />
+      <MemberSignature Language="F#" Value="override this.GetUpdateCommand : bool -&gt; System.Data.SqlClient.SqlCommand" Usage="sqlCommandBuilder.GetUpdateCommand useColumnsForParameterNames" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.SqlClient.SqlCommand</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="useColumnsForParameterNames" Type="System.Boolean" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="useColumnsForParameterNames">Generiert beim Wert <see langword="true" /> Parameternamen, die den Spaltennamen entsprechen (falls möglich). Bei <see langword="false" /> wird <c>@p1</c>, <c>@p2</c> usw. generiert.</param>
+        <summary>Ruft das automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt ab, das für das Ausführen von Aktualisierungen in der Datenbank erforderlich ist.</summary>
+        <returns>Das für Aktualisierungen erforderliche, automatisch generierte <see cref="T:System.Data.SqlClient.SqlCommand" />-Objekt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Eine Anwendung kann die <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A> -Methode zu Informationszwecken oder zur Problembehandlung verwenden, da Sie das <xref:System.Data.SqlClient.SqlCommand> auszuführende Objekt zurückgibt.  
+  
+ Sie können auch als <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A> Grundlage für einen geänderten Befehl verwenden. Beispielsweise können Sie den <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A> <xref:System.Data.SqlClient.SqlCommand.CommandTimeout%2A> -Wert aufzurufen und ändern und ihn dann <xref:System.Data.SqlClient.SqlDataAdapter>explizit auf festlegen.  
+  
+ Nachdem die Transact-SQL-Anweisung erstmalig generiert wurde, muss die <xref:System.Data.Common.DbCommandBuilder.RefreshSchema%2A> Anwendung explizit aufzurufen, wenn Sie die-Anweisung in beliebiger Weise ändert. Andernfalls verwendet das <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A> weiterhin Informationen aus der vorherigen Anweisung, die möglicherweise nicht korrekt sind. Die Transact-SQL-Anweisungen werden zuerst generiert, wenn die Anwendung <xref:System.Data.Common.DbDataAdapter.Update%2A> entweder <xref:System.Data.SqlClient.SqlCommandBuilder.GetUpdateCommand%2A>oder aufruft.  
+  
+ Das Standardverhalten bei der Erstellung von Parameternamen besteht darin, `@p1`, `@p2`usw. für die verschiedenen Parameter zu verwenden. Wenn `true` Sie für `useColumnsForParameterNames` den- <xref:System.Data.OleDb.OleDbCommandBuilder> Parameter übergeben, können Sie erzwingen, dass Parameter auf der Grundlage der Spaltennamen generieren. Dies ist nur erfolgreich, wenn die folgenden Bedingungen erfüllt sind:  
+  
+-   Der <xref:System.Data.Common.DbMetaDataColumnNames.ParameterNameMaxLength> , der vom **GetSchema** -Methoden Aufrufwert zurück <xref:System.Data.Common.DbMetaDataCollectionNames.DataSourceInformation> gegeben und in der Auflistung gefunden wurde, wurde angegeben, und seine Länge ist gleich oder größer als der generierte Parameter Name.  
+  
+-   Der generierte Parameter Name erfüllt die Kriterien, die in <xref:System.Data.Common.DbMetaDataColumnNames.ParameterNamePattern> der von der **GetSchema** -Methode zurückgegebenen enthalten sind <xref:System.Data.Common.DbMetaDataCollectionNames.DataSourceInformation> und im regulären Ausdruck der Auflistung enthalten sind.  
+  
+-   Ein <xref:System.Data.Common.DbMetaDataColumnNames.ParameterMarkerFormat> , der vom **GetSchema** -Methoden Aufrufwert zurück <xref:System.Data.Common.DbMetaDataCollectionNames.DataSourceInformation> gegeben und in der Auflistung gefunden wird, wird angegeben.  
+  
+ Weitere Informationen finden Sie unter [Erstellen von Befehlen mit CommandBuilder](~/docs/framework/data/adonet/generating-commands-with-commandbuilders.md).  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="InitializeCommand">
+      <MemberSignature Language="C#" Value="protected override System.Data.Common.DbCommand InitializeCommand (System.Data.Common.DbCommand command);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance class System.Data.Common.DbCommand InitializeCommand(class System.Data.Common.DbCommand command) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.InitializeCommand(System.Data.Common.DbCommand)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Function InitializeCommand (command As DbCommand) As DbCommand" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override System::Data::Common::DbCommand ^ InitializeCommand(System::Data::Common::DbCommand ^ command);" />
+      <MemberSignature Language="F#" Value="override this.InitializeCommand : System.Data.Common.DbCommand -&gt; System.Data.Common.DbCommand" Usage="sqlCommandBuilder.InitializeCommand command" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.Common.DbCommand</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="command" Type="System.Data.Common.DbCommand" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="command">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="QuoteIdentifier">
+      <MemberSignature Language="C#" Value="public override string QuoteIdentifier (string unquotedIdentifier);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string QuoteIdentifier(string unquotedIdentifier) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.QuoteIdentifier(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function QuoteIdentifier (unquotedIdentifier As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::String ^ QuoteIdentifier(System::String ^ unquotedIdentifier);" />
+      <MemberSignature Language="F#" Value="override this.QuoteIdentifier : string -&gt; string" Usage="sqlCommandBuilder.QuoteIdentifier unquotedIdentifier" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="unquotedIdentifier" Type="System.String" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="unquotedIdentifier">Der ursprüngliche Bezeichner ohne Anführungszeichen.</param>
+        <summary>Bei einem Bezeichner ohne Anführungszeichen in der richtigen Katalogschreibweise wird die korrekte Form des jeweiligen Bezeichners mit Anführungszeichen zurückgegeben. Dies schließt ein, dass eingebettete Anführungszeichen im Bezeichner ordnungsgemäß mit Escapezeichen versehen werden.</summary>
+        <returns>Die Version des Bezeichners mit Anführungszeichen. Eingebettete Anführungszeichen im Bezeichner werden ordnungsgemäß mit Escapezeichen versehen.</returns>
+        <remarks>To be added.</remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="QuotePrefix">
+      <MemberSignature Language="C#" Value="public override string QuotePrefix { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string QuotePrefix" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlCommandBuilder.QuotePrefix" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Property QuotePrefix As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ QuotePrefix { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.QuotePrefix : string with get, set" Usage="System.Data.SqlClient.SqlCommandBuilder.QuotePrefix" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.Browsable(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;xamarinandroid-7.1;xamarinios-10.8;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0">
+          <AttributeName>System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-1.1">
+          <AttributeName>System.Data.DataSysDescription("SqlCommandBuilder_QuotePrefix")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;xamarinandroid-7.1;xamarinios-10.8;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0">
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft das oder die Anfangszeichen ab, die beim Angeben von SQL Server-Datenbankobjekten (z. B. Tabellen oder Spalten) verwendet werden sollen, deren Namen Leerzeichen oder reservierte Token enthalten, oder legt diese fest.</summary>
+        <value>Das oder die zu verwendende(n) Anfangszeichen. Der Standardwert ist eine leere Zeichenfolge.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Obwohl Sie die-Eigenschaft <xref:System.Data.SqlClient.SqlCommandBuilder.QuotePrefix%2A> oder <xref:System.Data.SqlClient.SqlCommandBuilder.QuoteSuffix%2A> die-Eigenschaft nicht ändern können, nachdem ein INSERT-, Update-oder DELETE-Befehl generiert wurde, können `Update` Sie Ihre Einstellungen ändern, nachdem Sie die-Methode eines DataAdapter aufgerufen haben.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">Diese Eigenschaft kann nicht geändert werden, nachdem ein INSERT-Befehl, ein UPDATE-Befehl oder ein DELETE-Befehl generiert wurde.</exception>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="QuoteSuffix">
+      <MemberSignature Language="C#" Value="public override string QuoteSuffix { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string QuoteSuffix" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlCommandBuilder.QuoteSuffix" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Property QuoteSuffix As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ QuoteSuffix { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.QuoteSuffix : string with get, set" Usage="System.Data.SqlClient.SqlCommandBuilder.QuoteSuffix" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.Browsable(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;xamarinandroid-7.1;xamarinios-10.8;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0">
+          <AttributeName>System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-1.1">
+          <AttributeName>System.Data.DataSysDescription("SqlCommandBuilder_QuoteSuffix")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;xamarinandroid-7.1;xamarinios-10.8;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0">
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft das oder die Endzeichen ab, die beim Angeben von SQL Server-Datenbankobjekten (z. B. Tabellen oder Spalten) verwendet werden sollen, deren Namen Leerzeichen oder reservierte Token enthalten, oder legt diese fest.</summary>
+        <value>Das oder die zu verwendende(n) Endzeichen. Der Standardwert ist eine leere Zeichenfolge.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Obwohl Sie die-Eigenschaft <xref:System.Data.SqlClient.SqlCommandBuilder.QuotePrefix%2A> oder <xref:System.Data.SqlClient.SqlCommandBuilder.QuoteSuffix%2A> die-Eigenschaft nicht ändern können, nachdem ein INSERT-, Update-oder DELETE-Vorgang generiert wurde, können `Update` Sie Ihre Einstellungen nach dem Aufrufen der-Methode eines DataAdapter-Steuerelemente ändern.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">Diese Eigenschaft kann nicht geändert werden, nachdem ein INSERT-Befehl, ein UPDATE-Befehl oder ein DELETE-Befehl generiert wurde.</exception>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="RefreshSchema">
+      <MemberSignature Language="C#" Value="public void RefreshSchema ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void RefreshSchema() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.RefreshSchema" />
+      <MemberSignature Language="VB.NET" Value="Public Sub RefreshSchema ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void RefreshSchema();" />
+      <MemberSignature Language="F#" Value="member this.RefreshSchema : unit -&gt; unit" Usage="sqlCommandBuilder.RefreshSchema " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Löscht die Befehle, die diesem Befehlsgenerator zugeordnet sind.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SchemaSeparator">
+      <MemberSignature Language="C#" Value="public override string SchemaSeparator { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string SchemaSeparator" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlCommandBuilder.SchemaSeparator" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Property SchemaSeparator As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ SchemaSeparator { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.SchemaSeparator : string with get, set" Usage="System.Data.SqlClient.SqlCommandBuilder.SchemaSeparator" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.Browsable(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;xamarinandroid-7.1;xamarinios-10.8;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0">
+          <AttributeName>System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;xamarinandroid-7.1;xamarinios-10.8;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0">
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft das als Trennzeichen zwischen dem Schemabezeichner und anderen Bezeichnern zu verwendende Zeichen ab oder legt dieses fest.</summary>
+        <value>Das Zeichen, das als Schematrennzeichen verwendet werden soll.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Im Allgemeinen geben Datenbankserver das Schema für einen Bezeichner an, indem der Schema Name von dem Bezeichner durch ein Zeichen getrennt wird. Beispielsweise wird SQL Server einen Zeitraum verwendet, indem er umfassende Bezeichner wie Person. CustomerName erstellt, wobei "Person" der Schema Name und "CustomerName" der Bezeichner ist. Wenn diese Eigenschaft festgelegt wird, können Entwickler dieses Verhalten ändern.  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+    <Member MemberName="SetRowUpdatingHandler">
+      <MemberSignature Language="C#" Value="protected override void SetRowUpdatingHandler (System.Data.Common.DbDataAdapter adapter);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void SetRowUpdatingHandler(class System.Data.Common.DbDataAdapter adapter) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.SetRowUpdatingHandler(System.Data.Common.DbDataAdapter)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Sub SetRowUpdatingHandler (adapter As DbDataAdapter)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override void SetRowUpdatingHandler(System::Data::Common::DbDataAdapter ^ adapter);" />
+      <MemberSignature Language="F#" Value="override this.SetRowUpdatingHandler : System.Data.Common.DbDataAdapter -&gt; unit" Usage="sqlCommandBuilder.SetRowUpdatingHandler adapter" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="adapter" Type="System.Data.Common.DbDataAdapter" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="adapter">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="UnquoteIdentifier">
+      <MemberSignature Language="C#" Value="public override string UnquoteIdentifier (string quotedIdentifier);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string UnquoteIdentifier(string quotedIdentifier) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlCommandBuilder.UnquoteIdentifier(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function UnquoteIdentifier (quotedIdentifier As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::String ^ UnquoteIdentifier(System::String ^ quotedIdentifier);" />
+      <MemberSignature Language="F#" Value="override this.UnquoteIdentifier : string -&gt; string" Usage="sqlCommandBuilder.UnquoteIdentifier quotedIdentifier" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="quotedIdentifier" Type="System.String" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="quotedIdentifier">Der Bezeichner, dessen eingebettete Anführungszeichen entfernt werden.</param>
+        <summary>Bei einem Bezeichner mit Anführungszeichen wird die korrekte Form dieses Bezeichners ohne Anführungszeichen zurückgegeben. Dies schließt ein, dass eingebettete Anführungszeichen im Bezeichner ordnungsgemäß ohne Escapezeichen verwendet werden.</summary>
+        <returns>Der Bezeichner ohne Anführungszeichen, bei dem die Escapezeichen für eingebettete Anführungszeichen ordnungsgemäß entfernt wurden.</returns>
+        <remarks>To be added.</remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-and-modifying-data.md">Verbinden und Abrufen von Daten in ADO.net</related>
+        <related type="Article" href="~/docs/framework/data/adonet/sql/index.md">Verwenden der .NET Framework Datenanbieter für SQL Server</related>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">Übersicht über ADO.NET</related>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

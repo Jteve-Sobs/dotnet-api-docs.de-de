@@ -1,0 +1,783 @@
+<Type Name="ControlAdapter" FullName="System.Web.UI.Adapters.ControlAdapter">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="32931f959545fbccc955d499802e8801510a11d2" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70702015" /></Metadata><TypeSignature Language="C#" Value="public abstract class ControlAdapter" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit ControlAdapter extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Web.UI.Adapters.ControlAdapter" />
+  <TypeSignature Language="VB.NET" Value="Public MustInherit Class ControlAdapter" />
+  <TypeSignature Language="C++ CLI" Value="public ref class ControlAdapter abstract" />
+  <TypeSignature Language="F#" Value="type ControlAdapter = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Web</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>Passt das Rendering für das abgeleitete Steuerelement an, an das der Adapter angefügt ist, um das Standardmarkup oder Standardverhalten für bestimmte Browser zu ändern, und ist die Basisklasse, die alle Steuerelementadapter erben.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Steuerelement Adapter sind Komponenten, die <xref:System.Web.UI.Control> bestimmte Klassen Methoden und Ereignisse in Ihrem Ausführungs Lebenszyklus überschreiben, um eine Browser-oder Markup spezifische Handhabung zuzulassen. Der .NET Framework ordnet einem- <xref:System.Web.UI.Control> Objekt für jede Client Anforderung einen einzelnen abgeleiteten Steuerelement Adapter zu.  
+  
+ Ein Adapter ändert ein Steuerelement für einen bestimmten Browser oder eine bestimmte Browser Klasse oder fungiert als beliebiger Filter für eine Funktion. In der Regel wird der Adapter durch die Markup Sprache definiert, die der Browser verwendet (z. b. XHTML oder HTML 3,2). Ein Großteil der Anpassbarkeit im Renderingverhalten kann in den spezialisierten Klassen gekapselt <xref:System.Web.UI.HtmlTextWriter> werden, die von der-Klasse abgeleitet werden. Daher ist es wahrscheinlich, dass ein einzelner Adapter für eine Reihe von Browser Klassen Verhalten verwendet werden kann oder dass die Einbindung der Anpassbarkeit in <xref:System.Web.UI.HtmlTextWriter> die Klassen die Verwendung eines Steuerelement Adapters unnötig machen könnte.  
+  
+ Ein Adapter für eine Steuerelement Klasse gilt für alle Steuerelemente, die von dieser Klasse erben, es sei denn, es sind weitere spezialisierte Adapter vorhanden. Beispielsweise kann ein Adapter für die <xref:System.Web.UI.WebControls.BaseValidator> -Klasse für alle `Validator` -Objekte verwendet werden.  
+  
+ Adapter erben in der Regel nicht direkt von <xref:System.Web.UI.Adapters.ControlAdapter> der-Klasse, sondern von einer der Ziel spezifischen Adapter Basisklassen, die zusätzliche Funktionalität bereitstellen, die speziell für den Steuer ungstyp und den Zielbrowser oder das jeweilige Rendering erforderlich ist.  
+  
+ Steuerelemente selbst erfordern keinen Adapter. Wenn Steuerelemente durch Komposition erweitert werden, sind die untergeordneten Steuerelement Adapter in der Regel ausreichend.  
+  
+ Jedes Steuerelement verfügt über die Browser Definitions Dateien über explizite Zuordnungen zu Adaptern. Folglich wird für jeden Zugriff auf <xref:System.Web.UI.Control.Adapter%2A?displayProperty=nameWithType> die-Eigenschaft <xref:System.Web.HttpBrowserCapabilities> das aus den Browser Definitions Dateien extrahierte-Objekt verwendet, um die Suche nach der Zuordnung des Adapters durchzuführen, der gesteuert werden soll.  
+  
+ Während der Verarbeitung fängt der .NET Framework Aufrufe der über schreibbaren Methoden eines Steuer Elements ab, das Ziel spezifisch sein könnte. Wenn ein Steuerelement Adapter angefügt ist, ruft der .NET Framework die zugeordneten Adapter Methoden auf.  
+  
+ Der Adapter führt das Rendering für das-Steuer <xref:System.Web.UI.Adapters.ControlAdapter.Render%2A> Element über die-Methode aus. Wenn überschrieben, <xref:System.Web.UI.Adapters.ControlAdapter.Render%2A> sollte möglicherweise nicht die Basisklassen Implementierung aufgerufen werden, da damit einen Rückruf für <xref:System.Web.UI.Control.Render%2A?displayProperty=nameWithType> die-Methode ausführt. Dies kann dazu führen, dass das Rendering zweimal durch den Adapter und einmal durch das Steuerelement erfolgt.  
+  
+ Die <xref:System.Web.UI.Adapters.ControlAdapter.Render%2A> Basis Methode ruft die- <xref:System.Web.UI.Control.Render%2A?displayProperty=nameWithType> Methode des-Steuer Elements zurück. Wenn Sie also überschreiben <xref:System.Web.UI.Adapters.ControlAdapter.Render%2A>, sollten Sie die Basisklassen Implementierung nur dann aufzurufen, wenn das Rendering, das Sie implementieren, zusätzlich <xref:System.Web.UI.Control.Render%2A?displayProperty=nameWithType> zu dem vom-Steuerelement bereitgestellten vorhanden ist.  
+  
+ Sie müssen sicherstellen, dass die .NET Framework Abfang Vorgänge für Adapter der untergeordneten Steuerelemente ausführt. Dies können Sie erreichen, indem Sie <xref:System.Web.UI.Adapters.ControlAdapter.RenderChildren%2A> die Basis Methode aufrufen, die <xref:System.Web.UI.Control.RenderChildren%2A?displayProperty=nameWithType> die-Methode des-Steuer Elements <xref:System.Web.UI.Adapters.ControlAdapter.Render%2A> aus der-außer Kraft Setzung aufruft.  
+  
+ Die <xref:System.Web.UI.Adapters.ControlAdapter.BeginRender%2A> - <xref:System.Web.UI.Adapters.ControlAdapter.EndRender%2A> Methode und die-Methode werden vom-Steuerelement aufgerufen, unmittelbar bevor bzw. Nachdem <xref:System.Web.UI.Adapters.ControlAdapter.Render%2A> das-Steuerelement die-Methode aufruft. Wenn vor und nach dem Rendering die einzigen browserspezifischen Verarbeitungsaufgaben erforderlich sind, kann die über <xref:System.Web.UI.Adapters.ControlAdapter.BeginRender%2A> Schreibung <xref:System.Web.UI.Adapters.ControlAdapter.EndRender%2A> von <xref:System.Web.UI.Adapters.ControlAdapter.Render%2A>und möglicherweise unnötig sein. Das Standardverhalten <xref:System.Web.UI.Adapters.ControlAdapter.BeginRender%2A> der-Methode <xref:System.Web.UI.Adapters.ControlAdapter.EndRender%2A> und der-Methode besteht darin, <xref:System.Web.UI.HtmlTextWriter>die entsprechenden Methoden von aufzurufen.  
+  
+ Um seine eigenen Zustandsinformationen beizubehalten, kann ein Steuerelement Adapter die <xref:System.Web.UI.Adapters.ControlAdapter.SaveAdapterControlState%2A>Methoden <xref:System.Web.UI.Adapters.ControlAdapter.LoadAdapterControlState%2A>, <xref:System.Web.UI.Adapters.ControlAdapter.SaveAdapterViewState%2A>, und <xref:System.Web.UI.Adapters.ControlAdapter.LoadAdapterViewState%2A> überschreiben. <xref:System.Web.UI.Adapters.ControlAdapter.SaveAdapterControlState%2A>, <xref:System.Web.UI.Adapters.ControlAdapter.SaveAdapterViewState%2A>, <xref:System.Web.UI.Adapters.ControlAdapter.LoadAdapterControlState%2A> und <xref:System.Web.UI.Adapters.ControlAdapter.LoadAdapterViewState%2A>  werden aufgerufen, wenn private Steuerelement-und Ansichts Zustände gespeichert bzw. geladen werden.  
+  
+ Die <xref:System.Web.UI.Adapters.ControlAdapter.OnInit%2A>Basis <xref:System.Web.UI.Adapters.ControlAdapter.OnLoad%2A>Methoden <xref:System.Web.UI.Adapters.ControlAdapter.OnPreRender%2A>,, und <xref:System.Web.UI.Adapters.ControlAdapter.OnUnload%2A>  greifen auf die entsprechenden <xref:System.Web.UI.Control> -Klassen Methoden zurück. Daher müssen alle diese <xref:System.Web.UI.Adapters.ControlAdapter> Methoden, die überschrieben werden, ihre Basis Methoden aufzurufen. andernfalls wird das der- <xref:System.Web.UI.Control> Klassenmethode zugeordnete-Ereignis nicht ausgelöst.  
+  
+ Steuerelemente und Adapter implementieren optional <xref:System.Web.UI.IPostBackDataHandler> die <xref:System.Web.UI.IPostBackEventHandler> -und-Schnittstellen. Der .NET Framework bestimmt, ob ein Adapter vorhanden ist und ob der Adapter diese Schnittstellen implementiert. Wenn dies der Fall ist, sollte der Adapter <xref:System.Web.UI.IPostBackDataHandler.LoadPostData%2A>ggf. <xref:System.Web.UI.IPostBackEventHandler.RaisePostBackEvent%2A> die Methoden, <xref:System.Web.UI.IPostBackDataHandler.RaisePostDataChangedEvent%2A>und überschreiben. Wenn die Post Back Daten im Adapter nicht erkannt werden, muss Sie für das Steuerelement zurückgreifen, um es zu verarbeiten. Nachfolgende Ereignishandler müssen auch einen Rückruf für das-Steuerelement durcharbeiten.  
+  
+ ]]></format>
+    </remarks>
+    <block subset="none" type="overrides"><para>Wenn Sie von <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> der-Klasse erben, sollte ein Steuerelement, das allgemeine Adapter Funktionen erfordert, über eine entsprechende Adapter Basisklasse verfügen, die im Muster <see langword="TextBoxAdapter" /> <paramref name="ControlType" /> <see langword="Adapter" /> (z. b.) genannt wird. Der Adapter sollte mindestens eine stark typisierte Instanz des Steuer Elements über seine <see cref="P:System.Web.UI.Adapters.ControlAdapter.Control" /> -Eigenschaft zurückgeben.  
+  
+1.  Steuerelement Adapter für einen bestimmten Steuerelement-und Markup Sprache sollten im Muster <paramref name="MarkupControlType" /> <see langword="Adapter" /> benannt werden (z <see langword="XhtmlTextBoxAdapter" />. b.). Adapter für ein Steuerelement sollten in einem <see langword="Adapters" /> untergeordneten Namespace implementiert werden.  
+  
+Steuerelement Adapter sollten von der entsprechenden Basisklasse erben und dem gleichen Vererbungs Modell wie das Steuerelement folgen. Beispielsweise muss ein Adapter für ein Steuerelement, das von <see cref="T:System.Web.UI.Control" /> der-Basisklasse erbt, <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> von der-Klasse <paramref name="ControlType" /> oder der entsprechenden <see langword="Adapter" /> -Klasse erben.  
+  
+Alle spezialisierten Adapter sollten für das spezialisierte Steuerelement unter allen Geräteknoten in den Configuration. Browser-Dateien definiert werden.  
+  
+Ein ordnungsgemäß implementiertes Steuerelement sollte nicht davon ausgehen, dass ein Adapter angefügt ist oder dass der angefügte Adapter eine bestimmte Schnittstelle implementiert. Stattdessen sollte Sie vor dem Aufrufen von überprüft werden.  
+  
+Es ist möglich, das Überschreiben geschützter Ereignis Methoden im-Steuerelement zu simulieren <see cref="M:System.Web.UI.WebControls.LinkButton.OnClick(System.EventArgs)" /> , z <see cref="T:System.Web.UI.WebControls.LinkButton" />. b. die-Methode von. Erstellen Sie zunächst eine Adapter Klasse mit einer <c>OnClick</c> -Methode. Erstellen Sie dann ein neues, von <see cref="T:System.Web.UI.WebControls.LinkButton" /> abgeleitetes <see cref="M:System.Web.UI.WebControls.LinkButton.OnClick(System.EventArgs)" /> Steuerelement, und überschreiben Sie die Die überschriebene <see cref="M:System.Web.UI.WebControls.LinkButton.OnClick(System.EventArgs)" /> Methode ruft die <c>OnClick</c> -Methode des Adapters auf. Das Adapter Objekt ist über die geschützte <see cref="P:System.Web.UI.Control.Adapter" /> -Eigenschaft <see cref="T:System.Web.UI.Control" /> der-Klasse verfügbar. Die <see cref="P:System.Web.UI.Control.Adapter" /> -Eigenschaft des-Steuer <see langword="null" /> Elements ist, wenn kein zugeordneter Adapter vorhanden ist. Daher sollte jeglicher Code vor dem Aufrufen von Methoden des Adapters diese Bedingung überprüfen.</para></block>
+    <altmember cref="T:System.Web.UI.Control" />
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected ControlAdapter ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; ControlAdapter();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Web.UI.Adapters.ControlAdapter" />-Klasse.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Der .NET Framework erstellt diesen Adapter intern, wenn er das entsprechende <xref:System.Web.UI.Control> -Objekt erstellt.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Web.UI.Control" />
+      </Docs>
+    </Member>
+    <Member MemberName="BeginRender">
+      <MemberSignature Language="C#" Value="protected internal virtual void BeginRender (System.Web.UI.HtmlTextWriter writer);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance void BeginRender(class System.Web.UI.HtmlTextWriter writer) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.BeginRender(System.Web.UI.HtmlTextWriter)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Sub BeginRender (writer As HtmlTextWriter)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual void BeginRender(System::Web::UI::HtmlTextWriter ^ writer);" />
+      <MemberSignature Language="F#" Value="abstract member BeginRender : System.Web.UI.HtmlTextWriter -&gt; unit&#xA;override this.BeginRender : System.Web.UI.HtmlTextWriter -&gt; unit" Usage="controlAdapter.BeginRender writer" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="writer" Type="System.Web.UI.HtmlTextWriter" />
+      </Parameters>
+      <Docs>
+        <param name="writer">Der <see cref="T:System.Web.UI.HtmlTextWriter" />, der Methoden für das Rendering der zielspezifischen Ausgabe enthält.</param>
+        <summary>Wird vor dem Rendering eines Steuerelements aufgerufen. Generiert in einer abgeleiteten Adapterklasse öffnende Tags, die für ein bestimmtes Ziel erforderlich sind, von HTML-Browsern jedoch nicht benötigt werden.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.UI.Adapters.ControlAdapter.BeginRender%2A> -Methode wird direkt vor der <xref:System.Web.UI.Adapters.ControlAdapter.Render%2A> -Methode aufgerufen und für die Ausführung der Ziel spezifischen Vorverarbeitung vor dem Rendering des Steuer Elements verwendet.  
+  
+ Verwenden Sie <xref:System.Web.UI.Adapters.ControlAdapter.BeginRender%2A> die-Methode in Verbindung <xref:System.Web.UI.Adapters.ControlAdapter.EndRender%2A> mit der-Methode, um die öffnende und schließende tagkonsistenz sicherzustellen  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie von der <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> -Klasse erben, ruft die <see cref="M:System.Web.UI.Adapters.ControlAdapter.BeginRender(System.Web.UI.HtmlTextWriter)" /> Basis Methode <see cref="M:System.Web.UI.HtmlTextWriter.BeginRender" /> die-Methode auf. Daher sollten über schreibungen der <see cref="M:System.Web.UI.Adapters.ControlAdapter.BeginRender(System.Web.UI.HtmlTextWriter)" /> -Methode die <see cref="M:System.Web.UI.Adapters.ControlAdapter.BeginRender(System.Web.UI.HtmlTextWriter)" /> -Basis Methode nur dann aufgerufen werden, wenn die Verarbeitung anstelle der- <see cref="M:System.Web.UI.HtmlTextWriter.BeginRender" /> Methode anstelle der-Methode erfolgt.</para></block>
+        <altmember cref="M:System.Web.UI.HtmlTextWriter.BeginRender" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.Render(System.Web.UI.HtmlTextWriter)" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.EndRender(System.Web.UI.HtmlTextWriter)" />
+        <altmember cref="T:System.Web.UI.HtmlTextWriter" />
+        <altmember cref="T:System.Web.UI.Control" />
+      </Docs>
+    </Member>
+    <Member MemberName="Browser">
+      <MemberSignature Language="C#" Value="protected System.Web.HttpBrowserCapabilities Browser { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Web.HttpBrowserCapabilities Browser" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.Adapters.ControlAdapter.Browser" />
+      <MemberSignature Language="VB.NET" Value="Protected ReadOnly Property Browser As HttpBrowserCapabilities" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; property System::Web::HttpBrowserCapabilities ^ Browser { System::Web::HttpBrowserCapabilities ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Browser : System.Web.HttpBrowserCapabilities" Usage="System.Web.UI.Adapters.ControlAdapter.Browser" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.HttpBrowserCapabilities</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Verweis auf die Browserfunktionen des Clients ab, durch den die aktuelle HTTP-Anforderung erfolgt.</summary>
+        <value><see cref="T:System.Web.HttpBrowserCapabilities" /> mit den Angaben zu den Clientbrowser- und Markupfunktionen.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Ein <xref:System.Web.UI.Adapters.ControlAdapter> -Objekt bestimmt die Client Browserfunktionen aus <xref:System.Web.HttpBrowserCapabilities> dem-Objekt, das von <xref:System.Web.UI.Adapters.ControlAdapter.Browser%2A> der-Eigenschaft zurückgegeben wird. Dies ermöglicht es <xref:System.Web.UI.Adapters.ControlAdapter> dem-Objekt, Browser spezifisches Markup zu renderingoder anderweitig das <xref:System.Web.UI.Control>Verhalten von zu ändern.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird gezeigt, wie die <xref:System.Web.UI.Adapters.ControlAdapter.Browser%2A> -Eigenschaft verwendet wird, um auf die Details des anfordernden Browsers zuzugreifen. In diesem Beispiel überprüft der Code, ob der Browser mit JavaScript kompatibel ist, und ermöglicht es dem Entwickler dann, die angepasste Ausgabe in diesem Fall zu rendieren.  
+  
+ [!code-cpp[ControlAdapter_Browser#1](~/samples/snippets/cpp/VS_Snippets_WebNet/ControlAdapter_Browser/CPP/controladapter_browser.cpp#1)]
+ [!code-csharp[ControlAdapter_Browser#1](~/samples/snippets/csharp/VS_Snippets_WebNet/ControlAdapter_Browser/CS/controladapter_browser.cs#1)]
+ [!code-vb[ControlAdapter_Browser#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/ControlAdapter_Browser/VB/controladapter_browser.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Web.UI.Control" />
+        <altmember cref="T:System.Web.HttpBrowserCapabilities" />
+        <altmember cref="T:System.Web.Configuration.HttpCapabilitiesBase" />
+      </Docs>
+    </Member>
+    <Member MemberName="Control">
+      <MemberSignature Language="C#" Value="protected System.Web.UI.Control Control { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Web.UI.Control Control" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.Adapters.ControlAdapter.Control" />
+      <MemberSignature Language="VB.NET" Value="Protected ReadOnly Property Control As Control" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; property System::Web::UI::Control ^ Control { System::Web::UI::Control ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Control : System.Web.UI.Control" Usage="System.Web.UI.Adapters.ControlAdapter.Control" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.Browsable(false)</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Web.UI.Control</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Verweis auf das Steuerelement ab, an das dieser Steuerelementadapter angefügt ist.</summary>
+        <value>Das <see cref="T:System.Web.UI.Control" />, an das dieser <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> angefügt ist.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn ein abgeleiteter Steuerelement Adapter an ein Steuerelement angefügt wird, ruft der .NET Framework bestimmte Adapter Elemente anstelle der Steuerelemente des Steuer Elements auf.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird gezeigt, wie ein benutzerdefiniertes Steuer <xref:System.Web.UI.Control> Element aus der-Klasse abgeleitet und anschließend ein entsprechender Adapter erstellt wird <xref:System.Web.UI.Adapters.ControlAdapter> , der von der-Klasse erbt. Der Adapter überschreibt die <xref:System.Web.UI.Adapters.ControlAdapter.Control%2A> -Eigenschaft und gibt einen stark typisierten Verweis auf das-Steuerelement zurück.  
+  
+ [!code-cpp[ControlAdapter.Control#1](~/samples/snippets/cpp/VS_Snippets_WebNet/ControlAdapter.Control/CPP/controladapter.control.cpp#1)]
+ [!code-csharp[ControlAdapter.Control#1](~/samples/snippets/csharp/VS_Snippets_WebNet/ControlAdapter.Control/CS/controladapter.control.cs#1)]
+ [!code-vb[ControlAdapter.Control#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/ControlAdapter.Control/VB/controladapter.control.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie von der <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> -Klasse erben, sollten Sie mindestens eine <see langword="Control" /> -Eigenschaft implementieren, um eine stark typisierte Instanz des Steuer Elements zurückzugeben, wie im Beispiel Abschnitt gezeigt.</para></block>
+        <altmember cref="T:System.Web.UI.Control" />
+      </Docs>
+    </Member>
+    <Member MemberName="CreateChildControls">
+      <MemberSignature Language="C#" Value="protected internal virtual void CreateChildControls ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance void CreateChildControls() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.CreateChildControls" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Sub CreateChildControls ()" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual void CreateChildControls();" />
+      <MemberSignature Language="F#" Value="abstract member CreateChildControls : unit -&gt; unit&#xA;override this.CreateChildControls : unit -&gt; unit" Usage="controlAdapter.CreateChildControls " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Erstellt die zielspezifischen untergeordneten Steuerelemente für ein zusammengesetztes Steuerelement.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn ein abgeleiteter Steuerelement Adapter an ein <xref:System.Web.UI.Control> -Objekt angefügt ist und die <xref:System.Web.UI.Adapters.ControlAdapter.CreateChildControls%2A> -Methode überschrieben wird, <xref:System.Web.UI.Control.CreateChildControls%2A?displayProperty=nameWithType> wird die-Überschreibung anstelle der-Methode aufgerufen. Daher kann <xref:System.Web.UI.Adapters.ControlAdapter.CreateChildControls%2A> verwendet werden, um einen Ziel spezifischen untergeordneten Steuerelement Satz zu erstellen.  
+  
+ Weitere Informationen zum Kombinieren von Steuerelementen zum Erstellen eines neuen Steuer Elements finden Sie unter zusammen [gesetzte Steuerelemente](https://msdn.microsoft.com/library/fb174677-d845-467c-8bf3-cc096b2490b0).  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie eine erbende Klasse erstellen und die <see cref="M:System.Web.UI.Adapters.ControlAdapter.CreateChildControls" /> -Methode überschreiben, rufen Sie nicht die-Basis Methode auf, es sei denn, Sie möchten Steuerelementen hinzufügen, die von der Basis Methode erstellt wurden. Andernfalls können Sie zwei Sätze von untergeordneten Steuerelementen erstellen.</para></block>
+        <altmember cref="M:System.Web.UI.Control.CreateChildControls" />
+        <altmember cref="T:System.Web.UI.Control" />
+      </Docs>
+    </Member>
+    <Member MemberName="EndRender">
+      <MemberSignature Language="C#" Value="protected internal virtual void EndRender (System.Web.UI.HtmlTextWriter writer);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance void EndRender(class System.Web.UI.HtmlTextWriter writer) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.EndRender(System.Web.UI.HtmlTextWriter)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Sub EndRender (writer As HtmlTextWriter)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual void EndRender(System::Web::UI::HtmlTextWriter ^ writer);" />
+      <MemberSignature Language="F#" Value="abstract member EndRender : System.Web.UI.HtmlTextWriter -&gt; unit&#xA;override this.EndRender : System.Web.UI.HtmlTextWriter -&gt; unit" Usage="controlAdapter.EndRender writer" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="writer" Type="System.Web.UI.HtmlTextWriter" />
+      </Parameters>
+      <Docs>
+        <param name="writer">Der <see cref="T:System.Web.UI.HtmlTextWriter" />, der Methoden für das Rendering der zielspezifischen Ausgabe enthält.</param>
+        <summary>Wird nach dem Rendering eines Steuerelements aufgerufen. Generiert in einer abgeleiteten Adapterklasse schließende Tags, die für ein bestimmtes Ziel erforderlich sind, von HTML-Browsern jedoch nicht benötigt werden.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.UI.Adapters.ControlAdapter.EndRender%2A> -Methode wird direkt nach der <xref:System.Web.UI.Adapters.ControlAdapter.Render%2A> -Methode aufgerufen und wird verwendet, um nach dem Rendering des Steuer Elements eine Ziel spezifische Postverarbeitung auszuführen.  
+  
+ Verwenden Sie <xref:System.Web.UI.Adapters.ControlAdapter.EndRender%2A> die-Methode in Verbindung <xref:System.Web.UI.Adapters.ControlAdapter.BeginRender%2A> mit der-Methode, um die öffnende und schließende tagkonsistenz sicherzustellen  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie von der <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> -Klasse erben, ruft die <see cref="M:System.Web.UI.Adapters.ControlAdapter.EndRender(System.Web.UI.HtmlTextWriter)" /> Basis Methode <see cref="M:System.Web.UI.HtmlTextWriter.EndRender" /> die-Methode auf. Daher sollten über schreibungen der <see cref="M:System.Web.UI.Adapters.ControlAdapter.EndRender(System.Web.UI.HtmlTextWriter)" /> -Methode die <see cref="M:System.Web.UI.Adapters.ControlAdapter.EndRender(System.Web.UI.HtmlTextWriter)" /> -Basis Methode nur dann aufgerufen werden, wenn die Verarbeitung anstelle der- <see cref="M:System.Web.UI.HtmlTextWriter.EndRender" /> Methode anstelle der-Methode erfolgt.</para></block>
+        <altmember cref="M:System.Web.UI.HtmlTextWriter.EndRender" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.Render(System.Web.UI.HtmlTextWriter)" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.BeginRender(System.Web.UI.HtmlTextWriter)" />
+        <altmember cref="T:System.Web.UI.HtmlTextWriter" />
+        <altmember cref="T:System.Web.UI.Control" />
+      </Docs>
+    </Member>
+    <Member MemberName="LoadAdapterControlState">
+      <MemberSignature Language="C#" Value="protected internal virtual void LoadAdapterControlState (object state);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance void LoadAdapterControlState(object state) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.LoadAdapterControlState(System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Sub LoadAdapterControlState (state As Object)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual void LoadAdapterControlState(System::Object ^ state);" />
+      <MemberSignature Language="F#" Value="abstract member LoadAdapterControlState : obj -&gt; unit&#xA;override this.LoadAdapterControlState : obj -&gt; unit" Usage="controlAdapter.LoadAdapterControlState state" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="state" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="state">Ein <see cref="T:System.Object" />, das die Steuerelementzustandsinformationen des Adapters als <see cref="T:System.Web.UI.StateBag" /> enthält.</param>
+        <summary>Lädt Steuerelementzustandsinformationen des Adapters, die von <see cref="M:System.Web.UI.Adapters.ControlAdapter.SaveAdapterControlState" /> während einer vorherigen Anforderung der Seite, auf der sich das diesem Steuerelementadapter zugeordnete Steuerelement befindet, gespeichert wurden.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Der Steuerelement Zustand ist die notwendigen Zustandsinformationen, auch wenn der Ansichts Zustand deaktiviert ist. Wenn ein Adapter seine eigenen Steuerelement Zustandsinformationen beibehalten muss, kann er die- <xref:System.Web.UI.Adapters.ControlAdapter.LoadAdapterControlState%2A> Methode <xref:System.Web.UI.Adapters.ControlAdapter.SaveAdapterControlState%2A> und die-Methode überschreiben.  
+  
+ Ein Adapter muss möglicherweise Steuerungs Zustandsinformationen beibehalten, wenn Features vorhanden sind, für die der Status über Anforderungen hinweg unabhängig vom Zustand des zugeordneten Steuer Elements verwaltet werden muss. Beispielsweise kann ein zusammengesetztes Steuerelement, das aus einer großen Textanzeige <xref:System.Web.UI.WebControls.RadioButton> und einer Gruppe von Steuerelementen besteht, als einzelne Ansicht auf Desktop Computer Browsern gerenbt werden. In anderen Browsern kann es das Rendering einer Ansicht für die Textanzeige und die andere für die Optionsfeld Gruppe aufteilen. Der Adapter muss seine eigenen Ziel spezifischen Informationen über die zurzeit aktive Sicht behalten.  
+  
+ Die <xref:System.Web.UI.Adapters.ControlAdapter.LoadAdapterControlState%2A> -Methode wird direkt nach der <xref:System.Web.UI.Control.LoadControlState%2A?displayProperty=nameWithType> -Methode in der `LoadState` Lebenszyklusphase aufgerufen. Der Adapter Steuerelement Zustand ist getrennt und zusätzlich zum Steuerelement Zustand des Steuer Elements.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Web.UI.Control.LoadControlState(System.Object)" />
+        <altmember cref="T:System.Web.UI.Control" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.SaveAdapterControlState" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.LoadAdapterViewState(System.Object)" />
+      </Docs>
+    </Member>
+    <Member MemberName="LoadAdapterViewState">
+      <MemberSignature Language="C#" Value="protected internal virtual void LoadAdapterViewState (object state);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance void LoadAdapterViewState(object state) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.LoadAdapterViewState(System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Sub LoadAdapterViewState (state As Object)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual void LoadAdapterViewState(System::Object ^ state);" />
+      <MemberSignature Language="F#" Value="abstract member LoadAdapterViewState : obj -&gt; unit&#xA;override this.LoadAdapterViewState : obj -&gt; unit" Usage="controlAdapter.LoadAdapterViewState state" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="state" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="state">Ein <see cref="T:System.Object" />, das die Adapteransichtszustandsinformationen als <see cref="T:System.Web.UI.StateBag" /> enthält.</param>
+        <summary>Lädt Ansichtszustandsinformationen des Adapters, die von <see cref="M:System.Web.UI.Adapters.ControlAdapter.SaveAdapterViewState" /> während einer vorherigen Anforderung der Seite, auf der sich das diesem Steuerelementadapter zugeordnete Steuerelement befindet, gespeichert wurden.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn ein Adapter seine eigenen Ansichts Zustandsinformationen beibehalten muss, kann er die- <xref:System.Web.UI.Adapters.ControlAdapter.LoadAdapterViewState%2A> Methode <xref:System.Web.UI.Adapters.ControlAdapter.SaveAdapterViewState%2A> und die-Methode überschreiben.  
+  
+ Ein Adapter muss Informationen zum Ansichts Zustand erhalten, wenn Daten, die über Anforderungen hinweg verwaltet werden müssen, unabhängig vom Ansichts Zustand des zugeordneten Steuer Elements vorhanden sind. Ein Raster Steuerelement auf Desktop Computer Browsern kann z. b. als eine einzelne Ansicht von Zeilen und Spalten von Werten dargestellt werden. In anderen Browsern wird das Rendering möglicherweise in mehrere separate Ansichten aufgeteilt, z. b. eine Liste von Zeilen und Details einer einzelnen Zeile. Der Adapter muss die Daten für die Sichten verwalten, die derzeit im Ansichts Zustand nicht aktiv sind.  
+  
+ Die <xref:System.Web.UI.Adapters.ControlAdapter.LoadAdapterViewState%2A> -Methode wird direkt vor der <xref:System.Web.UI.Control.LoadViewState%2A?displayProperty=nameWithType> -Methode in `LoadState` der Lebenszyklusphase aufgerufen. Der Adapter Ansichts Zustand ist getrennt und zusätzlich zum Ansichts Zustand des Steuer Elements.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Web.UI.Control.LoadViewState(System.Object)" />
+        <altmember cref="T:System.Web.UI.Control" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.SaveAdapterViewState" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.LoadAdapterControlState(System.Object)" />
+        <altmember cref="P:System.Web.UI.Control.ViewState" />
+      </Docs>
+    </Member>
+    <Member MemberName="OnInit">
+      <MemberSignature Language="C#" Value="protected internal virtual void OnInit (EventArgs e);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance void OnInit(class System.EventArgs e) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.OnInit(System.EventArgs)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Sub OnInit (e As EventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual void OnInit(EventArgs ^ e);" />
+      <MemberSignature Language="F#" Value="abstract member OnInit : EventArgs -&gt; unit&#xA;override this.OnInit : EventArgs -&gt; unit" Usage="controlAdapter.OnInit e" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="e" Type="System.EventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="e">Ein <see cref="T:System.EventArgs" />, das die Ereignisdaten enthält.</param>
+        <summary>Überschreibt die <see cref="M:System.Web.UI.Control.OnInit(System.EventArgs)" />-Methode für das zugeordnete Steuerelement.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn ein Adapter an ein <xref:System.Web.UI.Control> -Objekt angefügt ist und die <xref:System.Web.UI.Adapters.ControlAdapter.OnInit%2A> -Methode überschrieben wird, wird die Überschreibungs Methode anstelle <xref:System.Web.UI.Control.OnInit%2A?displayProperty=nameWithType> der-Methode aufgerufen.  
+  
+ Über <xref:System.Web.UI.Adapters.ControlAdapter.OnInit%2A> schreiben Sie, um die Ziel spezifische Verarbeitung `Initialize` in der Phase des Steuerungs Lebenszyklus auszuführen. In der Regel handelt es sich hierbei um Funktionen, die beim Erstellen eines Steuer Elements ausgeführt werden.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird ein benutzerdefinierter Steuerelement Adapter <xref:System.Web.UI.Adapters.ControlAdapter> von der-Klasse abgeleitet. Anschließend wird die <xref:System.Web.UI.Adapters.ControlAdapter.OnInit%2A> -Methode überschrieben, um eine Eigenschaft für das zugeordnete Steuerelement festzulegen und die Basis Methode aufzurufen, um die Initialisierung des Steuer Elements abzuschließen.  
+  
+ [!code-cpp[ControlAdapter_OnInit#1](~/samples/snippets/cpp/VS_Snippets_WebNet/ControlAdapter_OnInit/CPP/controladapter_oninit.cpp#1)]
+ [!code-csharp[ControlAdapter_OnInit#1](~/samples/snippets/csharp/VS_Snippets_WebNet/ControlAdapter_OnInit/CS/controladapter_oninit.cs#1)]
+ [!code-vb[ControlAdapter_OnInit#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/ControlAdapter_OnInit/VB/controladapter_oninit.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie von der <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> -Klasse erben und der Adapter die <see cref="M:System.Web.UI.Adapters.ControlAdapter.OnInit(System.EventArgs)" /> -Methode überschreibt, muss der Adapter die entsprechende Basisklassen Methode aufrufen, die wiederum die <see cref="M:System.Web.UI.Control.OnInit(System.EventArgs)" /> -Methode aufruft. Wenn die <see cref="M:System.Web.UI.Control.OnInit(System.EventArgs)" /> -Methode nicht aufgerufen wird, <see cref="E:System.Web.UI.Control.Init" /> wird das-Ereignis nicht ausgelöst.</para></block>
+        <altmember cref="E:System.Web.UI.Control.Init" />
+        <altmember cref="M:System.Web.UI.Control.OnInit(System.EventArgs)" />
+        <altmember cref="T:System.Web.UI.Control" />
+      </Docs>
+    </Member>
+    <Member MemberName="OnLoad">
+      <MemberSignature Language="C#" Value="protected internal virtual void OnLoad (EventArgs e);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance void OnLoad(class System.EventArgs e) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.OnLoad(System.EventArgs)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Sub OnLoad (e As EventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual void OnLoad(EventArgs ^ e);" />
+      <MemberSignature Language="F#" Value="abstract member OnLoad : EventArgs -&gt; unit&#xA;override this.OnLoad : EventArgs -&gt; unit" Usage="controlAdapter.OnLoad e" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="e" Type="System.EventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="e">Ein <see cref="T:System.EventArgs" />, das die Ereignisdaten enthält.</param>
+        <summary>Überschreibt die <see cref="M:System.Web.UI.Control.OnLoad(System.EventArgs)" />-Methode für das zugeordnete Steuerelement.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn ein Adapter an ein <xref:System.Web.UI.Control> -Objekt angefügt ist und die <xref:System.Web.UI.Adapters.ControlAdapter.OnLoad%2A> -Methode überschrieben wird, wird die Überschreibungs Methode anstelle <xref:System.Web.UI.Control.OnLoad%2A?displayProperty=nameWithType> der-Methode aufgerufen.  
+  
+ Überschreiben <xref:System.Web.UI.Adapters.ControlAdapter.OnLoad%2A> Sie die-Methode, um die Ziel spezifische `Load` Verarbeitung in der Phase des Lebenszyklus der Steuerelemente auszuführen. In der Regel handelt es sich hierbei um Funktionen, die für jede Client Anforderung ausgeführt werden müssen.  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie von der <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> -Klasse erben und der Adapter die <see cref="M:System.Web.UI.Adapters.ControlAdapter.OnLoad(System.EventArgs)" /> -Methode überschreibt, muss der Adapter die entsprechende Basisklassen Methode aufrufen, die wiederum die <see cref="M:System.Web.UI.Control.OnLoad(System.EventArgs)" /> -Methode aufruft. Wenn <see cref="M:System.Web.UI.Control.OnLoad(System.EventArgs)" /> nicht aufgerufen wird, wird <see cref="E:System.Web.UI.Control.Load" /> das-Ereignis nicht ausgelöst.</para></block>
+        <altmember cref="E:System.Web.UI.Control.Load" />
+        <altmember cref="M:System.Web.UI.Control.OnLoad(System.EventArgs)" />
+        <altmember cref="T:System.Web.UI.Control" />
+      </Docs>
+    </Member>
+    <Member MemberName="OnPreRender">
+      <MemberSignature Language="C#" Value="protected internal virtual void OnPreRender (EventArgs e);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance void OnPreRender(class System.EventArgs e) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.OnPreRender(System.EventArgs)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Sub OnPreRender (e As EventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual void OnPreRender(EventArgs ^ e);" />
+      <MemberSignature Language="F#" Value="abstract member OnPreRender : EventArgs -&gt; unit&#xA;override this.OnPreRender : EventArgs -&gt; unit" Usage="controlAdapter.OnPreRender e" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="e" Type="System.EventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="e">Ein <see cref="T:System.EventArgs" />, das die Ereignisdaten enthält.</param>
+        <summary>Überschreibt die <see cref="M:System.Web.UI.Control.OnPreRender(System.EventArgs)" />-Methode für das zugeordnete Steuerelement.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn ein Adapter an ein <xref:System.Web.UI.Control> -Objekt angefügt ist und die <xref:System.Web.UI.Adapters.ControlAdapter.OnPreRender%2A> -Methode überschrieben wird, wird die Überschreibungs Methode anstelle <xref:System.Web.UI.Control.OnPreRender%2A?displayProperty=nameWithType> der-Methode aufgerufen.  
+  
+ Überschreiben <xref:System.Web.UI.Adapters.ControlAdapter.OnPreRender%2A> Sie die-Methode, um die Ziel spezifische `PreRender` Verarbeitung in der Phase des Lebenszyklus der Steuerelemente auszuführen. In der Regel handelt es sich hierbei um Funktionen, die unmittelbar vor dem Rendering der Steuerelement Ausgabe stehen.  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie von der <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> -Klasse erben und der Adapter die <see cref="M:System.Web.UI.Adapters.ControlAdapter.OnPreRender(System.EventArgs)" /> -Methode überschreibt, muss der Adapter die entsprechende Basisklassen Methode aufrufen, die wiederum die <see cref="M:System.Web.UI.Control.OnPreRender(System.EventArgs)" /> -Methode aufruft. Wenn die <see cref="M:System.Web.UI.Control.OnPreRender(System.EventArgs)" /> -Methode nicht aufgerufen wird, <see cref="E:System.Web.UI.Control.PreRender" /> wird das-Ereignis nicht ausgelöst.</para></block>
+        <altmember cref="E:System.Web.UI.Control.PreRender" />
+        <altmember cref="M:System.Web.UI.Control.OnPreRender(System.EventArgs)" />
+        <altmember cref="T:System.Web.UI.Control" />
+      </Docs>
+    </Member>
+    <Member MemberName="OnUnload">
+      <MemberSignature Language="C#" Value="protected internal virtual void OnUnload (EventArgs e);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance void OnUnload(class System.EventArgs e) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.OnUnload(System.EventArgs)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Sub OnUnload (e As EventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual void OnUnload(EventArgs ^ e);" />
+      <MemberSignature Language="F#" Value="abstract member OnUnload : EventArgs -&gt; unit&#xA;override this.OnUnload : EventArgs -&gt; unit" Usage="controlAdapter.OnUnload e" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="e" Type="System.EventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="e">Ein <see cref="T:System.EventArgs" />, das die Ereignisdaten enthält.</param>
+        <summary>Überschreibt die <see cref="M:System.Web.UI.Control.OnUnload(System.EventArgs)" />-Methode für das zugeordnete Steuerelement.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn ein Adapter an ein <xref:System.Web.UI.Control> -Objekt angefügt ist und die <xref:System.Web.UI.Adapters.ControlAdapter.OnUnload%2A> -Methode überschrieben wird, wird die Überschreibungs Methode anstelle <xref:System.Web.UI.Control.OnUnload%2A?displayProperty=nameWithType> der-Methode aufgerufen.  
+  
+ Überschreiben <xref:System.Web.UI.Adapters.ControlAdapter.OnUnload%2A> Sie die-Methode, um die Ziel spezifische `Unload` Verarbeitung in der Phase des Lebenszyklus von Steuerelementen durchzuführen. In der Regel handelt es sich hierbei um Bereinigungs Funktionen, die der Disposition des Steuer Elements vorausgehen.  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie von der <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> -Klasse erben und der Adapter die <see cref="M:System.Web.UI.Adapters.ControlAdapter.OnUnload(System.EventArgs)" /> -Methode überschreibt, muss der Adapter die entsprechende Basisklassen Methode aufrufen, die wiederum die <see cref="M:System.Web.UI.Control.OnUnload(System.EventArgs)" /> -Methode aufruft. Wenn <see cref="M:System.Web.UI.Control.OnUnload(System.EventArgs)" /> nicht aufgerufen wird, wird <see cref="E:System.Web.UI.Control.Unload" /> das-Ereignis nicht ausgelöst.</para></block>
+        <altmember cref="E:System.Web.UI.Control.Unload" />
+        <altmember cref="M:System.Web.UI.Control.OnUnload(System.EventArgs)" />
+        <altmember cref="T:System.Web.UI.Control" />
+      </Docs>
+    </Member>
+    <Member MemberName="Page">
+      <MemberSignature Language="C#" Value="protected System.Web.UI.Page Page { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Web.UI.Page Page" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.Adapters.ControlAdapter.Page" />
+      <MemberSignature Language="VB.NET" Value="Protected ReadOnly Property Page As Page" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; property System::Web::UI::Page ^ Page { System::Web::UI::Page ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Page : System.Web.UI.Page" Usage="System.Web.UI.Adapters.ControlAdapter.Page" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.Browsable(false)</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Web.UI.Page</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Verweis auf die Seite ab, auf der sich das diesem Adapter zugeordnete Steuerelement befindet.</summary>
+        <value>Eine <see cref="T:System.Web.UI.Page" />, die den Zugriff auf die Instanz der Seite ermöglicht, auf der sich das zugeordnete Steuerelement befindet.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.UI.Adapters.ControlAdapter.Page%2A> -Eigenschaft ermöglicht den Zugriff <xref:System.Web.UI.Page?displayProperty=nameWithType> auf das-Objekt, in dem sich das Steuerelement befindet.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Web.UI.Page" />
+        <altmember cref="T:System.Web.UI.Control" />
+      </Docs>
+    </Member>
+    <Member MemberName="PageAdapter">
+      <MemberSignature Language="C#" Value="protected System.Web.UI.Adapters.PageAdapter PageAdapter { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Web.UI.Adapters.PageAdapter PageAdapter" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.Adapters.ControlAdapter.PageAdapter" />
+      <MemberSignature Language="VB.NET" Value="Protected ReadOnly Property PageAdapter As PageAdapter" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; property System::Web::UI::Adapters::PageAdapter ^ PageAdapter { System::Web::UI::Adapters::PageAdapter ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.PageAdapter : System.Web.UI.Adapters.PageAdapter" Usage="System.Web.UI.Adapters.ControlAdapter.PageAdapter" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.Browsable(false)</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Web.UI.Adapters.PageAdapter</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Verweis auf den Seitenadapter für die Seite ab, auf der sich das zugeordnete Steuerelement befindet.</summary>
+        <value>Ein <see cref="T:System.Web.UI.Adapters.PageAdapter" /> für die Seite, auf der sich das dem aktuellen <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> zugeordnete Steuerelement befindet.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.UI.Adapters.ControlAdapter.PageAdapter%2A> -Eigenschaft ermöglicht den Zugriff <xref:System.Web.UI.Adapters.PageAdapter?displayProperty=nameWithType> auf das- <xref:System.Web.UI.Page> Objekt für das <xref:System.Web.UI.Control> -Objekt, in dem <xref:System.Web.UI.Adapters.ControlAdapter> sich das dem aktuellen-Objekt zugeordnete-Objekt befindet.  
+  
+ Die <xref:System.Web.UI.Adapters.ControlAdapter.PageAdapter%2A> -Eigenschaft kann für den Zugriff auf andere Elemente auf Seiten Adapter Ebene verwendet werden, wie z. b. allgemeine Ziel spezifische Funktionen, die auf verschiedene Steuerelement Typen auf der Seite angewendet werden können.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Web.UI.Adapters.PageAdapter" />
+        <altmember cref="T:System.Web.UI.Control" />
+      </Docs>
+    </Member>
+    <Member MemberName="Render">
+      <MemberSignature Language="C#" Value="protected internal virtual void Render (System.Web.UI.HtmlTextWriter writer);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance void Render(class System.Web.UI.HtmlTextWriter writer) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.Render(System.Web.UI.HtmlTextWriter)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Sub Render (writer As HtmlTextWriter)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual void Render(System::Web::UI::HtmlTextWriter ^ writer);" />
+      <MemberSignature Language="F#" Value="abstract member Render : System.Web.UI.HtmlTextWriter -&gt; unit&#xA;override this.Render : System.Web.UI.HtmlTextWriter -&gt; unit" Usage="controlAdapter.Render writer" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="writer" Type="System.Web.UI.HtmlTextWriter" />
+      </Parameters>
+      <Docs>
+        <param name="writer">Der für das Rendering der zielspezifischen Ausgabe zu verwendende <see cref="T:System.Web.UI.HtmlTextWriter" />.</param>
+        <summary>Generiert das zielspezifische Markup für das Steuerelement, an das der Steuerelementadapter angefügt ist.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Überschreiben <xref:System.Web.UI.Adapters.ControlAdapter.Render%2A> Sie die-Methode, um das Ziel spezifische Markup zu generieren, das an den Client Browser gesendet wird. Die <xref:System.Web.UI.Adapters.ControlAdapter.Render%2A> -Methode wird anstelle <xref:System.Web.UI.Control.Render%2A?displayProperty=nameWithType> der-Methode aufgerufen, wenn <xref:System.Web.UI.Adapters.ControlAdapter> ein-Objekt an ein <xref:System.Web.UI.Control> -Objekt angefügt wird.  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie von der <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> -Klasse erben, ruft die <see cref="M:System.Web.UI.Adapters.ControlAdapter.Render(System.Web.UI.HtmlTextWriter)" /> Basis Methode <see cref="M:System.Web.UI.Control.Render(System.Web.UI.HtmlTextWriter)" /> die-Methode auf. Daher sollten über schreibungen der <see cref="M:System.Web.UI.Adapters.ControlAdapter.Render(System.Web.UI.HtmlTextWriter)" /> -Methode die <see cref="M:System.Web.UI.Adapters.ControlAdapter.Render(System.Web.UI.HtmlTextWriter)" /> -Basis Methode nur dann aufgerufen werden, wenn die Verarbeitung anstelle der- <see cref="M:System.Web.UI.Control.Render(System.Web.UI.HtmlTextWriter)" /> Methode anstelle der-Methode erfolgt.  
+  
+Bei einem zusammengesetzten Steuerelement muss der Adapter Entwickler sicherstellen, dass die untergeordneten Steuerelemente gerendert werden. Wenn die <see cref="M:System.Web.UI.Control.Render(System.Web.UI.HtmlTextWriter)" /> -Methode bewirkt, dass die untergeordneten Steuerelemente gerendert werden, aber kein Markup generiert, <see cref="M:System.Web.UI.Adapters.ControlAdapter.Render(System.Web.UI.HtmlTextWriter)" /> kann es sinnvoll sein, dass die-Methode ihre Basis Methode aufruft. Wenn das Ziel spezifische Rendering der untergeordneten Steuerelemente erforderlich ist, sollte der Adapter die <see cref="M:System.Web.UI.Adapters.ControlAdapter.RenderChildren(System.Web.UI.HtmlTextWriter)" /> -Methode implementieren und <see cref="M:System.Web.UI.Adapters.ControlAdapter.RenderChildren(System.Web.UI.HtmlTextWriter)" /> die-Methode <see cref="M:System.Web.UI.Adapters.ControlAdapter.Render(System.Web.UI.HtmlTextWriter)" /> von der-Methode aus aufzurufen.</para></block>
+        <altmember cref="M:System.Web.UI.Control.Render(System.Web.UI.HtmlTextWriter)" />
+        <altmember cref="T:System.Web.UI.Control" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.RenderChildren(System.Web.UI.HtmlTextWriter)" />
+        <altmember cref="M:System.Web.UI.Control.RenderChildren(System.Web.UI.HtmlTextWriter)" />
+        <altmember cref="M:System.Web.UI.Control.RenderControl(System.Web.UI.HtmlTextWriter,System.Web.UI.Adapters.ControlAdapter)" />
+      </Docs>
+    </Member>
+    <Member MemberName="RenderChildren">
+      <MemberSignature Language="C#" Value="protected virtual void RenderChildren (System.Web.UI.HtmlTextWriter writer);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void RenderChildren(class System.Web.UI.HtmlTextWriter writer) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.RenderChildren(System.Web.UI.HtmlTextWriter)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub RenderChildren (writer As HtmlTextWriter)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void RenderChildren(System::Web::UI::HtmlTextWriter ^ writer);" />
+      <MemberSignature Language="F#" Value="abstract member RenderChildren : System.Web.UI.HtmlTextWriter -&gt; unit&#xA;override this.RenderChildren : System.Web.UI.HtmlTextWriter -&gt; unit" Usage="controlAdapter.RenderChildren writer" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="writer" Type="System.Web.UI.HtmlTextWriter" />
+      </Parameters>
+      <Docs>
+        <param name="writer">Der für das Rendering der zielspezifischen Ausgabe zu verwendende <see cref="T:System.Web.UI.HtmlTextWriter" />.</param>
+        <summary>Generiert das zielspezifische Markup für die untergeordneten Steuerelemente in einem zusammengesetzten Steuerelement, an das der Steuerelementadapter angefügt ist.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Überschreiben <xref:System.Web.UI.Adapters.ControlAdapter.RenderChildren%2A> Sie die-Methode, wenn es erforderlich ist, das Ziel spezifische Markup für den untergeordneten Steuerelement Satz eines zusammengesetzten Steuer Elements zu generieren, zusätzlich zum Markup für die einzelnen untergeordneten Steuerelemente.  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie von der <see cref="T:System.Web.UI.Adapters.ControlAdapter" /> -Klasse erben, muss der Adapter Entwickler für ein zusammengesetztes Steuerelement sicherstellen, dass die untergeordneten Steuerelemente gerendert werden. Wenn der Adapter die <see cref="M:System.Web.UI.Adapters.ControlAdapter.RenderChildren(System.Web.UI.HtmlTextWriter)" /> -Methode überschreibt, sollte die <see cref="M:System.Web.UI.Adapters.ControlAdapter.RenderChildren(System.Web.UI.HtmlTextWriter)" /> -Methode <see cref="M:System.Web.UI.Adapters.ControlAdapter.Render(System.Web.UI.HtmlTextWriter)" /> von einer Überschreibung der-Methode aufgerufen werden.  
+  
+Wenn die <see cref="M:System.Web.UI.Control.Render(System.Web.UI.HtmlTextWriter)" /> Methode bewirkt, dass die untergeordneten Steuerelemente gerendert werden, aber selbst kein Markup generiert, kann <see cref="M:System.Web.UI.Adapters.ControlAdapter.Render(System.Web.UI.HtmlTextWriter)" /> es sinnvoll sein, dass die-Methode die- <see cref="M:System.Web.UI.Control.Render(System.Web.UI.HtmlTextWriter)" /> Methode aufruft, die die-Methode aufruft, anstatt eine außer Kraft setzung für zu implementieren. die <see cref="M:System.Web.UI.Adapters.ControlAdapter.RenderChildren(System.Web.UI.HtmlTextWriter)" /> -Methode.</para></block>
+        <altmember cref="M:System.Web.UI.Control.RenderChildren(System.Web.UI.HtmlTextWriter)" />
+        <altmember cref="T:System.Web.UI.Control" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.Render(System.Web.UI.HtmlTextWriter)" />
+        <altmember cref="M:System.Web.UI.Control.Render(System.Web.UI.HtmlTextWriter)" />
+      </Docs>
+    </Member>
+    <Member MemberName="SaveAdapterControlState">
+      <MemberSignature Language="C#" Value="protected internal virtual object SaveAdapterControlState ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance object SaveAdapterControlState() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.SaveAdapterControlState" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Function SaveAdapterControlState () As Object" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual System::Object ^ SaveAdapterControlState();" />
+      <MemberSignature Language="F#" Value="abstract member SaveAdapterControlState : unit -&gt; obj&#xA;override this.SaveAdapterControlState : unit -&gt; obj" Usage="controlAdapter.SaveAdapterControlState " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Speichert Steuerelementzustandsinformationen für den Steuerelementadapter.</summary>
+        <returns>Ein <see cref="T:System.Object" />, das die Steuerelementzustandsinformationen des Adapters als <see cref="T:System.Web.UI.StateBag" /> enthält.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Der Steuerelement Zustand ist die notwendigen Zustandsinformationen, auch wenn der Ansichts Zustand deaktiviert ist. Wenn ein Adapter seine eigenen Steuerelement Zustandsinformationen beibehalten muss, kann er die- <xref:System.Web.UI.Adapters.ControlAdapter.SaveAdapterControlState%2A> Methode <xref:System.Web.UI.Adapters.ControlAdapter.LoadAdapterControlState%2A> und die-Methode überschreiben.  
+  
+ Ein Adapter muss möglicherweise Steuerungs Zustandsinformationen beibehalten, wenn Features vorhanden sind, für die der Status über Anforderungen hinweg unabhängig vom Zustand des zugeordneten Steuer Elements verwaltet werden muss. Beispielsweise kann ein zusammengesetztes Steuerelement, das aus einer großen Textanzeige <xref:System.Web.UI.WebControls.RadioButton> und einer Gruppe von Steuerelementen besteht, als einzelne Ansicht auf Desktop Computer Browsern gerenbt werden. In anderen Browsern kann es das Rendering einer Ansicht für die Textanzeige und die andere für die Optionsfeld Gruppe aufteilen. Der Adapter muss seine eigenen Ziel spezifischen Informationen über die zurzeit aktive Sicht behalten.  
+  
+ Die <xref:System.Web.UI.Adapters.ControlAdapter.SaveAdapterControlState%2A> -Methode wird unmittelbar nach der <xref:System.Web.UI.Control.SaveControlState%2A?displayProperty=nameWithType> -Methode in `SaveState` der Lebenszyklusphase aufgerufen. Der Adapter Steuerelement Zustand ist getrennt und zusätzlich zum Steuerelement Zustand des Steuer Elements.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Web.UI.Control.SaveControlState" />
+        <altmember cref="T:System.Web.UI.Control" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.LoadAdapterControlState(System.Object)" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.SaveAdapterViewState" />
+      </Docs>
+    </Member>
+    <Member MemberName="SaveAdapterViewState">
+      <MemberSignature Language="C#" Value="protected internal virtual object SaveAdapterViewState ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance object SaveAdapterViewState() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.Adapters.ControlAdapter.SaveAdapterViewState" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Function SaveAdapterViewState () As Object" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual System::Object ^ SaveAdapterViewState();" />
+      <MemberSignature Language="F#" Value="abstract member SaveAdapterViewState : unit -&gt; obj&#xA;override this.SaveAdapterViewState : unit -&gt; obj" Usage="controlAdapter.SaveAdapterViewState " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Speichert Ansichtszustandsinformationen für den Steuerelementadapter.</summary>
+        <returns>Ein <see cref="T:System.Object" />, das die Adapteransichtszustandsinformationen als <see cref="T:System.Web.UI.StateBag" /> enthält.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn ein Adapter seine eigenen Ansichts Zustandsinformationen beibehalten muss, kann er die- <xref:System.Web.UI.Adapters.ControlAdapter.SaveAdapterViewState%2A> Methode <xref:System.Web.UI.Adapters.ControlAdapter.LoadAdapterViewState%2A> und die-Methode überschreiben.  
+  
+ Ein Adapter muss Informationen zum Ansichts Zustand erhalten, wenn Daten, die über Anforderungen hinweg verwaltet werden müssen, unabhängig vom zugeordneten Ansichts Zustand des Steuer Elements vorhanden sind. Ein Raster Steuerelement auf Desktop Computer Browsern kann z. b. als eine einzelne Ansicht von Zeilen und Spalten von Werten dargestellt werden. In anderen Browsern wird das Rendering möglicherweise in mehrere separate Ansichten aufgeteilt, z. b. eine Liste von Zeilen und Details einer einzelnen Zeile. Der Adapter muss die Daten für die Sichten verwalten, die derzeit im Ansichts Zustand nicht aktiv sind.  
+  
+ Die <xref:System.Web.UI.Adapters.ControlAdapter.SaveAdapterViewState%2A> -Methode wird direkt vor der <xref:System.Web.UI.Control.SaveViewState%2A?displayProperty=nameWithType> -Methode in `SaveState` der Lebenszyklusphase aufgerufen. Der Adapter Ansichts Zustand ist getrennt und zusätzlich zum Ansichts Zustand des Steuer Elements.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Web.UI.Control.SaveViewState" />
+        <altmember cref="T:System.Web.UI.Control" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.SaveAdapterControlState" />
+        <altmember cref="M:System.Web.UI.Adapters.ControlAdapter.LoadAdapterViewState(System.Object)" />
+        <altmember cref="P:System.Web.UI.Control.ViewState" />
+      </Docs>
+    </Member>
+  </Members>
+</Type>

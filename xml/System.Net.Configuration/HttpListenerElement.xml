@@ -1,0 +1,271 @@
+<Type Name="HttpListenerElement" FullName="System.Net.Configuration.HttpListenerElement">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="0bb649fa98399448f29bf4d71df1fde7531797b2" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70691262" /></Metadata><TypeSignature Language="C#" Value="public sealed class HttpListenerElement : System.Configuration.ConfigurationElement" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed HttpListenerElement extends System.Configuration.ConfigurationElement" />
+  <TypeSignature Language="DocId" Value="T:System.Net.Configuration.HttpListenerElement" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class HttpListenerElement&#xA;Inherits ConfigurationElement" />
+  <TypeSignature Language="C++ CLI" Value="public ref class HttpListenerElement sealed : System::Configuration::ConfigurationElement" />
+  <TypeSignature Language="F#" Value="type HttpListenerElement = class&#xA;    inherit ConfigurationElement" />
+  <AssemblyInfo>
+    <AssemblyName>System</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Configuration.ConfigurationElement</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>Stellt das HttpListener-Element in der Konfigurationsdatei dar. Diese Klasse kann nicht vererbt werden.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Klasse entspricht dem \<HttpListener-Konfigurations Element >-Element (Netzwerkeinstellungen). Diese Klasse ermöglicht den programmgesteuerten Zugriff auf Informationen, die in Konfigurationsdateien gespeichert werden können.  
+  
+ Die <xref:System.Net.Configuration.HttpListenerElement.UnescapeRequestUrl%2A> -Eigenschaft gibt <xref:System.Net.HttpListener> an, ob den unformatierten URI ohne Escapezeichen anstelle des konvertierten URI verwendet, bei dem alle Prozent codierten Werte konvertiert werden und andere normalisierungs Schritte ausgeführt werden.  
+  
+ Wenn eine <xref:System.Net.HttpListener> -Instanz eine Anforderung über den `http.sys` Dienst empfängt, erstellt Sie eine Instanz der von `http.sys`bereitgestellten URI-Zeichenfolge und macht Sie <xref:System.Net.HttpListenerRequest.Url%2A?displayProperty=nameWithType> als-Eigenschaft verfügbar.  
+  
+ Der `http.sys` Dienst macht zwei Anforderungs-URI-Zeichen folgen verfügbar:  
+  
+-   RAW-URI  
+  
+-   Konvertierter URI  
+  
+ Der unformatierte URI <xref:System.Uri?displayProperty=nameWithType> ist das, das in der Anforderungs Zeile einer HTTP-Anforderung bereitgestellt wird:  
+  
+ `GET /path/`  
+  
+ `Host: www.contoso.com`  
+  
+ Der von `http.sys` bereitgestellte Rohdaten-URI für die oben genannte Anforderung ist "/Path/". Dies stellt die Zeichenfolge dar, die auf das HTTP-Verb folgt, wie es über das Netzwerk gesendet wurde.  
+  
+ Der `http.sys` Dienst erstellt einen konvertierten URI aus den Informationen, die in der Anforderung bereitgestellt werden, indem der URI in der HTTP-Anforderungs Zeile und der Host Header verwendet wird, um den Ursprungsserver zu ermitteln, an den die Anforderung weitergeleitet werden soll. Dies erfolgt durch Vergleichen der Informationen aus der Anforderung mit einem Satz von registrierten URI-Präfixen. In der HTTP-Server-SDK-Dokumentation wird dieser konvertierte URI als [HTTP_COOKED_URL](https://go.microsoft.com/fwlink/?LinkID=166108) -Struktur bezeichnet.  
+  
+ Um die Anforderung mit registrierten URI-Präfixen vergleichen zu können, müssen einige Normalisierungen der Anforderung vorgenommen werden. Im obigen Beispiel würde der konvertierte URI wie folgt lauten:  
+  
+ `http://www.contoso.com/path/`  
+  
+ Der `http.sys` Dienst kombiniert den <xref:System.Uri.Host%2A?displayProperty=nameWithType> -Eigenschafts Wert und die Zeichenfolge in der Anforderungs Zeile, um einen konvertierten URI zu erstellen. Außerdem werden `http.sys` und die <xref:System.Uri?displayProperty=nameWithType> -Klasse auch die folgenden Schritte ausführen:  
+  
+-   Deaktiviert alle Prozent codierten Werte.  
+  
+-   Konvertiert Prozent codierte nicht-ASCII-Zeichen in eine UTF-16-Zeichen Darstellung. Beachten Sie, dass UTF-8-und ANSI/DBCS-Zeichen sowie Unicode-Zeichen (Unicode-Codierung mit dem Format "% uXXXX") unterstützt werden.  
+  
+-   Führt andere normalisierungs Schritte aus, z. b. Pfad Komprimierung  
+  
+ Da die Anforderung keine Informationen über die Codierung enthält, die für Prozent codierte Werte verwendet wird, ist es möglicherweise nicht möglich, die richtige Codierung zu ermitteln, indem Sie die Prozent codierten Werte zu ermitteln.  
+  
+ Stellt `http.sys` daher zwei Registrierungsschlüssel zum Ändern des Prozesses bereit:  
+  
+|-Registrierungsschlüssel|Standardwert|Beschreibung|  
+|------------------|-------------------|-----------------|  
+|EnableNonUTF8|1|Wenn 0 ( `http.sys` null), werden nur UTF-8-codierte URLs akzeptiert.<br /><br /> Wenn ungleich 0 (NULL `http.sys` ), werden auch ANSI-codierte oder DBCS-codierte URLs in Anforderungen akzeptiert.|  
+|FavorUTF8|1|Wenn der Wert ungleich NULL `http.sys` ist, wird von immer versucht, eine URL als UTF-8 zu decodieren. wenn diese Konvertierung fehlschlägt und EnableNonUTF8 nicht NULL ist, versucht http. sys, Sie als ANSI oder DBCS zu decodieren.<br /><br /> Wenn NULL (und EnableNonUTF8 ungleich null) ist, versucht `http.sys` , es als ANSI oder DBCS zu decodieren. wenn dies nicht erfolgreich ist, versucht es, eine UTF-8-Konvertierung durchzusetzen.|  
+  
+ Wenn <xref:System.Net.HttpListener> eine Anforderung empfängt, wird der konvertierte URI von `http.sys` als Eingabe für die <xref:System.Net.HttpListenerRequest.Url%2A> -Eigenschaft verwendet.  
+  
+ Es besteht die Notwendigkeit, Zeichen neben Zeichen und Zahlen in URIs zu unterstützen. Ein Beispiel ist der folgende URI, der zum Abrufen von Kundeninformationen für die Kundennummer "1/3812" verwendet wird:  
+  
+ `http://www.contoso.com/Customer('1%2F3812')/`  
+  
+ Notieren Sie sich den Prozentsatz codierten Schrägstrich im URI (% 2F). Dies ist erforderlich, da der Schrägstrich in diesem Fall Daten und kein Pfad Trennzeichen darstellt.  
+  
+ Wenn die Zeichenfolge an den URI-Konstruktor übergeben wird, führt dies zu folgendem URI:  
+  
+ `http://www.contoso.com/Customer('1/3812')/`  
+  
+ Wenn Sie den Pfad in seine Segmente aufteilen, werden die folgenden Elemente angezeigt:  
+  
+ `Customer('1`  
+  
+ `3812')`  
+  
+ Dies ist nicht die Absicht des Absenders der Anforderung.  
+  
+ Wenn die <xref:System.Net.Configuration.HttpListenerElement.UnescapeRequestUrl%2A> -Eigenschaft auf false festgelegt ist, wird <xref:System.Net.HttpListener> beim Empfangen einer Anforderung der unformatierte URI anstelle des konvertierten URI aus `http.sys` als Eingabe für die <xref:System.Net.HttpListenerRequest.Url%2A> -Eigenschaft verwendet.  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Net.HttpListener" />
+    <altmember cref="P:System.Net.HttpListenerRequest.Url" />
+    <related type="Article" href="~/docs/framework/configure-apps/file-schema/network/index.md">Netzwerkeinstellungsschema</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/62f121fd-3f2e-4033-bb39-48ae996bfbd9">&lt;HttpListener&gt; -Element (Netzwerkeinstellungen)</related>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public HttpListenerElement ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Net.Configuration.HttpListenerElement.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; HttpListenerElement();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Net.Configuration.HttpListenerElement" />-Klasse.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Properties">
+      <MemberSignature Language="C#" Value="protected override System.Configuration.ConfigurationPropertyCollection Properties { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Configuration.ConfigurationPropertyCollection Properties" />
+      <MemberSignature Language="DocId" Value="P:System.Net.Configuration.HttpListenerElement.Properties" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides ReadOnly Property Properties As ConfigurationPropertyCollection" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual property System::Configuration::ConfigurationPropertyCollection ^ Properties { System::Configuration::ConfigurationPropertyCollection ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Properties : System.Configuration.ConfigurationPropertyCollection" Usage="System.Net.Configuration.HttpListenerElement.Properties" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Configuration.ConfigurationPropertyCollection</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added.</summary>
+        <value>To be added.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Timeouts">
+      <MemberSignature Language="C#" Value="public System.Net.Configuration.HttpListenerTimeoutsElement Timeouts { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Net.Configuration.HttpListenerTimeoutsElement Timeouts" />
+      <MemberSignature Language="DocId" Value="P:System.Net.Configuration.HttpListenerElement.Timeouts" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Timeouts As HttpListenerTimeoutsElement" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Net::Configuration::HttpListenerTimeoutsElement ^ Timeouts { System::Net::Configuration::HttpListenerTimeoutsElement ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Timeouts : System.Net.Configuration.HttpListenerTimeoutsElement" Usage="System.Net.Configuration.HttpListenerElement.Timeouts" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Configuration.ConfigurationProperty("timeouts")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Net.Configuration.HttpListenerTimeoutsElement</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft die Standardtimeoutelemente ab, die für ein <see cref="T:System.Net.HttpListener" />-Objekt verwendet werden.</summary>
+        <value>Die Timeoutelemente, die für ein <see cref="T:System.Net.HttpListener" /> Objekt verwendet werden.</value>
+        <remarks>To be added.</remarks>
+        <altmember cref="T:System.Net.HttpListener" />
+        <altmember cref="T:System.Net.HttpListenerTimeoutManager" />
+        <altmember cref="T:System.Net.Configuration.HttpListenerTimeoutsElement" />
+      </Docs>
+    </Member>
+    <Member MemberName="UnescapeRequestUrl">
+      <MemberSignature Language="C#" Value="public bool UnescapeRequestUrl { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool UnescapeRequestUrl" />
+      <MemberSignature Language="DocId" Value="P:System.Net.Configuration.HttpListenerElement.UnescapeRequestUrl" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property UnescapeRequestUrl As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool UnescapeRequestUrl { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.UnescapeRequestUrl : bool" Usage="System.Net.Configuration.HttpListenerElement.UnescapeRequestUrl" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.Configuration.ConfigurationProperty("unescapeRequestUrl", DefaultValue=Mono.Cecil.CustomAttributeArgument, IsRequired=false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der angibt, ob <see cref="T:System.Net.HttpListener" /> den unformatierten URI ohne Escapezeichen anstelle des konvertierten URI verwendet.</summary>
+        <value>Ein boolescher Wert, der angibt, ob <see cref="T:System.Net.HttpListener" /> den unformatierten URI ohne Escapezeichen anstelle des konvertierten URI verwendet.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Net.Configuration.HttpListenerElement.UnescapeRequestUrl%2A> -Eigenschaft gibt <xref:System.Net.HttpListener> an, ob den unformatierten URI ohne Escapezeichen anstelle des konvertierten URI verwendet, bei dem alle Prozent codierten Werte konvertiert werden und andere normalisierungs Schritte ausgeführt werden.  
+  
+ Wenn eine <xref:System.Net.HttpListener> -Instanz eine Anforderung über den `http.sys` Dienst empfängt, erstellt Sie eine Instanz der von `http.sys`bereitgestellten URI-Zeichenfolge und macht Sie <xref:System.Net.HttpListenerRequest.Url%2A?displayProperty=nameWithType> als-Eigenschaft verfügbar.  
+  
+ Der `http.sys` Dienst macht zwei Anforderungs-URI-Zeichen folgen verfügbar:  
+  
+-   RAW-URI  
+  
+-   Konvertierter URI  
+  
+ Der unformatierte URI <xref:System.Uri?displayProperty=nameWithType> ist das, das in der Anforderungs Zeile einer HTTP-Anforderung bereitgestellt wird:  
+  
+ `GET /path/`  
+  
+ `Host: www.contoso.com`  
+  
+ Der von `http.sys` bereitgestellte Rohdaten-URI für die oben genannte Anforderung ist "/Path/". Dies stellt die Zeichenfolge dar, die auf das HTTP-Verb folgt, wie es über das Netzwerk gesendet wurde.  
+  
+ Der `http.sys` Dienst erstellt einen konvertierten URI aus den Informationen, die in der Anforderung bereitgestellt werden, indem der URI in der HTTP-Anforderungs Zeile und der Host Header verwendet wird, um den Ursprungsserver zu ermitteln, an den die Anforderung weitergeleitet werden soll. Dies erfolgt durch Vergleichen der Informationen aus der Anforderung mit einem Satz von registrierten URI-Präfixen. In der HTTP-Server-SDK-Dokumentation wird dieser konvertierte URI als [HTTP_COOKED_URL](https://go.microsoft.com/fwlink/?LinkID=166108) -Struktur bezeichnet.  
+  
+ Um die Anforderung mit registrierten URI-Präfixen vergleichen zu können, müssen einige Normalisierungen der Anforderung vorgenommen werden. Im obigen Beispiel würde der konvertierte URI wie folgt lauten:  
+  
+ `http://www.contoso.com/path/`  
+  
+ Der `http.sys` Dienst kombiniert den <xref:System.Uri.Host%2A?displayProperty=nameWithType> -Eigenschafts Wert und die Zeichenfolge in der Anforderungs Zeile, um einen konvertierten URI zu erstellen. Außerdem werden `http.sys` und die <xref:System.Uri?displayProperty=nameWithType> -Klasse auch die folgenden Schritte ausführen:  
+  
+-   Deaktiviert alle Prozent codierten Werte.  
+  
+-   Konvertiert Prozent codierte nicht-ASCII-Zeichen in eine UTF-16-Zeichen Darstellung. Beachten Sie, dass UTF-8-und ANSI/DBCS-Zeichen sowie Unicode-Zeichen (Unicode-Codierung mit dem Format "% uXXXX") unterstützt werden.  
+  
+-   Führt andere normalisierungs Schritte aus, z. b. Pfad Komprimierung  
+  
+ Da die Anforderung keine Informationen über die Codierung enthält, die für Prozent codierte Werte verwendet wird, ist es möglicherweise nicht möglich, die richtige Codierung zu ermitteln, indem Sie die Prozent codierten Werte zu ermitteln.  
+  
+ Stellt `http.sys` daher zwei Registrierungsschlüssel zum Ändern des Prozesses bereit:  
+  
+|-Registrierungsschlüssel|Standardwert|Beschreibung|  
+|------------------|-------------------|-----------------|  
+|EnableNonUTF8|1|Wenn 0 ( `http.sys` null), werden nur UTF-8-codierte URLs akzeptiert.<br /><br /> Wenn ungleich 0 (NULL `http.sys` ), werden auch ANSI-codierte oder DBCS-codierte URLs in Anforderungen akzeptiert.|  
+|FavorUTF8|1|Wenn der Wert ungleich NULL `http.sys` ist, wird von immer versucht, eine URL als UTF-8 zu decodieren. wenn diese Konvertierung fehlschlägt und EnableNonUTF8 nicht NULL ist, versucht http. sys, Sie als ANSI oder DBCS zu decodieren.<br /><br /> Wenn NULL (und EnableNonUTF8 ungleich null) ist, versucht `http.sys` , es als ANSI oder DBCS zu decodieren. wenn dies nicht erfolgreich ist, versucht es, eine UTF-8-Konvertierung durchzusetzen.|  
+  
+ Wenn <xref:System.Net.HttpListener> eine Anforderung empfängt, wird der konvertierte URI von `http.sys` als Eingabe für die <xref:System.Net.HttpListenerRequest.Url%2A> -Eigenschaft verwendet.  
+  
+ Es besteht die Notwendigkeit, Zeichen neben Zeichen und Zahlen in URIs zu unterstützen. Ein Beispiel ist der folgende URI, der zum Abrufen von Kundeninformationen für die Kundennummer "1/3812" verwendet wird:  
+  
+ `http://www.contoso.com/Customer('1%2F3812')/`  
+  
+ Notieren Sie sich den Prozentsatz codierten Schrägstrich im URI (% 2F). Dies ist erforderlich, da der Schrägstrich in diesem Fall Daten und kein Pfad Trennzeichen darstellt.  
+  
+ Wenn die Zeichenfolge an den URI-Konstruktor übergeben wird, führt dies zu folgendem URI:  
+  
+ `http://www.contoso.com/Customer('1/3812')/`  
+  
+ Wenn Sie den Pfad in seine Segmente aufteilen, werden die folgenden Elemente angezeigt:  
+  
+ `Customer('1`  
+  
+ `3812')`  
+  
+ Dies ist nicht die Absicht des Absenders der Anforderung.  
+  
+ Wenn die <xref:System.Net.Configuration.HttpListenerElement.UnescapeRequestUrl%2A> -Eigenschaft auf false festgelegt ist, wird <xref:System.Net.HttpListener> beim Empfangen einer Anforderung der unformatierte URI anstelle des konvertierten URI aus `http.sys` als Eingabe für die <xref:System.Net.HttpListenerRequest.Url%2A> -Eigenschaft verwendet.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Net.HttpListener" />
+        <altmember cref="P:System.Net.HttpListenerRequest.Url" />
+        <related type="Article" href="~/docs/framework/configure-apps/file-schema/network/index.md">Netzwerkeinstellungsschema</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/62f121fd-3f2e-4033-bb39-48ae996bfbd9">&lt;HttpListener&gt; -Element (Netzwerkeinstellungen)</related>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
