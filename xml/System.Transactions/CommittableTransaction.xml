@@ -1,0 +1,538 @@
+<Type Name="CommittableTransaction" FullName="System.Transactions.CommittableTransaction">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="051e7170b311f9af83680067a1edb706570cb5af" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70680362" /></Metadata><TypeSignature Language="C#" Value="public sealed class CommittableTransaction : System.Transactions.Transaction, IAsyncResult, IDisposable, System.Runtime.Serialization.ISerializable" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi serializable sealed beforefieldinit CommittableTransaction extends System.Transactions.Transaction implements class System.IAsyncResult, class System.IDisposable, class System.Runtime.Serialization.ISerializable" />
+  <TypeSignature Language="DocId" Value="T:System.Transactions.CommittableTransaction" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class CommittableTransaction&#xA;Inherits Transaction&#xA;Implements IAsyncResult, IDisposable, ISerializable" />
+  <TypeSignature Language="C++ CLI" Value="public ref class CommittableTransaction sealed : System::Transactions::Transaction, IAsyncResult, IDisposable, System::Runtime::Serialization::ISerializable" />
+  <TypeSignature Language="F#" Value="type CommittableTransaction = class&#xA;    inherit Transaction&#xA;    interface ISerializable&#xA;    interface IDisposable&#xA;    interface IAsyncResult" />
+  <AssemblyInfo>
+    <AssemblyName>System.Transactions</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Transactions.Local</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Transactions.Transaction</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.IAsyncResult</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.IDisposable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.Runtime.Serialization.ISerializable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes>
+    <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0">
+      <AttributeName>System.Serializable</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>Beschreibt eine Transaktion, für die ein Commit ausgeführt werden kann.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die `CommittableTransaction`-Klasse ermöglicht es Anwendungen, Transaktionen explizit zu verwenden, anstatt die <xref:System.Transactions.TransactionScope>-Klasse implizit zu verwenden. Im Unterschied zur <xref:System.Transactions.TransactionScope>-Klasse muss der Autor der Anwendung die <xref:System.Transactions.CommittableTransaction.Commit%2A>-Methode bzw. die <xref:System.Transactions.Transaction.Rollback%2A>-Methode aufrufen, um einen Commit der Transaktion auszuführen oder um sie abzubrechen. Allerdings kann nur der Ersteller einer Transaktion einen Commit für die Transaktion durchsetzen. Daher können Kopien einer commitfähigen Transaktion, die über die <xref:System.Transactions.Transaction.Clone%2A?displayProperty=nameWithType> -Methode abgerufen wird, nicht committet werden.  
+  
+> [!NOTE]
+>  Es wird empfohlen, implizite Transaktionen mithilfe der <xref:System.Transactions.TransactionScope> -Klasse zu erstellen, damit der Ambient-Transaktionskontext automatisch für Sie verwaltet wird. Außerdem sollten Sie die- <xref:System.Transactions.TransactionScope> Klasse <xref:System.Transactions.DependentTransaction> und die-Klasse für Anwendungen verwenden, die die Verwendung derselben Transaktion über mehrere Funktionsaufrufe oder mehrere Thread Aufrufe erfordern. Weitere Informationen zu diesem Modell finden Sie im Thema [Implementieren einer impliziten Transaktion mit Transaktions Bereich](~/docs/framework/data/transactions/implementing-an-implicit-transaction-using-transaction-scope.md) .  
+  
+ Beim Erstellen <xref:System.Transactions.CommittableTransaction> eines wird die Ambient-Transaktion nicht automatisch festgelegt, d. h. die Transaktion, in der der Code ausgeführt wird. Die Ambient-Transaktion kann durch Aufrufen der statischen <xref:System.Transactions.Transaction.Current%2A?displayProperty=nameWithType> -Eigenschaft des globalen <xref:System.Transactions.Transaction> -Objekts aufgerufen oder festgelegt werden. Weitere Informationen zu Ambient-Transaktionen finden Sie im Abschnitt "Verwalten des Transaktions Flusses mithilfe von transaktionscopeoption" im Thema [Implementieren einer impliziten Transaktion mit Transaktions Bereich](~/docs/framework/data/transactions/implementing-an-implicit-transaction-using-transaction-scope.md) . Wenn die Ambient-Transaktion nicht festgelegt ist, ist jeder Vorgang in einem Ressourcen-Manager nicht Teil dieser Transaktion. Sie müssen die Ambient-Transaktion explizit festlegen und zurücksetzen, um sicherzustellen, dass Ressourcen-Manager im richtigen Transaktionskontext arbeiten.  
+  
+ Bis ein <xref:System.Transactions.CommittableTransaction> Commit für ein Commit ausgeführt wurde, sind alle mit der Transaktion verbundenen Ressourcen immer noch gesperrt.  
+  
+ Ein <xref:System.Transactions.CommittableTransaction>-Objekt kann nicht wiederverwendet werden. Nachdem ein Commit oder Rollback ausgeführt wurde, kann er nicht mehr in einer Transaktion verwendet oder als aktueller Ambient-Transaktionskontext festgelegt werden.  
+
+ ]]></format>
+    </remarks>
+    <threadsafe>Dieser Typ ist threadsicher.</threadsafe>
+    <related type="Article" href="https://docs.microsoft.com/previous-versions/dotnet/netframework-3.0/ms172152(v=vs.85)">Implementieren einer impliziten Transaktion mit Transaktions Bereich</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/f6c648f8-d638-4228-bfa4-0d65dd262968">Implementieren einer expliziten Transaktion mit CommittableTransaction</related>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Transactions.CommittableTransaction" />-Klasse.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public CommittableTransaction ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Transactions.CommittableTransaction.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; CommittableTransaction();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions.Local</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Transactions.CommittableTransaction" />-Klasse.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ Im folgenden Beispiel wird eine neue Instanz von <xref:System.Transactions.CommittableTransaction> erstellt und ein Commit für Sie ausgeführt.  
+  
+ [!code-csharp[Tx_CommittableTx#1](~/samples/snippets/csharp/VS_Snippets_CFX/tx_committabletx/cs/committabletxwithsql.cs#1)]
+ [!code-vb[Tx_CommittableTx#1](~/samples/snippets/visualbasic/VS_Snippets_CFX/tx_committabletx/vb/committabletxwithsql.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.PlatformNotSupportedException">Es wurde versucht, unter Windows 98, Windows 98 SE oder Windows Millennium Edition eine Transaktion zu erstellen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public CommittableTransaction (TimeSpan timeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(valuetype System.TimeSpan timeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Transactions.CommittableTransaction.#ctor(System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (timeout As TimeSpan)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; CommittableTransaction(TimeSpan timeout);" />
+      <MemberSignature Language="F#" Value="new System.Transactions.CommittableTransaction : TimeSpan -&gt; System.Transactions.CommittableTransaction" Usage="new System.Transactions.CommittableTransaction timeout" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions.Local</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="timeout" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="timeout">Die maximale Zeitspanne, für die die Transaktion vorhanden sein kann, bevor sie abgebrochen wird.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Transactions.CommittableTransaction" />-Klasse mit dem angegebenen <paramref name="timeout" />-Wert.</summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.PlatformNotSupportedException">Es wurde versucht, unter Windows 98, Windows 98 SE oder Windows Millennium Edition eine Transaktion zu erstellen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public CommittableTransaction (System.Transactions.TransactionOptions options);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(valuetype System.Transactions.TransactionOptions options) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Transactions.CommittableTransaction.#ctor(System.Transactions.TransactionOptions)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (options As TransactionOptions)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; CommittableTransaction(System::Transactions::TransactionOptions options);" />
+      <MemberSignature Language="F#" Value="new System.Transactions.CommittableTransaction : System.Transactions.TransactionOptions -&gt; System.Transactions.CommittableTransaction" Usage="new System.Transactions.CommittableTransaction options" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions.Local</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="options" Type="System.Transactions.TransactionOptions" />
+      </Parameters>
+      <Docs>
+        <param name="options">Eine <see cref="T:System.Transactions.TransactionOptions" />-Struktur, die die Transaktionsoptionen beschreibt, die für die neue Transaktion verwendet werden sollen.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Transactions.CommittableTransaction" />-Klasse mit den angegebenen Transaktionsoptionen.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ Im folgenden Beispiel wird eine neue Instanz von <xref:System.Transactions.CommittableTransaction> mit Optionen erstellt und abgebrochen.  
+  
+  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.PlatformNotSupportedException">Es wurde versucht, unter Windows 98, Windows 98 SE oder Windows Millennium Edition eine Transaktion zu erstellen.</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="options" /> ist ungültig.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="BeginCommit">
+      <MemberSignature Language="C#" Value="public IAsyncResult BeginCommit (AsyncCallback asyncCallback, object asyncState);" FrameworkAlternate="netcore-2.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netstandard-2.0;netcore-2.1;netframework-4.7.2;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.IAsyncResult BeginCommit(class System.AsyncCallback asyncCallback, object asyncState) cil managed" FrameworkAlternate="netcore-2.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netstandard-2.0;netcore-2.1;netframework-4.7.2;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      <MemberSignature Language="DocId" Value="M:System.Transactions.CommittableTransaction.BeginCommit(System.AsyncCallback,System.Object)" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; IAsyncResult ^ BeginCommit(AsyncCallback ^ asyncCallback, System::Object ^ asyncState);" FrameworkAlternate="netcore-2.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netstandard-2.0;netcore-2.1;netframework-4.7.2;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      <MemberSignature Language="C#" Value="public IAsyncResult BeginCommit (AsyncCallback callback, object user_defined_state);" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.IAsyncResult BeginCommit(class System.AsyncCallback callback, object user_defined_state) cil managed" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="VB.NET" Value="Public Function BeginCommit (callback As AsyncCallback, user_defined_state As Object) As IAsyncResult" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; IAsyncResult ^ BeginCommit(AsyncCallback ^ callback, System::Object ^ user_defined_state);" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="DocId" Value="M:System.Transactions.CommittableTransaction.BeginCommit(System.AsyncCallback,System.Object)" FrameworkAlternate="xamarinandroid-7.1" />
+      <MemberSignature Language="VB.NET" Value="Public Function BeginCommit (callback As AsyncCallback, user_defined_state As Object) As IAsyncResult" FrameworkAlternate="xamarinandroid-7.1" />
+      <MemberSignature Language="F#" Value="member this.BeginCommit : AsyncCallback * obj -&gt; IAsyncResult" Usage="committableTransaction.BeginCommit (callback, user_defined_state)" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="F#" Value="member this.BeginCommit : AsyncCallback * obj -&gt; IAsyncResult" Usage="committableTransaction.BeginCommit (callback, user_defined_state)" FrameworkAlternate="xamarinandroid-7.1" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions.Local</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.IAsyncResult</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="asyncCallback" Type="System.AsyncCallback" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1" />
+        <Parameter Name="callback" Type="System.AsyncCallback" Index="0" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="asyncState" Type="System.Object" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1" />
+        <Parameter Name="user_defined_state" Type="System.Object" Index="1" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="asyncCallback">Der <see cref="T:System.AsyncCallback" />-Delegat, der beim Abschluss der Transaktion aufgerufen wird. Dieser Parameter kann <see langword="null" /> sein. In diesem Fall wird die Anwendung nicht über den Abschluss der Transaktion benachrichtigt. Stattdessen muss die Anwendung mithilfe der <see cref="T:System.IAsyncResult" />-Schnittstelle eine Überprüfung auf den Abschluss ausführen und entsprechend warten bzw. <see cref="M:System.Transactions.CommittableTransaction.EndCommit(System.IAsyncResult)" /> aufrufen, um auf den Abschluss der Transaktion zu warten.</param>
+        <param name="callback">Der <see cref="T:System.AsyncCallback" />-Delegat, der beim Abschluss der Transaktion aufgerufen wird. Dieser Parameter kann <see langword="null" /> sein. In diesem Fall wird die Anwendung nicht über den Abschluss der Transaktion benachrichtigt. Stattdessen muss die Anwendung mithilfe der <see cref="T:System.IAsyncResult" />-Schnittstelle eine Überprüfung auf den Abschluss ausführen und entsprechend warten bzw. <see cref="M:System.Transactions.CommittableTransaction.EndCommit(System.IAsyncResult)" /> aufrufen, um auf den Abschluss der Transaktion zu warten.</param>
+        <param name="asyncState">Ein Objekt, das beliebige Zustandsinformationen enthalten kann, die dem asynchronen Commit zugeordnet sind. Dieses Objekt wird an den Rückruf übergeben und von <see cref="N:System.Transactions" /> nicht interpretiert. Ein NULL-Verweis ist zulässig.</param>
+        <param name="user_defined_state">Ein Objekt, das beliebige Zustandsinformationen enthalten kann, die dem asynchronen Commit zugeordnet sind. Dieses Objekt wird an den Rückruf übergeben und von <see cref="N:System.Transactions" /> nicht interpretiert. Ein NULL-Verweis ist zulässig.</param>
+        <summary>Versucht, einen asynchronen Commit für die Transaktion auszuführen.</summary>
+        <returns>Eine <see cref="T:System.IAsyncResult" />-Schnittstelle, mit deren Hilfe der Aufrufer den Status des asynchronen Vorgangs überprüfen oder auf den Abschluss des Vorgangs warten kann.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode wird sofort zurückgegeben, bevor die Transaktion abgeschlossen wurde. Die Transaktion führt dann einen Commit für einen anderen Thread aus `asyncCallback` , und der Delegat wird aufgerufen, wenn er abgeschlossen wurde. Nachdem diese Methode aufgerufen wurde, erhalten Sie das Ergebnis der Transaktion erst, nachdem Sie <xref:System.Transactions.CommittableTransaction.EndCommit%2A>aufgerufen haben.  
+  
+> [!NOTE]
+>  Der Commit-Prozess kann innerhalb dieses Methoden Aufrufes synchron vollständig ausgeführt werden.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Transactions.CommittableTransaction.EndCommit(System.IAsyncResult)" />
+      </Docs>
+    </Member>
+    <Member MemberName="Commit">
+      <MemberSignature Language="C#" Value="public void Commit ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void Commit() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Transactions.CommittableTransaction.Commit" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Commit ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void Commit();" />
+      <MemberSignature Language="F#" Value="member this.Commit : unit -&gt; unit" Usage="committableTransaction.Commit " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions.Local</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Versucht, einen Commit für die Transaktion auszuführen.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn diese Methode aufgerufen wird, werden alle Objekte, die für die Teilnahme an der Transaktion registriert wurden, abgerufen und können unabhängig voneinander angeben, ob für die Transaktion ein Commit oder ein Rollback ausgeführt werden soll. Wenn für einen Teilnehmer ein Rollback der Transaktion durchgeführt wird, wird ein Rollback ausgeführt <xref:System.Transactions.TransactionException> , und diese Methode löst eine-Ausnahme aus. Dies ist ein normales Vorkommen für eine Transaktion, und Ihr Code sollte solche Ausnahmen abfangen und verarbeiten.  
+  
+ <xref:System.Transactions.CommittableTransaction.Commit%2A>und <xref:System.Transactions.CommittableTransaction.EndCommit%2A> blockieren, bis die erste Phase der Transaktionsverarbeitung abgeschlossen ist. Die erste Phase wird beendet, nachdem alle Ressourcen-Manager und Eintragung in der Transaktion zum Transaktions Ergebnis gewählt und die <xref:System.Transactions.TransactionManager> Transaktion permanent beschlossen hat, die Transaktion zu committen oder abzubrechen. Die zweite Phase der Verarbeitung ist immer asynchron. Daher gibt es keine Garantie dafür, dass Daten, die gerade innerhalb einer bestimmten Transaktion ausgeführt wurden, sofort verfügbar sind, wenn keine andere Transaktion zum Anzeigen dieser Daten verwendet wird.  
+  
+ Da diese Methode blockiert wird, bis die erste Phase der Transaktionsverarbeitung abgeschlossen ist, sollten Sie sehr vorsichtig sein, wenn Sie diese Methode in einer Windows Form-Anwendung (Winform) verwenden oder ein Deadlock auftreten kann. Wenn Sie diese Methode innerhalb eines Winform-Steuerelement Ereignisses (z. b. durch Klicken auf eine Schaltfläche) <xref:System.Windows.Forms.Control.Invoke%2A> aufzurufen und die synchrone-Methode verwenden, um das Steuerelement zur Ausführung einiger Benutzeroberflächen Tasks (z. b. zum Ändern von Farben) während der Verarbeitung der Transaktion zu leiten, a ein Deadlock wird auftreten. Dies liegt daran, <xref:System.Windows.Forms.Control.Invoke%2A> dass die-Methode synchron ist und den Arbeits Thread blockiert, bis der UI-Thread seinen Auftrag beendet. In unserem Szenario wartet der UI-Thread jedoch auch darauf, dass der Arbeits Thread einen Commit für die Transaktion durchläuft. Das Ergebnis ist, dass keine fortgesetzt werden kann und der Bereich unbegrenzt wartet, bis der Commit abgeschlossen ist. Sie sollten <xref:System.Windows.Forms.Control.BeginInvoke%2A> <xref:System.Windows.Forms.Control.Invoke%2A> anstelle der möglichen Verwendung verwenden, da Sie asynchron und somit weniger anfällig für Deadlocks ist.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Transactions.TransactionInDoubtException"><see cref="M:System.Transactions.CommittableTransaction.Commit" /> wird für eine Transaktion aufgerufen, und die Transaktion wird zu <see cref="F:System.Transactions.TransactionStatus.InDoubt" />.</exception>
+        <exception cref="T:System.Transactions.TransactionAbortedException"><see cref="M:System.Transactions.CommittableTransaction.Commit" /> wird aufgerufen, und es wird zum ersten Mal ein Commit der Transaktion ausgeführt.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="EndCommit">
+      <MemberSignature Language="C#" Value="public void EndCommit (IAsyncResult asyncResult);" FrameworkAlternate="netcore-2.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netstandard-2.0;netcore-2.1;netframework-4.7.2;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void EndCommit(class System.IAsyncResult asyncResult) cil managed" FrameworkAlternate="netcore-2.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netstandard-2.0;netcore-2.1;netframework-4.7.2;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      <MemberSignature Language="DocId" Value="M:System.Transactions.CommittableTransaction.EndCommit(System.IAsyncResult)" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="VB.NET" Value="Public Sub EndCommit (asyncResult As IAsyncResult)" FrameworkAlternate="netcore-2.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netstandard-2.0;netcore-2.1;netframework-4.7.2;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void EndCommit(IAsyncResult ^ asyncResult);" FrameworkAlternate="netcore-2.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netstandard-2.0;netcore-2.1;netframework-4.7.2;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      <MemberSignature Language="C#" Value="public void EndCommit (IAsyncResult ar);" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void EndCommit(class System.IAsyncResult ar) cil managed" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="VB.NET" Value="Public Sub EndCommit (ar As IAsyncResult)" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void EndCommit(IAsyncResult ^ ar);" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="DocId" Value="M:System.Transactions.CommittableTransaction.EndCommit(System.IAsyncResult)" FrameworkAlternate="xamarinandroid-7.1" />
+      <MemberSignature Language="F#" Value="member this.EndCommit : IAsyncResult -&gt; unit" Usage="committableTransaction.EndCommit ar" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="F#" Value="member this.EndCommit : IAsyncResult -&gt; unit" Usage="committableTransaction.EndCommit ar" FrameworkAlternate="xamarinandroid-7.1" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions.Local</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="asyncResult" Type="System.IAsyncResult" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1" />
+        <Parameter Name="ar" Type="System.IAsyncResult" Index="0" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="asyncResult">Das dem asynchronen Commit zugeordnete <see cref="T:System.IAsyncResult" />-Objekt.</param>
+        <param name="ar">Das dem asynchronen Commit zugeordnete <see cref="T:System.IAsyncResult" />-Objekt.</param>
+        <summary>Beendet einen Versuch, einen asynchronen Commit für die Transaktion auszuführen.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Sie sollten diese Methode in dem Rückruf Delegaten aufrufen, der als Parameter für <xref:System.Transactions.CommittableTransaction.BeginCommit%2A> die-Methode angegeben wird, wenn Sie alle Bereinigungs Arbeiten abgeschlossen haben, die mit der asynchronen Verpflichtung verknüpft sind. Sie können diese Methode auch frühzeitig aufzurufen, ohne auf den Delegaten zu warten. Wenn die Transaktion zum Zeitpunkt der aufrufenden Methode noch nicht abgeschlossen ist, wartet diese Methode auf deren Abschluss.  
+  
+> [!CAUTION]
+>  Die <xref:System.IAsyncResult.CompletedSynchronously%2A> `false`von `asyncResult` zurückgegebene Eigenschaft ist immer, auch wenn der Vorgang synchron abgeschlossen wurde.  
+  
+ <xref:System.Transactions.CommittableTransaction.Commit%2A>und <xref:System.Transactions.CommittableTransaction.EndCommit%2A> blockieren, bis die erste Phase der Transaktionsverarbeitung abgeschlossen ist. Die erste Phase wird beendet, nachdem alle Ressourcen-Manager und Eintragung in der Transaktion zum Transaktions Ergebnis gewählt und die <xref:System.Transactions.TransactionManager> Transaktion permanent beschlossen hat, die Transaktion zu committen oder abzubrechen. Die zweite Phase der Verarbeitung ist immer asynchron. Daher gibt es keine Garantie dafür, dass Daten, die gerade innerhalb einer bestimmten Transaktion ausgeführt wurden, sofort verfügbar sind, wenn keine andere Transaktion zum Anzeigen dieser Daten verwendet wird.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Transactions.TransactionAbortedException"><see cref="M:System.Transactions.CommittableTransaction.BeginCommit(System.AsyncCallback,System.Object)" /> wird aufgerufen, und es wird zum ersten Mal ein Commit der Transaktion ausgeführt.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="System.IAsyncResult.AsyncState">
+      <MemberSignature Language="C#" Value="object System.IAsyncResult.AsyncState { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object System.IAsyncResult.AsyncState" />
+      <MemberSignature Language="DocId" Value="P:System.Transactions.CommittableTransaction.System#IAsyncResult#AsyncState" />
+      <MemberSignature Language="VB.NET" Value=" ReadOnly Property AsyncState As Object Implements IAsyncResult.AsyncState" />
+      <MemberSignature Language="C++ CLI" Value="property System::Object ^ System::IAsyncResult::AsyncState { System::Object ^ get(); };" />
+      <MemberSignature Language="F#" Usage="System.IAsyncResult.AsyncState" />
+      <MemberType>Property</MemberType>
+      <Implements>
+        <InterfaceMember>P:System.IAsyncResult.AsyncState</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions.Local</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft das Objekt ab, das als letzter Parameter des <see cref="M:System.Transactions.CommittableTransaction.BeginCommit(System.AsyncCallback,System.Object)" />-Methodenaufrufs bereitgestellt wurde.</summary>
+        <value>Das Objekt, das als letzter Parameter des <see cref="M:System.Transactions.CommittableTransaction.BeginCommit(System.AsyncCallback,System.Object)" />-Methodenaufrufs bereitgestellt wurde.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="System.IAsyncResult.AsyncWaitHandle">
+      <MemberSignature Language="C#" Value="System.Threading.WaitHandle System.IAsyncResult.AsyncWaitHandle { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Threading.WaitHandle System.IAsyncResult.AsyncWaitHandle" />
+      <MemberSignature Language="DocId" Value="P:System.Transactions.CommittableTransaction.System#IAsyncResult#AsyncWaitHandle" />
+      <MemberSignature Language="VB.NET" Value=" ReadOnly Property AsyncWaitHandle As WaitHandle Implements IAsyncResult.AsyncWaitHandle" />
+      <MemberSignature Language="C++ CLI" Value="property System::Threading::WaitHandle ^ System::IAsyncResult::AsyncWaitHandle { System::Threading::WaitHandle ^ get(); };" />
+      <MemberSignature Language="F#" Usage="System.IAsyncResult.AsyncWaitHandle" />
+      <MemberType>Property</MemberType>
+      <Implements>
+        <InterfaceMember>P:System.IAsyncResult.AsyncWaitHandle</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions.Local</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Threading.WaitHandle</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft eine <see cref="T:System.Threading.WaitHandle" />-Klasse auf, die für das Warten auf den Abschluss eines asynchronen Vorgangs verwendet wird.</summary>
+        <value>Eine <see cref="T:System.Threading.WaitHandle" />-Klasse, die für das Warten auf den Abschluss eines asynchronen Vorgangs verwendet wird.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="System.IAsyncResult.CompletedSynchronously">
+      <MemberSignature Language="C#" Value="bool System.IAsyncResult.CompletedSynchronously { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool System.IAsyncResult.CompletedSynchronously" />
+      <MemberSignature Language="DocId" Value="P:System.Transactions.CommittableTransaction.System#IAsyncResult#CompletedSynchronously" />
+      <MemberSignature Language="VB.NET" Value=" ReadOnly Property CompletedSynchronously As Boolean Implements IAsyncResult.CompletedSynchronously" />
+      <MemberSignature Language="C++ CLI" Value="property bool System::IAsyncResult::CompletedSynchronously { bool get(); };" />
+      <MemberSignature Language="F#" Usage="System.IAsyncResult.CompletedSynchronously" />
+      <MemberType>Property</MemberType>
+      <Implements>
+        <InterfaceMember>P:System.IAsyncResult.CompletedSynchronously</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions.Local</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft eine Angabe darüber ab, ob der asynchrone Commitvorgang synchron abgeschlossen wurde.</summary>
+        <value><see langword="true" />, wenn der asynchrone Commitvorgang synchron abgeschlossen wurde, andernfalls <see langword="false" />. Diese Eigenschaft gibt immer <see langword="false" /> zurück, auch wenn der Vorgang synchron abgeschlossen wurde.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="System.IAsyncResult.IsCompleted">
+      <MemberSignature Language="C#" Value="bool System.IAsyncResult.IsCompleted { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool System.IAsyncResult.IsCompleted" />
+      <MemberSignature Language="DocId" Value="P:System.Transactions.CommittableTransaction.System#IAsyncResult#IsCompleted" />
+      <MemberSignature Language="VB.NET" Value=" ReadOnly Property IsCompleted As Boolean Implements IAsyncResult.IsCompleted" />
+      <MemberSignature Language="C++ CLI" Value="property bool System::IAsyncResult::IsCompleted { bool get(); };" />
+      <MemberSignature Language="F#" Usage="System.IAsyncResult.IsCompleted" />
+      <MemberType>Property</MemberType>
+      <Implements>
+        <InterfaceMember>P:System.IAsyncResult.IsCompleted</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions.Local</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft eine Angabe darüber ab, ob der asynchrone Commitvorgang abgeschlossen wurde.</summary>
+        <value><see langword="true" />, wenn der Vorgang abgeschlossen ist, andernfalls <see langword="false" />.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="System.Runtime.Serialization.ISerializable.GetObjectData">
+      <MemberSignature Language="C#" Value="void ISerializable.GetObjectData (System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context);" />
+      <MemberSignature Language="ILAsm" Value=".method hidebysig newslot virtual instance void System.Runtime.Serialization.ISerializable.GetObjectData(class System.Runtime.Serialization.SerializationInfo info, valuetype System.Runtime.Serialization.StreamingContext context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Transactions.CommittableTransaction.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" />
+      <MemberSignature Language="VB.NET" Value="Sub GetObjectData (info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData" />
+      <MemberSignature Language="C++ CLI" Value=" virtual void System.Runtime.Serialization.ISerializable.GetObjectData(System::Runtime::Serialization::SerializationInfo ^ info, System::Runtime::Serialization::StreamingContext context) = System::Runtime::Serialization::ISerializable::GetObjectData;" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Transactions.Local</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="info" Type="System.Runtime.Serialization.SerializationInfo" Index="0" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="context" Type="System.Runtime.Serialization.StreamingContext" Index="1" FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="info">To be added.</param>
+        <param name="context">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
