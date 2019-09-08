@@ -1,0 +1,1762 @@
+<Type Name="ReaderWriterLockSlim" FullName="System.Threading.ReaderWriterLockSlim">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="bccb975feff4e3305b575f6d69439f620330aec9" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70567441" /></Metadata><TypeSignature Language="C#" Value="public class ReaderWriterLockSlim : IDisposable" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit ReaderWriterLockSlim extends System.Object implements class System.IDisposable" />
+  <TypeSignature Language="DocId" Value="T:System.Threading.ReaderWriterLockSlim" />
+  <TypeSignature Language="VB.NET" Value="Public Class ReaderWriterLockSlim&#xA;Implements IDisposable" />
+  <TypeSignature Language="C++ CLI" Value="public ref class ReaderWriterLockSlim : IDisposable" />
+  <TypeSignature Language="F#" Value="type ReaderWriterLockSlim = class&#xA;    interface IDisposable" />
+  <AssemblyInfo>
+    <AssemblyName>System.Threading</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.10.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Core</AssemblyName>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>3.5.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.IDisposable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Docs>
+    <summary>Stellt eine Sperre dar, mit der der Zugriff auf eine Ressource verwaltet wird. Mehrere Threads können hierbei Lesezugriff oder exklusiven Schreibzugriff erhalten.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Verwenden <xref:System.Threading.ReaderWriterLockSlim> Sie, um eine Ressource zu schützen, die von mehreren Threads gelesen und jeweils von einem Thread geschrieben wird. <xref:System.Threading.ReaderWriterLockSlim>ermöglicht es, dass sich mehrere Threads im Lesemodus befinden, einen Thread im Schreibmodus mit ausschließlicher Besitz Sperre aufweisen und einem Thread, der über Lesezugriff verfügt, den erweiterbaren Lesemodus ermöglicht, von dem der Thread auf den Schreibmodus aktualisiert werden kann, ohne ihn aufgeben zu müssen. Lesezugriff auf die Ressource.  
+  
+> [!NOTE]
+>  <xref:System.Threading.ReaderWriterLockSlim> ähnelt <xref:System.Threading.ReaderWriterLock>, verfügt aber über vereinfachte Regeln für Rekursion sowie für Upgrade und Downgrade des Sperrstatus. <xref:System.Threading.ReaderWriterLockSlim> vermeidet viele potenzielle Deadlocks. Darüber hinaus ist die Leistung von <xref:System.Threading.ReaderWriterLockSlim> wesentlich besser als die von <xref:System.Threading.ReaderWriterLock>. <xref:System.Threading.ReaderWriterLockSlim> wird für alle Neuentwicklungen empfohlen.  
+  
+ Standardmäßig werden neue Instanzen von <xref:System.Threading.ReaderWriterLockSlim> mit dem <xref:System.Threading.LockRecursionPolicy.NoRecursion?displayProperty=nameWithType> -Flag erstellt und lassen keine Rekursion zu. Diese Standard Richtlinie wird für alle neuen Entwicklungen empfohlen, da bei der Rekursion unnötige Komplikationen eingeführt werden und der Code anfälliger für Deadlocks wird. Um die Migration von vorhandenen Projekten zu vereinfachen <xref:System.Threading.Monitor> , <xref:System.Threading.ReaderWriterLock>die oder verwenden, können <xref:System.Threading.LockRecursionPolicy.SupportsRecursion?displayProperty=nameWithType> Sie das-Flag verwenden <xref:System.Threading.ReaderWriterLockSlim> , um Instanzen von zu erstellen, die Rekursion zulassen.  
+  
+ Ein Thread kann die Sperre in drei Modi eingeben: Lesemodus, Schreibmodus und aktualisierbaren Lesemodus. (Im weiteren Verlauf dieses Themas wird "erweiterbare Lesemodus" als "erweiterbaren Modus" bezeichnet, und der Ausdruck "Enter `x` Mode" wird im Gegensatz zum längeren Ausdruck "Sperre in `x` den Modus eingeben" verwendet.)  
+  
+ Unabhängig von der Rekursions Richtlinie kann sich jeweils nur ein Thread im Schreibmodus befinden. Wenn sich ein Thread im Schreibmodus befindet, kann kein anderer Thread die Sperre in einem beliebigen Modus eingeben. Nur ein Thread kann jederzeit im erweiterbaren Modus ausgeführt werden. Eine beliebige Anzahl von Threads kann sich im Lesemodus befinden, und es kann ein Thread im erweiterbaren Modus vorhanden sein, während sich andere Threads im Lesemodus befinden.  
+  
+> [!IMPORTANT]
+>  Dieser Typ implementiert die <xref:System.IDisposable>-Schnittstelle. Nach Abschluss der Verwendung sollten Sie den Typ entweder direkt oder indirekt löschen. Zum direkten Löschen des Typs rufen Sie seine <xref:System.IDisposable.Dispose%2A>-Methode in einem `try`/`catch`-Block auf. Zum indirekten Löschen verwenden Sie ein Sprachkonstrukt wie `using` (in C#) oder `Using` (in Visual Basic). Weitere Informationen finden Sie im Abschnitt „Verwenden eines Objekts, das IDisposable implementiert“ des Themas „Die <xref:System.IDisposable>-Schnittstelle“.  
+  
+ <xref:System.Threading.ReaderWriterLockSlim>hat eine verwaltete Thread Affinität. Das heißt, dass <xref:System.Threading.Thread> jedes-Objekt seine eigenen Methodenaufrufe ausführen muss, um Sperr Modi einzugeben und zu beenden. Der Modus eines anderen Threads kann von keinem Thread geändert werden.  
+  
+ Wenn eine <xref:System.Threading.ReaderWriterLockSlim> Rekursion nicht zulässt, kann ein Thread, der versucht, die Sperre einzugeben, aus verschiedenen Gründen blockieren:  
+  
+-   Ein Thread, der versucht, in den Lesemodus zu wechseln, wenn Threads darauf warten, in den Schreibmodus zu wechseln, oder wenn ein einzelner Thread im Schreibmodus vorhanden ist.  
+  
+    > [!NOTE]
+    >  Das Blockieren neuer Leser, wenn Writer in die Warteschlange eingereiht werden, ist eine Richtlinie für die Sperrung von Sperren Die aktuelle Fairness-Richtlinie gleicht die Fairness von Lesern und Writern aus, um den Durchsatz in den gängigsten Szenarien zu fördern. In zukünftigen Versionen von [!INCLUDE[dnprdnshort](~/includes/dnprdnshort-md.md)] können neue Fairness-Richtlinien eingeführt werden.  
+  
+-   Ein Thread, der versucht, den erweiterbaren Modus zu wechseln, wenn sich bereits ein Thread im erweiterbaren Modus befindet, wenn Threads darauf warten, in den Schreibmodus zu wechseln, oder wenn ein einzelner Thread im Schreibmodus vorhanden ist.  
+  
+-   Ein Thread, der versucht, in den Schreibmodus zu wechseln, wenn ein Thread in einem der drei Modi vorhanden ist.  
+  
+## <a name="upgrading-and-downgrading-locks"></a>Aktualisieren und Herabstufen von Sperren  
+ Der aktualisierbare Modus ist für Fälle vorgesehen, in denen ein Thread normalerweise aus der geschützten Ressource liest, aber möglicherweise in ihn schreiben muss, wenn eine bestimmte Bedingung erfüllt ist. Ein Thread, der in einen <xref:System.Threading.ReaderWriterLockSlim> erweiterbaren Modus eingetreten ist, verfügt über Lesezugriff auf die geschützte Ressource und kann durch Aufrufen der-Methode oder <xref:System.Threading.ReaderWriterLockSlim.EnterWriteLock%2A> <xref:System.Threading.ReaderWriterLockSlim.TryEnterWriteLock%2A> der-Methode auf den Schreibmodus aktualisieren. Da es jeweils nur einen Thread im erweiterbaren Modus geben kann, kann ein Upgrade auf den Schreibmodus nicht durchgeführt werden, wenn die Rekursion nicht zulässig ist. Dies ist die Standard Richtlinie.  
+  
+> [!IMPORTANT]
+>  Unabhängig von der Rekursions Richtlinie ist ein Thread, der anfänglich in den Lesemodus wechselt, nicht berechtigt, auf den erweiterbaren Modus oder den Schreibmodus zu aktualisieren, da dieses Muster eine hohe Wahrscheinlichkeit von Deadlocks erzeugt. Wenn z. b. zwei Threads im Lesemodus versuchen, in den Schreibmodus zu wechseln, wird ein Deadlock angezeigt. Der aktualisierbare Modus ist so konzipiert, dass solche Deadlocks vermieden werden.  
+  
+ Wenn andere Threads im Lesemodus vorhanden sind, wird der Thread, der die Blöcke aktualisiert, blockiert. Während der Thread blockiert wird, werden andere Threads, die versuchen, in den Lesemodus zu wechseln, blockiert. Wenn alle Threads vom Lesemodus beendet wurden, wechselt der blockierte aktualisierbare Thread in den Schreibmodus. Wenn andere Threads auf den Schreibmodus warten, bleiben Sie blockiert, da der einzige Thread, der sich im erweiterbaren Modus befindet, verhindert, dass Sie exklusiven Zugriff auf die Ressource erlangen.  
+  
+ Wenn der Thread im erweiterbaren Modus den Schreibmodus beendet, können andere Threads, die auf die Eingabe des Lesemodus warten, dies tun, es sei denn, es sind Threads vorhanden, die auf den Schreibmodus warten. Der Thread im erweiterbaren Modus kann auf unbestimmte Zeit aktualisiert und herabgestuft werden, solange er der einzige Thread ist, der in die geschützte Ressource schreibt.  
+  
+> [!IMPORTANT]
+>  Wenn Sie zulassen, dass mehrere Threads in den Schreibmodus oder den erweiterbaren Modus wechseln, dürfen Sie nicht zulassen, dass ein Thread den aktualisierbaren Modus monopolisiert. Andernfalls können Threads, die versuchen, direkt in den Schreibmodus zu wechseln, unbegrenzt blockiert werden. während Sie blockiert werden, können andere Threads nicht in den Lesemodus wechseln.  
+  
+ Ein Thread im erweiterbaren Modus kann in den Lesemodus herabgestuft werden, indem zunächst <xref:System.Threading.ReaderWriterLockSlim.EnterReadLock%2A> die-Methode aufgerufen und <xref:System.Threading.ReaderWriterLockSlim.ExitUpgradeableReadLock%2A> dann die-Methode aufgerufen wird. Dieses Downgrade-Muster ist auch <xref:System.Threading.LockRecursionPolicy.NoRecursion>für alle Sperr Rekursions Richtlinien zulässig.  
+  
+ Nach dem Downgrade in den Lesemodus kann ein Thread den erweiterbaren Modus erst wieder eingeben, wenn er vom Lesemodus beendet wurde.  
+  
+## <a name="entering-the-lock-recursively"></a>Rekursiv Eingabe der Sperre  
+ Sie können einen erstellen <xref:System.Threading.ReaderWriterLockSlim> , der einen rekursiven Sperr Eintrag unter <xref:System.Threading.ReaderWriterLockSlim.%23ctor%28System.Threading.LockRecursionPolicy%29> stützt, indem Sie den-Konstruktor verwenden <xref:System.Threading.LockRecursionPolicy.SupportsRecursion?displayProperty=nameWithType>, der die Sperr Richtlinie angibt, und angeben.  
+  
+> [!NOTE]
+>  Die Verwendung von Rekursion ist für die neue Entwicklung nicht empfehlenswert, da dadurch unnötige Komplikationen eingeführt werden und der Code anfälliger für Deadlocks wird.  
+  
+ Für einen <xref:System.Threading.ReaderWriterLockSlim> , der Rekursion zulässt, kann Folgendes über die Modi, die ein Thread eingegeben werden kann, fest gesagt werden:  
+  
+-   Ein Thread im Lesemodus kann rekursiv in den Lesemodus wechseln, kann jedoch nicht in den Schreibmodus oder den erweiterbaren Modus wechseln. Wenn Sie versucht, dies zu tun, <xref:System.Threading.LockRecursionException> wird eine ausgelöst. Wenn Sie in den Lesemodus wechseln und dann in den Schreibmodus oder den erweiterbaren Modus wechseln, handelt es sich um ein Muster mit einer starken Wahrscheinlichkeit von Deadlocks, sodass es nicht zulässig ist. Wie bereits erwähnt, wird der erweiterbare Modus für Fälle bereitgestellt, in denen es erforderlich ist, eine Sperre zu aktualisieren.  
+  
+-   Ein Thread im erweiterbaren Modus kann in den Schreibmodus und/oder den Lesemodus wechseln und jeden der drei Modi rekursiv eingeben. Der Versuch, in den Schreibmodus einzutreten, blockiert jedoch, wenn andere Threads im Lesemodus vorhanden sind.  
+  
+-   Ein Thread im Schreibmodus kann in den Lesemodus und/oder den aktualisierbaren Modus wechseln und jeden der drei Modi rekursiv eingeben.  
+  
+-   Ein Thread, der nicht die Sperre eingegeben hat, kann einen beliebigen Modus eingeben. Dieser Versuch kann aus denselben Gründen blockiert werden, wenn versucht wird, eine nicht rekursive Sperre einzugeben.  
+  
+ Ein Thread kann die Modi beenden, die er in beliebiger Reihenfolge eingegeben hat, solange er jeden Modus genau so oft verlässt, wie er in diesen Modus wechselt. Wenn ein Thread versucht, den Modus zu oft zu beenden oder einen Modus zu beenden, der nicht eingegeben wurde, wird <xref:System.Threading.SynchronizationLockException> eine ausgelöst.  
+  
+## <a name="lock-states"></a>Sperr Zustände  
+ Möglicherweise ist es hilfreich, sich die Sperre in Bezug auf ihre Zustände vorzustellen. Ein <xref:System.Threading.ReaderWriterLockSlim> kann einen von vier Zuständen aufweisen: nicht eingegeben, lesen, aktualisieren und schreiben.  
+  
+-   Nicht eingegeben: in diesem Zustand haben keine Threads die Sperre eingegeben (oder alle Threads haben die Sperre verlassen).  
+  
+-   Read: in diesem Zustand hat mindestens ein Thread die Sperre für den Lesezugriff auf die geschützte Ressource erreicht.  
+  
+    > [!NOTE]
+    >  Ein Thread kann die Sperre im Lesemodus mithilfe der <xref:System.Threading.ReaderWriterLockSlim.EnterReadLock%2A> -Methode oder <xref:System.Threading.ReaderWriterLockSlim.TryEnterReadLock%2A> der-Methode oder durch Herabstufen des aktualisierbaren Modus eingeben.  
+  
+-   Upgrade: in diesem Zustand hat ein Thread die Sperre für den Lesezugriff mit der Option zum Aktualisieren auf Schreibzugriff (d. h. im erweiterbaren Modus) und NULL oder mehr Threads in die Sperre für den Lesezugriff eingegeben. Es kann nicht mehr als ein Thread gleichzeitig die Sperre mit der Option zum Aktualisieren eingeben. zusätzliche Threads, die versuchen, den erweiterbaren Modus einzugeben, werden blockiert.  
+  
+-   Write: in diesem Zustand hat ein Thread die Sperre für Schreibzugriff auf die geschützte Ressource eingegeben. Dieser Thread besitzt exklusiven Besitz der Sperre. Jeder andere Thread, der versucht, die Sperre aus irgendeinem Grund einzugeben, wird blockiert.  
+  
+ In der folgenden Tabelle werden die Übergänge zwischen Sperr Zuständen für Sperren beschrieben, die keine Rekursion zulassen, wenn `t` ein Thread die in der Spalte ganz links beschriebene Aktion durchführt. Zu dem Zeitpunkt, an dem die Aktion `t` ausgeführt wird, hat keinen Modus. (Der Sonderfall `t` , in dem der erweiterbare Modus ist, wird in den Tabellen Fußnoten beschrieben.) Die obere Zeile beschreibt den Anfangszustand der Sperre. Die Zellen beschreiben, was mit dem Thread geschieht, und zeigen Änderungen am Sperr Zustand in Klammern an.  
+  
+||Nicht eingegeben (N)|Lesen (R)|Upgrade (U)|Schreiben (W)|  
+|-|-----------------------|----------------|-------------------|-----------------|  
+|`t`wechselt in den Lesemodus|`t`Gibt ein (R).|`t`blockiert, wenn Threads auf den Schreibmodus warten. Andernfalls wird `t` eingegeben.|`t`blockiert, wenn Threads auf den Schreibmodus warten. Andernfalls wird `t` eingegeben.<sup> 1</sup>|`t`Blöcke.|  
+|`t`wechselt in den aktualisierbaren Modus|`t`gibt (U) ein.|`t`blockiert, wenn Threads auf den Schreibmodus oder den Upgrademodus warten. `t` andernfalls gibt (U) ein.|`t`Blöcke.|`t`Blöcke.|  
+|`t`wechselt in den Schreibmodus|`t`eingibt (W).|`t`Blöcke.|`t`Blöcke. <sup>2</sup>|`t`Blöcke.|  
+  
+ <sup>1</sup> Wenn `t` im erweiterbaren Modus gestartet wird, wechselt er in den Lesemodus. Diese Aktion blockiert nie. Der Sperr Zustand ändert sich nicht. (Der Thread kann dann einen Downgrade in den Lesemodus vervollständigen, indem er den aktualisierbaren Modus verlässt.)  
+  
+ <sup>2</sup> Wenn `t` im erweiterbaren Modus gestartet wird, wird blockiert, wenn Threads im Lesemodus vorhanden sind. Andernfalls wird ein Upgrade auf den Schreibmodus ausgeführt. Der Sperr Status ändert sich in Write (W). Wenn `t` -Blöcke aufgrund von Threads im Lesemodus in den Schreibmodus wechseln, sobald der letzte Thread den Lesemodus beendet, auch wenn Threads vorhanden sind, die auf den Schreibmodus warten.  
+  
+ Wenn eine Zustandsänderung auftritt, weil ein Thread die Sperre beendet, wird der nächste zu erwachende Thread wie folgt ausgewählt:  
+  
+-   Zuerst ein Thread, der auf den Schreibmodus wartet und sich bereits im erweiterbaren Modus befindet (es kann höchstens ein solcher Thread vorhanden sein).  
+  
+-   Ein Fehler, ein Thread, der auf den Schreibmodus wartet.  
+  
+-   Wenn ein Fehler auftritt, ein Thread, der auf den erweiterbaren Modus wartet.  
+  
+-   Wenn ein Fehler aufgetreten ist, alle Threads, die auf den Lesemodus warten.  
+  
+ Der nachfolgende Status der Sperre lautet in den ersten beiden Fällen immer Write (W) und das Upgrade (U) im dritten Fall, unabhängig vom Status der Sperre, wenn der Ende Thread die Zustandsänderung ausgelöst hat. Im letzten Fall lautet der Status der Sperre Upgrade (U), wenn sich nach der Zustandsänderung ein Thread im erweiterbaren Modus befindet, und andernfalls der Lesevorgang (R), unabhängig vom vorherigen Zustand.  
+  
+   
+  
+## Examples  
+ Das folgende Beispiel zeigt einen einfachen synchronisierten Cache, der Zeichen folgen mit ganzzahligen Schlüsseln enthält. Eine Instanz von <xref:System.Threading.ReaderWriterLockSlim> wird verwendet, um den Zugriff auf <xref:System.Collections.Generic.Dictionary%602> die zu synchronisieren, die als innerer Cache fungiert.  
+  
+ Das Beispiel enthält einfache Methoden, die dem Cache hinzugefügt, aus dem Cache gelöscht und aus dem Cache gelesen werden. Um Timeouts zu veranschaulichen, enthält das Beispiel eine-Methode, die nur dann dem Cache hinzugefügt wird, wenn dies innerhalb eines angegebenen Timeouts möglich ist.  
+  
+ Um den erweiterbaren Modus zu veranschaulichen, enthält das Beispiel eine Methode, die den einem Schlüssel zugeordneten Wert abruft und ihn mit einem neuen Wert vergleicht. Wenn der Wert unverändert ist, gibt die Methode einen Status zurück, der angibt, dass keine Änderungen vorgenommen wurden. Wenn kein Wert für den Schlüssel gefunden wird, wird das Schlüssel-Wert-Paar eingefügt. Wenn der Wert geändert wurde, wird er aktualisiert. Der aktualisierbare Modus ermöglicht es dem Thread, bei Bedarf von Lesezugriff auf Schreibzugriff zu aktualisieren, ohne dass Deadlocks gefährdet sind.  
+  
+ Das Beispiel enthält eine geschaltete Enumeration, die die Rückgabewerte für die Methode angibt, die den aktualisierbaren Modus veranschaulicht.  
+  
+ Im Beispiel wird der Parameter lose Konstruktor verwendet, um die Sperre zu erstellen, sodass Rekursion nicht zulässig ist. Das <xref:System.Threading.ReaderWriterLockSlim> Programmieren von ist einfacher und weniger fehleranfällig, wenn die Sperre keine Rekursion zulässt.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#11](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/classexample1.cs#11)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#11](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/classexample1.vb#11)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#12](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/classexample1.cs#12)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#12](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/classexample1.vb#12)]  
+  
+ Im folgenden Code wird dann das `SynchronizedCache` -Objekt verwendet, um ein Wörterbuch mit Gemüse Namen zu speichern. Es werden drei Aufgaben erstellt. Der erste schreibt die in einem Array gespeicherten Namen von Gemüse in eine `SynchronizedCache` -Instanz. In der zweiten und dritten Aufgabe werden die Namen des Gemüses angezeigt, der erste in aufsteigender Reihenfolge (von niedrigem Index bis zu hohem Index), der zweite in absteigender Reihenfolge. Die letzte Aufgabe sucht nach der Zeichenfolge "gurber" und Ruft beim Auffinden die <xref:System.Threading.ReaderWriterLockSlim.EnterUpgradeableReadLock%2A> -Methode auf, um die Zeichenfolge "grünes Bean" zu ersetzen.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#11](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/classexample1.cs#11)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#11](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/classexample1.vb#11)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#13](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/classexample1.cs#13)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#13](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/classexample1.vb#13)]  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe>Dieser Typ ist threadsicher.</threadsafe>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Threading.ReaderWriterLockSlim" />-Klasse.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ReaderWriterLockSlim ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; ReaderWriterLockSlim();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Threading.ReaderWriterLockSlim" />-Klasse mit Standardeigenschaftswerten.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Ein <xref:System.Threading.ReaderWriterLockSlim> , das mit diesem Konstruktor initialisiert wird, lässt keine Rekursion zu. Das bedeutet, dass die <xref:System.Threading.ReaderWriterLockSlim.RecursionPolicy%2A>-Eigenschaft <xref:System.Threading.LockRecursionPolicy.NoRecursion?displayProperty=nameWithType> zurückgibt.  
+  
+ Weitere Informationen zur Rekursions Richtlinie und deren Auswirkungen finden Sie unter <xref:System.Threading.LockRecursionPolicy> der-Enumeration <xref:System.Threading.ReaderWriterLockSlim> und der-Klasse.  
+  
+   
+  
+## Examples  
+ Das folgende Beispiel zeigt einen einfachen synchronisierten Cache, der Zeichen folgen mit ganzzahligen Schlüsseln enthält. Eine Instanz von <xref:System.Threading.ReaderWriterLockSlim> wird verwendet, um den Zugriff auf <xref:System.Collections.Generic.Dictionary%602> die zu synchronisieren, die als innerer Cache fungiert. Der Parameter lose Konstruktor wird verwendet, um die Sperre zu erstellen.  
+  
+ Das Beispiel enthält einfache Methoden, die dem Cache hinzugefügt, aus dem Cache gelöscht und aus dem Cache gelesen werden. Um Timeouts zu veranschaulichen, enthält das Beispiel eine-Methode, die nur dann dem Cache hinzugefügt wird, wenn dies innerhalb eines angegebenen Timeouts möglich ist.  
+  
+ Um den erweiterbaren Modus zu veranschaulichen, enthält das Beispiel eine Methode, die den einem Schlüssel zugeordneten Wert abruft und ihn mit einem neuen Wert vergleicht. Wenn der Wert unverändert ist, gibt die Methode einen Status zurück, der angibt, dass keine Änderungen vorgenommen wurden. Wenn kein Wert für den Schlüssel gefunden wird, wird das Schlüssel-Wert-Paar eingefügt. Wenn der Wert geändert wurde, wird er aktualisiert. Der aktualisierbare Modus ermöglicht es dem Thread, bei Bedarf von Lesezugriff auf Schreibzugriff zu aktualisieren, ohne dass Deadlocks gefährdet sind.  
+  
+ Das Beispiel enthält eine geschaltete Enumeration, die die Rückgabewerte für die Methode angibt, die den aktualisierbaren Modus veranschaulicht.  
+  
+ Im Beispiel wird der Parameter lose Konstruktor verwendet, um die Sperre zu erstellen, sodass Rekursion nicht zulässig ist. Das <xref:System.Threading.ReaderWriterLockSlim> Programmieren von ist einfacher und weniger fehleranfällig, wenn die Sperre keine Rekursion zulässt.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#11](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/classexample1.cs#11)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#11](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/classexample1.vb#11)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#12](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/classexample1.cs#12)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#12](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/classexample1.vb#12)]  
+  
+ Im folgenden Code wird dann das `SynchronizedCache` -Objekt verwendet, um ein Wörterbuch mit Gemüse Namen zu speichern. Es werden drei Aufgaben erstellt. Der erste schreibt die in einem Array gespeicherten Namen von Gemüse in eine `SynchronizedCache` -Instanz. In der zweiten und dritten Aufgabe werden die Namen des Gemüses angezeigt, der erste in aufsteigender Reihenfolge (von niedrigem Index bis zu hohem Index), der zweite in absteigender Reihenfolge. Die letzte Aufgabe sucht nach der Zeichenfolge "gurber" und Ruft beim Auffinden die <xref:System.Threading.ReaderWriterLockSlim.EnterUpgradeableReadLock%2A> -Methode auf, um die Zeichenfolge "grünes Bean" zu ersetzen.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#11](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/classexample1.cs#11)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#11](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/classexample1.vb#11)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#13](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/classexample1.cs#13)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#13](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/classexample1.vb#13)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Threading.LockRecursionPolicy" />
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ReaderWriterLockSlim (System.Threading.LockRecursionPolicy recursionPolicy);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(valuetype System.Threading.LockRecursionPolicy recursionPolicy) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.#ctor(System.Threading.LockRecursionPolicy)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (recursionPolicy As LockRecursionPolicy)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; ReaderWriterLockSlim(System::Threading::LockRecursionPolicy recursionPolicy);" />
+      <MemberSignature Language="F#" Value="new System.Threading.ReaderWriterLockSlim : System.Threading.LockRecursionPolicy -&gt; System.Threading.ReaderWriterLockSlim" Usage="new System.Threading.ReaderWriterLockSlim recursionPolicy" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="recursionPolicy" Type="System.Threading.LockRecursionPolicy" />
+      </Parameters>
+      <Docs>
+        <param name="recursionPolicy">Einer der Enumerationswerte, der die Rekursionsrichtlinie für die Sperre angibt.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Threading.ReaderWriterLockSlim" />-Klasse unter Angabe der Rekursionsrichtlinie für die Sperre.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Mit der Rekursions Richtlinie werden die Einschränkungen für Threads festgelegt, die die Sperre mehrmals eingeben. Wenn z. b. eine Sperre mit <xref:System.Threading.LockRecursionPolicy.NoRecursion?displayProperty=nameWithType> erstellt wurde und ein Thread die Sperre im Lesemodus erreicht hat, wird ausgelöst, <xref:System.Threading.LockRecursionException> wenn der Thread versucht, die Sperre erneut in den Lesemodus einzugeben. Wenn ein Thread die Sperre im Schreibmodus erreicht hat, wird auch <xref:System.Threading.LockRecursionException> eine ausgelöst, wenn der Thread versucht, die Sperre in einem beliebigen Modus erneut einzugeben.  
+  
+> [!NOTE]
+>  Ein Thread im erweiterbaren Modus kann unabhängig von der Richtlinien Einstellung für die sperrrekursion auf den Schreibmodus oder das Downgrade in den Lesemodus aktualisieren.  
+  
+ Unabhängig von der Rekursions Richtlinie ist ein Thread, der anfänglich in den Lesemodus wechselt, nicht berechtigt, auf den erweiterbaren Modus oder den Schreibmodus zu aktualisieren, da dieses Muster eine hohe Wahrscheinlichkeit von Deadlocks erzeugt.  
+  
+ Weitere Informationen zur Rekursions Richtlinie und deren Auswirkungen finden Sie unter <xref:System.Threading.LockRecursionPolicy> der-Enumeration <xref:System.Threading.ReaderWriterLockSlim> und der-Klasse.  
+  
+   
+  
+## Examples  
+ Das folgende Beispiel zeigt zwei Ausnahme Szenarios: eine, die von <xref:System.Threading.LockRecursionPolicy> der-Einstellung abhängt, und eine, die nicht ist.  
+  
+ Im ersten Szenario wechselt der Thread in den Lesemodus und versucht dann rekursiv in den Lesemodus zu wechseln. Wenn der <xref:System.Threading.ReaderWriterLockSlim> mit dem Parameter losen Konstruktor erstellt wird, mit dem die Rekursions Richtlinie auf <xref:System.Threading.LockRecursionPolicy.NoRecursion?displayProperty=nameWithType>festgelegt wird, wird eine Ausnahme ausgelöst. Wenn <xref:System.Threading.LockRecursionPolicy.SupportsRecursion?displayProperty=nameWithType> verwendet wird, um das <xref:System.Threading.ReaderWriterLockSlim>zu erstellen, wird keine Ausnahme ausgelöst.  
+  
+ Im zweiten Szenario wechselt der Thread in den Lesemodus und versucht dann, in den Schreibmodus zu wechseln. <xref:System.Threading.LockRecursionException>wird unabhängig von der sperrrekursions Richtlinie ausgelöst.  
+  
+[!code-csharp[System.Threading.LockRecursionPolicy#11](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.LockRecursionPolicy/cs/ClassExample1.cs#11)] 
+[!code-vb[System.Threading.LockRecursionPolicy#11](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.LockRecursionPolicy/vb/ClassExample1.vb#11)]   
+[!code-csharp[System.Threading.LockRecursionPolicy#12](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.LockRecursionPolicy/cs/ClassExample1.cs#12)] 
+[!code-vb[System.Threading.LockRecursionPolicy#12](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.LockRecursionPolicy/vb/ClassExample1.vb#12)]  
+  
+ Im folgenden Code wird dann das `SynchronizedCache` -Objekt verwendet, um ein Wörterbuch mit Gemüse Namen zu speichern. Es werden drei Aufgaben erstellt. Der erste schreibt die in einem Array gespeicherten Namen von Gemüse in eine `SynchronizedCache` -Instanz. In der zweiten und dritten Aufgabe werden die Namen des Gemüses angezeigt, der erste in aufsteigender Reihenfolge (von niedrigem Index bis zu hohem Index), der zweite in absteigender Reihenfolge. Die letzte Aufgabe sucht nach der Zeichenfolge "gurber" und Ruft beim Auffinden die <xref:System.Threading.ReaderWriterLockSlim.EnterUpgradeableReadLock%2A> -Methode auf, um die Zeichenfolge "grünes Bean" zu ersetzen.  
+  
+[!code-csharp[System.Threading.LockRecursionPolicy#11](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.LockRecursionPolicy/cs/ClassExample1.cs#11)] 
+[!code-vb[System.Threading.LockRecursionPolicy#11](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.LockRecursionPolicy/vb/ClassExample1.vb#11)]   
+[!code-csharp[System.Threading.LockRecursionPolicy#13](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.LockRecursionPolicy/cs/ClassExample1.cs#13)] 
+[!code-vb[System.Threading.LockRecursionPolicy#13](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.LockRecursionPolicy/vb/ClassExample1.vb#13)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Threading.LockRecursionPolicy" />
+        <altmember cref="P:System.Threading.ReaderWriterLockSlim.RecursionPolicy" />
+      </Docs>
+    </Member>
+    <Member MemberName="CurrentReadCount">
+      <MemberSignature Language="C#" Value="public int CurrentReadCount { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 CurrentReadCount" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.ReaderWriterLockSlim.CurrentReadCount" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property CurrentReadCount As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int CurrentReadCount { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.CurrentReadCount : int" Usage="System.Threading.ReaderWriterLockSlim.CurrentReadCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft die Gesamtzahl von eindeutigen Threads ab, denen die Sperre im Lesemodus zugewiesen ist.</summary>
+        <value>Die Anzahl von eindeutigen Threads, denen die Sperre im Lesemodus zugewiesen ist.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Ein Thread wird nur einmal gezählt, auch wenn die Sperre eine Rekursion zulässt und der Thread mehrmals in den Lesemodus wechselt.  
+  
+ Verwenden Sie diese Eigenschaft nur für Debuggen, Profilerstellung und Protokollierung und nicht zum Steuern des Verhaltens eines Algorithmus. Die Ergebnisse können sich ändern, sobald Sie berechnet wurden. Daher ist es nicht sicher, Entscheidungen basierend auf dieser Eigenschaft zu treffen.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLockSlim.CurrentReadCount%2A> -Eigenschaft verwendet wird, um einen Ereignisprotokoll Eintrag zu generieren, wenn die Anzahl der Threads im Lesemodus einen Schwellenwert überschreitet.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#1)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#1)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#2)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Aux#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#2)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#11](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#11)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Aux#11](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#11)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Dispose">
+      <MemberSignature Language="C#" Value="public void Dispose ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void Dispose() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.Dispose" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Dispose ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void Dispose();" />
+      <MemberSignature Language="F#" Value="abstract member Dispose : unit -&gt; unit&#xA;override this.Dispose : unit -&gt; unit" Usage="readerWriterLockSlim.Dispose " />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.IDisposable.Dispose</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Gibt alle von der aktuellen Instanz der <see cref="T:System.Threading.ReaderWriterLockSlim" />-Klasse verwendeten Ressourcen frei.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Rufen Sie <xref:System.Threading.ReaderWriterLockSlim.Dispose%2A> auf, wenn Sie <xref:System.Threading.ReaderWriterLockSlim> nicht mehr benötigen. Die <xref:System.Threading.ReaderWriterLockSlim.Dispose%2A>-Methode bewirkt, dass <xref:System.Threading.ReaderWriterLockSlim> nicht mehr verwendet werden kann. Nach dem <xref:System.Threading.ReaderWriterLockSlim.Dispose%2A>Aufrufen von müssen Sie alle Verweise auf den <xref:System.Threading.ReaderWriterLockSlim> freigeben, damit der Garbage Collector den Speicher freigeben kann <xref:System.Threading.ReaderWriterLockSlim> , den der belegt hat. Weitere Informationen finden Sie unter [Bereinigen von nicht verwalteten Ressourcen](~/docs/standard/garbage-collection/unmanaged.md) und [Implementieren einer](~/docs/standard/garbage-collection/implementing-dispose.md)verwerfen-Methode.  
+  
+> [!NOTE]
+>  Wird immer <xref:System.Threading.ReaderWriterLockSlim.Dispose%2A> aufgerufen, bevor der letzte Verweis auf das <xref:System.Threading.ReaderWriterLockSlim> Objekt freigegeben wird.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.SynchronizationLockException"><see cref="P:System.Threading.ReaderWriterLockSlim.WaitingReadCount" /> ist größer als 0 (null).  
+  
+- oder - 
+ <see cref="P:System.Threading.ReaderWriterLockSlim.WaitingUpgradeCount" /> ist größer als 0 (null).  
+  
+- oder - 
+ <see cref="P:System.Threading.ReaderWriterLockSlim.WaitingWriteCount" /> ist größer als 0 (null).</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="EnterReadLock">
+      <MemberSignature Language="C#" Value="public void EnterReadLock ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void EnterReadLock() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.EnterReadLock" />
+      <MemberSignature Language="VB.NET" Value="Public Sub EnterReadLock ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void EnterReadLock();" />
+      <MemberSignature Language="F#" Value="member this.EnterReadLock : unit -&gt; unit" Usage="readerWriterLockSlim.EnterReadLock " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Versucht, die Sperre im Lesemodus zu erhalten.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode wird blockiert, bis der aufrufende Thread in die Sperre eintritt und daher möglicherweise nie zurückgibt. Verwenden Sie <xref:System.Threading.ReaderWriterLockSlim.TryEnterReadLock%2A> die-Methode, um ein bestimmtes Intervall zu blockieren, und geben Sie dann zurück, wenn der aufrufenden Thread während dieses Intervalls nicht in den Lesemodus wechselt.  
+  
+ Mehrere Threads können gleichzeitig in den Lesemodus wechseln.  
+  
+ Wenn ein oder mehrere Threads auf den Schreibmodus warten, wird ein Thread, der die <xref:System.Threading.ReaderWriterLockSlim.EnterReadLock%2A> -Methode aufruft, blockiert, bis für diese Threads ein Timeout oder ein Timeout im Schreibmodus aufgetreten ist.  
+  
+> [!NOTE]
+>  Wenn eine Sperre eine Rekursion zulässt, kann ein Thread, der die Sperre im Lesemodus eingegeben hat, rekursiv in den Lesemodus wechseln, auch wenn andere Threads auf den Schreibmodus warten.  
+  
+ Der aktualisierbare Modus kann höchstens einen Thread aufweisen, während sich andere Threads im Lesemodus befinden. Wenn zusätzliche Threads auf den erweiterbaren Modus warten und keine Threads auf den Schreibmodus warten, werden die Threads, die die Methode aufzurufen <xref:System.Threading.ReaderWriterLockSlim.EnterReadLock%2A> , sofort in den Lesemodus wechseln und dürfen nicht blockiert werden.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLockSlim.EnterReadLock%2A> -Methode verwendet wird, um die Sperre im Lesemodus einzugeben. Die im Beispiel gezeigte-Methode ruft den Wert ab, der einem Schlüssel zugeordnet ist. Wenn der Schlüssel nicht gefunden wird, ist die vom inneren <xref:System.Collections.Generic.Dictionary%602> ausgelöste Ausnahme zulässig, um die Methode zu beenden. Ein `finally` -Block wird verwendet, um <xref:System.Threading.ReaderWriterLockSlim.ExitReadLock%2A> die-Methode auszuführen und sicherzustellen, dass der Aufrufer den Lesemodus beendet  
+  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLockSlim> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#2)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#2)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#3](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#3)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#3](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.LockRecursionException">Die <see cref="P:System.Threading.ReaderWriterLockSlim.RecursionPolicy" />-Eigenschaft ist gleich <see cref="F:System.Threading.LockRecursionPolicy.NoRecursion" />, und der aktuelle Thread hat versucht, die Lesesperre zu erlangen, obwohl er die Lesesperre bereits besitzt.  
+  
+- oder - 
+Die <see cref="P:System.Threading.ReaderWriterLockSlim.RecursionPolicy" />-Eigenschaft ist gleich <see cref="F:System.Threading.LockRecursionPolicy.NoRecursion" />, und der aktuelle Thread hat versucht, die Lesesperre zu erlangen, obwohl er die Schreibsperre bereits besitzt.  
+  
+- oder - 
+Die Rekursionszahl würde die Kapazität des Zählers übersteigen. Dieser Grenzwert ist so groß, dass diese Ausnahme nie für Anwendungen auftreten sollte.</exception>
+        <exception cref="T:System.ObjectDisposedException">Das <see cref="T:System.Threading.ReaderWriterLockSlim" />-Objekt wurde verworfen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="EnterUpgradeableReadLock">
+      <MemberSignature Language="C#" Value="public void EnterUpgradeableReadLock ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void EnterUpgradeableReadLock() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.EnterUpgradeableReadLock" />
+      <MemberSignature Language="VB.NET" Value="Public Sub EnterUpgradeableReadLock ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void EnterUpgradeableReadLock();" />
+      <MemberSignature Language="F#" Value="member this.EnterUpgradeableReadLock : unit -&gt; unit" Usage="readerWriterLockSlim.EnterUpgradeableReadLock " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Versucht, die Sperre im erweiterbaren Modus zu erhalten.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode wird blockiert, bis der aufrufende Thread in die Sperre eintritt und daher möglicherweise nie zurückgibt. Verwenden Sie <xref:System.Threading.ReaderWriterLockSlim.TryEnterUpgradeableReadLock%2A> die-Methode, um ein bestimmtes Intervall zu blockieren, und geben Sie dann zurück, wenn der aufrufenden Thread während dieses Intervalls nicht in den erweiterbaren-Modus gewechselt ist  
+  
+ Verwenden Sie den aktualisierbaren Modus, wenn ein Thread in der Regel <xref:System.Threading.ReaderWriterLockSlim> auf die Ressource zugreift, die im Lesemodus von geschützt ist, aber möglicherweise in den Schreibmodus wechseln muss, wenn bestimmte Bedingungen erfüllt sind. Ein Thread im erweiterbaren Modus kann auf den Lesemodus Herabstufen oder auf den Schreibmodus aktualisieren.  
+  
+ Nur ein einziger Thread kann zu einem beliebigen Zeitpunkt in den erweiterbaren Modus wechseln. Wenn sich ein Thread im erweiterbaren Modus befindet und keine Threads auf den Schreibmodus warten, kann eine beliebige Anzahl anderer Threads in den Lesemodus wechseln, auch wenn Threads vorhanden sind, die auf die Eingabe des erweiterbaren Modus warten.  
+  
+ Wenn ein oder mehrere Threads auf den Schreibmodus warten, wird ein Thread, der die <xref:System.Threading.ReaderWriterLockSlim.EnterUpgradeableReadLock%2A> -Methode aufruft, blockiert, bis für diese Threads ein Timeout oder ein Timeout im Schreibmodus aufgetreten ist.  
+  
+> [!NOTE]
+>  Wenn eine Sperre eine Rekursion zulässt, kann ein Thread, der die Sperre im erweiterbaren Modus eingegeben hat, rekursiv in den aktualisierbaren Modus wechseln, auch wenn andere Threads auf den Schreibmodus warten.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLockSlim.EnterUpgradeableReadLock%2A> -Methode verwendet wird, um die Sperre im erweiterbaren Modus einzugeben. Ein `finally` -Block wird verwendet, um <xref:System.Threading.ReaderWriterLockSlim.ExitUpgradeableReadLock%2A> die-Methode auszuführen und sicherzustellen, dass der Aufrufer den erweiterbaren Modus beendet.  
+  
+ Die im Beispiel gezeigte-Methode ruft den Wert ab, der einem Schlüssel zugeordnet ist, und vergleicht ihn mit einem neuen Wert. Wenn der Wert unverändert ist, gibt die Methode einen Status zurück, der angibt, dass keine Änderungen vorgenommen wurden. Es wurde kein Wert für den Schlüssel gefunden, das Schlüssel-Wert-Paar wird eingefügt. Wenn der Wert geändert wurde, wird er aktualisiert. Der aktualisierbare Modus ermöglicht es dem Thread, die Lesesperre nach Bedarf zu aktualisieren, ohne dass Deadlocks gefährdet sind.  
+  
+ Im Beispiel wird der Parameter lose Konstruktor verwendet, um die Sperre zu erstellen, sodass Rekursion nicht zulässig ist. Das <xref:System.Threading.ReaderWriterLockSlim> Programmieren von ist einfacher und weniger fehleranfällig, wenn die Sperre keine Rekursion zulässt.  
+  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLockSlim> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#2)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#2)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#6](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#6)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#6](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#6)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#10](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#10)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#10](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#10)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.LockRecursionException">Die <see cref="P:System.Threading.ReaderWriterLockSlim.RecursionPolicy" />-Eigenschaft ist <see cref="F:System.Threading.LockRecursionPolicy.NoRecursion" />, und dem aktuellen Thread wurde die Sperre bereits in einem der Modi zugewiesen.  
+  
+- oder - 
+Der aktuelle Thread befindet sich im Lesemodus, sodass durch eine Zuweisung des erweiterbaren Modus die Möglichkeit eines Deadlocks entstehen würde.  
+  
+- oder - 
+Die Rekursionszahl würde die Kapazität des Zählers übersteigen. Die Kapazität ist so groß, dass Anwendungen diese Grenze niemals erreichen dürften.</exception>
+        <exception cref="T:System.ObjectDisposedException">Das <see cref="T:System.Threading.ReaderWriterLockSlim" />-Objekt wurde verworfen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="EnterWriteLock">
+      <MemberSignature Language="C#" Value="public void EnterWriteLock ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void EnterWriteLock() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.EnterWriteLock" />
+      <MemberSignature Language="VB.NET" Value="Public Sub EnterWriteLock ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void EnterWriteLock();" />
+      <MemberSignature Language="F#" Value="member this.EnterWriteLock : unit -&gt; unit" Usage="readerWriterLockSlim.EnterWriteLock " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Versucht, die Sperre im Schreibmodus zu erhalten.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode wird blockiert, bis der aufrufende Thread in die Sperre eintritt und daher möglicherweise nie zurückgibt. Verwenden Sie <xref:System.Threading.ReaderWriterLockSlim.TryEnterWriteLock%2A> die-Methode, um ein bestimmtes Intervall zu blockieren, und geben Sie dann zurück, wenn der aufrufende Thread während dieses Intervalls nicht in den Schreibmodus wechselt.  
+  
+ Wenn andere Threads die Sperre im Lesemodus eingegeben haben, wird ein Thread, der <xref:System.Threading.ReaderWriterLockSlim.EnterWriteLock%2A> die-Methode aufruft, blockiert, bis diese Threads den Lesemodus verlassen haben. Wenn Threads darauf warten, in den Schreibmodus zu wechseln, können zusätzliche Threads, die versuchen, in den Lesemodus oder den erweiterbaren Modus zu wechseln, blockiert werden, bis alle Threads, die auf den Schreibmodus warten, entweder abgelaufen sind oder in den Schreibmodus gewechselt und dann beendet wurden.  
+  
+> [!NOTE]
+>  Wenn eine Sperre eine Rekursion zulässt, kann ein Thread, der die Sperre im Schreibmodus eingegeben hat, rekursiv in den Schreibmodus wechseln, auch wenn andere Threads auf den Schreibmodus warten.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLockSlim.EnterWriteLock%2A> -Methode verwendet wird, um die Sperre im Schreibmodus einzugeben. Die im Beispiel gezeigte-Methode fügt dem synchronisierten Cache ein neues Schlüssel-Wert-Paar hinzu. Wenn sich der Schlüssel bereits im Cache befindet, ist die vom inneren <xref:System.Collections.Generic.Dictionary%602> ausgelöste Ausnahme zulässig, um die Methode zu beenden. Ein `finally` -Block wird verwendet, um <xref:System.Threading.ReaderWriterLockSlim.ExitWriteLock%2A> die-Methode auszuführen und sicherzustellen, dass der Aufrufer den Schreibmodus beendet  
+  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLockSlim> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#2)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#2)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#4](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#4)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#4](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#4)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.LockRecursionException">Die <see cref="P:System.Threading.ReaderWriterLockSlim.RecursionPolicy" />-Eigenschaft ist <see cref="F:System.Threading.LockRecursionPolicy.NoRecursion" />, und dem aktuellen Thread wurde die Sperre bereits in einem der Modi zugewiesen.  
+  
+- oder - 
+Der aktuelle Thread befindet sich im Lesemodus und besitzt noch keine Schreibsperre, sodass durch eine Zuweisung des Schreibmodus die Möglichkeit eines Deadlocks entstehen würde.  
+  
+- oder - 
+Die Rekursionszahl würde die Kapazität des Zählers übersteigen. Die Kapazität ist so groß, dass Anwendungen diese Grenze niemals erreichen dürften.</exception>
+        <exception cref="T:System.ObjectDisposedException">Das <see cref="T:System.Threading.ReaderWriterLockSlim" />-Objekt wurde verworfen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ExitReadLock">
+      <MemberSignature Language="C#" Value="public void ExitReadLock ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void ExitReadLock() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.ExitReadLock" />
+      <MemberSignature Language="VB.NET" Value="Public Sub ExitReadLock ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void ExitReadLock();" />
+      <MemberSignature Language="F#" Value="member this.ExitReadLock : unit -&gt; unit" Usage="readerWriterLockSlim.ExitReadLock " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Verringert die Rekursionszahl für den Lesemodus oder beendet den Lesemodus, wenn das Rekursionsergebnis 0 (null) ist.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode ist nicht für die Rekursions Reihenfolge empfindlich. Wenn ein Thread z. b. eine Sperre im erweiterbaren Modus eingibt und dann in den Lesemodus wechselt, spielt die Reihenfolge, in der der Thread die beiden Modi verlässt, keine Rolle. Wenn eine Sperre eine Rekursion zulässt, kann ein Thread die Sperre im Schreibmodus eingeben und ihn im Lesemodus rekursiv eingeben. die Reihenfolge, in der der Thread den Lesemodus und den Schreibmodus beendet, spielt keine Rolle.  
+  
+ Durch das Beenden der Sperre werden möglicherweise andere wartende Threads signalisiert.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie ein `finally` -Block verwendet wird <xref:System.Threading.ReaderWriterLockSlim.ExitReadLock%2A> , um die-Methode auszuführen und sicherzustellen, dass der Aufrufer den Lesemodus Die im Beispiel gezeigte-Methode ruft den Wert ab, der einem Schlüssel zugeordnet ist. Wenn der Schlüssel nicht gefunden wird, ist die vom inneren <xref:System.Collections.Generic.Dictionary%602> ausgelöste Ausnahme zulässig, um die Methode zu beenden. Die <xref:System.Threading.ReaderWriterLockSlim.EnterReadLock%2A> -Methode wird verwendet, um in den Lesemodus zu wechseln.  
+  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLockSlim> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#2)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#2)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#3](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#3)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#3](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.SynchronizationLockException">Der aktuelle Thread befindet sich nicht im Lesemodus.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ExitUpgradeableReadLock">
+      <MemberSignature Language="C#" Value="public void ExitUpgradeableReadLock ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void ExitUpgradeableReadLock() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.ExitUpgradeableReadLock" />
+      <MemberSignature Language="VB.NET" Value="Public Sub ExitUpgradeableReadLock ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void ExitUpgradeableReadLock();" />
+      <MemberSignature Language="F#" Value="member this.ExitUpgradeableReadLock : unit -&gt; unit" Usage="readerWriterLockSlim.ExitUpgradeableReadLock " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Verringert die Rekursionszahl für den erweiterbaren Modus oder beendet den erweiterbaren Modus, wenn das Rekursionsergebnis 0 (null) ist.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode ist nicht für die Rekursions Reihenfolge empfindlich. Wenn ein Thread z. b. eine Sperre im erweiterbaren Modus eingibt und dann in den Schreibmodus wechselt, spielt die Reihenfolge, in der der Thread die beiden Modi verlässt, keine Rolle. Wenn eine Sperre eine Rekursion zulässt, kann ein Thread die Sperre im Schreibmodus eingeben und ihn dann rekursiv im erweiterbaren Modus eingeben. die Reihenfolge, in der der Thread den aktualisierbaren Modus und den Schreibmodus beendet, spielt keine Rolle.  
+  
+ Durch das Beenden der Sperre werden möglicherweise andere wartende Threads signalisiert.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie ein `finally` -Block verwendet wird <xref:System.Threading.ReaderWriterLockSlim.ExitUpgradeableReadLock%2A> , um die-Methode auszuführen und sicherzustellen, dass der Aufrufer den erweiterbaren Modus beendet.  
+  
+ Die im Beispiel gezeigte-Methode ruft den Wert ab, der einem Schlüssel zugeordnet ist, und vergleicht ihn mit einem neuen Wert. Wenn der Wert unverändert ist, gibt die Methode einen Status zurück, der angibt, dass keine Änderungen vorgenommen wurden. Es wurde kein Wert für den Schlüssel gefunden, das Schlüssel-Wert-Paar wird eingefügt. Wenn der Wert geändert wurde, wird er aktualisiert. Der aktualisierbare Modus ermöglicht es dem Thread, die Lesesperre nach Bedarf zu aktualisieren, ohne dass Deadlocks gefährdet sind.  
+  
+ Im Beispiel wird der Parameter lose Konstruktor verwendet, um die Sperre zu erstellen, sodass Rekursion nicht zulässig ist. Das <xref:System.Threading.ReaderWriterLockSlim> Programmieren von ist einfacher und weniger fehleranfällig, wenn die Sperre keine Rekursion zulässt.  
+  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLockSlim> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#2)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#2)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#6](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#6)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#6](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#6)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#10](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#10)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#10](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#10)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.SynchronizationLockException">Der aktuelle Thread befindet sich nicht im erweiterbaren Modus.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ExitWriteLock">
+      <MemberSignature Language="C#" Value="public void ExitWriteLock ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void ExitWriteLock() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.ExitWriteLock" />
+      <MemberSignature Language="VB.NET" Value="Public Sub ExitWriteLock ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void ExitWriteLock();" />
+      <MemberSignature Language="F#" Value="member this.ExitWriteLock : unit -&gt; unit" Usage="readerWriterLockSlim.ExitWriteLock " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Verringert die Rekursionszahl für den Schreibmodus oder beendet den Schreibmodus, wenn das Rekursionsergebnis 0 (null) ist.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode ist nicht für die Rekursions Reihenfolge empfindlich. Wenn ein Thread z. b. eine Sperre im erweiterbaren Modus eingibt und dann in den Schreibmodus wechselt, spielt die Reihenfolge, in der der Thread die beiden Modi verlässt, keine Rolle. Wenn eine Sperre eine Rekursion zulässt, kann ein Thread die Sperre im Schreibmodus eingeben und ihn im Lesemodus rekursiv eingeben. die Reihenfolge, in der der Thread den Lesemodus und den Schreibmodus beendet, spielt keine Rolle.  
+  
+ Durch das Beenden der Sperre werden möglicherweise andere wartende Threads signalisiert.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie ein `finally` -Block verwendet wird <xref:System.Threading.ReaderWriterLockSlim.ExitWriteLock%2A> , um die-Methode auszuführen und sicherzustellen, dass der Aufrufer den Schreibmodus Die im Beispiel gezeigte-Methode fügt dem synchronisierten Cache ein neues Schlüssel-Wert-Paar hinzu. Wenn sich der Schlüssel bereits im Cache befindet, ist die vom inneren <xref:System.Collections.Generic.Dictionary%602> ausgelöste Ausnahme zulässig, um die Methode zu beenden. Die <xref:System.Threading.ReaderWriterLockSlim.EnterWriteLock%2A> -Methode wird verwendet, um die Sperre im Schreibmodus einzugeben.  
+  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLockSlim> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#2)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#2)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#4](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#4)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#4](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#4)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.SynchronizationLockException">Der aktuelle Thread befindet sich nicht im Schreibmodus.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="IsReadLockHeld">
+      <MemberSignature Language="C#" Value="public bool IsReadLockHeld { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsReadLockHeld" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.ReaderWriterLockSlim.IsReadLockHeld" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property IsReadLockHeld As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsReadLockHeld { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.IsReadLockHeld : bool" Usage="System.Threading.ReaderWriterLockSlim.IsReadLockHeld" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der angibt, ob die Sperre dem aktuellen Thread im Lesemodus zugewiesen ist.</summary>
+        <value><see langword="true" />, wenn sich der aktuelle Thread im Lesemodus befindet, andernfalls <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Eigenschaft ist für die Verwendung in Bestätigungen oder für andere Debuggingzwecke vorgesehen. Verwenden Sie es nicht, um den Ablauf der Programmausführung zu steuern.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLockSlim.IsReadLockHeld%2A> -Eigenschaft verwendet wird, um eine Assert-Generierung zu generieren, wenn der aktuelle Thread unerwartet in den Lesemodus wechselt.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#1)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#1)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#21](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#21)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Aux#21](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#21)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsUpgradeableReadLockHeld">
+      <MemberSignature Language="C#" Value="public bool IsUpgradeableReadLockHeld { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsUpgradeableReadLockHeld" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.ReaderWriterLockSlim.IsUpgradeableReadLockHeld" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property IsUpgradeableReadLockHeld As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsUpgradeableReadLockHeld { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.IsUpgradeableReadLockHeld : bool" Usage="System.Threading.ReaderWriterLockSlim.IsUpgradeableReadLockHeld" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der angibt, ob die Sperre dem aktuellen Thread im erweiterbaren Modus zugewiesen ist.</summary>
+        <value><see langword="true" />, wenn sich der aktuelle Thread im erweiterbaren Modus befindet, andernfalls <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Eigenschaft ist für die Verwendung in Bestätigungen oder für andere Debuggingzwecke vorgesehen. Verwenden Sie es nicht, um den Ablauf der Programmausführung zu steuern.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLockSlim.IsUpgradeableReadLockHeld%2A> -Eigenschaft verwendet wird, um eine Assert-Generierung zu generieren, wenn der aktuelle Thread unerwartet in den erweiterbaren Modus wechselt.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#1)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#1)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#22](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#22)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Aux#22](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#22)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsWriteLockHeld">
+      <MemberSignature Language="C#" Value="public bool IsWriteLockHeld { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsWriteLockHeld" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.ReaderWriterLockSlim.IsWriteLockHeld" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property IsWriteLockHeld As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsWriteLockHeld { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.IsWriteLockHeld : bool" Usage="System.Threading.ReaderWriterLockSlim.IsWriteLockHeld" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der angibt, ob die Sperre dem aktuellen Thread im Schreibmodus zugewiesen ist.</summary>
+        <value><see langword="true" />, wenn sich der aktuelle Thread im Schreibmodus befindet, andernfalls <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Eigenschaft ist für die Verwendung in Bestätigungen oder für andere Debuggingzwecke vorgesehen. Verwenden Sie es nicht, um den Ablauf der Programmausführung zu steuern.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLockSlim.IsWriteLockHeld%2A> -Eigenschaft verwendet wird, um eine Assert-Generierung zu generieren, wenn der aktuelle Thread unerwartet in den Schreibmodus wechselt.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#1)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#1)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#23](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#23)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Aux#23](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#23)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RecursionPolicy">
+      <MemberSignature Language="C#" Value="public System.Threading.LockRecursionPolicy RecursionPolicy { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Threading.LockRecursionPolicy RecursionPolicy" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.ReaderWriterLockSlim.RecursionPolicy" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property RecursionPolicy As LockRecursionPolicy" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Threading::LockRecursionPolicy RecursionPolicy { System::Threading::LockRecursionPolicy get(); };" />
+      <MemberSignature Language="F#" Value="member this.RecursionPolicy : System.Threading.LockRecursionPolicy" Usage="System.Threading.ReaderWriterLockSlim.RecursionPolicy" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Threading.LockRecursionPolicy</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der die Rekursionsrichtlinie für das aktuelle <see cref="T:System.Threading.ReaderWriterLockSlim" />-Objekt angibt.</summary>
+        <value>Einer der Enumerationswerte, der die Rekursionsrichtlinie für die Sperre angibt.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Mit der Rekursions Richtlinie werden die Einschränkungen für Threads festgelegt, die die Sperre mehrmals eingeben. Wenn z. b. eine Sperre mit <xref:System.Threading.LockRecursionPolicy.NoRecursion?displayProperty=nameWithType> erstellt wurde und ein Thread die Sperre im Lesemodus erreicht hat, wird ausgelöst, <xref:System.Threading.LockRecursionException> wenn der Thread versucht, die Sperre erneut in den Lesemodus einzugeben.  
+  
+> [!NOTE]
+>  Ein Thread im erweiterbaren Modus kann unabhängig von der Richtlinien Einstellung für die sperrrekursion auf den Schreibmodus oder das Downgrade in den Lesemodus aktualisieren.  
+  
+ Unabhängig von der Rekursions Richtlinie ist ein Thread, der anfänglich in den Lesemodus wechselt, nicht berechtigt, auf den erweiterbaren Modus oder den Schreibmodus zu aktualisieren, da dieses Muster eine hohe Wahrscheinlichkeit von Deadlocks erzeugt.  
+  
+ Weitere Informationen zur Rekursions Richtlinie und deren Auswirkungen finden Sie unter <xref:System.Threading.LockRecursionPolicy> der-Enumeration <xref:System.Threading.ReaderWriterLockSlim> und der-Klasse.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Threading.LockRecursionException" />
+      </Docs>
+    </Member>
+    <Member MemberName="RecursiveReadCount">
+      <MemberSignature Language="C#" Value="public int RecursiveReadCount { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 RecursiveReadCount" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.ReaderWriterLockSlim.RecursiveReadCount" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property RecursiveReadCount As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int RecursiveReadCount { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.RecursiveReadCount : int" Usage="System.Threading.ReaderWriterLockSlim.RecursiveReadCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der als Indikator für eine Rekursion angibt, wie oft dem aktuellen Thread die Sperre im Lesemodus zugewiesen ist.</summary>
+        <value>0 (null), wenn sich der aktuelle Thread nicht im Lesemodus befindet, 1, wenn sich der Thread im Lesemodus befindet und diesen nicht rekursiv angefordert hat, oder *n*, wenn der Thread die Sperre *n* - 1 Mal rekursiv angefordert hat.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Verwenden Sie diese Eigenschaft nur für Debuggen, Profilerstellung und Protokollierung und nicht zum Steuern des Verhaltens eines Algorithmus. Die Ergebnisse können sich ändern, sobald Sie berechnet wurden. Daher ist es nicht sicher, Entscheidungen basierend auf dieser Eigenschaft zu treffen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RecursiveUpgradeCount">
+      <MemberSignature Language="C#" Value="public int RecursiveUpgradeCount { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 RecursiveUpgradeCount" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.ReaderWriterLockSlim.RecursiveUpgradeCount" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property RecursiveUpgradeCount As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int RecursiveUpgradeCount { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.RecursiveUpgradeCount : int" Usage="System.Threading.ReaderWriterLockSlim.RecursiveUpgradeCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der als Indikator für eine Rekursion angibt, wie oft dem aktuellen Thread die Sperre im erweiterbaren Modus zugewiesen ist.</summary>
+        <value>0 (null), wenn sich der aktuelle Thread nicht im erweiterbaren Modus befindet, 1, wenn sich der Thread im erweiterbaren Modus befindet und diesen nicht rekursiv angefordert hat, oder *n*, wenn der Thread den erweiterbaren Modus *n* - 1 Mal rekursiv angefordert hat.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Verwenden Sie diese Eigenschaft nur für Debuggen, Profilerstellung und Protokollierung und nicht zum Steuern des Verhaltens eines Algorithmus. Die Ergebnisse können sich ändern, sobald Sie berechnet wurden. Daher ist es nicht sicher, Entscheidungen basierend auf dieser Eigenschaft zu treffen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RecursiveWriteCount">
+      <MemberSignature Language="C#" Value="public int RecursiveWriteCount { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 RecursiveWriteCount" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.ReaderWriterLockSlim.RecursiveWriteCount" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property RecursiveWriteCount As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int RecursiveWriteCount { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.RecursiveWriteCount : int" Usage="System.Threading.ReaderWriterLockSlim.RecursiveWriteCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der als Indikator für eine Rekursion angibt, wie oft dem aktuellen Thread die Sperre im Schreibmodus zugewiesen ist.</summary>
+        <value>0 (null), wenn sich der aktuelle Thread nicht im Schreibmodus befindet, 1, wenn sich der Thread im Schreibmodus befindet und diesen nicht rekursiv angefordert hat, oder *n*, wenn der Thread den Schreibmodus *n* - 1 Mal rekursiv angefordert hat.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Verwenden Sie diese Eigenschaft nur für Debuggen, Profilerstellung und Protokollierung und nicht zum Steuern des Verhaltens eines Algorithmus. Die Ergebnisse können sich ändern, sobald Sie berechnet wurden. Daher ist es nicht sicher, Entscheidungen basierend auf dieser Eigenschaft zu treffen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TryEnterReadLock">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Versucht, die Sperre im Lesemodus zu erhalten. Optional wird ein Timeout berücksichtigt.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TryEnterReadLock">
+      <MemberSignature Language="C#" Value="public bool TryEnterReadLock (int millisecondsTimeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryEnterReadLock(int32 millisecondsTimeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.TryEnterReadLock(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryEnterReadLock (millisecondsTimeout As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryEnterReadLock(int millisecondsTimeout);" />
+      <MemberSignature Language="F#" Value="member this.TryEnterReadLock : int -&gt; bool" Usage="readerWriterLockSlim.TryEnterReadLock millisecondsTimeout" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="millisecondsTimeout" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="millisecondsTimeout">Die Zeit in Millisekunden, die gewartet wird, oder -1 (<see cref="F:System.Threading.Timeout.Infinite" />), um unbegrenzt zu warten.</param>
+        <summary>Versucht, die Sperre im Lesemodus zu erhalten. Optional wird ein ganzzahliger Timeout berücksichtigt.</summary>
+        <returns><see langword="true" />, wenn der aufrufende Thread den Lesemodus erhalten hat, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn `millisecondsTimeout` 0 (null) ist, überprüft diese Methode den Sperr Zustand und gibt `false` sofort zurück, wenn der gewünschte Zustand nicht verfügbar ist.  
+  
+ Mehrere Threads können gleichzeitig in den Lesemodus wechseln.  
+  
+ Wenn ein oder mehrere Threads auf den Schreibmodus warten, wird ein Thread, der die <xref:System.Threading.ReaderWriterLockSlim.TryEnterReadLock%2A> -Methode aufruft, blockiert, bis diese Threads entweder abgelaufen sind oder in den Schreibmodus gewechselt und dann beendet werden, oder bis das eigene Timeout Intervall für das aufrufende Thread abläuft.  
+  
+> [!NOTE]
+>  Wenn eine Sperre eine Rekursion zulässt, kann ein Thread, der die Sperre im Lesemodus eingegeben hat, rekursiv in den Lesemodus wechseln, auch wenn andere Threads auf den Schreibmodus warten.  
+  
+ Ein Thread kann sich im erweiterbaren Modus befinden, während sich andere Threads im Lesemodus befinden. Wenn zusätzliche Threads auf den erweiterbaren Modus warten und keine Threads auf den Schreibmodus warten, werden die Threads, die die Methode aufzurufen <xref:System.Threading.ReaderWriterLockSlim.TryEnterReadLock%2A> , sofort in den Lesemodus wechseln und dürfen nicht blockiert werden.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.LockRecursionException">Die <see cref="P:System.Threading.ReaderWriterLockSlim.RecursionPolicy" />-Eigenschaft ist <see cref="F:System.Threading.LockRecursionPolicy.NoRecursion" />, und der aktuelle Thread hat die Sperre bereits erhalten.  
+  
+- oder - 
+Die Rekursionszahl würde die Kapazität des Zählers übersteigen. Die Kapazität ist so groß, dass Anwendungen diese Grenze niemals erreichen dürften.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der Wert von <paramref name="millisecondsTimeout" /> ist negativ, aber ungleich <see cref="F:System.Threading.Timeout.Infinite" /> (-1), der den einzigen zulässigen negativen Wert darstellt.</exception>
+        <exception cref="T:System.ObjectDisposedException">Das <see cref="T:System.Threading.ReaderWriterLockSlim" />-Objekt wurde verworfen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="TryEnterReadLock">
+      <MemberSignature Language="C#" Value="public bool TryEnterReadLock (TimeSpan timeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryEnterReadLock(valuetype System.TimeSpan timeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.TryEnterReadLock(System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryEnterReadLock (timeout As TimeSpan) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryEnterReadLock(TimeSpan timeout);" />
+      <MemberSignature Language="F#" Value="member this.TryEnterReadLock : TimeSpan -&gt; bool" Usage="readerWriterLockSlim.TryEnterReadLock timeout" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="timeout" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="timeout">Der Zeitintervall bis zum Timeout, oder -1 Millisekunden, um unbegrenzt zu warten.</param>
+        <summary>Versucht, die Sperre im Lesemodus zu erhalten. Optional wird ein Timeout berücksichtigt.</summary>
+        <returns><see langword="true" />, wenn der aufrufende Thread den Lesemodus erhalten hat, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn `timeout` 0 (null) ist, überprüft diese Methode den Sperr Zustand und gibt `false` sofort zurück, wenn der gewünschte Zustand nicht verfügbar ist.  
+  
+ Mehrere Threads können gleichzeitig in den Lesemodus wechseln.  
+  
+ Wenn ein oder mehrere Threads in die Warteschlange für den Schreibmodus eingereiht werden, wird <xref:System.Threading.ReaderWriterLockSlim.TryEnterReadLock%2A> ein Thread, der die-Methode aufruft, blockiert, bis diese Threads entweder abgelaufen sind oder in den Schreibmodus gewechselt und dann beendet wurden oder bis das eigene Timeout Intervall für das aufrufende Thread abläuft.  
+  
+> [!NOTE]
+>  Wenn eine Sperre eine Rekursion zulässt, kann ein Thread, der die Sperre im Lesemodus eingegeben hat, rekursiv in den Lesemodus wechseln, auch wenn andere Threads auf den Schreibmodus warten.  
+  
+ Ein Thread kann sich im erweiterbaren Modus befinden, während sich andere Threads im Lesemodus befinden. Wenn zusätzliche Threads auf den erweiterbaren Modus warten und keine Threads auf den Schreibmodus warten, werden die Threads, die die Methode aufzurufen <xref:System.Threading.ReaderWriterLockSlim.TryEnterReadLock%2A> , sofort in den Lesemodus wechseln und dürfen nicht blockiert werden.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.LockRecursionException">Die <see cref="P:System.Threading.ReaderWriterLockSlim.RecursionPolicy" />-Eigenschaft ist <see cref="F:System.Threading.LockRecursionPolicy.NoRecursion" />, und der aktuelle Thread hat die Sperre bereits erhalten.  
+  
+- oder - 
+Die Rekursionszahl würde die Kapazität des Zählers übersteigen. Die Kapazität ist so groß, dass Anwendungen diese Grenze niemals erreichen dürften.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der Wert von <paramref name="timeout" /> ist negativ, aber ungleich -1 Millisekunden. (Dies ist der einzige zulässige negative Wert.)  
+  
+- oder - 
+Der Wert von <paramref name="timeout" /> ist größer als <see cref="F:System.Int32.MaxValue" /> Millisekunden.</exception>
+        <exception cref="T:System.ObjectDisposedException">Das <see cref="T:System.Threading.ReaderWriterLockSlim" />-Objekt wurde verworfen.</exception>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TryEnterUpgradeableReadLock">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Versucht, die Sperre im erweiterbaren Modus zu erhalten. Optional wird ein Timeout berücksichtigt.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TryEnterUpgradeableReadLock">
+      <MemberSignature Language="C#" Value="public bool TryEnterUpgradeableReadLock (int millisecondsTimeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryEnterUpgradeableReadLock(int32 millisecondsTimeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.TryEnterUpgradeableReadLock(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryEnterUpgradeableReadLock (millisecondsTimeout As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryEnterUpgradeableReadLock(int millisecondsTimeout);" />
+      <MemberSignature Language="F#" Value="member this.TryEnterUpgradeableReadLock : int -&gt; bool" Usage="readerWriterLockSlim.TryEnterUpgradeableReadLock millisecondsTimeout" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="millisecondsTimeout" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="millisecondsTimeout">Die Zeit in Millisekunden, die gewartet wird, oder -1 (<see cref="F:System.Threading.Timeout.Infinite" />), um unbegrenzt zu warten.</param>
+        <summary>Versucht, die Sperre im erweiterbaren Modus zu erhalten. Optional wird ein Timeout berücksichtigt.</summary>
+        <returns><see langword="true" />, wenn der aufrufende Thread den erweiterbaren Modus erhalten hat, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn `millisecondsTimeout` 0 (null) ist, überprüft diese Methode den Sperr Zustand und gibt `false` sofort zurück, wenn der gewünschte Zustand nicht verfügbar ist.  
+  
+ Verwenden Sie den aktualisierbaren Modus, wenn ein Thread in der Regel <xref:System.Threading.ReaderWriterLockSlim> auf die Ressource zugreift, die im Lesemodus von geschützt ist, aber möglicherweise in den Schreibmodus wechseln muss, wenn bestimmte Bedingungen erfüllt sind. Ein Thread im erweiterbaren Modus kann auf den Schreibmodus oder das Downgrade in den Lesemodus aktualisieren.  
+  
+ Nur ein Thread kann zu einem beliebigen Zeitpunkt eine Sperre im erweiterbaren Modus eingeben. Wenn sich ein Thread im erweiterbaren Modus befindet und keine Threads auf den Schreibmodus warten, kann eine beliebige Anzahl anderer Threads in den Lesemodus wechseln, auch wenn Threads vorhanden sind, die auf die Eingabe des erweiterbaren Modus warten.  
+  
+ Wenn ein oder mehrere Threads auf den Schreibmodus warten, wird ein Thread, der die <xref:System.Threading.ReaderWriterLockSlim.TryEnterUpgradeableReadLock%2A> -Methode aufruft, blockiert, bis diese Threads entweder abgelaufen sind oder in den Schreibmodus gewechselt und dann beendet werden, oder bis das eigene Timeout Intervall für das aufrufende Thread abläuft.  
+  
+> [!NOTE]
+>  Wenn eine Sperre eine Rekursion zulässt, kann ein Thread, der die Sperre im erweiterbaren Modus eingegeben hat, rekursiv in den aktualisierbaren Modus wechseln, auch wenn andere Threads auf den Schreibmodus warten.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.LockRecursionException">Die <see cref="P:System.Threading.ReaderWriterLockSlim.RecursionPolicy" />-Eigenschaft ist <see cref="F:System.Threading.LockRecursionPolicy.NoRecursion" />, und der aktuelle Thread hat die Sperre bereits erhalten.  
+  
+- oder - 
+Der aktuelle Thread befindet sich bereits im Lesemodus, sodass durch eine Zuweisung des erweiterbaren Modus die Möglichkeit eines Deadlocks entstehen würde.  
+  
+- oder - 
+Die Rekursionszahl würde die Kapazität des Zählers übersteigen. Die Kapazität ist so groß, dass Anwendungen diese Grenze niemals erreichen dürften.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der Wert von <paramref name="millisecondsTimeout" /> ist negativ, aber ungleich <see cref="F:System.Threading.Timeout.Infinite" /> (-1), der den einzigen zulässigen negativen Wert darstellt.</exception>
+        <exception cref="T:System.ObjectDisposedException">Das <see cref="T:System.Threading.ReaderWriterLockSlim" />-Objekt wurde verworfen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="TryEnterUpgradeableReadLock">
+      <MemberSignature Language="C#" Value="public bool TryEnterUpgradeableReadLock (TimeSpan timeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryEnterUpgradeableReadLock(valuetype System.TimeSpan timeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.TryEnterUpgradeableReadLock(System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryEnterUpgradeableReadLock (timeout As TimeSpan) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryEnterUpgradeableReadLock(TimeSpan timeout);" />
+      <MemberSignature Language="F#" Value="member this.TryEnterUpgradeableReadLock : TimeSpan -&gt; bool" Usage="readerWriterLockSlim.TryEnterUpgradeableReadLock timeout" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="timeout" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="timeout">Der Zeitintervall bis zum Timeout, oder -1 Millisekunden, um unbegrenzt zu warten.</param>
+        <summary>Versucht, die Sperre im erweiterbaren Modus zu erhalten. Optional wird ein Timeout berücksichtigt.</summary>
+        <returns><see langword="true" />, wenn der aufrufende Thread den erweiterbaren Modus erhalten hat, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn `timeout` 0 (null) ist, überprüft diese Methode den Sperr Zustand und gibt `false` sofort zurück, wenn der gewünschte Zustand nicht verfügbar ist.  
+  
+ Verwenden Sie den erweiterbaren Modus, wenn ein Thread in der Regel auf die <xref:System.Threading.ReaderWriterLockSlim> Ressource zugreift, die vom im Lesemodus geschützt wird. wenn bestimmte Bedingungen erfüllt sind, muss der Schreibmodus jedoch möglicherweise eingegeben werden. Ein Thread im erweiterbaren Modus kann auf den Schreibmodus oder das Downgrade in den Lesemodus aktualisieren.  
+  
+ Nur ein Thread kann zu einem beliebigen Zeitpunkt eine Sperre im erweiterbaren Modus eingeben. Wenn sich ein Thread im erweiterbaren Modus befindet und keine Threads auf den Schreibmodus warten, kann eine beliebige Anzahl anderer Threads in den Lesemodus wechseln, auch wenn Threads vorhanden sind, die auf die Eingabe des erweiterbaren Modus warten.  
+  
+ Wenn ein oder mehrere Threads auf den Schreibmodus warten, wird ein Thread, der die <xref:System.Threading.ReaderWriterLockSlim.TryEnterUpgradeableReadLock%2A> -Methode aufruft, blockiert, bis diese Threads entweder abgelaufen sind oder in den Schreibmodus gewechselt und dann beendet werden, oder bis das eigene Timeout Intervall für das aufrufende Thread abläuft.  
+  
+> [!NOTE]
+>  Wenn eine Sperre eine Rekursion zulässt, kann ein Thread, der die Sperre im erweiterbaren Modus eingegeben hat, rekursiv in den aktualisierbaren Modus wechseln, auch wenn andere Threads auf den Schreibmodus warten.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.LockRecursionException">Die <see cref="P:System.Threading.ReaderWriterLockSlim.RecursionPolicy" />-Eigenschaft ist <see cref="F:System.Threading.LockRecursionPolicy.NoRecursion" />, und der aktuelle Thread hat die Sperre bereits erhalten.  
+  
+- oder - 
+Der aktuelle Thread befindet sich bereits im Lesemodus, sodass durch eine Zuweisung des erweiterbaren Modus die Möglichkeit eines Deadlocks entstehen würde.  
+  
+- oder - 
+Die Rekursionszahl würde die Kapazität des Zählers übersteigen. Die Kapazität ist so groß, dass Anwendungen diese Grenze niemals erreichen dürften.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der Wert von <paramref name="timeout" /> ist negativ, aber ungleich -1 Millisekunden. (Dies ist der einzige zulässige negative Wert.)  
+  
+- oder - 
+Der Wert von <paramref name="timeout" /> ist größer als <see cref="F:System.Int32.MaxValue" /> Millisekunden.</exception>
+        <exception cref="T:System.ObjectDisposedException">Das <see cref="T:System.Threading.ReaderWriterLockSlim" />-Objekt wurde verworfen.</exception>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TryEnterWriteLock">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Versucht, die Sperre im Schreibmodus zu erhalten. Optional wird ein Timeout berücksichtigt.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TryEnterWriteLock">
+      <MemberSignature Language="C#" Value="public bool TryEnterWriteLock (int millisecondsTimeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryEnterWriteLock(int32 millisecondsTimeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.TryEnterWriteLock(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryEnterWriteLock (millisecondsTimeout As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryEnterWriteLock(int millisecondsTimeout);" />
+      <MemberSignature Language="F#" Value="member this.TryEnterWriteLock : int -&gt; bool" Usage="readerWriterLockSlim.TryEnterWriteLock millisecondsTimeout" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="millisecondsTimeout" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="millisecondsTimeout">Die Zeit in Millisekunden, die gewartet wird, oder -1 (<see cref="F:System.Threading.Timeout.Infinite" />), um unbegrenzt zu warten.</param>
+        <summary>Versucht, die Sperre im Schreibmodus zu erhalten. Optional wird ein Timeout berücksichtigt.</summary>
+        <returns><see langword="true" />, wenn der aufrufende Thread den Schreibmodus erhalten hat, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn `millisecondsTimeout` 0 (null) ist, überprüft diese Methode den Sperr Zustand und gibt `false` sofort zurück, wenn der gewünschte Zustand nicht verfügbar ist.  
+  
+ Wenn andere Threads die Sperre im Lesemodus eingegeben haben, wird ein Thread, der <xref:System.Threading.ReaderWriterLockSlim.TryEnterWriteLock%2A> die-Methode aufruft, blockiert, bis diese Threads den Lesemodus verlassen haben oder bis das Timeout Intervall abgelaufen ist. Während Threads blockiert werden, die auf den Schreibmodus warten, können zusätzliche Threads, die versuchen, in den Lesemodus oder den erweiterbaren Modus zu wechseln, blockiert werden, bis für alle Threads, die auf den Schreibmodus warten, ein Timeout eingetreten ist oder der Schreibmodus beendet und anschließend beendet wurde.  
+  
+> [!NOTE]
+>  Wenn eine Sperre eine Rekursion zulässt, kann ein Thread, der die Sperre im Schreibmodus eingegeben hat, rekursiv in den Schreibmodus wechseln, auch wenn andere Threads auf den Schreibmodus warten.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLockSlim.TryEnterWriteLock%2A> -Methode verwendet wird, um die Sperre im Schreibmodus mit einem Timeout einzugeben. Die im Beispiel gezeigte-Methode fügt dem synchronisierten Cache ein neues Schlüssel-Wert-Paar hinzu. Wenn das angegebene Timeout Intervall abläuft, bevor der Thread in die Sperre wechselt, gibt die Methode zurück `false`. Die Methode gibt `true` zurück, wenn das Schlüssel-Wert-Paar hinzugefügt wird.  
+  
+ Wenn sich der Schlüssel bereits im Cache befindet, ist die vom inneren <xref:System.Collections.Generic.Dictionary%602> ausgelöste Ausnahme zulässig, um die Methode zu beenden. Ein `finally` -Block wird verwendet, um <xref:System.Threading.ReaderWriterLockSlim.ExitWriteLock%2A> die-Methode auszuführen und sicherzustellen, dass der Aufrufer die Sperre beendet.  
+  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLockSlim> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#2)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#2)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Shadow#5](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/cs/source.cs#5)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Shadow#5](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Shadow/vb/source.vb#5)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.LockRecursionException">Die <see cref="P:System.Threading.ReaderWriterLockSlim.RecursionPolicy" />-Eigenschaft ist <see cref="F:System.Threading.LockRecursionPolicy.NoRecursion" />, und der aktuelle Thread hat die Sperre bereits erhalten.  
+  
+- oder - 
+Der aktuelle Thread befindet sich bereits im Lesemodus, sodass durch eine Zuweisung des Schreibmodus die Möglichkeit eines Deadlocks entstehen würde.  
+  
+- oder - 
+Die Rekursionszahl würde die Kapazität des Zählers übersteigen. Die Kapazität ist so groß, dass Anwendungen diese Grenze niemals erreichen dürften.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der Wert von <paramref name="millisecondsTimeout" /> ist negativ, aber ungleich <see cref="F:System.Threading.Timeout.Infinite" /> (-1), der den einzigen zulässigen negativen Wert darstellt.</exception>
+        <exception cref="T:System.ObjectDisposedException">Das <see cref="T:System.Threading.ReaderWriterLockSlim" />-Objekt wurde verworfen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="TryEnterWriteLock">
+      <MemberSignature Language="C#" Value="public bool TryEnterWriteLock (TimeSpan timeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryEnterWriteLock(valuetype System.TimeSpan timeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.ReaderWriterLockSlim.TryEnterWriteLock(System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryEnterWriteLock (timeout As TimeSpan) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryEnterWriteLock(TimeSpan timeout);" />
+      <MemberSignature Language="F#" Value="member this.TryEnterWriteLock : TimeSpan -&gt; bool" Usage="readerWriterLockSlim.TryEnterWriteLock timeout" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="timeout" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="timeout">Der Zeitintervall bis zum Timeout, oder -1 Millisekunden, um unbegrenzt zu warten.</param>
+        <summary>Versucht, die Sperre im Schreibmodus zu erhalten. Optional wird ein Timeout berücksichtigt.</summary>
+        <returns><see langword="true" />, wenn der aufrufende Thread den Schreibmodus erhalten hat, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn `timeout` 0 (null) ist, überprüft diese Methode den Sperr Zustand und gibt `false` sofort zurück, wenn der gewünschte Zustand nicht verfügbar ist.  
+  
+ Wenn andere Threads die Sperre im Lesemodus eingegeben haben, wird ein Thread, der <xref:System.Threading.ReaderWriterLockSlim.TryEnterWriteLock%2A> die-Methode aufruft, blockiert, bis diese Threads den Lesemodus verlassen haben oder bis das Timeout Intervall abgelaufen ist. Während Threads blockiert werden, die auf den Schreibmodus warten, können zusätzliche Threads, die versuchen, in den Lesemodus oder den erweiterbaren Modus zu wechseln, blockiert werden, bis für alle Threads, die auf den Schreibmodus warten, ein Timeout eingetreten ist oder der Schreibmodus beendet und anschließend beendet wurde.  
+  
+> [!NOTE]
+>  Wenn eine Sperre eine Rekursion zulässt, kann ein Thread, der die Sperre im Schreibmodus eingegeben hat, rekursiv in den Schreibmodus wechseln, auch wenn andere Threads auf den Schreibmodus warten.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.LockRecursionException">Die <see cref="P:System.Threading.ReaderWriterLockSlim.RecursionPolicy" />-Eigenschaft ist <see cref="F:System.Threading.LockRecursionPolicy.NoRecursion" />, und der aktuelle Thread hat die Sperre bereits erhalten.  
+  
+- oder - 
+Der aktuelle Thread befindet sich bereits im Lesemodus, sodass durch eine Zuweisung des Schreibmodus die Möglichkeit eines Deadlocks entstehen würde.  
+  
+- oder - 
+Die Rekursionszahl würde die Kapazität des Zählers übersteigen. Die Kapazität ist so groß, dass Anwendungen diese Grenze niemals erreichen dürften.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der Wert von <paramref name="timeout" /> ist negativ, aber ungleich -1 Millisekunden. (Dies ist der einzige zulässige negative Wert.)  
+  
+- oder - 
+Der Wert von <paramref name="timeout" /> ist größer als <see cref="F:System.Int32.MaxValue" /> Millisekunden.</exception>
+        <exception cref="T:System.ObjectDisposedException">Das <see cref="T:System.Threading.ReaderWriterLockSlim" />-Objekt wurde verworfen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WaitingReadCount">
+      <MemberSignature Language="C#" Value="public int WaitingReadCount { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 WaitingReadCount" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.ReaderWriterLockSlim.WaitingReadCount" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property WaitingReadCount As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int WaitingReadCount { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.WaitingReadCount : int" Usage="System.Threading.ReaderWriterLockSlim.WaitingReadCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft die Gesamtzahl von Threads ab, die auf eine Zuweisung des Lesemodus warten.</summary>
+        <value>Die Gesamtzahl von Threads, die auf eine Zuweisung des Lesemodus warten.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Verwenden Sie diese Eigenschaft nur für Debuggen, Profilerstellung und Protokollierung und nicht zum Steuern des Verhaltens eines Algorithmus. Die Ergebnisse können sich ändern, sobald Sie berechnet wurden. Daher ist es nicht sicher, Entscheidungen basierend auf dieser Eigenschaft zu treffen.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLockSlim.WaitingReadCount%2A> -Eigenschaft verwendet wird, um einen Ereignisprotokoll Eintrag zu generieren, wenn die Anzahl der blockierten Threads, die auf die Eingabe des Lesemodus warten, einen Schwellenwert überschreitet.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#1)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#1)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#31](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#31)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Aux#31](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#31)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WaitingUpgradeCount">
+      <MemberSignature Language="C#" Value="public int WaitingUpgradeCount { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 WaitingUpgradeCount" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.ReaderWriterLockSlim.WaitingUpgradeCount" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property WaitingUpgradeCount As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int WaitingUpgradeCount { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.WaitingUpgradeCount : int" Usage="System.Threading.ReaderWriterLockSlim.WaitingUpgradeCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft die Gesamtzahl von Threads ab, die auf eine Zuweisung des erweiterbaren Modus warten.</summary>
+        <value>Die Gesamtzahl von Threads, die auf eine Zuweisung des erweiterbaren Modus warten.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Verwenden Sie diese Eigenschaft nur für Debuggen, Profilerstellung und Protokollierung und nicht zum Steuern des Verhaltens eines Algorithmus. Die Ergebnisse können sich ändern, sobald Sie berechnet wurden. Daher ist es nicht sicher, Entscheidungen basierend auf dieser Eigenschaft zu treffen.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLockSlim.WaitingUpgradeCount%2A> -Eigenschaft verwendet wird, um einen Ereignisprotokoll Eintrag zu generieren, wenn die Anzahl der blockierten Threads, die auf den erweiterbaren Modus warten, einen Schwellenwert überschreitet.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#1)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#1)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#33](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#33)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Aux#33](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#33)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WaitingWriteCount">
+      <MemberSignature Language="C#" Value="public int WaitingWriteCount { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 WaitingWriteCount" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.ReaderWriterLockSlim.WaitingWriteCount" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property WaitingWriteCount As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int WaitingWriteCount { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.WaitingWriteCount : int" Usage="System.Threading.ReaderWriterLockSlim.WaitingWriteCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft die Gesamtzahl von Threads ab, die auf eine Zuweisung des Schreibmodus warten.</summary>
+        <value>Die Gesamtzahl von Threads, die auf eine Zuweisung des Schreibmodus warten.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Verwenden Sie diese Eigenschaft nur für Debuggen, Profilerstellung und Protokollierung und nicht zum Steuern des Verhaltens eines Algorithmus. Die Ergebnisse können sich ändern, sobald Sie berechnet wurden. Daher ist es nicht sicher, Entscheidungen basierend auf dieser Eigenschaft zu treffen.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLockSlim.WaitingWriteCount%2A> -Eigenschaft verwendet wird, um einen Ereignisprotokoll Eintrag zu generieren, wenn die Anzahl der blockierten Threads, die auf den Schreibmodus warten, einen Schwellenwert überschreitet.  
+  
+ [!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#1)]
+ [!code-vb[System.Threading.ReaderWriterLockSlim_Aux#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#1)]  
+[!code-csharp[System.Threading.ReaderWriterLockSlim_Aux#32](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/cs/source.cs#32)]
+[!code-vb[System.Threading.ReaderWriterLockSlim_Aux#32](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.ReaderWriterLockSlim_Aux/vb/source.vb#32)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
