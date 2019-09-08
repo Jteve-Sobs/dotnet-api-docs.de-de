@@ -1,0 +1,714 @@
+<Type Name="ValueTask&lt;TResult&gt;" FullName="System.Threading.Tasks.ValueTask&lt;TResult&gt;">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="7d944c7bf458154d39d4d54370d616073ce64d8e" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70556401" /></Metadata><TypeSignature Language="C#" Value="public struct ValueTask&lt;TResult&gt; : IEquatable&lt;System.Threading.Tasks.ValueTask&lt;TResult&gt;&gt;" />
+  <TypeSignature Language="ILAsm" Value=".class public sequential ansi sealed beforefieldinit ValueTask`1&lt;TResult&gt; extends System.ValueType implements class System.IEquatable`1&lt;valuetype System.Threading.Tasks.ValueTask`1&lt;!TResult&gt;&gt;" />
+  <TypeSignature Language="DocId" Value="T:System.Threading.Tasks.ValueTask`1" />
+  <TypeSignature Language="VB.NET" Value="Public Structure ValueTask(Of TResult)&#xA;Implements IEquatable(Of ValueTask(Of TResult))" />
+  <TypeSignature Language="C++ CLI" Value="generic &lt;typename TResult&gt;&#xA;public value class ValueTask : IEquatable&lt;System::Threading::Tasks::ValueTask&lt;TResult&gt;&gt;" />
+  <TypeSignature Language="F#" Value="type ValueTask&lt;'Result&gt; = struct" />
+  <AssemblyInfo>
+    <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Runtime</AssemblyName>
+    <AssemblyVersion>4.2.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <TypeParameters>
+    <TypeParameter Name="TResult" />
+  </TypeParameters>
+  <Base>
+    <BaseTypeName>System.ValueType</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.IEquatable&lt;System.Threading.Tasks.ValueTask&lt;TResult&gt;&gt;</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes>
+    <Attribute FrameworkAlternate="netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1">
+      <AttributeName>System.Runtime.CompilerServices.AsyncMethodBuilder(typeof(System.Runtime.CompilerServices.AsyncValueTaskMethodBuilder`1))</AttributeName>
+    </Attribute>
+    <Attribute FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1">
+      <AttributeName>System.Runtime.CompilerServices.IsReadOnly</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <typeparam name="TResult">Das Ergebnis.</typeparam>
+    <summary>Liefert einen Werttyp, der ein <see cref="T:System.Threading.Tasks.Task`1" /> und ein <typeparamref name="TResult" /> umschließt, von denen nur einer verwendet wird.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[ 
+
+## Remarks  
+Eine <xref:System.Threading.Tasks.ValueTask%601> -Instanz kann entweder gewartet oder mithilfe <xref:System.Threading.Tasks.ValueTask%601.AsTask%2A>von in <xref:System.Threading.Tasks.Task%601> eine konvertiert werden. Eine <xref:System.Threading.Tasks.ValueTask%601> -Instanz kann nur einmal gewartet werden, und Consumer können erst <xref:System.Threading.Tasks.ValueTask%601.GetAwaiter> dann aufzurufen, wenn die Instanz abgeschlossen wurde. Wenn diese Einschränkungen nicht zulässig sind, konvertieren <xref:System.Threading.Tasks.ValueTask%601> Sie den <xref:System.Threading.Tasks.Task%601> in einen <xref:System.Threading.Tasks.ValueTask%601.AsTask%2A>, indem Sie aufrufen.
+
+Die folgenden Vorgänge sollten nie auf einer <xref:System.Threading.Tasks.ValueTask%601> -Instanz ausgeführt werden:
+
+  - Mehrmals auf die Instanz warten.
+  - Mehrmals <xref:System.Threading.Tasks.ValueTask%601.AsTask%2A> aufrufen.
+  - Verwenden `.Result` Sie `.GetAwaiter().GetResult()` oder, wenn der Vorgang noch nicht abgeschlossen wurde, oder verwenden Sie Sie mehrmals.
+  - Verwenden Sie mehr als eine dieser Techniken, um die-Instanz zu verwenden.
+
+Wenn Sie eine der oben genannten Aktionen ausführen, sind die Ergebnisse nicht definiert.
+
+Eine Methode kann eine Instanz dieses Werttyps zurückgeben, wenn es wahrscheinlich ist, dass das Ergebnis des Vorgangs synchron verfügbar ist, und wenn erwartet wird, dass die Kosten für das Zuordnen eines neuen <xref:System.Threading.Tasks.Task%601> für jeden Aufruf nicht mehr ausreichen.   
+
+Es gibt Kompromisse bei <xref:System.Threading.Tasks.ValueTask%601> <xref:System.Threading.Tasks.Task%601>der Verwendung eines anstelle von. Wenn beispielsweise eine <xref:System.Threading.Tasks.ValueTask%601> Zuordnung vermieden werden kann, wenn das erfolgreiche Ergebnis synchron verfügbar ist, enthält es auch mehrere Felder, <xref:System.Threading.Tasks.Task%601> wohingegen als Verweistyp ein einzelnes Feld ist. Dies bedeutet, dass das <xref:System.Threading.Tasks.ValueTask%601> zurückgeben von aus einer Methode dazu führt, dass mehr Daten kopiert werden. Dies bedeutet auch Folgendes: Wenn eine Methode, die einen <xref:System.Threading.Tasks.ValueTask%601> zurückgibt, in einer asynchronen Methode erwartet wird, ist der Zustands Automat für diese Async-Methode größer, da Sie eine Struktur mit mehreren Feldern anstelle eines einzelnen Verweises speichern muss.   
+
+Für andere Verwendungszwecke als das Ergebnis eines asynchronen Vorgangs mithilfe von "warten <xref:System.Threading.Tasks.ValueTask%601> " kann zu einem eher zusammenhängenden Programmiermodell führen, das mehr Zuordnungen erfordert. Stellen Sie sich beispielsweise eine Methode vor, die entweder <xref:System.Threading.Tasks.Task%601> einen mit einer zwischengespeicherten Aufgabe als häufiges Ergebnis oder <xref:System.Threading.Tasks.ValueTask%601>einen zurückgeben kann. Wenn der Consumer des Ergebnisses ihn als <xref:System.Threading.Tasks.Task%601> in einer Methode wie <xref:System.Threading.Tasks.Task.WhenAll%2A> oder <xref:System.Threading.Tasks.Task.WhenAny%2A>verwenden möchte, <xref:System.Threading.Tasks.ValueTask%601> muss zuerst in eine <xref:System.Threading.Tasks.Task%601> mit <xref:System.Threading.Tasks.ValueTask%601.AsTask%2A>konvertiert werden. Dies führt zu einer Zuordnung, die vermieden werden würde, wenn ein die <xref:System.Threading.Tasks.Task%601> Zwischenspeicherung wurde bereits verwendet.   
+
+Daher sollte die Standardauswahl für jede asynchrone Methode sein, wenn <xref:System.Threading.Tasks.Task> oder <xref:System.Threading.Tasks.Task%601>zurückgeben soll. Nur, wenn sich die Leistungsanalyse als <xref:System.Threading.Tasks.ValueTask%601> lohnend erweist, sollte anstelle <xref:System.Threading.Tasks.Task%601>eines verwendet werden. Die nicht generische Version von <xref:System.Threading.Tasks.ValueTask> wird in den meisten Szenarien nicht empfohlen. Die <xref:System.Threading.Tasks.Task.CompletedTask> -Eigenschaft sollte verwendet werden, um ein erfolgreich ausgefülltes Singleton zurückzugeben, wenn eine Methode <xref:System.Threading.Tasks.Task> , die zurückgibt, synchron und erfolgreich abgeschlossen wird.
+
+> [!NOTE]
+>  Die Verwendung des <xref:System.Threading.Tasks.ValueTask%601> -Typs wird ab C# 7,0 unterstützt und wird von keiner Version von Visual Basic unterstützt.
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ValueTask (System.Threading.Tasks.Task&lt;TResult&gt; task);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Threading.Tasks.Task`1&lt;!TResult&gt; task) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.#ctor(System.Threading.Tasks.Task{`0})" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (task As Task(Of TResult))" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; ValueTask(System::Threading::Tasks::Task&lt;TResult&gt; ^ task);" />
+      <MemberSignature Language="F#" Value="new System.Threading.Tasks.ValueTask&lt;'Result&gt; : System.Threading.Tasks.Task&lt;'Result&gt; -&gt; System.Threading.Tasks.ValueTask&lt;'Result&gt;" Usage="new System.Threading.Tasks.ValueTask&lt;'Result&gt; task" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="task" Type="System.Threading.Tasks.Task&lt;TResult&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="task">Die Aufgabe.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Threading.Tasks.ValueTask`1" />-Klasse unter Verwendung des angegebenen Tasks, der den Vorgang darstellt.</summary>
+        <remarks></remarks>
+        <exception cref="T:System.ArgumentNullException">Das <paramref name="task" />-Argument lautet <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ValueTask (TResult result);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(!TResult result) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.#ctor(`0)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (result As TResult)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; ValueTask(TResult result);" />
+      <MemberSignature Language="F#" Value="new System.Threading.Tasks.ValueTask&lt;'Result&gt; : 'Result -&gt; System.Threading.Tasks.ValueTask&lt;'Result&gt;" Usage="new System.Threading.Tasks.ValueTask&lt;'Result&gt; result" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="result" Type="TResult" />
+      </Parameters>
+      <Docs>
+        <param name="result">Das Ergebnis.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Threading.Tasks.ValueTask`1" />-Klasse unter Verwendung des von einem erfolgreichen Vorgang zurückgegebenen Ergebnisses.</summary>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ValueTask (System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt; source, short token);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Threading.Tasks.Sources.IValueTaskSource`1&lt;!TResult&gt; source, int16 token) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.#ctor(System.Threading.Tasks.Sources.IValueTaskSource{`0},System.Int16)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (source As IValueTaskSource(Of TResult), token As Short)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; ValueTask(System::Threading::Tasks::Sources::IValueTaskSource&lt;TResult&gt; ^ source, short token);" />
+      <MemberSignature Language="F#" Value="new System.Threading.Tasks.ValueTask&lt;'Result&gt; : System.Threading.Tasks.Sources.IValueTaskSource&lt;'Result&gt; * int16 -&gt; System.Threading.Tasks.ValueTask&lt;'Result&gt;" Usage="new System.Threading.Tasks.ValueTask&lt;'Result&gt; (source, token)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="source" Type="System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="token" Type="System.Int16" Index="1" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="source">Die Quelle.</param>
+        <param name="token">Ein nicht transparenter Wert, der an <see cref="T:System.Threading.Tasks.Sources.IValueTaskSource" /> übergeben wird.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Threading.Tasks.ValueTask`1" />-Klasse mit einem <see cref="T:System.Threading.Tasks.Sources.IValueTaskSource`1" />-Objekt, das den Vorgang darstellt.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AsTask">
+      <MemberSignature Language="C#" Value="public System.Threading.Tasks.Task&lt;TResult&gt; AsTask ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Threading.Tasks.Task`1&lt;!TResult&gt; AsTask() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.AsTask" />
+      <MemberSignature Language="VB.NET" Value="Public Function AsTask () As Task(Of TResult)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Threading::Tasks::Task&lt;TResult&gt; ^ AsTask();" />
+      <MemberSignature Language="F#" Value="member this.AsTask : unit -&gt; System.Threading.Tasks.Task&lt;'Result&gt;" Usage="valueTask.AsTask " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Threading.Tasks.Task&lt;TResult&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Ruft ein <see cref="T:System.Threading.Tasks.Task`1" />-Objekt ab, das dieses <see cref="T:System.Threading.Tasks.ValueTask`1" /> darstellt.</summary>
+        <returns>Das <see cref="T:System.Threading.Tasks.Task`1" />-Objekt, das in dieses <see cref="T:System.Threading.Tasks.ValueTask`1" /> eingeschlossen ist, wenn es vorhanden ist, oder ein neues <see cref="T:System.Threading.Tasks.Task`1" />-Objekt, das das Ergebnis darstellt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+Diese Methode gibt entweder das umschließende Task Objekt zurück, sofern vorhanden, oder es wird ein neues Task Objekt zur Darstellung des Ergebnisses hergestellt.
+          ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ConfigureAwait">
+      <MemberSignature Language="C#" Value="public System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable&lt;TResult&gt; ConfigureAwait (bool continueOnCapturedContext);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance valuetype System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable`1&lt;!TResult&gt; ConfigureAwait(bool continueOnCapturedContext) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.ConfigureAwait(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Function ConfigureAwait (continueOnCapturedContext As Boolean) As ConfiguredValueTaskAwaitable(Of TResult)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Runtime::CompilerServices::ConfiguredValueTaskAwaitable&lt;TResult&gt; ConfigureAwait(bool continueOnCapturedContext);" />
+      <MemberSignature Language="F#" Value="member this.ConfigureAwait : bool -&gt; System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable&lt;'Result&gt;" Usage="valueTask.ConfigureAwait continueOnCapturedContext" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable&lt;TResult&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="continueOnCapturedContext" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="continueOnCapturedContext"><see langword="true" />, um zu versuchen, die Fortsetzung zurück in den erfassten Text zu marshallen; andernfalls <see langword="false" />.</param>
+        <summary>Konfiguriert ein „awaiter“-Element für diesen Wert.</summary>
+        <returns>Das konfigurierte „awaiter“-Element.</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CreateAsyncMethodBuilder">
+      <MemberSignature Language="C#" Value="public static System.Runtime.CompilerServices.AsyncValueTaskMethodBuilder&lt;TResult&gt; CreateAsyncMethodBuilder ();" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.Runtime.CompilerServices.AsyncValueTaskMethodBuilder`1&lt;!TResult&gt; CreateAsyncMethodBuilder() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.CreateAsyncMethodBuilder" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function CreateAsyncMethodBuilder () As AsyncValueTaskMethodBuilder(Of TResult)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Runtime::CompilerServices::AsyncValueTaskMethodBuilder&lt;TResult&gt; CreateAsyncMethodBuilder();" />
+      <MemberSignature Language="F#" Value="static member CreateAsyncMethodBuilder : unit -&gt; System.Runtime.CompilerServices.AsyncValueTaskMethodBuilder&lt;'Result&gt;" Usage="System.Threading.Tasks.ValueTask&lt;'Result&gt;.CreateAsyncMethodBuilder " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-2.0">
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netcore-1.1">
+          <AttributeName>System.ComponentModel.EditorBrowsable</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Runtime.CompilerServices.AsyncValueTaskMethodBuilder&lt;TResult&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Erstellt einen Methodengenerator für die Verwendung mit einer asynchronen Methode.</summary>
+        <returns>Der erstellte Generator.</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Equals">
+      <MemberSignature Language="C#" Value="public override bool Equals (object obj);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool Equals(object obj) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.Equals(System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function Equals (obj As Object) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override bool Equals(System::Object ^ obj);" />
+      <MemberSignature Language="F#" Value="override this.Equals : obj -&gt; bool" Usage="valueTask.Equals obj" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="obj" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="obj">Das Objekt, das mit dem aktuellen Objekt verglichen werden soll.</param>
+        <summary>Bestimmt, ob das angegebene Objekt mit dem aktuellen Objekt identisch ist.</summary>
+        <returns><see langword="true" />, wenn das angegebene Objekt und das aktuelle Objekt gleich sind, andernfalls <see langword="false" />.</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Equals">
+      <MemberSignature Language="C#" Value="public bool Equals (System.Threading.Tasks.ValueTask&lt;TResult&gt; other);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance bool Equals(valuetype System.Threading.Tasks.ValueTask`1&lt;!TResult&gt; other) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.Equals(System.Threading.Tasks.ValueTask{`0})" />
+      <MemberSignature Language="VB.NET" Value="Public Function Equals (other As ValueTask(Of TResult)) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual bool Equals(System::Threading::Tasks::ValueTask&lt;TResult&gt; other);" />
+      <MemberSignature Language="F#" Value="override this.Equals : System.Threading.Tasks.ValueTask&lt;'Result&gt; -&gt; bool" Usage="valueTask.Equals other" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.IEquatable`1.Equals(`0)</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="other" Type="System.Threading.Tasks.ValueTask&lt;TResult&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="other">Das Objekt, das mit dem aktuellen Objekt verglichen werden soll.</param>
+        <summary>Bestimmt, ob das angegebene <see cref="T:System.Threading.Tasks.ValueTask`1" />-Objekt mit dem aktuellen <see cref="T:System.Threading.Tasks.ValueTask`1" />-Objekt identisch ist.</summary>
+        <returns><see langword="true" />, wenn das angegebene Objekt und das aktuelle Objekt gleich sind, andernfalls <see langword="false" />.</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetAwaiter">
+      <MemberSignature Language="C#" Value="public System.Runtime.CompilerServices.ValueTaskAwaiter&lt;TResult&gt; GetAwaiter ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance valuetype System.Runtime.CompilerServices.ValueTaskAwaiter`1&lt;!TResult&gt; GetAwaiter() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.GetAwaiter" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetAwaiter () As ValueTaskAwaiter(Of TResult)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Runtime::CompilerServices::ValueTaskAwaiter&lt;TResult&gt; GetAwaiter();" />
+      <MemberSignature Language="F#" Value="member this.GetAwaiter : unit -&gt; System.Runtime.CompilerServices.ValueTaskAwaiter&lt;'Result&gt;" Usage="valueTask.GetAwaiter " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Runtime.CompilerServices.ValueTaskAwaiter&lt;TResult&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Erstellt ein „awaiter“-Element für diesen Wert.</summary>
+        <returns>Der Awaiter.</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetHashCode">
+      <MemberSignature Language="C#" Value="public override int GetHashCode ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance int32 GetHashCode() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.GetHashCode" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetHashCode () As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override int GetHashCode();" />
+      <MemberSignature Language="F#" Value="override this.GetHashCode : unit -&gt; int" Usage="valueTask.GetHashCode " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Gibt den Hashcode für diese Instanz zurück.</summary>
+        <returns>Der Hashcode für das aktuelle Objekt.</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsCanceled">
+      <MemberSignature Language="C#" Value="public bool IsCanceled { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsCanceled" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.Tasks.ValueTask`1.IsCanceled" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property IsCanceled As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsCanceled { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.IsCanceled : bool" Usage="System.Threading.Tasks.ValueTask&lt;'Result&gt;.IsCanceled" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der angibt, ob dieses Objekt einen abgebrochenen Vorgang darstellt.</summary>
+        <value><see langword="true" />, wenn dieses-Objekt einen abgebrochenen Vorgang darstellt. <see langword="false" />andernfalls.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+Wenn der <xref:System.Threading.Tasks.ValueTask`1> durch ein Ergebnis oder durch eine <xref:System.Threading.Tasks.Sources.IValueTaskSource`1>gestützt wird, wird immer zurückgegeben `false`.  Wenn Sie von einem <xref:System.Threading.Tasks.Task>unterstützt wird, gibt Sie den Wert der- <xref:System.Threading.Tasks.Task.IsCanceled> Eigenschaft der Aufgabe zurück.
+          ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsCompleted">
+      <MemberSignature Language="C#" Value="public bool IsCompleted { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsCompleted" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.Tasks.ValueTask`1.IsCompleted" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property IsCompleted As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsCompleted { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.IsCompleted : bool" Usage="System.Threading.Tasks.ValueTask&lt;'Result&gt;.IsCompleted" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der angibt, ob dieses Objekt einen abgeschlossenen Vorgang darstellt.</summary>
+        <value><see langword="true" />, wenn dieses-Objekt einen abgeschlossenen Vorgang darstellt. <see langword="false" />andernfalls.</value>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsCompletedSuccessfully">
+      <MemberSignature Language="C#" Value="public bool IsCompletedSuccessfully { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsCompletedSuccessfully" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.Tasks.ValueTask`1.IsCompletedSuccessfully" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property IsCompletedSuccessfully As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsCompletedSuccessfully { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.IsCompletedSuccessfully : bool" Usage="System.Threading.Tasks.ValueTask&lt;'Result&gt;.IsCompletedSuccessfully" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der angibt, ob dieses Objekt einen erfolgreich abgeschlossenen Vorgang darstellt.</summary>
+        <value><see langword="true" />, wenn dieses-Objekt einen erfolgreich abgeschlossenen Vorgang darstellt. <see langword="false" />andernfalls.</value>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsFaulted">
+      <MemberSignature Language="C#" Value="public bool IsFaulted { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsFaulted" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.Tasks.ValueTask`1.IsFaulted" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property IsFaulted As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsFaulted { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.IsFaulted : bool" Usage="System.Threading.Tasks.ValueTask&lt;'Result&gt;.IsFaulted" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der angibt, ob dieses Objekt einen fehlgeschlagenen Vorgang darstellt.</summary>
+        <value><see langword="true" />, wenn dieses-Objekt einen fehlgeschlagenen Vorgang darstellt. <see langword="false" />andernfalls.</value>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="op_Equality">
+      <MemberSignature Language="C#" Value="public static bool operator == (System.Threading.Tasks.ValueTask&lt;TResult&gt; left, System.Threading.Tasks.ValueTask&lt;TResult&gt; right);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig specialname bool op_Equality(valuetype System.Threading.Tasks.ValueTask`1&lt;!TResult&gt; left, valuetype System.Threading.Tasks.ValueTask`1&lt;!TResult&gt; right) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.op_Equality(System.Threading.Tasks.ValueTask{`0},System.Threading.Tasks.ValueTask{`0})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Operator == (left As ValueTask(Of TResult), right As ValueTask(Of TResult)) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool operator ==(System::Threading::Tasks::ValueTask&lt;TResult&gt; left, System::Threading::Tasks::ValueTask&lt;TResult&gt; right);" />
+      <MemberSignature Language="F#" Value="static member ( = ) : System.Threading.Tasks.ValueTask&lt;'Result&gt; * System.Threading.Tasks.ValueTask&lt;'Result&gt; -&gt; bool" Usage="left = right" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="left" Type="System.Threading.Tasks.ValueTask&lt;TResult&gt;" />
+        <Parameter Name="right" Type="System.Threading.Tasks.ValueTask&lt;TResult&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="left">Der erste zu vergleichende Wert.</param>
+        <param name="right">Der zweite zu vergleichende Wert.</param>
+        <summary>Überprüft zwei Werte auf Gleichheit.</summary>
+        <returns><see langword="true" />, wenn die beiden <see cref="T:System.Threading.Tasks.ValueTask`1" />-Werte gleich sind, andernfalls <see langword="false" />.</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="op_Inequality">
+      <MemberSignature Language="C#" Value="public static bool operator != (System.Threading.Tasks.ValueTask&lt;TResult&gt; left, System.Threading.Tasks.ValueTask&lt;TResult&gt; right);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig specialname bool op_Inequality(valuetype System.Threading.Tasks.ValueTask`1&lt;!TResult&gt; left, valuetype System.Threading.Tasks.ValueTask`1&lt;!TResult&gt; right) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.op_Inequality(System.Threading.Tasks.ValueTask{`0},System.Threading.Tasks.ValueTask{`0})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Operator != (left As ValueTask(Of TResult), right As ValueTask(Of TResult)) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool operator !=(System::Threading::Tasks::ValueTask&lt;TResult&gt; left, System::Threading::Tasks::ValueTask&lt;TResult&gt; right);" />
+      <MemberSignature Language="F#" Value="static member op_Inequality : System.Threading.Tasks.ValueTask&lt;'Result&gt; * System.Threading.Tasks.ValueTask&lt;'Result&gt; -&gt; bool" Usage="System.Threading.Tasks.ValueTask&lt;'Result&gt;.op_Inequality (left, right)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="left" Type="System.Threading.Tasks.ValueTask&lt;TResult&gt;" />
+        <Parameter Name="right" Type="System.Threading.Tasks.ValueTask&lt;TResult&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="left">Der erste zu vergleichende Wert.</param>
+        <param name="right">Der zweite zu vergleichende Wert.</param>
+        <summary>Bestimmt, ob zwei <see cref="T:System.Threading.Tasks.ValueTask`1" />-Werte ungleich sind.</summary>
+        <returns><see langword="true" />, wenn die beiden <see cref="T:System.Threading.Tasks.ValueTask`1" />-Werte ungleich sind, andernfalls <see langword="false" />.</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Preserve">
+      <MemberSignature Language="C#" Value="public System.Threading.Tasks.ValueTask&lt;TResult&gt; Preserve ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance valuetype System.Threading.Tasks.ValueTask`1&lt;!TResult&gt; Preserve() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.Preserve" />
+      <MemberSignature Language="VB.NET" Value="Public Function Preserve () As ValueTask(Of TResult)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Threading::Tasks::ValueTask&lt;TResult&gt; Preserve();" />
+      <MemberSignature Language="F#" Value="member this.Preserve : unit -&gt; System.Threading.Tasks.ValueTask&lt;'Result&gt;" Usage="valueTask.Preserve " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Threading.Tasks.ValueTask&lt;TResult&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Ruft einen <see cref="T:System.Threading.Tasks.ValueTask`1" /> ab, der an einem beliebigen Zeitpunkt in der Zukunft verwendet werden kann.</summary>
+        <returns>Ein Taskobjekt für die zukünftige Verwendung.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Result">
+      <MemberSignature Language="C#" Value="public TResult Result { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance !TResult Result" />
+      <MemberSignature Language="DocId" Value="P:System.Threading.Tasks.ValueTask`1.Result" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Result As TResult" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property TResult Result { TResult get(); };" />
+      <MemberSignature Language="F#" Value="member this.Result : 'Result" Usage="System.Threading.Tasks.ValueTask&lt;'Result&gt;.Result" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>TResult</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft das Ergebnis ab.</summary>
+        <value>Das Ergebnis.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+## Remarks  
+Auf diese Eigenschaft kann nur einmal zugegriffen werden, und zwar erst <xref:System.Threading.Tasks.ValueTask%601> , nachdem Sie abgeschlossen wurde.
+
+Wenn dieser <xref:System.Threading.Tasks.ValueTask%601> Vorgang erfolgreich abgeschlossen wurde, gibt diese Eigenschaft den resultierenden Wert zurück. Wenn ein Fehler aufgetreten ist, löst diese Eigenschaft eine Ausnahme aus. <xref:System.Threading.Tasks.ValueTask%601> Die ausgelöste Ausnahme ist nicht in ein <xref:System.AggregateException>umgerückt.
+]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public override string ToString ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string ToString() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Tasks.ValueTask`1.ToString" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function ToString () As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::String ^ ToString();" />
+      <MemberSignature Language="F#" Value="override this.ToString : unit -&gt; string" Usage="valueTask.ToString " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading.Tasks.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Gibt eine Zeichenfolge zurück, die das aktuelle Objekt darstellt.</summary>
+        <returns>Eine Zeichenfolge, die das aktuelle Objekt darstellt.</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

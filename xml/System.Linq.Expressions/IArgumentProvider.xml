@@ -1,0 +1,124 @@
+<Type Name="IArgumentProvider" FullName="System.Linq.Expressions.IArgumentProvider">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="4abd0b0508fdc62e37d2117e5823a54dfc7dfdce" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70580561" /></Metadata><TypeSignature Language="C#" Value="public interface IArgumentProvider" />
+  <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract IArgumentProvider" />
+  <TypeSignature Language="DocId" Value="T:System.Linq.Expressions.IArgumentProvider" />
+  <TypeSignature Language="VB.NET" Value="Public Interface IArgumentProvider" />
+  <TypeSignature Language="C++ CLI" Value="public interface class IArgumentProvider" />
+  <TypeSignature Language="F#" Value="type IArgumentProvider = interface" />
+  <AssemblyInfo>
+    <AssemblyName>System.Linq.Expressions</AssemblyName>
+    <AssemblyVersion>4.0.10.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Core</AssemblyName>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Interfaces />
+  <Docs>
+    <summary>Stellt eine interne Schnittstelle für den Zugriff auf die Argumente von mehreren Strukturknoten (DynamicExpression, ElementInit, MethodCallExpression, InvocationExpression, NewExpression und IndexExpression) bereit.  Diese API ist ausschließlich für die interne Verwendung vorgesehen.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[
+      
+## Remarks
+
+Sie sollten diese API nicht verwenden.  Er ist nur aufgrund der assemblyumgestaltung öffentlich und nur für interne Leistungsoptimierungen vorhanden. Sie ermöglicht zwei Optimierungen, die die Größe der Strukturen verringern:
+  
+1. Sie ermöglicht es, dass die Knoten <xref:System.Collections.Generic.IList%601> anstelle <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>eines in einem enthalten sind.  Dies spart die Kosten für das Zuordnen der schreibgeschützten Auflistung für jeden Knoten.
+  
+2. Sie ermöglicht die Erstellung spezieller Unterklassen, die eine bestimmte Anzahl von Argumenten (z `Block2` `Block2`. b.,, `Block4`) enthalten.  Daher wird durch diese Knoten vermieden, dass <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> sowohl ein als auch ein Array zum Speichern Ihrer Elemente zugeordnet werden. Dadurch werden 32 Bytes pro Knoten gespeichert.  Diese Technik wird von verschiedenen Knoten verwendet, einschließlich <xref:System.Linq.Expressions.BlockExpression>, <xref:System.Linq.Expressions.InvocationExpression>und <xref:System.Linq.Expressions.MethodCallExpression>.
+            
+Die Ausdrucks Baumstruktur Knoten machen weiterhin die ursprünglichen LINQ-Eigenschaften <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> von Objekten verfügbar. Dazu wird ein Feld zum Speichern des Arrays oder eines Elements, das normalerweise im Array gespeichert wäre, wieder verwendet.
+            
+Für den arrayfall wird die Auflistung <xref:System.Collections.Generic.IList%601> anstelle von <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>typisiert. Wenn der Knoten erstmalig erstellt wird, ist er ein Array.  Der Compiler oder die Hilfsprogramme in dieser Bibliothek greifen über diese Schnittstelle auf die Elemente zu. Beim Zugreifen auf Array Elemente wird das Array <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>in eine herauf gestuft.
+            
+Für den Objekt Fall wird das erste Argument in einem Feld gespeichert, das in <xref:System.Object>eingegeben wurde. Wenn der Knoten erstmalig erstellt wird, enthält dieses <xref:System.Linq.Expressions.Expression> Feld den des ersten Arguments.  Wenn der Compiler und die Hilfsprogramme in dieser Bibliothek auf die Argumente zugreifen, wird diese Schnittstelle wieder verwendet, und der-Accessor für das erste `Expression.ReturnObject<T>(System.Object)` Argument verwendet die interne Hilfsmethode, um das <xref:System.Linq.Expressions.Expression> Objekt <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> zurückzugeben, das die-oder-Groß-/Kleinschreibung behandelt. Wenn der Benutzer auf das <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>-Objekt zugreift, wird das Objektfeld so aktualisiert <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>, dass es direkt auf dem-Objekt
+            
+Es ist wichtig, <xref:System.Linq.Expressions.Expression> dass Eigenschaften konstant denselben <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>Wert zurückgeben. Andernfalls wird der von den Ausdrucks Besuchern verwendete ReWriter-Struktur Durchlauf abgebrochen. Es handelt sich um eine Breaking Change von LINQ v1, <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> um andere vom <xref:System.Linq.Expressions.Expression> gleichen Knoten zurückzugeben. Derzeit können sich Benutzer auf die Objekt Identität verlassen, um zu erkennen, ob sich der Knoten geändert hat.  Das speichern <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> der in einem überladenen Feld reduziert die Speicherauslastung und behält die Kompatibilität für die öffentliche API bei.
+
+      ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="ArgumentCount">
+      <MemberSignature Language="C#" Value="public int ArgumentCount { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 ArgumentCount" />
+      <MemberSignature Language="DocId" Value="P:System.Linq.Expressions.IArgumentProvider.ArgumentCount" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property ArgumentCount As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int ArgumentCount { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.ArgumentCount : int" Usage="System.Linq.Expressions.IArgumentProvider.ArgumentCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Linq.Expressions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gibt die Anzahl der Argumente an den Ausdrucksbaumstrukturknoten zurück. Diese API ist ausschließlich für die interne Verwendung vorgesehen.</summary>
+        <value>Die Anzahl der Argumente für den Ausdrucksstrukturknoten als <see cref="T:System.Int32" />.</value>
+        <remarks>Sie sollten diese API nicht verwenden. Er ist nur aufgrund der assemblyumgestaltung öffentlich und wird intern zur Leistungsoptimierung verwendet.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetArgument">
+      <MemberSignature Language="C#" Value="public System.Linq.Expressions.Expression GetArgument (int index);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Linq.Expressions.Expression GetArgument(int32 index) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Linq.Expressions.IArgumentProvider.GetArgument(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetArgument (index As Integer) As Expression" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Linq::Expressions::Expression ^ GetArgument(int index);" />
+      <MemberSignature Language="F#" Value="abstract member GetArgument : int -&gt; System.Linq.Expressions.Expression" Usage="iArgumentProvider.GetArgument index" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Linq.Expressions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Linq.Expressions.Expression</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="index" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="index">Der Index des Arguments.</param>
+        <summary>Gibt das Argument beim <paramref name="index" /> zurück, das ausgelöst wird, wenn der <paramref name="index" /> außerhalb des gültigen Bereichs liegt. Diese API ist ausschließlich für die interne Verwendung vorgesehen.</summary>
+        <returns>Das Argument beim Index.</returns>
+        <remarks>Sie sollten diese API nicht verwenden.  Es ist nur aufgrund der Assemblyumgestaltung öffentlich und wird intern zur Leistungsoptimierung verwendet.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

@@ -1,0 +1,3110 @@
+<Type Name="XmlConvert" FullName="System.Xml.XmlConvert">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="17a16750c79feb4f4a1c36668d74953827c24039" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70584371" /></Metadata><TypeSignature Language="C#" Value="public class XmlConvert" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit XmlConvert extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Xml.XmlConvert" />
+  <TypeSignature Language="VB.NET" Value="Public Class XmlConvert" />
+  <TypeSignature Language="C++ CLI" Value="public ref class XmlConvert" />
+  <TypeSignature Language="F#" Value="type XmlConvert = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.10.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Xml</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>Codiert und decodiert XML-Namen und stellt Methoden für das Konvertieren zwischen Typen der Common Language Runtime und XSD-Typen (XML Schema Definition) bereit. Bei der Konvertierung von Datentypen sind die zurückgegebenen Werte vom Gebietsschema unabhängig.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Xml.XmlConvert> -Klasse ist funktionell gleichwertig <xref:System.Convert> mit der-Klasse, unterstützt jedoch XML-Standards. Das Typsystem basiert auf dem XSD-Schematyp (XML Schema Definition Language), und die zurückgegebenen Werte sind stets vom Gebietsschema unabhängig.  
+  
+## <a name="encoding-and-decoding"></a>Codierung und Decodierung  
+ Element-und Attributnamen oder ID-Werte sind auf einen Bereich von XML-Zeichen gemäß der W3C- [Empfehlung für XML 1,0](https://www.w3.org/TR/2006/REC-xml-20060816/)beschränkt. Wenn Namen ungültige Zeichen enthalten, können Sie die <xref:System.Xml.XmlConvert.EncodeName%2A> - <xref:System.Xml.XmlConvert.DecodeName%2A> Methode und die-Methode in dieser Klasse verwenden, um Sie in gültige XML-Namen zu übersetzen.  
+  
+ Wenn Sie z. b. die Spaltenüberschrift "Order Detail" in einer-Datenbank verwenden möchten, lässt die Datenbank den Leerraum zwischen den beiden Wörtern zu. In XML wird das Leerzeichen zwischen "Order" und "Detail" jedoch als ungültiges XML-Zeichen betrachtet. Sie müssen es in eine hexadezimale Codierung mit Escapezeichen umwandeln und Sie später decodieren.  
+  
+ Sie können die <xref:System.Xml.XmlConvert.EncodeName%2A> -Methode mit der <xref:System.Xml.XmlWriter> -Klasse verwenden, um sicherzustellen, dass die geschriebenen Namen gültige XML-Namen sind. Der folgende C# Code konvertiert den Namen "Order Detail" in einen gültigen XML-Namen und schreibt das `<Order_0x0020_Detail>My order</Order_0x0020_Detail>`-Element.  
+  
+```csharp  
+writer.WriteElementString(XmlConvert.EncodeName("Order Detail"),"My order");
+```  
+  
+ Die folgenden <xref:System.Xml.XmlConvert> Methoden führen die Codierung und Decodierung durch.  
+  
+|Methode|Beschreibung|  
+|------------|-----------------|  
+|<xref:System.Xml.XmlConvert.EncodeName%2A>|Nimmt einen Namen an und gibt den codierten Namen zusammen mit jedem ungültigen Zeichen zurück, das durch eine Escapezeichenfolge ersetzt wird. Diese Methode ermöglicht Doppelpunkte an jeder beliebigen Position, d. h., der Name ist nach der W3C- [Empfehlung "Namespaces in XML 1,0](https://www.w3.org/TR/REC-xml-names/)" möglicherweise trotzdem ungültig.|  
+|<xref:System.Xml.XmlConvert.EncodeNmToken%2A>|Nimmt einen Namen an und gibt den codierten Namen zurück.|  
+|<xref:System.Xml.XmlConvert.EncodeLocalName%2A>|Identisch mit mit der Ausnahme, dass Sie auch den Doppelpunkt codiert und sicherstellt, dass der Name `LocalName` als Teil eines mit einem Namespace qualifizierten Namens verwendet werden kann. <xref:System.Xml.XmlConvert.EncodeName%2A>|  
+|<xref:System.Xml.XmlConvert.DecodeName%2A>|Kehrt die Transformation für alle Codierungsmethoden um.|  
+  
+## <a name="name-validation"></a>Namens Validierung  
+ Die <xref:System.Xml.XmlConvert> -Klasse enthält zwei Methoden, die die Zeichen in einem Element-oder Attributnamen überprüfen und sicherstellen, dass der Name den Regeln entspricht, die von der W3C- [Empfehlung zu XML 1,0](https://www.w3.org/TR/2006/REC-xml-20060816/)festgelegt werden:  
+  
+-   <xref:System.Xml.XmlConvert.VerifyName%2A>überprüft die Zeichen und überprüft, ob der Name gültig ist. Die Methode gibt den Namen zurück, wenn Sie gültig ist, und löst eine Ausnahme aus, wenn dies nicht der Fall ist.  
+  
+-   <xref:System.Xml.XmlConvert.VerifyNCName%2A>führt die gleiche Validierung aus, akzeptiert jedoch nicht qualifizierte Namen.  
+  
+ Der <xref:System.Xml.XmlConvert> enthält zusätzliche Methoden, die Token, Leerzeichen, öffentliche IDs und andere Zeichen folgen überprüfen.  
+  
+## <a name="data-type-conversion"></a>Datentyp Konvertierung  
+ <xref:System.Xml.XmlConvert>stellt auch Methoden bereit, die es Ihnen ermöglichen, Daten aus einer Zeichenfolge in einen stark typisierten Datentyp zu konvertieren. Beispielsweise konvertiert die <xref:System.Xml.XmlConvert.ToDateTime%2A> -Methode eine Zeichenfolge in <xref:System.DateTime> die-Entsprechung. Dies ist hilfreich, da die meisten Methoden <xref:System.Xml.XmlReader> in der-Klasse Daten als Zeichenfolge zurückgeben. Nachdem die Daten gelesen wurden, können Sie in den richtigen Datentyp konvertiert werden, bevor Sie verwendet werden. Die <xref:System.Xml.XmlConvert.ToString%2A> -über Ladungen stellen den ergänzenden Vorgang bereit, indem stark typisierte Daten in Zeichen folgen umgerechnet werden. Dies ist beispielsweise hilfreich, wenn Sie die Daten zu Textfeldern auf einer Webseite hinzufügen möchten. Gebiets Schema Einstellungen werden bei der Datenkonvertierung nicht berücksichtigt. Die Datentypen basieren auf den XML-Schema-Datentypen (XSD).  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XmlConvert ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XmlConvert();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Xml.XmlConvert" />-Klasse.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="DecodeName">
+      <MemberSignature Language="C#" Value="public static string DecodeName (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string DecodeName(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.DecodeName(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function DecodeName (name As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ DecodeName(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="static member DecodeName : string -&gt; string" Usage="System.Xml.XmlConvert.DecodeName name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">Der umzuwandelnde Name.</param>
+        <summary>Decodiert einen Namen. Diese Methode ist die Umkehrung der <see cref="M:System.Xml.XmlConvert.EncodeName(System.String)" />-Methode und der <see cref="M:System.Xml.XmlConvert.EncodeLocalName(System.String)" />-Methode.</summary>
+        <returns>Der decodierte Name.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Namen werden mit den folgenden Regeln decodiert:  
+  
+- Namen werden von links nach rechts decodiert.  
+  
+- Jede Sequenz \_x*HHHH* \_ (wobei HHHH für einen gültigen, vierstelligen hexadezimalen UCS-2-Code steht), der nicht decodiert wurde, wird in den entsprechenden Unicode-Wert 2,1 (Unicode 3,0, wenn von der Anwendung unterstützt) transformiert.  
+  
+- Es werden keine shortforms erkannt. Sie werden ohne Übersetzung weitergegeben. Beispielsweise \_werden x20\_ oder  \_ nicht decodiert \_ .
+  
+> [!NOTE]
+> Die tatsächliche Codierung des Zeichens ist anwendungsspezifisch. Beispielsweise werden Order\_x0020\_Details zu Bestelldetails. Sogar Escapezeichen, die in XML-Namen ungültig sind, werden erkannt und decodiert.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel werden Namen codiert und decodiert.  
+  
+ [!code-cpp[XmlConvert.EncodeName#1](~/samples/snippets/cpp/VS_Snippets_Data/XmlConvert.EncodeName/CPP/convert.cpp#1)]
+ [!code-csharp[XmlConvert.EncodeName#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlConvert.EncodeName/CS/convert.cs#1)]
+ [!code-vb[XmlConvert.EncodeName#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlConvert.EncodeName/VB/convert.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EncodeLocalName">
+      <MemberSignature Language="C#" Value="public static string EncodeLocalName (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string EncodeLocalName(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.EncodeLocalName(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function EncodeLocalName (name As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ EncodeLocalName(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="static member EncodeLocalName : string -&gt; string" Usage="System.Xml.XmlConvert.EncodeLocalName name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">Der zu codierende Name.</param>
+        <summary>Konvertiert den Namen in einen gültigen lokalen XML-Namen.</summary>
+        <returns>Der codierte Name.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode ähnelt der <xref:System.Xml.XmlConvert.EncodeName%2A> -Methode, mit der Ausnahme, dass Sie den Doppelpunkt codiert, mit dem sichergestellt wird, dass der Name als lokaler Namensteil eines qualifizierten Namespace namens verwendet werden kann.  
+  
+ Wenn Sie diese Methode z. b. an den ungültigen Namen a:b weitergegeben\_haben\_, wird ein x003a b zurückgegeben, bei dem es sich um einen gültigen lokalen Namen handelt.  
+  
+ Wenn `name` gleich `null` oder <xref:System.String.Empty?displayProperty=fullName> ist, gibt die Methode denselben Wert zurück.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel werden Namen codiert und decodiert.  
+  
+ [!code-cpp[XmlConvert.EncodeName#1](~/samples/snippets/cpp/VS_Snippets_Data/XmlConvert.EncodeName/CPP/convert.cpp#1)]
+ [!code-csharp[XmlConvert.EncodeName#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlConvert.EncodeName/CS/convert.cs#1)]
+ [!code-vb[XmlConvert.EncodeName#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlConvert.EncodeName/VB/convert.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Xml.XmlConvert.EncodeName(System.String)" />
+        <altmember cref="M:System.Xml.XmlConvert.DecodeName(System.String)" />
+      </Docs>
+    </Member>
+    <Member MemberName="EncodeName">
+      <MemberSignature Language="C#" Value="public static string EncodeName (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string EncodeName(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.EncodeName(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function EncodeName (name As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ EncodeName(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="static member EncodeName : string -&gt; string" Usage="System.Xml.XmlConvert.EncodeName name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">Ein zu übersetzender Name.</param>
+        <summary>Konvertiert den Namen in einen gültigen XML-Namen.</summary>
+        <returns>Der Name, in dem eventuelle ungültige Zeichen durch eine Escapezeichenfolge ersetzt wurden.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode übersetzt ungültige Zeichen, z. b. Leerzeichen oder Katakana (halbbreite), die XML-Namen ohne die Unterstützung oder das vorhanden sein von Schemas zugeordnet werden müssen. Die ungültigen Zeichen werden in geschützte numerische Entitäts Codierungen übersetzt.  
+  
+ Das Escapezeichen ist\_"". Alle XML-Namens Zeichen, die nicht der [Empfehlung "XML 1,0 spec" (Vierte Edition)](https://www.w3.org/TR/2006/REC-xml-20060816/) entsprechen, \_werden als "xhhhh\_" geschützt. Die HHHH-Zeichenfolge steht für den vierstelligen hexadezimalen UCS-2-Code für das Zeichen in der höchst wertigen bidirektionalen Reihenfolge. Die Details der namens Reihenfolge werden z. b\_.\_als Order x0020-Details codiert.  
+  
+ Der Unterstrich muss nicht geschützt werden, es sei denn, er wird von einer Zeichensequenz gefolgt, die beim Decodieren des Namens zusammen mit dem Unterstrich als Escapezeichenfolge fehlinterpretiert werden kann. Beispielsweise werden die\_Bestell Details nicht codiert, aber\_Order\_ x0020 wird als Order\_x005f\_x0020\_codiert. Shortforms sind nicht zulässig. Beispielsweise werden die Formulare \_x20\_ und \_ \_ nicht generiert.  
+  
+ Diese Methode stellt sicher, dass der Name gemäß der XML-Spezifikation gültig ist. Sie ermöglicht eine beliebige Position von Doppelpunkten. Dies bedeutet, dass der Name nach der Spezifikation des [W3C-Namespace](https://www.w3.org/TR/REC-xml-names/)möglicherweise weiterhin ungültig ist. Um sicherzustellen, dass es sich um einen gültigen Namespace qualifizierten Namen handelt, verwenden <xref:System.Xml.XmlConvert.EncodeLocalName%2A> Sie für die Präfix-und lokalen namens Teile, und verknüpfen Sie das Ergebnis mit einem  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel werden Namen codiert und decodiert.  
+  
+ [!code-cpp[XmlConvert.EncodeName#1](~/samples/snippets/cpp/VS_Snippets_Data/XmlConvert.EncodeName/CPP/convert.cpp#1)]
+ [!code-csharp[XmlConvert.EncodeName#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlConvert.EncodeName/CS/convert.cs#1)]
+ [!code-vb[XmlConvert.EncodeName#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlConvert.EncodeName/VB/convert.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Xml.XmlConvert.EncodeLocalName(System.String)" />
+        <altmember cref="M:System.Xml.XmlConvert.DecodeName(System.String)" />
+      </Docs>
+    </Member>
+    <Member MemberName="EncodeNmToken">
+      <MemberSignature Language="C#" Value="public static string EncodeNmToken (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string EncodeNmToken(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.EncodeNmToken(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function EncodeNmToken (name As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ EncodeNmToken(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="static member EncodeNmToken : string -&gt; string" Usage="System.Xml.XmlConvert.EncodeNmToken name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">Der zu codierende Name.</param>
+        <summary>Überprüft, ob der Name entsprechend der XML-Spezifikation gültig ist.</summary>
+        <returns>Der codierte Name.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode stellt sicher, dass der Name gemäß der XML-Spezifikation gültig ist. Wenn Sie diese Methode z. b. den ungültigen Namen 70 + haben, wird\_70\_ zurückgegeben x002b Dies ist ein gültiger XML-Name.  
+  
+ Wenn `name` oder `null` String. Empty ist, erhalten Sie denselben Wert, der zurückgegeben wird.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsNCNameChar">
+      <MemberSignature Language="C#" Value="public static bool IsNCNameChar (char ch);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsNCNameChar(char ch) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.IsNCNameChar(System.Char)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function IsNCNameChar (ch As Char) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool IsNCNameChar(char ch);" />
+      <MemberSignature Language="F#" Value="static member IsNCNameChar : char -&gt; bool" Usage="System.Xml.XmlConvert.IsNCNameChar ch" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ch" Type="System.Char" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="ch">Das Zeichen, das als Nicht-Doppelpunkt-Zeichen überprüft werden soll.</param>
+        <summary>Überprüft, ob das übergebene Zeichen ein gültiger Nicht-Doppelpunkt-Zeichentyp ist.</summary>
+        <returns><see langword="true" />, wenn ein Zeichen ein gültiger Nicht-Doppelpunkt-Zeichentyp ist, andernfalls <see langword="false" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsPublicIdChar">
+      <MemberSignature Language="C#" Value="public static bool IsPublicIdChar (char ch);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsPublicIdChar(char ch) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.IsPublicIdChar(System.Char)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function IsPublicIdChar (ch As Char) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool IsPublicIdChar(char ch);" />
+      <MemberSignature Language="F#" Value="static member IsPublicIdChar : char -&gt; bool" Usage="System.Xml.XmlConvert.IsPublicIdChar ch" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ch" Type="System.Char" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="ch">Das zu überprüfende <see cref="T:System.Char" />-Objekt.</param>
+        <summary>Gibt die übergebene Zeicheninstanz zurück, wenn das Zeichen im Argument ein gültiges Zeichen für eine öffentliche ID ist, andernfalls <see langword="null" />.</summary>
+        <returns>Das übergebene Zeichen, wenn das Zeichen ein gültiges Zeichen für eine öffentliche ID ist, andernfalls <see langword="null" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsStartNCNameChar">
+      <MemberSignature Language="C#" Value="public static bool IsStartNCNameChar (char ch);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsStartNCNameChar(char ch) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.IsStartNCNameChar(System.Char)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function IsStartNCNameChar (ch As Char) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool IsStartNCNameChar(char ch);" />
+      <MemberSignature Language="F#" Value="static member IsStartNCNameChar : char -&gt; bool" Usage="System.Xml.XmlConvert.IsStartNCNameChar ch" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ch" Type="System.Char" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="ch">Das Zeichen, das validiert werden soll.</param>
+        <summary>Überprüft, ob das übergebene Zeichen ein gültiger Startnamenszeichen-Typ ist.</summary>
+        <returns><see langword="true" />, wenn das Zeichen ein gültiger Startnamenszeichen-Typ ist, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Ausführliche Informationen zu zulässigen Zeichen finden Sie in der Empfehlung zu [XML 1,0 spec (Fourth Edition)](https://go.microsoft.com/fwlink/?LinkId=147985) .  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsWhitespaceChar">
+      <MemberSignature Language="C#" Value="public static bool IsWhitespaceChar (char ch);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsWhitespaceChar(char ch) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.IsWhitespaceChar(System.Char)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function IsWhitespaceChar (ch As Char) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool IsWhitespaceChar(char ch);" />
+      <MemberSignature Language="F#" Value="static member IsWhitespaceChar : char -&gt; bool" Usage="System.Xml.XmlConvert.IsWhitespaceChar ch" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ch" Type="System.Char" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="ch">Das Zeichen, das validiert werden soll.</param>
+        <summary>Überprüft, ob das übergebene Zeichen ein gültiges XML-Leerraumzeichen ist.</summary>
+        <returns><see langword="true" />, wenn das übergebene Zeichen ein gültiges XML-Leerraumzeichen ist, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Ausführliche Informationen zu zulässigen Zeichen finden Sie in der Empfehlung zu [XML 1,0 spec (Fourth Edition)](https://go.microsoft.com/fwlink/?LinkID=147985) .  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsXmlChar">
+      <MemberSignature Language="C#" Value="public static bool IsXmlChar (char ch);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsXmlChar(char ch) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.IsXmlChar(System.Char)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function IsXmlChar (ch As Char) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool IsXmlChar(char ch);" />
+      <MemberSignature Language="F#" Value="static member IsXmlChar : char -&gt; bool" Usage="System.Xml.XmlConvert.IsXmlChar ch" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ch" Type="System.Char" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="ch">Das Zeichen, das validiert werden soll.</param>
+        <summary>Überprüft, ob das übergebene Zeichen ein gültiges XML-Zeichen ist.</summary>
+        <returns><see langword="true" />, wenn das übergebene Zeichen ein gültiges XML-Zeichen ist, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Ausführliche Informationen zu zulässigen Zeichen finden Sie in der Empfehlung zu [XML 1,0 spec (Fourth Edition)](https://go.microsoft.com/fwlink/?LinkId=147985) .  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsXmlSurrogatePair">
+      <MemberSignature Language="C#" Value="public static bool IsXmlSurrogatePair (char lowChar, char highChar);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsXmlSurrogatePair(char lowChar, char highChar) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.IsXmlSurrogatePair(System.Char,System.Char)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function IsXmlSurrogatePair (lowChar As Char, highChar As Char) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool IsXmlSurrogatePair(char lowChar, char highChar);" />
+      <MemberSignature Language="F#" Value="static member IsXmlSurrogatePair : char * char -&gt; bool" Usage="System.Xml.XmlConvert.IsXmlSurrogatePair (lowChar, highChar)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="lowChar" Type="System.Char" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="highChar" Type="System.Char" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="lowChar">Das zu validierende Ersatzzeichen.</param>
+        <param name="highChar">Das zu validierende Ersatzzeichen.</param>
+        <summary>Überprüft, ob das übergebene Ersatzzeichenpaar ein gültiges XML-Zeichen ist.</summary>
+        <returns><see langword="true" />, wenn das übergebene Ersatzzeichenpaar ein gültiges XML-Zeichen ist, andernfalls <see langword="false" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToBoolean">
+      <MemberSignature Language="C#" Value="public static bool ToBoolean (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool ToBoolean(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToBoolean(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToBoolean (s As String) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool ToBoolean(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToBoolean : string -&gt; bool" Usage="System.Xml.XmlConvert.ToBoolean s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.Boolean" />-Äquivalent.</summary>
+        <returns>Ein <see langword="Boolean" />-Wert, d. h. <see langword="true" /> oder <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Gültige Zeichen folgen sind "1" oder "true" `true` für und "0" oder "false" `false`für.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> stellt keinen <see langword="Boolean" />-Wert dar.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToByte">
+      <MemberSignature Language="C#" Value="public static byte ToByte (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig unsigned int8 ToByte(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToByte(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToByte (s As String) As Byte" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Byte ToByte(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToByte : string -&gt; byte" Usage="System.Xml.XmlConvert.ToByte s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.Byte" />-Äquivalent.</summary>
+        <returns>Ein <see langword="Byte" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> weist nicht das richtige Format auf.</exception>
+        <exception cref="T:System.OverflowException"><paramref name="s" /> stellt eine Zahl dar, die kleiner als <see cref="F:System.Byte.MinValue" /> oder größer als <see cref="F:System.Byte.MaxValue" /> ist.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToChar">
+      <MemberSignature Language="C#" Value="public static char ToChar (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig char ToChar(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToChar(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToChar (s As String) As Char" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static char ToChar(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToChar : string -&gt; char" Usage="System.Xml.XmlConvert.ToChar s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Char</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die Zeichenfolge, die ein einzelnes zu konvertierendes Zeichen enthält.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.Char" />-Äquivalent.</summary>
+        <returns>Ein <see langword="Char" />, das für das einzelne Zeichen steht.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException">Der Wert des <paramref name="s" />-Parameters ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException">Der <paramref name="s" />-Parameter enthält mehr als ein Zeichen.</exception>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="ToDateTime">
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.DateTime" />-Äquivalent.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="ToDateTime">
+      <MemberSignature Language="C#" Value="public static DateTime ToDateTime (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.DateTime ToDateTime(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToDateTime(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToDateTime (s As String) As DateTime" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static DateTime ToDateTime(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToDateTime : string -&gt; DateTime" Usage="System.Xml.XmlConvert.ToDateTime s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-2.0;netcore-2.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.Obsolete("Use XmlConvert.ToDateTime() that takes in XmlDateTimeSerializationMode")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.DateTime" />-Äquivalent.</summary>
+        <returns>Ein <see langword="DateTime" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Die <xref:System.Xml.XmlConvert.ToDateTime%28System.String%29?displayProperty=nameWithType> -Methode ist in Version 2,0 des .NET Framework veraltet und wurde durch die <xref:System.Xml.XmlConvert.ToDateTime%28System.String%2CSystem.Xml.XmlDateTimeSerializationMode%29?displayProperty=nameWithType> -Methode ersetzt.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel werden <xref:System.Xml.XmlConvert.ToDouble%2A> und `ToDateTime` verwendet, um stark typisierte Daten zu lesen.  
+  
+ [!code-cpp[XmlConvert.ToDouble#1](~/samples/snippets/cpp/VS_Snippets_Data/XmlConvert.ToDouble/CPP/readData.cpp#1)]
+ [!code-csharp[XmlConvert.ToDouble#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlConvert.ToDouble/CS/readdata.cs#1)]
+ [!code-vb[XmlConvert.ToDouble#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlConvert.ToDouble/VB/readdata.vb#1)]  
+  
+ Im Beispiel wird die-Datei `orderData.xml`als Eingabe verwendet.  
+  
+ [!code-xml[XmlConvert.ToDouble#2](~/samples/snippets/xml/VS_Snippets_Data/XmlConvert.ToDouble/XML/orderdata.xml#2)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> ist eine leere Zeichenfolge oder hat nicht das richtige Format.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToDateTime">
+      <MemberSignature Language="C#" Value="public static DateTime ToDateTime (string s, string format);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.DateTime ToDateTime(string s, string format) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToDateTime(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToDateTime (s As String, format As String) As DateTime" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static DateTime ToDateTime(System::String ^ s, System::String ^ format);" />
+      <MemberSignature Language="F#" Value="static member ToDateTime : string * string -&gt; DateTime" Usage="System.Xml.XmlConvert.ToDateTime (s, format)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="format" Type="System.String" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <param name="format">Die auf das konvertierte <see langword="DateTime" /> anzuwendende Formatstruktur. Zu den gültigen Format zählt „yyyy-MM-ddTHH:mm:sszzzzzz“ und dessen Teilmengen. Es wird validiert, ob die Zeichenfolge dieses Format aufweist.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.DateTime" />-Äquivalent.</summary>
+        <returns>Ein <see langword="DateTime" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> oder <paramref name="format" /> ist String.Empty. 
+- oder - 
+ <paramref name="s" /> enthält kein Datum und keine Uhrzeit, die <paramref name="format" /> entsprechen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToDateTime">
+      <MemberSignature Language="C#" Value="public static DateTime ToDateTime (string s, string[] formats);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.DateTime ToDateTime(string s, string[] formats) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToDateTime(System.String,System.String[])" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToDateTime (s As String, formats As String()) As DateTime" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static DateTime ToDateTime(System::String ^ s, cli::array &lt;System::String ^&gt; ^ formats);" />
+      <MemberSignature Language="F#" Value="static member ToDateTime : string * string[] -&gt; DateTime" Usage="System.Xml.XmlConvert.ToDateTime (s, formats)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="formats" Type="System.String[]" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <param name="formats">Ein Array, das die Formatstrukturen enthält, die auf das konvertierte <see langword="DateTime" /> angewendet werden sollen. Zu den gültigen Format zählt „yyyy-MM-ddTHH:mm:sszzzzzz“ und dessen Teilmengen.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.DateTime" />-Äquivalent.</summary>
+        <returns>Ein <see langword="DateTime" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode ermöglicht das Validieren mehrerer Formate für die Zeichenfolge.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> oder ein Element von <paramref name="formats" /> ist String.Empty. 
+- oder - 
+ <paramref name="s" /> enthält kein Datum und keine Uhrzeit, die einem der Elemente von <paramref name="formats" /> entsprechen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToDateTime">
+      <MemberSignature Language="C#" Value="public static DateTime ToDateTime (string s, System.Xml.XmlDateTimeSerializationMode dateTimeOption);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.DateTime ToDateTime(string s, valuetype System.Xml.XmlDateTimeSerializationMode dateTimeOption) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToDateTime(System.String,System.Xml.XmlDateTimeSerializationMode)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToDateTime (s As String, dateTimeOption As XmlDateTimeSerializationMode) As DateTime" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static DateTime ToDateTime(System::String ^ s, System::Xml::XmlDateTimeSerializationMode dateTimeOption);" />
+      <MemberSignature Language="F#" Value="static member ToDateTime : string * System.Xml.XmlDateTimeSerializationMode -&gt; DateTime" Usage="System.Xml.XmlConvert.ToDateTime (s, dateTimeOption)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="dateTimeOption" Type="System.Xml.XmlDateTimeSerializationMode" Index="1" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="s">Der zu konvertierende <see cref="T:System.String" />-Wert.</param>
+        <param name="dateTimeOption">Einer der Enumerationswerte, die angeben, ob das Datum in die Ortszeit konvertiert oder als UTC-Zeit (Coordinated Universal Time) beibehalten werden soll, falls es sich um ein UTC-Datum handelt.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> mithilfe von <see cref="T:System.Xml.XmlDateTimeSerializationMode" /> in eine <see cref="T:System.DateTime" />-Struktur.</summary>
+        <returns>Ein <see cref="T:System.DateTime" />-Äquivalent von <see cref="T:System.String" />.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.NullReferenceException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="dateTimeOption" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> ist eine leere Zeichenfolge oder weist kein gültiges Format auf.</exception>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="ToDateTimeOffset">
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Konvertiert den angegebenen <see cref="T:System.String" /> in ein <see cref="T:System.DateTimeOffset" />-Äquivalent.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="ToDateTimeOffset">
+      <MemberSignature Language="C#" Value="public static DateTimeOffset ToDateTimeOffset (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.DateTimeOffset ToDateTimeOffset(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToDateTimeOffset(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToDateTimeOffset (s As String) As DateTimeOffset" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static DateTimeOffset ToDateTimeOffset(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToDateTimeOffset : string -&gt; DateTimeOffset" Usage="System.Xml.XmlConvert.ToDateTimeOffset s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.DateTimeOffset</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.  
+  
+ **Hinweis** Die Zeichenfolge muss einer Teilmenge der W3C-Empfehlung für den XML-dateTime-Typ entsprechen. Weitere Informationen finden Sie im <see href="https://www.w3.org/TR/xmlschema-2/#dateTime">dateTime</see>-Abschnitt der XML-Schemaspezifikation.</param>
+        <summary>Konvertiert den angegebenen <see cref="T:System.String" /> in ein <see cref="T:System.DateTimeOffset" />-Äquivalent.</summary>
+        <returns>Das <see cref="T:System.DateTimeOffset" />-Äquivalent der angegebenen Zeichenfolge.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn mehr als sieben Ziffern für Sekundenbruchteile angegeben werden, wird der Wert gerundet. Beispielsweise wird 00000004 zu 0000000, und 00000005 bei der wird 0000001.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird veranschaulicht, wie eine Zeichenfolge aus einer XML-Datei gelesen <xref:System.Xml.XmlConvert.ToDateTimeOffset%2A> und die-Methode verwendet wird, <xref:System.DateTimeOffset> um die Zeichenfolge in einen-Typ zu konvertieren.  
+  
+ [!code-csharp[XmlConvert_ToDateTimeOffset_ex1#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlConvert_ToDateTimeOffset_ex1/CS/XmlConvert_ToDateTimeOffset_ex1.cs#1)]
+ [!code-vb[XmlConvert_ToDateTimeOffset_ex1#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlConvert_ToDateTimeOffset_ex1/VB/XmlConvert_ToDateTimeOffset_ex1.vb#1)]  
+  
+ Im Beispiel wird die Datei Transactions. XML verwendet.  
+  
+```xml  
+<?xml version="1.0"?>  
+<transactions>  
+   <transaction>  
+      <id>123456789</id>  
+      <amount>1.00</amount>  
+      <currency>USD</currency>  
+      <time>2007-08-03T22:05:13-07:00</time>  
+   </transaction>  
+</transactions>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Das an diese Methode übergebene Argument liegt außerhalb des Bereichs zulässiger Werte. Informationen über zulässige Werte finden Sie unter <see cref="T:System.DateTimeOffset" />.</exception>
+        <exception cref="T:System.FormatException">Das an diese Methode übergebene Argument entspricht einer der Teilmengen der W3C-Empfehlung für den XML-DateTime-Typ nicht. Weitere Informationen finden Sie im <see href="https://www.w3.org/TR/xmlschema-2/#dateTime">dateTime</see>-Abschnitt der XML-Schemaspezifikation.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToDateTimeOffset">
+      <MemberSignature Language="C#" Value="public static DateTimeOffset ToDateTimeOffset (string s, string format);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.DateTimeOffset ToDateTimeOffset(string s, string format) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToDateTimeOffset(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToDateTimeOffset (s As String, format As String) As DateTimeOffset" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static DateTimeOffset ToDateTimeOffset(System::String ^ s, System::String ^ format);" />
+      <MemberSignature Language="F#" Value="static member ToDateTimeOffset : string * string -&gt; DateTimeOffset" Usage="System.Xml.XmlConvert.ToDateTimeOffset (s, format)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.DateTimeOffset</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="format" Type="System.String" Index="1" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <param name="format">Das Format, aus dem <paramref name="s" /> konvertiert wird. Der Formatparameter kann eine beliebige Teilmenge der W3C-Empfehlung für den XML-DateTime-Typ sein. (Weitere Informationen finden Sie im <see href="https://www.w3.org/TR/xmlschema-2/#dateTime">dateTime</see>-Abschnitt der XML-Schemaspezifikation.) Es wird validiert, ob die Zeichenfolge <paramref name="s" /> dieses Format aufweist.</param>
+        <summary>Konvertiert den angegebenen <see cref="T:System.String" /> in ein <see cref="T:System.DateTimeOffset" />-Äquivalent.</summary>
+        <returns>Das <see cref="T:System.DateTimeOffset" />-Äquivalent der angegebenen Zeichenfolge.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn der Offset, der in der Eingabe Zeichenfolge angegeben ist, in der deserialisierten Darstellung von DateTimeOffset einen Überlauf verursacht, wird eine FormatException ausgelöst.  
+  
+ Wenn mehr als sieben Ziffern für Sekundenbruchteile angegeben werden, wird der Wert gerundet. Beispielsweise wird 00000004 zu 0000000, und 00000005 bei der wird 0000001.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird veranschaulicht, wie eine Zeichenfolge aus einer XML-Datei gelesen <xref:System.Xml.XmlConvert.ToDateTimeOffset%2A> und die-Methode verwendet wird, <xref:System.DateTimeOffset> um die Zeichenfolge in einen-Typ zu konvertieren. Die Eingabe Zeichenfolge wird anhand des angegebenen Formats überprüft, bevor Sie konvertiert wird.  
+  
+ [!code-csharp[XmlConvert_ToDateTimeOffset_ex2#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlConvert_ToDateTimeOffset_ex2/CS/XmlConvert_ToDateTimeOffset_ex2.cs#1)]
+ [!code-vb[XmlConvert_ToDateTimeOffset_ex2#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlConvert_ToDateTimeOffset_ex2/VB/XmlConvert_ToDateTimeOffset_ex2.vb#1)]  
+  
+ Im Beispiel wird die Datei Transactions. XML verwendet.  
+  
+```xml  
+<?xml version="1.0"?>  
+<transactions>  
+   <transaction>  
+      <id>123456789</id>  
+      <amount>1.00</amount>  
+      <currency>USD</currency>  
+      <time>2007-08-03T22:05:13-07:00</time>  
+   </transaction>  
+</transactions>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> oder <paramref name="format" /> ist eine leere Zeichenfolge oder hat nicht das angegebene Format.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToDateTimeOffset">
+      <MemberSignature Language="C#" Value="public static DateTimeOffset ToDateTimeOffset (string s, string[] formats);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.DateTimeOffset ToDateTimeOffset(string s, string[] formats) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToDateTimeOffset(System.String,System.String[])" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToDateTimeOffset (s As String, formats As String()) As DateTimeOffset" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static DateTimeOffset ToDateTimeOffset(System::String ^ s, cli::array &lt;System::String ^&gt; ^ formats);" />
+      <MemberSignature Language="F#" Value="static member ToDateTimeOffset : string * string[] -&gt; DateTimeOffset" Usage="System.Xml.XmlConvert.ToDateTimeOffset (s, formats)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.DateTimeOffset</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="formats" Type="System.String[]" Index="1" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <param name="formats">Ein Array von Formaten, aus denen <paramref name="s" /> konvertiert werden kann. Jedes Format in <paramref name="formats" /> kann eine beliebige Teilmenge der W3C-Empfehlung für den XML-DateTime-Typ sein. (Weitere Informationen finden Sie im <see href="https://www.w3.org/TR/xmlschema-2/#dateTime">dateTime</see>-Abschnitt der XML-Schemaspezifikation.) Es wird validiert, ob die Zeichenfolge <paramref name="s" /> eines dieser Formate aufweist.</param>
+        <summary>Konvertiert den angegebenen <see cref="T:System.String" /> in ein <see cref="T:System.DateTimeOffset" />-Äquivalent.</summary>
+        <returns>Das <see cref="T:System.DateTimeOffset" />-Äquivalent der angegebenen Zeichenfolge.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn der Offset, der in der Eingabe Zeichenfolge angegeben ist, in der deserialisierten Darstellung von DateTimeOffset einen Überlauf verursacht, wird eine FormatException ausgelöst.  
+  
+ Wenn mehr als sieben Ziffern für Sekundenbruchteile angegeben werden, wird der Wert gerundet. Beispielsweise wird 00000004 zu 0000000, und 00000005 bei der wird 0000001.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird veranschaulicht, wie eine Zeichenfolge aus einer XML-Datei gelesen <xref:System.Xml.XmlConvert.ToDateTimeOffset%2A> und die-Methode verwendet wird, <xref:System.DateTimeOffset> um die Zeichenfolge in einen-Typ zu konvertieren. Vor der Konvertierung muss die Eingabe Zeichenfolge mit einem der angegebenen Formate überprüft werden.  
+  
+ [!code-csharp[XmlConvert_ToDateTimeOffset_ex3#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlConvert_ToDateTimeOffset_ex3/CS/XmlConvert_ToDateTimeOffset_ex3.cs#1)]
+ [!code-vb[XmlConvert_ToDateTimeOffset_ex3#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlConvert_ToDateTimeOffset_ex3/VB/XmlConvert_ToDateTimeOffset_ex3.vb#1)]  
+  
+ Im Beispiel wird die Datei Transactions. XML verwendet.  
+  
+```xml  
+<?xml version="1.0"?>  
+<transactions>  
+   <transaction>  
+      <id>123456789</id>  
+      <amount>1.00</amount>  
+      <currency>USD</currency>  
+      <time>2007-08-03T22:05:13-07:00</time>  
+   </transaction>  
+</transactions>  
+```  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToDecimal">
+      <MemberSignature Language="C#" Value="public static decimal ToDecimal (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.Decimal ToDecimal(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToDecimal(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToDecimal (s As String) As Decimal" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Decimal ToDecimal(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToDecimal : string -&gt; decimal" Usage="System.Xml.XmlConvert.ToDecimal s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Decimal</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.Decimal" />-Äquivalent.</summary>
+        <returns>Ein <see langword="Decimal" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> weist nicht das richtige Format auf.</exception>
+        <exception cref="T:System.OverflowException"><paramref name="s" /> stellt eine Zahl dar, die kleiner als <see cref="F:System.Decimal.MinValue" /> oder größer als <see cref="F:System.Decimal.MaxValue" /> ist.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToDouble">
+      <MemberSignature Language="C#" Value="public static double ToDouble (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig float64 ToDouble(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToDouble(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToDouble (s As String) As Double" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static double ToDouble(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToDouble : string -&gt; double" Usage="System.Xml.XmlConvert.ToDouble s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.Double" />-Äquivalent.</summary>
+        <returns>Ein <see langword="Double" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn `s` "inf" oder "-inf" ist, gibt diese Methode "Double. PositiveInfinity" bzw. "Double. NegativeInfinity" zurück.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel werden `ToDouble` und <xref:System.Xml.XmlConvert.ToDateTime%2A> verwendet, um stark typisierte Daten zu lesen.  
+  
+ [!code-cpp[XmlConvert.ToDouble#1](~/samples/snippets/cpp/VS_Snippets_Data/XmlConvert.ToDouble/CPP/readData.cpp#1)]
+ [!code-csharp[XmlConvert.ToDouble#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlConvert.ToDouble/CS/readdata.cs#1)]
+ [!code-vb[XmlConvert.ToDouble#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlConvert.ToDouble/VB/readdata.vb#1)]  
+  
+ Im Beispiel wird die-Datei `orderData.xml`als Eingabe verwendet.  
+  
+ [!code-xml[XmlConvert.ToDouble#2](~/samples/snippets/xml/VS_Snippets_Data/XmlConvert.ToDouble/XML/orderdata.xml#2)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> weist nicht das richtige Format auf.</exception>
+        <exception cref="T:System.OverflowException"><paramref name="s" /> stellt eine Zahl dar, die kleiner als <see cref="F:System.Double.MinValue" /> oder größer als <see cref="F:System.Double.MaxValue" /> ist.</exception>
+        <altmember cref="F:System.Double.PositiveInfinity" />
+        <altmember cref="F:System.Double.NegativeInfinity" />
+      </Docs>
+    </Member>
+    <Member MemberName="ToGuid">
+      <MemberSignature Language="C#" Value="public static Guid ToGuid (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.Guid ToGuid(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToGuid(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToGuid (s As String) As Guid" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static Guid ToGuid(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToGuid : string -&gt; Guid" Usage="System.Xml.XmlConvert.ToGuid s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Guid</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.Guid" />-Äquivalent.</summary>
+        <returns>Ein <see langword="Guid" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToInt16">
+      <MemberSignature Language="C#" Value="public static short ToInt16 (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int16 ToInt16(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToInt16(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToInt16 (s As String) As Short" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static short ToInt16(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToInt16 : string -&gt; int16" Usage="System.Xml.XmlConvert.ToInt16 s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int16</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.Int16" />-Äquivalent.</summary>
+        <returns>Ein <see langword="Int16" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> weist nicht das richtige Format auf.</exception>
+        <exception cref="T:System.OverflowException"><paramref name="s" /> stellt eine Zahl dar, die kleiner als <see cref="F:System.Int16.MinValue" /> oder größer als <see cref="F:System.Int16.MaxValue" /> ist.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToInt32">
+      <MemberSignature Language="C#" Value="public static int ToInt32 (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 ToInt32(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToInt32(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToInt32 (s As String) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int ToInt32(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToInt32 : string -&gt; int" Usage="System.Xml.XmlConvert.ToInt32 s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.Int32" />-Äquivalent.</summary>
+        <returns>Ein <see langword="Int32" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> weist nicht das richtige Format auf.</exception>
+        <exception cref="T:System.OverflowException"><paramref name="s" /> stellt eine Zahl dar, die kleiner als <see cref="F:System.Int32.MinValue" /> oder größer als <see cref="F:System.Int32.MaxValue" /> ist.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToInt64">
+      <MemberSignature Language="C#" Value="public static long ToInt64 (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int64 ToInt64(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToInt64(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToInt64 (s As String) As Long" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static long ToInt64(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToInt64 : string -&gt; int64" Usage="System.Xml.XmlConvert.ToInt64 s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.Int64" />-Äquivalent.</summary>
+        <returns>Ein <see langword="Int64" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> weist nicht das richtige Format auf.</exception>
+        <exception cref="T:System.OverflowException"><paramref name="s" /> stellt eine Zahl dar, die kleiner als <see cref="F:System.Int64.MinValue" /> oder größer als <see cref="F:System.Int64.MaxValue" /> ist.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToSByte">
+      <MemberSignature Language="C#" Value="public static sbyte ToSByte (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int8 ToSByte(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToSByte(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToSByte (s As String) As SByte" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::SByte ToSByte(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToSByte : string -&gt; sbyte" Usage="System.Xml.XmlConvert.ToSByte s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.SByte</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.SByte" />-Äquivalent.</summary>
+        <returns>Ein <see langword="SByte" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> weist nicht das richtige Format auf.</exception>
+        <exception cref="T:System.OverflowException"><paramref name="s" /> stellt eine Zahl dar, die kleiner als <see cref="F:System.SByte.MinValue" /> oder größer als <see cref="F:System.SByte.MaxValue" /> ist.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToSingle">
+      <MemberSignature Language="C#" Value="public static float ToSingle (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig float32 ToSingle(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToSingle(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToSingle (s As String) As Single" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static float ToSingle(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToSingle : string -&gt; single" Usage="System.Xml.XmlConvert.ToSingle s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Single</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.Single" />-Äquivalent.</summary>
+        <returns>Ein <see langword="Single" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn `s` "inf" oder "-inf" ist, gibt diese Methode "Single. PositiveInfinity" bzw. "Single. NegativeInfinity" zurück.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> weist nicht das richtige Format auf.</exception>
+        <exception cref="T:System.OverflowException"><paramref name="s" /> stellt eine Zahl dar, die kleiner als <see cref="F:System.Single.MinValue" /> oder größer als <see cref="F:System.Single.MaxValue" /> ist.</exception>
+        <altmember cref="F:System.Single.PositiveInfinity" />
+        <altmember cref="F:System.Single.NegativeInfinity" />
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="ToString">
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Konvertiert stark typisierte Daten in eine gleichbedeutende <see cref="T:System.String" />-Darstellung.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (bool value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(bool value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As Boolean) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(bool value);" />
+      <MemberSignature Language="F#" Value="static member ToString : bool -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.Boolean" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung von <see langword="Boolean" />, d. h. „true“ oder „false“.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (byte value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(unsigned int8 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.Byte)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As Byte) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(System::Byte value);" />
+      <MemberSignature Language="F#" Value="static member ToString : byte -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Byte" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.Byte" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="Byte" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (char value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(char value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.Char)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As Char) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(char value);" />
+      <MemberSignature Language="F#" Value="static member ToString : char -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Char" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.Char" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="Char" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (DateTime value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(valuetype System.DateTime value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.DateTime)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As DateTime) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(DateTime value);" />
+      <MemberSignature Language="F#" Value="static member ToString : DateTime -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-2.0;netcore-2.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.Obsolete("Use XmlConvert.ToString() that takes in XmlDateTimeSerializationMode")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.DateTime" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.DateTime" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung von <see langword="DateTime" /> im Format „yyyy-MM-ddTHH:mm:ss , wobei „T“ ein konstantes Literal ist.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Die <xref:System.Xml.XmlConvert.ToString%28System.DateTime%29?displayProperty=nameWithType> -Methode ist in Version 2,0 des .NET Framework veraltet und wurde durch die <xref:System.Xml.XmlConvert.ToString%28System.DateTime%2CSystem.Xml.XmlDateTimeSerializationMode%29?displayProperty=nameWithType> -Methode ersetzt.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (DateTimeOffset value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(valuetype System.DateTimeOffset value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.DateTimeOffset)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As DateTimeOffset) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(DateTimeOffset value);" />
+      <MemberSignature Language="F#" Value="static member ToString : DateTimeOffset -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.DateTimeOffset" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende <see cref="T:System.DateTimeOffset" />.</param>
+        <summary>Konvertiert den angegebenen <see cref="T:System.DateTimeOffset" /> in einen <see cref="T:System.String" />.</summary>
+        <returns>Eine <see cref="T:System.String" />-Darstellung des angegebenen <see cref="T:System.DateTimeOffset" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ Im folgenden Beispiel wird eine <xref:System.DateTimeOffset> -Darstellung der aktuellen Uhrzeit in eine <xref:System.String>konvertiert.  
+  
+ [!code-csharp[XmlConvert_ToString_DTO#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlConvert_ToString_DTO/CS/XmlConvert_ToString_DTO.cs#1)]
+ [!code-vb[XmlConvert_ToString_DTO#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlConvert_ToString_DTO/VB/XmlConvert_ToString_DTO.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (decimal value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(valuetype System.Decimal value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.Decimal)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As Decimal) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(System::Decimal value);" />
+      <MemberSignature Language="F#" Value="static member ToString : decimal -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Decimal" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.Decimal" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="Decimal" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (double value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(float64 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.Double)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As Double) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(double value);" />
+      <MemberSignature Language="F#" Value="static member ToString : double -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Double" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.Double" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="Double" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn `value` "Double. PositiveInfinity" oder "Double. NegativeInfinity" ist, gibt diese Methode die Zeichenfolge "inf" bzw. "-inf" zurück.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel werden Datentypen in eine Zeichenfolge konvertiert und anschließend in die Konsole geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlConvert.ToString Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlConvert.ToString Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlConvert.ToString Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlConvert.ToString Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlConvert.ToString Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlConvert.ToString Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="F:System.Double.PositiveInfinity" />
+        <altmember cref="F:System.Double.NegativeInfinity" />
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (Guid value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(valuetype System.Guid value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.Guid)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As Guid) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(Guid value);" />
+      <MemberSignature Language="F#" Value="static member ToString : Guid -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Guid" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.Guid" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="Guid" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (short value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(int16 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.Int16)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As Short) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(short value);" />
+      <MemberSignature Language="F#" Value="static member ToString : int16 -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Int16" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.Int16" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="Int16" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ Im folgenden Beispiel werden Datentypen in eine Zeichenfolge konvertiert und anschließend in die Konsole geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlConvert.ToString Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlConvert.ToString Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlConvert.ToString Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlConvert.ToString Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlConvert.ToString Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlConvert.ToString Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (int value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(int32 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As Integer) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(int value);" />
+      <MemberSignature Language="F#" Value="static member ToString : int -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.Int32" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="Int32" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (long value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(int64 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.Int64)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As Long) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(long value);" />
+      <MemberSignature Language="F#" Value="static member ToString : int64 -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Int64" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.Int64" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="Int64" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (sbyte value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(int8 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.SByte)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As SByte) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(System::SByte value);" />
+      <MemberSignature Language="F#" Value="static member ToString : sbyte -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.SByte" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.SByte" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="SByte" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (float value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(float32 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.Single)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As Single) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(float value);" />
+      <MemberSignature Language="F#" Value="static member ToString : single -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Single" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.Single" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="Single" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn `value` "Single. PositiveInfinity" oder "Single. NegativeInfinity" ist, gibt diese Methode die Zeichenfolge "inf" bzw. "-inf" zurück.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="F:System.Single.PositiveInfinity" />
+        <altmember cref="F:System.Single.NegativeInfinity" />
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (TimeSpan value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(valuetype System.TimeSpan value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As TimeSpan) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(TimeSpan value);" />
+      <MemberSignature Language="F#" Value="static member ToString : TimeSpan -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.TimeSpan" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="TimeSpan" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (ushort value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(unsigned int16 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.UInt16)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As UShort) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(System::UInt16 value);" />
+      <MemberSignature Language="F#" Value="static member ToString : uint16 -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.UInt16" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.UInt16" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="UInt16" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (uint value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(unsigned int32 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.UInt32)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As UInteger) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(System::UInt32 value);" />
+      <MemberSignature Language="F#" Value="static member ToString : uint32 -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.UInt32" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.UInt32" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="UInt32" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (ulong value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(unsigned int64 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.UInt64)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As ULong) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(System::UInt64 value);" />
+      <MemberSignature Language="F#" Value="static member ToString : uint64 -&gt; string" Usage="System.Xml.XmlConvert.ToString value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.UInt64" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <summary>Konvertiert das <see cref="T:System.UInt64" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung des <see langword="UInt64" />.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (DateTime value, string format);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(valuetype System.DateTime value, string format) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.DateTime,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As DateTime, format As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(DateTime value, System::String ^ format);" />
+      <MemberSignature Language="F#" Value="static member ToString : DateTime * string -&gt; string" Usage="System.Xml.XmlConvert.ToString (value, format)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.DateTime" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="format" Type="System.String" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende Wert.</param>
+        <param name="format">Die Formatstruktur, die die Anzeige der konvertierten Zeichenfolge definiert. Zu den gültigen Format zählt „yyyy-MM-ddTHH:mm:sszzzzzz“ und dessen Teilmengen.</param>
+        <summary>Konvertiert das <see cref="T:System.DateTime" />-Element in eine <see cref="T:System.String" />.</summary>
+        <returns>Eine Zeichenfolgendarstellung von <see langword="DateTime" /> im angegebenen Format.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ Im folgenden Beispiel werden Datentypen in eine Zeichenfolge konvertiert und anschließend in die Konsole geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlConvert.ToString Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlConvert.ToString Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlConvert.ToString Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlConvert.ToString Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlConvert.ToString Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlConvert.ToString Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (DateTime value, System.Xml.XmlDateTimeSerializationMode dateTimeOption);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(valuetype System.DateTime value, valuetype System.Xml.XmlDateTimeSerializationMode dateTimeOption) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.DateTime,System.Xml.XmlDateTimeSerializationMode)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As DateTime, dateTimeOption As XmlDateTimeSerializationMode) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(DateTime value, System::Xml::XmlDateTimeSerializationMode dateTimeOption);" />
+      <MemberSignature Language="F#" Value="static member ToString : DateTime * System.Xml.XmlDateTimeSerializationMode -&gt; string" Usage="System.Xml.XmlConvert.ToString (value, dateTimeOption)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.DateTime" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="dateTimeOption" Type="System.Xml.XmlDateTimeSerializationMode" Index="1" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende <see cref="T:System.DateTime" />-Wert.</param>
+        <param name="dateTimeOption">Einer der <see cref="T:System.Xml.XmlDateTimeSerializationMode" />-Werte, die angeben, wie der <see cref="T:System.DateTime" />-Wert behandelt wird.</param>
+        <summary>Konvertiert die <see cref="T:System.DateTime" />-Struktur mithilfe von <see cref="T:System.Xml.XmlDateTimeSerializationMode" /> in eine <see cref="T:System.String" />.</summary>
+        <returns>Ein <see cref="T:System.String" />-Äquivalent von <see cref="T:System.DateTime" />.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentException">Der <paramref name="dateTimeOption" />-Wert ist nicht zulässig.</exception>
+        <exception cref="T:System.ArgumentNullException">Der <paramref name="value" />-Wert oder der <paramref name="dateTimeOption" />-Wert ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (DateTimeOffset value, string format);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ToString(valuetype System.DateTimeOffset value, string format) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToString(System.DateTimeOffset,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToString (value As DateTimeOffset, format As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ToString(DateTimeOffset value, System::String ^ format);" />
+      <MemberSignature Language="F#" Value="static member ToString : DateTimeOffset * string -&gt; string" Usage="System.Xml.XmlConvert.ToString (value, format)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.DateTimeOffset" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="format" Type="System.String" Index="1" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="value">Der zu konvertierende <see cref="T:System.DateTimeOffset" />.</param>
+        <param name="format">Das Format, in das <paramref name="s" /> konvertiert wird. Der Formatparameter kann eine beliebige Teilmenge der W3C-Empfehlung für den XML-DateTime-Typ sein. (Weitere Informationen finden Sie im <see href="https://www.w3.org/TR/xmlschema-2/#dateTime">dateTime</see>-Abschnitt der XML-Schemaspezifikation.)</param>
+        <summary>Konvertiert den angegebenen <see cref="T:System.DateTimeOffset" /> in einen <see cref="T:System.String" /> im angegebenen Format.</summary>
+        <returns>Eine <see cref="T:System.String" />-Darstellung im angegebenen Format des bereitgestellten <see cref="T:System.DateTimeOffset" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ Im folgenden Beispiel wird eine <xref:System.DateTimeOffset> -Darstellung der aktuellen Uhrzeit im angegebenen <xref:System.String> Format in eine konvertiert.  
+  
+ [!code-csharp[XmlConvert_ToString_DTO_Format#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlConvert_ToString_DTO_Format/CS/XmlConvert_ToString_DTO_Format.cs#1)]
+ [!code-vb[XmlConvert_ToString_DTO_Format#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlConvert_ToString_DTO_Format/VB/XmlConvert_ToString_DTO_Format.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToTimeSpan">
+      <MemberSignature Language="C#" Value="public static TimeSpan ToTimeSpan (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.TimeSpan ToTimeSpan(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToTimeSpan(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToTimeSpan (s As String) As TimeSpan" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static TimeSpan ToTimeSpan(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToTimeSpan : string -&gt; TimeSpan" Usage="System.Xml.XmlConvert.ToTimeSpan s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.TimeSpan</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge. Das Format der Zeichenfolge muss dem W3C XML-Schema Teil 2 entsprechen: „Datentypempfehlungen für Dauer“.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.TimeSpan" />-Äquivalent.</summary>
+        <returns>Ein <see langword="TimeSpan" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.FormatException"><paramref name="s" /> hat nicht das richtige Format zum Darstellen eines <see langword="TimeSpan" />-Werts.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToUInt16">
+      <MemberSignature Language="C#" Value="public static ushort ToUInt16 (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig unsigned int16 ToUInt16(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToUInt16(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToUInt16 (s As String) As UShort" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::UInt16 ToUInt16(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToUInt16 : string -&gt; uint16" Usage="System.Xml.XmlConvert.ToUInt16 s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.UInt16</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.UInt16" />-Äquivalent.</summary>
+        <returns>Ein <see langword="UInt16" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> weist nicht das richtige Format auf.</exception>
+        <exception cref="T:System.OverflowException"><paramref name="s" /> stellt eine Zahl dar, die kleiner als <see cref="F:System.UInt16.MinValue" /> oder größer als <see cref="F:System.UInt16.MaxValue" /> ist.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToUInt32">
+      <MemberSignature Language="C#" Value="public static uint ToUInt32 (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig unsigned int32 ToUInt32(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToUInt32(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToUInt32 (s As String) As UInteger" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::UInt32 ToUInt32(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToUInt32 : string -&gt; uint32" Usage="System.Xml.XmlConvert.ToUInt32 s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.UInt32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.UInt32" />-Äquivalent.</summary>
+        <returns>Ein <see langword="UInt32" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> weist nicht das richtige Format auf.</exception>
+        <exception cref="T:System.OverflowException"><paramref name="s" /> stellt eine Zahl dar, die kleiner als <see cref="F:System.UInt32.MinValue" /> oder größer als <see cref="F:System.UInt32.MaxValue" /> ist.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ToUInt64">
+      <MemberSignature Language="C#" Value="public static ulong ToUInt64 (string s);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig unsigned int64 ToUInt64(string s) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.ToUInt64(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ToUInt64 (s As String) As ULong" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::UInt64 ToUInt64(System::String ^ s);" />
+      <MemberSignature Language="F#" Value="static member ToUInt64 : string -&gt; uint64" Usage="System.Xml.XmlConvert.ToUInt64 s" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.UInt64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="s" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="s">Die zu konvertierende Zeichenfolge.</param>
+        <summary>Konvertiert den <see cref="T:System.String" /> in ein <see cref="T:System.UInt64" />-Äquivalent.</summary>
+        <returns>Ein <see langword="UInt64" />-Äquivalent der Zeichenfolge.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="s" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.FormatException"><paramref name="s" /> weist nicht das richtige Format auf.</exception>
+        <exception cref="T:System.OverflowException"><paramref name="s" /> stellt eine Zahl dar, die kleiner als <see cref="F:System.UInt64.MinValue" /> oder größer als <see cref="F:System.UInt64.MaxValue" /> ist.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="VerifyName">
+      <MemberSignature Language="C#" Value="public static string VerifyName (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string VerifyName(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.VerifyName(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function VerifyName (name As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ VerifyName(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="static member VerifyName : string -&gt; string" Usage="System.Xml.XmlConvert.VerifyName name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">Der zu überprüfende Name.</param>
+        <summary>Überprüft, ob der Name ein gültiger Name gemäß der W3C-Empfehlung für XML (Extended Markup Language) ist.</summary>
+        <returns>Der Name, wenn dieser ein gültiger XML-Name ist.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode kann in der folgenden Weise <xref:System.Xml.XmlWriter> mit der-Klasse verwendet werden.  
+  
+```csharp  
+try{  
+  writer.WriteStartElement(XmlConvert.VerifyName("item"),"bar");  
+}  
+catch(Exception e)  
+{  
+  Console.WriteLine("error");  
+}  
+```  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird die `VerifyName` -Methode verwendet, um einen Elementnamen zu schreiben.  
+  
+ [!code-cpp[XmlConvert.VerifyName#1](~/samples/snippets/cpp/VS_Snippets_Data/XmlConvert.VerifyName/CPP/verifyname.cpp#1)]
+ [!code-csharp[XmlConvert.VerifyName#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlConvert.VerifyName/CS/verifyname.cs#1)]
+ [!code-vb[XmlConvert.VerifyName#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlConvert.VerifyName/VB/verifyname.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Xml.XmlException"><paramref name="name" /> ist kein gültiger XML-Name.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="name" /> ist <see langword="null" /> oder String.Empty.</exception>
+        <altmember cref="M:System.Xml.XmlConvert.VerifyNCName(System.String)" />
+      </Docs>
+    </Member>
+    <Member MemberName="VerifyNCName">
+      <MemberSignature Language="C#" Value="public static string VerifyNCName (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string VerifyNCName(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.VerifyNCName(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function VerifyNCName (name As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ VerifyNCName(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="static member VerifyNCName : string -&gt; string" Usage="System.Xml.XmlConvert.VerifyNCName name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">Der zu überprüfende Name.</param>
+        <summary>Überprüft, ob der Name ein gültiger <see langword="NCName" /> gemäß der W3C-Empfehlung für XML (Extended Markup Language) ist. Ein <see langword="NCName" /> darf keinen Doppelpunkt enthalten.</summary>
+        <returns>Der Name, wenn dieser ein gültiger NCName ist.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="name" /> ist <see langword="null" /> oder <c>String.Empty</c>.</exception>
+        <exception cref="T:System.Xml.XmlException"><paramref name="name" /> ist kein gültiger Nicht-Doppelpunkt-Name.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="VerifyNMTOKEN">
+      <MemberSignature Language="C#" Value="public static string VerifyNMTOKEN (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string VerifyNMTOKEN(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.VerifyNMTOKEN(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function VerifyNMTOKEN (name As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ VerifyNMTOKEN(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="static member VerifyNMTOKEN : string -&gt; string" Usage="System.Xml.XmlConvert.VerifyNMTOKEN name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="name">Die Zeichenfolge, die überprüft werden soll.</param>
+        <summary>Überprüft, ob die Zeichenfolge ein gültiges NMTOKEN gemäß der Empfehlung in W3C XML Schema, Teil 2: „Datentypempfehlung“ ist.</summary>
+        <returns>Das Namenstoken, wenn es sich um ein gültiges NMTOKEN handelt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode stellt sicher, dass das Name-Token der richtigen Syntax für ein gültiges NMTOKEN folgt. Es kann wie folgt verwendet werden:  
+  
+```csharp  
+try {  
+  writer.WriteStartElement(XmlConvert.VerifyNMTOKEN("abc"),"book");  
+}  
+catch(Exception e) {  
+  Console.WriteLine("error");  
+}  
+```  
+  
+ Weitere Informationen zum Datentyp NMTOKEN finden Sie im Abschnitt [NMTOKEN](https://www.w3.org/TR/xmlschema-2/#NMTOKEN) der zweiten Edition von XML-Schema Part 2: Datatypes.
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Xml.XmlException">Die Zeichenfolge ist kein gültiges Namenstoken.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="name" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="VerifyPublicId">
+      <MemberSignature Language="C#" Value="public static string VerifyPublicId (string publicId);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string VerifyPublicId(string publicId) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.VerifyPublicId(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function VerifyPublicId (publicId As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ VerifyPublicId(System::String ^ publicId);" />
+      <MemberSignature Language="F#" Value="static member VerifyPublicId : string -&gt; string" Usage="System.Xml.XmlConvert.VerifyPublicId publicId" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="publicId" Type="System.String" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="publicId"><see cref="T:System.String" />, der die zu überprüfende ID enthält.</param>
+        <summary>Gibt die übergebene Zeichenfolgeninstanz zurück, wenn alle Zeichen im Zeichenfolgenargument gültige Zeichen für eine öffentliche ID sind.</summary>
+        <returns>Die übergebene Zeichenfolge, wenn alle Zeichen im Argument gültige Zeichen für eine öffentliche ID sind.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Es sollten keine anderen Werte als das Übergabe Argument zurückgegeben werden. Die Zeichen, die für die öffentliche ID gültig sind, variieren nicht zwischen den `XmlVersion` XML-Editionen, sodass keine Überlastung erforderlich ist.  
+  
+ Ausführliche Informationen zu den zulässigen Zeichen finden Sie unter [XML 1,0 spec (Fourth Edition)](https://go.microsoft.com/fwlink/?LinkID=147985) Production [13] `PubidChar` .  
+  
+ Wenn der-Parameter NULL ist, `ArgumentNullException` wird eine ausgelöst. Wenn eines der Zeichen keine gültigen öffentlichen ID-Zeichen ist, wird `XmlException` eine mit Informationen zum ersten ungültigen Zeichen ausgelöst.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="VerifyTOKEN">
+      <MemberSignature Language="C#" Value="public static string VerifyTOKEN (string token);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string VerifyTOKEN(string token) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.VerifyTOKEN(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function VerifyTOKEN (token As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ VerifyTOKEN(System::String ^ token);" />
+      <MemberSignature Language="F#" Value="static member VerifyTOKEN : string -&gt; string" Usage="System.Xml.XmlConvert.VerifyTOKEN token" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="token" Type="System.String" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="token">Der Zeichenfolgenwert, der überprüft werden soll.</param>
+        <summary>Überprüft, ob die Zeichenfolge ein gültiges Token gemäß der Empfehlung in W3C XML Schema, Teil 2: „Datentypempfehlung“ ist.</summary>
+        <returns>Das Token, wenn es sich um ein gültiges Token handelt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode stellt sicher, dass das Name-Token der richtigen Syntax für ein gültiges Token folgt. Es kann wie folgt verwendet werden:  
+  
+```csharp  
+try {  
+  writer.WriteStartElement(XmlConvert.VerifyTOKEN("abc"),"book");  
+}  
+catch(Exception e) {  
+  Console.WriteLine("error");  
+}  
+```  
+  
+ Weitere Informationen zu Token finden Sie unter [NMTOKEN](https://www.w3.org/TR/xmlschema-2/#NMTOKEN).  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Xml.XmlException">Der Zeichenfolgenwert ist kein gültiges Token.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="VerifyWhitespace">
+      <MemberSignature Language="C#" Value="public static string VerifyWhitespace (string content);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string VerifyWhitespace(string content) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.VerifyWhitespace(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function VerifyWhitespace (content As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ VerifyWhitespace(System::String ^ content);" />
+      <MemberSignature Language="F#" Value="static member VerifyWhitespace : string -&gt; string" Usage="System.Xml.XmlConvert.VerifyWhitespace content" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="content" Type="System.String" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="content">Der zu überprüfende <see cref="T:System.String" />.</param>
+        <summary>Gibt die übergebene Zeichenfolgeninstanz zurück, wenn alle Zeichen im Zeichenfolgenargument gültige Leerraumzeichen sind.</summary>
+        <returns>Die übergebene Zeichenfolgeninstanz, wenn alle Zeichen im Zeichenfolgenargument gültige Leerraumzeichen sind, andernfalls <see langword="null" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Es sollten keine anderen Werte als das Übergabe Argument zurückgegeben werden. Die Zeichen, die für Leerzeichen gültig sind, variieren nicht zwischen den XML-Editionen, sodass keine Überladung der XML-Version erforderlich ist.  
+  
+ Ausführliche Informationen zu den zulässigen Zeichen finden Sie unter [XML 1,0 spec (Fourth Edition)](https://go.microsoft.com/fwlink/?LinkID=147985) Production [3] S.  
+  
+ Wenn der-Parameter NULL ist, `ArgumentNullException` wird eine ausgelöst.  
+  
+ Wenn eines der Zeichen keine gültigen Leerzeichen ist, wird eine `XmlException` mit Informationen zum ersten ungültigen Zeichen ausgelöst.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird die <xref:System.Xml.XmlConvert.VerifyWhitespace%2A> -Methode verwendet, um das vorhanden sein eines ungültigen Zeichens in einem Wert zu erkennen, der dem Start Element zugewiesen ist.  
+  
+ [!code-csharp[XmlConvert.NewVerify#5](~/samples/snippets/csharp/VS_Snippets_Data/xmlconvert.newverify/cs/xmlconvertnewverify.cs#5)]
+ [!code-vb[XmlConvert.NewVerify#5](~/samples/snippets/visualbasic/VS_Snippets_Data/xmlconvert.newverify/vb/xmlconvertnewverify.vb#5)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="VerifyXmlChars">
+      <MemberSignature Language="C#" Value="public static string VerifyXmlChars (string content);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string VerifyXmlChars(string content) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlConvert.VerifyXmlChars(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function VerifyXmlChars (content As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ VerifyXmlChars(System::String ^ content);" />
+      <MemberSignature Language="F#" Value="static member VerifyXmlChars : string -&gt; string" Usage="System.Xml.XmlConvert.VerifyXmlChars content" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="content" Type="System.String" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="content">Der <see cref="T:System.String" /> mit den zu überprüfenden Zeichen.</param>
+        <summary>Gibt die übergebene Zeichenfolge zurück, wenn alle Zeichen und Ersatzzeichenpaare im Zeichenfolgenargument gültige XML-Zeichen sind, andernfalls wird eine <see langword="XmlException" /> mit Informationen zum ersten ungültigen Zeichen ausgelöst.</summary>
+        <returns>Die übergebene Zeichenfolge, wenn alle Zeichen und Ersatzzeichenpaare im Zeichenfolgenargument gültige XML-Zeichen sind, andernfalls wird eine <see langword="XmlException" /> mit Informationen zum ersten ungültigen Zeichen ausgelöst.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Es sollten keine anderen Werte als das Übergabe Argument zurückgegeben werden. Ausführliche Informationen zu den zulässigen Zeichen finden Sie unter [XML 1,0 spec (Fourth Edition)](https://go.microsoft.com/fwlink/?LinkID=147985) Production [2] `Char` .  
+  
+ Wenn der-Parameter NULL ist, `ArgumentNullException` wird eine ausgelöst. Wenn eines der Zeichen keine gültigen XML-Zeichen ist, wird `XmlException` eine mit Informationen zum ersten ungültigen Zeichen ausgelöst.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird die <xref:System.Xml.XmlConvert.VerifyXmlChars%2A> -Methode verwendet, um ein unzulässiges Zeichen im Start-Element zu erkennen.  
+  
+ [!code-csharp[XmlConvert.NewVerify#3](~/samples/snippets/csharp/VS_Snippets_Data/xmlconvert.newverify/cs/xmlconvertnewverify.cs#3)]
+ [!code-vb[XmlConvert.NewVerify#3](~/samples/snippets/visualbasic/VS_Snippets_Data/xmlconvert.newverify/vb/xmlconvertnewverify.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
