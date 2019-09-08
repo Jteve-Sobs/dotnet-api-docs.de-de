@@ -1,0 +1,667 @@
+<Type Name="XamlObjectWriter" FullName="System.Xaml.XamlObjectWriter">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="31f36e0757a0ec127b5ff19e37dca6c8a490d0de" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70699392" /></Metadata><TypeSignature Language="C#" Value="public class XamlObjectWriter : System.Xaml.XamlWriter, System.Xaml.IXamlLineInfoConsumer" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit XamlObjectWriter extends System.Xaml.XamlWriter implements class System.Xaml.IXamlLineInfoConsumer" />
+  <TypeSignature Language="DocId" Value="T:System.Xaml.XamlObjectWriter" />
+  <TypeSignature Language="VB.NET" Value="Public Class XamlObjectWriter&#xA;Inherits XamlWriter&#xA;Implements IXamlLineInfoConsumer" />
+  <TypeSignature Language="C++ CLI" Value="public ref class XamlObjectWriter : System::Xaml::XamlWriter, System::Xaml::IXamlLineInfoConsumer" />
+  <TypeSignature Language="F#" Value="type XamlObjectWriter = class&#xA;    inherit XamlWriter&#xA;    interface IXamlLineInfoConsumer" />
+  <AssemblyInfo>
+    <AssemblyName>System.Xaml</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Xaml.XamlWriter</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.Xaml.IXamlLineInfoConsumer</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Docs>
+    <summary><span data-ttu-id="5106e-101">Erstellt ein Objektdiagramm aus einem Quell-XAML-Knotenstream.</span><span class="sxs-lookup"><span data-stu-id="5106e-101">Creates an object graph from a source XAML node stream.</span></span></summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="5106e-102">Mit `Write` den Methoden <xref:System.Xaml.XamlObjectWriter> von wird <xref:System.Xaml.XamlObjectWriter> ein Muster implementiert, <xref:System.Xaml.XamlWriter> sodass von das verwendet wird, das <xref:System.Xaml.XamlWriter.WriteNode%2A> von der-Methode definiert wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-102">The `Write` methods of <xref:System.Xaml.XamlObjectWriter> implement a pattern so that the <xref:System.Xaml.XamlObjectWriter> uses the <xref:System.Xaml.XamlWriter> that is defined by the <xref:System.Xaml.XamlWriter.WriteNode%2A> method.</span></span> <span data-ttu-id="5106e-103"><xref:System.Xaml.XamlWriter.WriteNode%2A>die Logik wechselt zwischen `Write` den Methoden, je nachdem, welcher Knotentyp sich an der aktuellen Position des Readers befindet.</span><span class="sxs-lookup"><span data-stu-id="5106e-103"><xref:System.Xaml.XamlWriter.WriteNode%2A> logic switches between the `Write` methods, depending on which node type is at the current position in the reader.</span></span>  
+  
+## <a name="scope"></a><span data-ttu-id="5106e-104">Bereich</span><span class="sxs-lookup"><span data-stu-id="5106e-104">Scope</span></span>  
+ <span data-ttu-id="5106e-105">Ein <xref:System.Xaml.XamlObjectWriter> weist ein Konzept des Bereichs auf, d. h <xref:System.Xaml.XamlObjectWriter> ., der verwaltet einen konzeptionellen Verweis Punkt in seinem Ausgabe Objekt Diagramm.</span><span class="sxs-lookup"><span data-stu-id="5106e-105">A <xref:System.Xaml.XamlObjectWriter> has a concept of scope; that is, the <xref:System.Xaml.XamlObjectWriter> maintains a conceptual point of reference in its output object graph.</span></span> <span data-ttu-id="5106e-106">Bestimmte Vorgänge können für einen bestimmten Bereich gültig oder ungültig sein oder ein Ergebnis ohne Vorgang verursachen.</span><span class="sxs-lookup"><span data-stu-id="5106e-106">For a particular scope, certain operations might be valid or invalid, or produce a no-operation result.</span></span> <span data-ttu-id="5106e-107">Wenn Sie z. b. <xref:System.Xaml.XamlObjectWriter.WriteStartMember%2A> zum Schreiben von Direktiven für die Initialisierung eines Objekts, das bereits als-Instanz vorhanden ist, aufruft, wird von der Standard Implementierung eine Ausnahme ausgelöst.</span><span class="sxs-lookup"><span data-stu-id="5106e-107">For example, if you call <xref:System.Xaml.XamlObjectWriter.WriteStartMember%2A> to write directives for initialization on an object that already exists as an instance, the default implementation throws an exception.</span></span>  
+  
+ <span data-ttu-id="5106e-108">Eine Möglichkeit zum Nachverfolgen des Bereichs in einem <xref:System.Xaml.XamlObjectWriter> benutzerdefinierten ist das Ausrichten der Knoten Aktionen mit einer Stapel-oder Frame Klasse.</span><span class="sxs-lookup"><span data-stu-id="5106e-108">A possible technique for tracking scope in a custom <xref:System.Xaml.XamlObjectWriter> is to align the node actions with a stack or frame class.</span></span> <span data-ttu-id="5106e-109">Der Stapel oder Frame kann Push und Pop für jede Ebene der Objektmodell Tiefe nachverfolgen, die eingegeben oder beendet wird, während <xref:System.Xaml.XamlObjectWriter> das Objekt Diagramm schreibt.</span><span class="sxs-lookup"><span data-stu-id="5106e-109">The stack or frame can keep track of push and pop for each level of object-model depth that is entered or exited while the <xref:System.Xaml.XamlObjectWriter> writes the object graph.</span></span>  
+  
+## <a name="callbacks"></a><span data-ttu-id="5106e-110">Rückrufe</span><span class="sxs-lookup"><span data-stu-id="5106e-110">Callbacks</span></span>  
+ <span data-ttu-id="5106e-111">Zur Unterstützung von zwischen <xref:System.Xaml.XamlObjectWriter> -und erweiterten Szenarien bietet der Mechanismus zum Schreiben eines Objekt Diagramms Rückruf Einstiegspunkte, <xref:System.Xaml.XamlObjectWriter> die auftreten, wenn ein Commit oder ein Commit für bestimmte Aktionen ausgeführt wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-111">To support intermediate and advanced <xref:System.Xaml.XamlObjectWriter> scenarios, the mechanism of writing an object graph provides callback entry points that occur when a <xref:System.Xaml.XamlObjectWriter> commits or is about to commit certain actions.</span></span> <span data-ttu-id="5106e-112">Einige Rückrufe sind in den Einstellungen aktiviert und nicht spezifisch für den Objekttyp oder den Member, der geschrieben wird. Rückruf Informationen sind jedoch häufig im Kontext verfügbar oder befinden sich in den Ereignisdaten, die durch den Rückruf gesendet werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-112">Some callbacks are enabled in the settings and are not specific to the object type or the member being written; however, callback information is often available in context or is in the event data that is sent through the callback.</span></span> <span data-ttu-id="5106e-113">Im folgenden finden Sie eine Liste relevanter Rückrufe:</span><span class="sxs-lookup"><span data-stu-id="5106e-113">The following is a list of relevant callbacks:</span></span>  
+  
+-   <span data-ttu-id="5106e-114">Der Rückruf, der von <xref:System.Xaml.XamlObjectWriterSettings.AfterBeginInitHandler%2A> deklariert wird, wird aufgerufen, wenn der Bereich in ein neues-Objekt und in der <xref:System.ComponentModel.ISupportInitialize.BeginInit%2A> Phase der Objekt Lebensdauer für jedes erstellte Objekt wechselt.</span><span class="sxs-lookup"><span data-stu-id="5106e-114">The callback that is declared by <xref:System.Xaml.XamlObjectWriterSettings.AfterBeginInitHandler%2A> is invoked when the scope goes to a new object and at the <xref:System.ComponentModel.ISupportInitialize.BeginInit%2A> phase of object lifetime for each created object.</span></span>  
+  
+-   <span data-ttu-id="5106e-115">Der Rückruf, der von <xref:System.Xaml.XamlObjectWriterSettings.AfterEndInitHandler%2A> deklariert wird, wird aufgerufen, wenn der Bereich in ein neues-Objekt und in der <xref:System.ComponentModel.ISupportInitialize.EndInit%2A> Phase der Objekt Lebensdauer für jedes erstellte Objekt wechselt.</span><span class="sxs-lookup"><span data-stu-id="5106e-115">The callback that is declared by <xref:System.Xaml.XamlObjectWriterSettings.AfterEndInitHandler%2A> is invoked when the scope goes to a new object and at the <xref:System.ComponentModel.ISupportInitialize.EndInit%2A> phase of object lifetime for each created object.</span></span>  
+  
+-   <span data-ttu-id="5106e-116">Der Rückruf, der von <xref:System.Xaml.XamlObjectWriterSettings.BeforePropertiesHandler%2A> deklariert wird, wird aufgerufen, wenn der Bereich in einem-Objekt beginnt, und tritt auf, wenn der erste <xref:System.Xaml.XamlObjectWriter.WriteStartMember%2A> Aufruf dieses Objekt Bereichs durchgeführt wird, für den jedoch noch kein Commit ausgeführt wurde.</span><span class="sxs-lookup"><span data-stu-id="5106e-116">The callback that is declared by <xref:System.Xaml.XamlObjectWriterSettings.BeforePropertiesHandler%2A> is invoked when the scope starts in an object, and occurs when the first <xref:System.Xaml.XamlObjectWriter.WriteStartMember%2A> call to that object scope is made but not yet committed.</span></span>  
+  
+-   <span data-ttu-id="5106e-117">Der Rückruf, der von <xref:System.Xaml.XamlObjectWriterSettings.AfterPropertiesHandler%2A> deklariert wird, wird aufgerufen, wenn der Bereich in einem-Objekt beginnt. Dies geschieht, wenn der <xref:System.Xaml.XamlObjectWriter.WriteEndObject%2A> Aufruf dieses Objekt Bereichs erfolgt, aber noch kein Commit ausgeführt wurde.</span><span class="sxs-lookup"><span data-stu-id="5106e-117">The callback that is declared by <xref:System.Xaml.XamlObjectWriterSettings.AfterPropertiesHandler%2A> is invoked when the scope starts in an object, and happens when the <xref:System.Xaml.XamlObjectWriter.WriteEndObject%2A> call to that object scope is made but not yet committed.</span></span>  
+  
+-   <span data-ttu-id="5106e-118">Der Rückruf, der von <xref:System.Xaml.XamlObjectWriterSettings.XamlSetValueHandler%2A> deklariert wird, wird aufgerufen, wenn <xref:System.Xaml.XamlObjectWriter.OnSetValue%2A> aufgerufen wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-118">The callback that is declared by <xref:System.Xaml.XamlObjectWriterSettings.XamlSetValueHandler%2A> is invoked when <xref:System.Xaml.XamlObjectWriter.OnSetValue%2A> is called.</span></span>  
+  
+## <a name="writing-dictionary-keys"></a><span data-ttu-id="5106e-119">Schreiben von Wörterbuch Schlüsseln</span><span class="sxs-lookup"><span data-stu-id="5106e-119">Writing Dictionary Keys</span></span>  
+ <span data-ttu-id="5106e-120">Die Standard Implementierung von <xref:System.Xaml.XamlObjectWriter> unterstützt die Typkonvertierung für die Einschränkungen <xref:System.Collections.Generic.Dictionary%602> von, bevor der Inhalt des Wörterbuchs dem Objekt Diagramm hinzugefügt wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-120">The default implementation of <xref:System.Xaml.XamlObjectWriter> supports type conversion on the constraints of a <xref:System.Collections.Generic.Dictionary%602> before the dictionary contents are added to the object graph.</span></span> <span data-ttu-id="5106e-121">Auf diese Weise kann ein generisches Wörterbuch zur Laufzeit von Objekten verschlüsselt werden und mit dem relevanten generischen `Add` und Indexer-Verhalten verglichen werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-121">In this manner, a generic dictionary can be keyed at run time by objects and can match the relevant generic `Add` and indexer behavior.</span></span> <span data-ttu-id="5106e-122">Diese Funktion ist jedoch für die Basis <xref:System.Xaml.XamlObjectWriter>Klasse nur für die Objekt Diagramm Erstellung aus der Basis <xref:System.Collections.Generic.Dictionary%602> Klasse und nicht für abgeleitete Klassen von <xref:System.Collections.Generic.Dictionary%602>vorhanden.</span><span class="sxs-lookup"><span data-stu-id="5106e-122">However, as implemented for the base <xref:System.Xaml.XamlObjectWriter>, this capability exists only for object graph creation from the base <xref:System.Collections.Generic.Dictionary%602> class and not for derived classes of <xref:System.Collections.Generic.Dictionary%602>.</span></span>  
+  
+## <a name="checks-for-disposed"></a><span data-ttu-id="5106e-123">Prüft auf "verworfen"</span><span class="sxs-lookup"><span data-stu-id="5106e-123">Checks for Disposed</span></span>  
+ <span data-ttu-id="5106e-124">XAML-Writer werden potenziell für verzögerte Vorgänge verwendet, oder es wird ein-Rückruf für eine XAML-Writer-Instanz durchgeführt, die in der Zwischenzeit verworfen wurde.</span><span class="sxs-lookup"><span data-stu-id="5106e-124">XAML writers are potentially used for deferred operations or where a call is made against a XAML writer instance that has been disposed in the interim.</span></span> <span data-ttu-id="5106e-125"><xref:System.ObjectDisposedException> In diesen Fällen <xref:System.Xaml.XamlObjectWriter> können verschiedene APIs von ausgelöst werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-125">Various APIs of <xref:System.Xaml.XamlObjectWriter> might throw <xref:System.ObjectDisposedException> in these cases.</span></span>  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Xaml.XamlWriter" />
+    <altmember cref="T:System.Xaml.XamlObjectReader" />
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><span data-ttu-id="5106e-126">Initialisiert eine neue Instanz der <see cref="T:System.Xaml.XamlObjectWriter" />-Klasse.</span><span class="sxs-lookup"><span data-stu-id="5106e-126">Initializes a new instance of the <see cref="T:System.Xaml.XamlObjectWriter" /> class.</span></span></summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XamlObjectWriter (System.Xaml.XamlSchemaContext schemaContext);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Xaml.XamlSchemaContext schemaContext) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.#ctor(System.Xaml.XamlSchemaContext)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (schemaContext As XamlSchemaContext)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XamlObjectWriter(System::Xaml::XamlSchemaContext ^ schemaContext);" />
+      <MemberSignature Language="F#" Value="new System.Xaml.XamlObjectWriter : System.Xaml.XamlSchemaContext -&gt; System.Xaml.XamlObjectWriter" Usage="new System.Xaml.XamlObjectWriter schemaContext" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="schemaContext" Type="System.Xaml.XamlSchemaContext" />
+      </Parameters>
+      <Docs>
+        <param name="schemaContext"><span data-ttu-id="5106e-127">Ein XAML-Schemakontext, der für den XAML-Reader freigegeben ist, von dem Knoten für Schreibvorgänge bereitgestellt werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-127">A XAML schema context that is shared with the XAML reader that provides nodes for writing.</span></span></param>
+        <summary><span data-ttu-id="5106e-128">Initialisiert eine neue Instanz der <see cref="T:System.Xaml.XamlObjectWriter" />-Klasse mit dem XAML-Schemakontext, der von einem <see cref="T:System.Xaml.XamlReader" /> verwendet wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-128">Initializes a new instance of the <see cref="T:System.Xaml.XamlObjectWriter" /> class using  the XAML schema context that is used by a <see cref="T:System.Xaml.XamlReader" />.</span></span></summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="5106e-129"><paramref name="schemaContext" /> ist <see langword="null" />.</span><span class="sxs-lookup"><span data-stu-id="5106e-129"><paramref name="schemaContext" /> is <see langword="null" />.</span></span></exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XamlObjectWriter (System.Xaml.XamlSchemaContext schemaContext, System.Xaml.XamlObjectWriterSettings settings);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Xaml.XamlSchemaContext schemaContext, class System.Xaml.XamlObjectWriterSettings settings) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.#ctor(System.Xaml.XamlSchemaContext,System.Xaml.XamlObjectWriterSettings)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (schemaContext As XamlSchemaContext, settings As XamlObjectWriterSettings)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XamlObjectWriter(System::Xaml::XamlSchemaContext ^ schemaContext, System::Xaml::XamlObjectWriterSettings ^ settings);" />
+      <MemberSignature Language="F#" Value="new System.Xaml.XamlObjectWriter : System.Xaml.XamlSchemaContext * System.Xaml.XamlObjectWriterSettings -&gt; System.Xaml.XamlObjectWriter" Usage="new System.Xaml.XamlObjectWriter (schemaContext, settings)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="schemaContext" Type="System.Xaml.XamlSchemaContext" />
+        <Parameter Name="settings" Type="System.Xaml.XamlObjectWriterSettings" />
+      </Parameters>
+      <Docs>
+        <param name="schemaContext"><span data-ttu-id="5106e-130">Ein XAML-Schemakontext, der für den XAML-Reader freigegeben ist, von dem Knoten für Schreibvorgänge bereitgestellt werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-130">A XAML schema context that is shared with the XAML reader that provides nodes for writing.</span></span></param>
+        <param name="settings"><span data-ttu-id="5106e-131">Ein Einstellungsobjekt, durch das bestimmte Optionen für das <see cref="T:System.Xaml.XamlObjectWriter" />-Verhalten und die Ausgabe angegeben werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-131">A settings object that specifies certain options for <see cref="T:System.Xaml.XamlObjectWriter" /> behavior and output.</span></span></param>
+        <summary><span data-ttu-id="5106e-132">Initialisiert eine neue Instanz der <see cref="T:System.Xaml.XamlObjectWriter" />-Klasse mithilfe eines durch einen <see cref="T:System.Xaml.XamlReader" /> verwendeten Kontexts und der zugehörigen Einstellungen.</span><span class="sxs-lookup"><span data-stu-id="5106e-132">Initializes a new instance of the <see cref="T:System.Xaml.XamlObjectWriter" /> class using the context that is used by a <see cref="T:System.Xaml.XamlReader" /> and its settings.</span></span></summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="5106e-133"><paramref name="schemaContext" /> ist <see langword="null" />.</span><span class="sxs-lookup"><span data-stu-id="5106e-133"><paramref name="schemaContext" /> is <see langword="null" />.</span></span></exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Clear">
+      <MemberSignature Language="C#" Value="public void Clear ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void Clear() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.Clear" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Clear ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void Clear();" />
+      <MemberSignature Language="F#" Value="member this.Clear : unit -&gt; unit" Usage="xamlObjectWriter.Clear " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><span data-ttu-id="5106e-134">Setzt alle möglichen Frames zurück und löscht das Objektdiagramm.</span><span class="sxs-lookup"><span data-stu-id="5106e-134">Resets all possible frames and clears the object graph.</span></span></summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Dispose">
+      <MemberSignature Language="C#" Value="protected override void Dispose (bool disposing);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void Dispose(bool disposing) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.Dispose(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Sub Dispose (disposing As Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override void Dispose(bool disposing);" />
+      <MemberSignature Language="F#" Value="override this.Dispose : bool -&gt; unit" Usage="xamlObjectWriter.Dispose disposing" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="disposing" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="disposing"><span data-ttu-id="5106e-135"><see langword="true" />, um die verwalteten Ressourcen freizugeben, andernfalls <see langword="false" />.</span><span class="sxs-lookup"><span data-stu-id="5106e-135"><see langword="true" /> to release the managed resources; otherwise, <see langword="false" />.</span></span></param>
+        <summary><span data-ttu-id="5106e-136">Gibt die von der <see cref="T:System.Xaml.XamlObjectWriter" />-Klasse verwendeten nicht verwalteten Ressourcen und optional die verwalteten Ressourcen frei.</span><span class="sxs-lookup"><span data-stu-id="5106e-136">Releases the unmanaged resources used by the <see cref="T:System.Xaml.XamlObjectWriter" />, and optionally, releases the managed resources.</span></span></summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnAfterBeginInit">
+      <MemberSignature Language="C#" Value="protected virtual void OnAfterBeginInit (object value);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnAfterBeginInit(object value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.OnAfterBeginInit(System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnAfterBeginInit (value As Object)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnAfterBeginInit(System::Object ^ value);" />
+      <MemberSignature Language="F#" Value="abstract member OnAfterBeginInit : obj -&gt; unit&#xA;override this.OnAfterBeginInit : obj -&gt; unit" Usage="xamlObjectWriter.OnAfterBeginInit value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="value"><span data-ttu-id="5106e-137">Das Objekt, das im Bericht enthalten sein soll.</span><span class="sxs-lookup"><span data-stu-id="5106e-137">The object to report on.</span></span> <span data-ttu-id="5106e-138">Das Objekt wird in <see cref="T:System.Xaml.XamlObjectEventArgs" /> gepackt, wenn der Handler aufgerufen wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-138">The object is packaged into <see cref="T:System.Xaml.XamlObjectEventArgs" /> when the handler is invoked.</span></span></param>
+        <summary><span data-ttu-id="5106e-139">Ruft eine beliebige <see cref="P:System.Xaml.XamlObjectWriterSettings.AfterBeginInitHandler" />-Methode auf, die <see cref="T:System.Xaml.XamlObjectWriterSettings" /> für diesen <see cref="T:System.Xaml.XamlObjectWriter" /> zugeordnet ist.</span><span class="sxs-lookup"><span data-stu-id="5106e-139">Invokes any <see cref="P:System.Xaml.XamlObjectWriterSettings.AfterBeginInitHandler" /> method that is associated with <see cref="T:System.Xaml.XamlObjectWriterSettings" /> for this <see cref="T:System.Xaml.XamlObjectWriter" />.</span></span></summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnAfterEndInit">
+      <MemberSignature Language="C#" Value="protected virtual void OnAfterEndInit (object value);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnAfterEndInit(object value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.OnAfterEndInit(System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnAfterEndInit (value As Object)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnAfterEndInit(System::Object ^ value);" />
+      <MemberSignature Language="F#" Value="abstract member OnAfterEndInit : obj -&gt; unit&#xA;override this.OnAfterEndInit : obj -&gt; unit" Usage="xamlObjectWriter.OnAfterEndInit value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="value"><span data-ttu-id="5106e-140">Das Objekt, das im Bericht enthalten sein soll.</span><span class="sxs-lookup"><span data-stu-id="5106e-140">The object to report on.</span></span> <span data-ttu-id="5106e-141">Der Wert wird in <see cref="T:System.Xaml.XamlObjectEventArgs" /> gepackt, wenn der Handler aufgerufen wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-141">The value  is packaged into <see cref="T:System.Xaml.XamlObjectEventArgs" /> when the handler is invoked.</span></span></param>
+        <summary><span data-ttu-id="5106e-142">Ruft eine beliebige <see cref="P:System.Xaml.XamlObjectWriterSettings.AfterEndInitHandler" />-Methode auf, die <see cref="T:System.Xaml.XamlObjectWriterSettings" /> für diesen <see cref="T:System.Xaml.XamlObjectWriter" /> zugeordnet ist.</span><span class="sxs-lookup"><span data-stu-id="5106e-142">Invokes any <see cref="P:System.Xaml.XamlObjectWriterSettings.AfterEndInitHandler" /> method that is associated with <see cref="T:System.Xaml.XamlObjectWriterSettings" /> for this <see cref="T:System.Xaml.XamlObjectWriter" />.</span></span></summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnAfterProperties">
+      <MemberSignature Language="C#" Value="protected virtual void OnAfterProperties (object value);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnAfterProperties(object value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.OnAfterProperties(System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnAfterProperties (value As Object)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnAfterProperties(System::Object ^ value);" />
+      <MemberSignature Language="F#" Value="abstract member OnAfterProperties : obj -&gt; unit&#xA;override this.OnAfterProperties : obj -&gt; unit" Usage="xamlObjectWriter.OnAfterProperties value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="value"><span data-ttu-id="5106e-143">Das Objekt, das im Bericht enthalten sein soll.</span><span class="sxs-lookup"><span data-stu-id="5106e-143">The object to report on.</span></span> <span data-ttu-id="5106e-144">Dies wird in das <see cref="T:System.Xaml.XamlObjectEventArgs" />-Objekt gepackt, wenn der Handler aufgerufen wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-144">This is packaged into <see cref="T:System.Xaml.XamlObjectEventArgs" /> when the handler is invoked.</span></span></param>
+        <summary><span data-ttu-id="5106e-145">Ruft eine beliebige <see cref="P:System.Xaml.XamlObjectWriterSettings.AfterPropertiesHandler" />-Methode auf, auf die verwiesen wird und die <see cref="T:System.Xaml.XamlObjectWriterSettings" /> für diesen <see cref="T:System.Xaml.XamlObjectWriter" /> zugeordnet ist.</span><span class="sxs-lookup"><span data-stu-id="5106e-145">Invokes any <see cref="P:System.Xaml.XamlObjectWriterSettings.AfterPropertiesHandler" /> referenced method that is associated with <see cref="T:System.Xaml.XamlObjectWriterSettings" /> for this <see cref="T:System.Xaml.XamlObjectWriter" />.</span></span></summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnBeforeProperties">
+      <MemberSignature Language="C#" Value="protected virtual void OnBeforeProperties (object value);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnBeforeProperties(object value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.OnBeforeProperties(System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnBeforeProperties (value As Object)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnBeforeProperties(System::Object ^ value);" />
+      <MemberSignature Language="F#" Value="abstract member OnBeforeProperties : obj -&gt; unit&#xA;override this.OnBeforeProperties : obj -&gt; unit" Usage="xamlObjectWriter.OnBeforeProperties value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="value"><span data-ttu-id="5106e-146">Der Wert, der mithilfe von <see cref="T:System.Xaml.XamlObjectEventArgs" /> übergeben werden soll, wenn der Handler aufgerufen wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-146">The value to pass through <see cref="T:System.Xaml.XamlObjectEventArgs" /> when the handler is invoked.</span></span></param>
+        <summary><span data-ttu-id="5106e-147">Ruft eine beliebige <see cref="P:System.Xaml.XamlObjectWriterSettings.BeforePropertiesHandler" />-Methode auf, auf die verwiesen wird und die <see cref="T:System.Xaml.XamlObjectWriterSettings" /> für diesen <see cref="T:System.Xaml.XamlObjectWriter" /> zugeordnet ist.</span><span class="sxs-lookup"><span data-stu-id="5106e-147">Invokes any <see cref="P:System.Xaml.XamlObjectWriterSettings.BeforePropertiesHandler" /> referenced method that is associated with <see cref="T:System.Xaml.XamlObjectWriterSettings" /> for this <see cref="T:System.Xaml.XamlObjectWriter" />.</span></span></summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnSetValue">
+      <MemberSignature Language="C#" Value="protected virtual bool OnSetValue (object eventSender, System.Xaml.XamlMember member, object value);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance bool OnSetValue(object eventSender, class System.Xaml.XamlMember member, object value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.OnSetValue(System.Object,System.Xaml.XamlMember,System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Function OnSetValue (eventSender As Object, member As XamlMember, value As Object) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual bool OnSetValue(System::Object ^ eventSender, System::Xaml::XamlMember ^ member, System::Object ^ value);" />
+      <MemberSignature Language="F#" Value="abstract member OnSetValue : obj * System.Xaml.XamlMember * obj -&gt; bool&#xA;override this.OnSetValue : obj * System.Xaml.XamlMember * obj -&gt; bool" Usage="xamlObjectWriter.OnSetValue (eventSender, member, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="eventSender" Type="System.Object" />
+        <Parameter Name="member" Type="System.Xaml.XamlMember" />
+        <Parameter Name="value" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="eventSender"><span data-ttu-id="5106e-148">Das Objekt, das dem Handler als Quelle gemeldet werden soll.</span><span class="sxs-lookup"><span data-stu-id="5106e-148">The object to report as the source to the handler.</span></span></param>
+        <param name="member"><span data-ttu-id="5106e-149">Der Name der festzulegenden Eigenschaft, die als Teil von <see cref="T:System.Windows.Markup.XamlSetValueEventArgs" /> an den Handler übergeben wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-149">The name of the property to set, which is passed to the handler as part of <see cref="T:System.Windows.Markup.XamlSetValueEventArgs" />.</span></span></param>
+        <param name="value"><span data-ttu-id="5106e-150">Der Wert, der für die von <paramref name="property" /> benannte Eigenschaft angegeben werden soll.</span><span class="sxs-lookup"><span data-stu-id="5106e-150">The value to provide for the property that is named by <paramref name="property" />.</span></span> <span data-ttu-id="5106e-151">Der Wert wird an den Handler als Teil von <see cref="T:System.Windows.Markup.XamlSetValueEventArgs" /> übergeben.</span><span class="sxs-lookup"><span data-stu-id="5106e-151">The value is passed to the handler as part of <see cref="T:System.Windows.Markup.XamlSetValueEventArgs" />.</span></span></param>
+        <summary><span data-ttu-id="5106e-152">Ruft eine beliebige <see cref="P:System.Xaml.XamlObjectWriterSettings.XamlSetValueHandler" />-Methode auf, auf die verwiesen wird und die <see cref="T:System.Xaml.XamlObjectWriterSettings" /> für diesen Writer zugeordnet ist (sofern <paramref name="handled" /> in den <see cref="T:System.Windows.Markup.XamlSetValueEventArgs" />-Ereignisdaten nicht <see langword="true" /> ist).</span><span class="sxs-lookup"><span data-stu-id="5106e-152">Invokes any <see cref="P:System.Xaml.XamlObjectWriterSettings.XamlSetValueHandler" /> referenced method that is associated with <see cref="T:System.Xaml.XamlObjectWriterSettings" /> for this writer, as long as <paramref name="handled" /> in <see cref="T:System.Windows.Markup.XamlSetValueEventArgs" /> event data is not <see langword="true" />.</span></span></summary>
+        <returns><span data-ttu-id="5106e-153">Ein boolescher Wert, der durch einen zugeordneten Handler festgelegt wird, andernfalls <see langword="false" />.</span><span class="sxs-lookup"><span data-stu-id="5106e-153">A Boolean value that is set by any associated handler; otherwise, <see langword="false" />.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="5106e-154">Wenn der `SetValue` Vorgang für diesen XAML-Writer über einen zugeordneten Handler <xref:System.Xaml.XamlObjectWriterSettings.XamlSetValueHandler%2A> verfügt (eine <xref:System.Xaml.XamlObjectWriterSettings>wird in deklariert), erstellt <xref:System.Windows.Markup.XamlSetValueEventArgs> diese Methode eine neue und übergibt sie an den Handler.</span><span class="sxs-lookup"><span data-stu-id="5106e-154">If the `SetValue` operation for this XAML writer has an associated handler (a <xref:System.Xaml.XamlObjectWriterSettings.XamlSetValueHandler%2A> is declared in <xref:System.Xaml.XamlObjectWriterSettings>), this method creates new <xref:System.Windows.Markup.XamlSetValueEventArgs> and passes them to the handler.</span></span> <span data-ttu-id="5106e-155">Der Rückgabewert wird festgelegt, indem <xref:System.Windows.Markup.XamlSetValueEventArgs.Handled%2A> der Wert gelesen wird, der durch die Ereignisdaten übermittelt wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-155">The return value is set by reading the <xref:System.Windows.Markup.XamlSetValueEventArgs.Handled%2A> value that is passed through the event data.</span></span> <span data-ttu-id="5106e-156">Wenn kein Handler vorhanden ist und diese Methode aufgerufen wird, gibt der `false`Aufruf zurück.</span><span class="sxs-lookup"><span data-stu-id="5106e-156">If no handler exists and this method is invoked, the call returns `false`.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Result">
+      <MemberSignature Language="C#" Value="public virtual object Result { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object Result" />
+      <MemberSignature Language="DocId" Value="P:System.Xaml.XamlObjectWriter.Result" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable ReadOnly Property Result As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Object ^ Result { System::Object ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Result : obj" Usage="System.Xaml.XamlObjectWriter.Result" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="5106e-157">Ruft das letzte Objekt ab, das geschrieben wurde.</span><span class="sxs-lookup"><span data-stu-id="5106e-157">Gets the last object that was written.</span></span> <span data-ttu-id="5106e-158">Wird normalerweise nur aufgerufen, wenn das Ende des Knotenstreams erreicht und das Objektdiagramm abgeschlossen wurde.</span><span class="sxs-lookup"><span data-stu-id="5106e-158">Typically only called when the node stream is at its end and the object graph is complete.</span></span></summary>
+        <value><span data-ttu-id="5106e-159">Das letzte geschriebene Objekt oder <see langword="null" />.</span><span class="sxs-lookup"><span data-stu-id="5106e-159">The last object written, or <see langword="null" />.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="5106e-160">Die typische Verwendung von <xref:System.Xaml.XamlObjectWriter.Result%2A> besteht darin, Sie nur aufzurufen, wenn der knotenstream bekanntermaßen am Ende ist und das Objekt Diagramm abgeschlossen ist.</span><span class="sxs-lookup"><span data-stu-id="5106e-160">The most typical usage of <xref:System.Xaml.XamlObjectWriter.Result%2A> is to call it only when the node stream is known to be at its end, and the object graph is complete.</span></span> <span data-ttu-id="5106e-161">Andernfalls ist das Objekt Diagramm wahrscheinlich unvollständig und in den meisten Platt Form Szenarios nicht nützlich.</span><span class="sxs-lookup"><span data-stu-id="5106e-161">Otherwise, the object graph is likely to be incomplete, and is not useful for most platform scenarios.</span></span>  
+  
+ <span data-ttu-id="5106e-162"><xref:System.Xaml.XamlObjectWriter.Result%2A>enthält in der Regel nur einen Wert ungleich NULL, wenn er unmittelbar nach einem Aufruf von <xref:System.Xaml.XamlObjectWriter.WriteEndObject%2A>aufgerufen wird, und wenn der aktuelle Bereich in dem Member enthalten ist, in dem das-Objekt einen Wert bereitstellt.</span><span class="sxs-lookup"><span data-stu-id="5106e-162"><xref:System.Xaml.XamlObjectWriter.Result%2A> typically only contains a non-null value if it is called immediately after a call to <xref:System.Xaml.XamlObjectWriter.WriteEndObject%2A>, and if the current scope is in the member where the object provides a value.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RootNameScope">
+      <MemberSignature Language="C#" Value="public System.Windows.Markup.INameScope RootNameScope { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Windows.Markup.INameScope RootNameScope" />
+      <MemberSignature Language="DocId" Value="P:System.Xaml.XamlObjectWriter.RootNameScope" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property RootNameScope As INameScope" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Windows::Markup::INameScope ^ RootNameScope { System::Windows::Markup::INameScope ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.RootNameScope : System.Windows.Markup.INameScope" Usage="System.Xaml.XamlObjectWriter.RootNameScope" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.Markup.INameScope</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="5106e-163">Ruft den <see cref="T:System.Windows.Markup.INameScope" />-Dienst ab, von dem der XAML-Namescope für den absoluten Knotenstamm des XAML-Objektwriters verwaltet wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-163">Gets the <see cref="T:System.Windows.Markup.INameScope" /> service that maintains the XAML namescope for the absolute node root of the XAML object writer.</span></span></summary>
+        <value><span data-ttu-id="5106e-164">Der <see cref="T:System.Windows.Markup.INameScope" />-Dienst, von dem der XAML-Namescope für den aktuellen Stamm des Objektwriters verwaltet wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-164">The <see cref="T:System.Windows.Markup.INameScope" /> service that maintains the XAML namescope for the current root of the object writer.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="5106e-165">Der Wert dieser Eigenschaft kann aus dem objektwriter-Kontext stammen.</span><span class="sxs-lookup"><span data-stu-id="5106e-165">The value of this property may come from the object writer context.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SchemaContext">
+      <MemberSignature Language="C#" Value="public override System.Xaml.XamlSchemaContext SchemaContext { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Xaml.XamlSchemaContext SchemaContext" />
+      <MemberSignature Language="DocId" Value="P:System.Xaml.XamlObjectWriter.SchemaContext" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property SchemaContext As XamlSchemaContext" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Xaml::XamlSchemaContext ^ SchemaContext { System::Xaml::XamlSchemaContext ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.SchemaContext : System.Xaml.XamlSchemaContext" Usage="System.Xaml.XamlObjectWriter.SchemaContext" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Xaml.XamlSchemaContext</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="5106e-166">Ruft den aktiven XAML-Schemakontext ab.</span><span class="sxs-lookup"><span data-stu-id="5106e-166">Gets the active XAML schema context.</span></span></summary>
+        <value><span data-ttu-id="5106e-167">Der XAML-Schemakontext.</span><span class="sxs-lookup"><span data-stu-id="5106e-167">The XAML schema context.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="5106e-168">Der XAML-Schema Kontext ist eine erforderliche Informationsquelle für die meisten praktischen Szenarios zum Schreiben von Objekten.</span><span class="sxs-lookup"><span data-stu-id="5106e-168">XAML schema context is a necessary information source for most practical object-writing scenarios.</span></span> <span data-ttu-id="5106e-169">Der XAML-Schema Kontext wirkt sich auf die Suche nach Typen aus und enthält Informationen über die Assemblys, in denen Unterstützungs Typen vorhanden sind.</span><span class="sxs-lookup"><span data-stu-id="5106e-169">The XAML schema context influences the type lookup for backing types and holds information about the assemblies where backing types exist.</span></span> <span data-ttu-id="5106e-170">Der XAML-Standardschema Kontext basiert auf CLR-Typmapping-Regeln.</span><span class="sxs-lookup"><span data-stu-id="5106e-170">The default XAML schema context is based on CLR type-mapping rules.</span></span> <span data-ttu-id="5106e-171">Frameworks stellen in der Regel ihren eigenen XAML-Schema Kontext bereit, um sicherzustellen, dass die Methoden zum Laden von Assemblys mit den Programmier Modellen des Frameworks AMD-Anwendungs</span><span class="sxs-lookup"><span data-stu-id="5106e-171">Frameworks typically provide their own XAML schema context in order to assure that the assembly-loading mechanisms match the framework's programming amd application models.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetLineInfo">
+      <MemberSignature Language="C#" Value="public void SetLineInfo (int lineNumber, int linePosition);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void SetLineInfo(int32 lineNumber, int32 linePosition) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.SetLineInfo(System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub SetLineInfo (lineNumber As Integer, linePosition As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void SetLineInfo(int lineNumber, int linePosition);" />
+      <MemberSignature Language="F#" Value="abstract member SetLineInfo : int * int -&gt; unit&#xA;override this.SetLineInfo : int * int -&gt; unit" Usage="xamlObjectWriter.SetLineInfo (lineNumber, linePosition)" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Xaml.IXamlLineInfoConsumer.SetLineInfo(System.Int32,System.Int32)</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="lineNumber" Type="System.Int32" />
+        <Parameter Name="linePosition" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="lineNumber"><span data-ttu-id="5106e-172">Die Zeilennummer vom Reader.</span><span class="sxs-lookup"><span data-stu-id="5106e-172">The line number from the reader.</span></span></param>
+        <param name="linePosition"><span data-ttu-id="5106e-173">Die Zeilenposition vom Reader.</span><span class="sxs-lookup"><span data-stu-id="5106e-173">The line position from the reader.</span></span></param>
+        <summary><span data-ttu-id="5106e-174">Implementiert <see cref="M:System.Xaml.IXamlLineInfoConsumer.SetLineInfo(System.Int32,System.Int32)" /> und stellt Zeileninformationen für Ausnahmen bereit.</span><span class="sxs-lookup"><span data-stu-id="5106e-174">Implements <see cref="M:System.Xaml.IXamlLineInfoConsumer.SetLineInfo(System.Int32,System.Int32)" /> and provides line information for exceptions.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="5106e-175">Diese Dienst Methode ist nicht dafür vorgesehen, direkt aus Ihrem Code aufgerufen zu werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-175">This service method is not intended to be called directly from your code.</span></span> <span data-ttu-id="5106e-176">Wenn Sie jedoch eine abgeleitete Klasse von <xref:System.Xaml.XamlObjectWriter> erstellen und davon ausgehen, dass Sie einen Kontext melden, in dem Zeilennummern nicht verfügbar oder nicht nützlich sind, kann diese Methode aufgerufen werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-176">However, if you are creating a derived class from <xref:System.Xaml.XamlObjectWriter> and expect to report a context where line numbers are unavailable or not useful, this method may be called.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ShouldProvideLineInfo">
+      <MemberSignature Language="C#" Value="public bool ShouldProvideLineInfo { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool ShouldProvideLineInfo" />
+      <MemberSignature Language="DocId" Value="P:System.Xaml.XamlObjectWriter.ShouldProvideLineInfo" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property ShouldProvideLineInfo As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool ShouldProvideLineInfo { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.ShouldProvideLineInfo : bool" Usage="System.Xaml.XamlObjectWriter.ShouldProvideLineInfo" />
+      <MemberType>Property</MemberType>
+      <Implements>
+        <InterfaceMember>P:System.Xaml.IXamlLineInfoConsumer.ShouldProvideLineInfo</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="5106e-177">Ruft einen Wert ab, der angibt, ob von einem Zeileninformationsdienst Werte bereitgestellt werden sollen und ob dementsprechend die <see cref="M:System.Xaml.IXamlLineInfoConsumer.SetLineInfo(System.Int32,System.Int32)" />-Methode aufgerufen werden soll, wenn diese relevant ist.</span><span class="sxs-lookup"><span data-stu-id="5106e-177">Gets a value that reports whether a line information service should provide values and therefore, should also call the <see cref="M:System.Xaml.IXamlLineInfoConsumer.SetLineInfo(System.Int32,System.Int32)" /> method when it is relevant.</span></span></summary>
+        <value><span data-ttu-id="5106e-178"><see langword="true" />, wenn vom Writer Zeileninformationen verwendet werden, andernfalls <see langword="false" />.</span><span class="sxs-lookup"><span data-stu-id="5106e-178"><see langword="true" /> if line information is used by the writer; otherwise, <see langword="false" />.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="5106e-179">Diese Implementierung gibt immer `true` zurück.</span><span class="sxs-lookup"><span data-stu-id="5106e-179">This implementation always returns `true`.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteEndMember">
+      <MemberSignature Language="C#" Value="public override void WriteEndMember ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteEndMember() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.WriteEndMember" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteEndMember ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteEndMember();" />
+      <MemberSignature Language="F#" Value="override this.WriteEndMember : unit -&gt; unit" Usage="xamlObjectWriter.WriteEndMember " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><span data-ttu-id="5106e-180">Schließt den aktuellen Memberbereich und schreibt möglicherweise den Wert des Memberbereichs beim Schließen.</span><span class="sxs-lookup"><span data-stu-id="5106e-180">Closes the current member scope, and may write the value of the member scope while it closes.</span></span> <span data-ttu-id="5106e-181">Der neue Bereich wird der übergeordnete Objektbereich des Members.</span><span class="sxs-lookup"><span data-stu-id="5106e-181">The new scope becomes the parent object scope of the member.</span></span></summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.Xaml.XamlObjectWriterException"><span data-ttu-id="5106e-182">Fehler beim Erstellen von Memberwerten aus einem Wertknoten, der zwischen diesem Aufruf und einem vorherigen <see langword="StartMember" /> gefunden wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-182">Failed to create member value from a value node that is encountered between this call and a previous <see langword="StartMember" />.</span></span></exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteEndObject">
+      <MemberSignature Language="C#" Value="public override void WriteEndObject ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteEndObject() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.WriteEndObject" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteEndObject ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteEndObject();" />
+      <MemberSignature Language="F#" Value="override this.WriteEndObject : unit -&gt; unit" Usage="xamlObjectWriter.WriteEndObject " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><span data-ttu-id="5106e-183">Schließt den aktuellen Objektbereich im Writer.</span><span class="sxs-lookup"><span data-stu-id="5106e-183">Closes the current object scope in the writer.</span></span> <span data-ttu-id="5106e-184">Der neue Objektbereich wird der übergeordnete Bereich des Members.</span><span class="sxs-lookup"><span data-stu-id="5106e-184">The new object scope becomes the parent member scope.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="5106e-185">Wenn dieser `EndObject` Positions Bereich das Stamm Objekt schließt, wird der neue Objektbereich zum Stamm Bereich.</span><span class="sxs-lookup"><span data-stu-id="5106e-185">If this `EndObject` position scope is closing the root object, the new object scope becomes the root scope.</span></span>  
+  
+ <span data-ttu-id="5106e-186">Der-aufrufswert <xref:System.Xaml.XamlObjectWriter.WriteStartObject%2A> hat das Objekt möglicherweise noch nicht erstellt, da ein Objektmember ein erforderlicher Initialisierungs Pfad sein kann, z. b. Initialisierungs Text oder Initialisierungs Parameter.</span><span class="sxs-lookup"><span data-stu-id="5106e-186">The call to <xref:System.Xaml.XamlObjectWriter.WriteStartObject%2A> might not yet have created the object because an object member might be a necessary initialization pathway, such as initialization text or initialization parameters.</span></span> <span data-ttu-id="5106e-187">In diesen Fällen schreibt der-Befehl <xref:System.Xaml.XamlObjectWriter.WriteEndObject%2A> , um das Objekt tatsächlich zu schreiben.</span><span class="sxs-lookup"><span data-stu-id="5106e-187">For these cases, the call to <xref:System.Xaml.XamlObjectWriter.WriteEndObject%2A> actually writes the object.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteGetObject">
+      <MemberSignature Language="C#" Value="public override void WriteGetObject ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteGetObject() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.WriteGetObject" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteGetObject ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteGetObject();" />
+      <MemberSignature Language="F#" Value="override this.WriteGetObject : unit -&gt; unit" Usage="xamlObjectWriter.WriteGetObject " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><span data-ttu-id="5106e-188">Schreibt das konzeptionelle <see langword="StartObject" />-Objekt in das Objektdiagramm, wenn das angegebene Objekt ein Standardwert oder ein impliziter Wert der übergeordneten Eigenschaft ist.</span><span class="sxs-lookup"><span data-stu-id="5106e-188">Writes the conceptual <see langword="StartObject" /> into the object graph when the specified object is a default or implicit value of the parent property.</span></span> <span data-ttu-id="5106e-189">Der implizite Wert stammt aus Informationen, die aus dem XAML-Schemakontext und Sicherungstypinformationen abgerufen und nicht als Objektwert in der eingegebenen XAML-Knotengruppe angegeben werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-189">The implicit value comes from information that is obtained from the XAML schema context and backing type information, instead of being specified as an object value in the input XAML node set.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="5106e-190">Der Unterschied zwischen dem <xref:System.Xaml.XamlObjectWriter.WriteGetObject%2A> schreiben mit und <xref:System.Xaml.XamlObjectWriter.WriteStartObject%2A> dem Schreiben mit kann im resultierenden Objekt Diagramm angezeigt werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-190">The difference between writing with <xref:System.Xaml.XamlObjectWriter.WriteGetObject%2A> and writing with <xref:System.Xaml.XamlObjectWriter.WriteStartObject%2A> can be seen in the resulting object graph.</span></span> <span data-ttu-id="5106e-191"><xref:System.Xaml.XamlObjectWriter.WriteGetObject%2A>erstellt keine Instanz eines-Typs, da die <xref:System.Xaml.XamlObjectWriter.WriteGetObject%2A> API keine Informationen enthält, um das Objekt Diagramm über die zu erstellenden Informationen zu informieren.</span><span class="sxs-lookup"><span data-stu-id="5106e-191"><xref:System.Xaml.XamlObjectWriter.WriteGetObject%2A> does not construct an instance of a type because the <xref:System.Xaml.XamlObjectWriter.WriteGetObject%2A> API has no information to inform the object graph of what to construct.</span></span> <span data-ttu-id="5106e-192">Stattdessen wurde das Objekt erstellt, als die übergeordnete Eigenschaft initialisiert wurde. <xref:System.Xaml.XamlObjectWriter> daher ist es nicht erforderlich, es zu erstellen.</span><span class="sxs-lookup"><span data-stu-id="5106e-192">Instead, the object was created when the parent property was initialized; so a <xref:System.Xaml.XamlObjectWriter> does not need to construct it.</span></span> <span data-ttu-id="5106e-193">Im Gegensatz dazu <xref:System.Xaml.XamlObjectWriter.WriteStartObject%2A> gibt an, dass eine Instanz dieses Typs erstellt und in das Objekt Diagramm eingefügt werden soll.</span><span class="sxs-lookup"><span data-stu-id="5106e-193">In contrast, <xref:System.Xaml.XamlObjectWriter.WriteStartObject%2A> specifies that an instance of that type should be constructed and inserted into the object graph.</span></span>  
+  
+ <span data-ttu-id="5106e-194">Wenn Sie den XAML-knotenstream als eine Reihe von Frames betrachten, wird <xref:System.Xaml.XamlObjectWriter.WriteGetObject%2A> ein mit einem <xref:System.Xaml.XamlObjectWriter.WriteEndObject%2A> -Befehl ausgeglichen.</span><span class="sxs-lookup"><span data-stu-id="5106e-194">If you think of the XAML node stream as a series of frames, a <xref:System.Xaml.XamlObjectWriter.WriteGetObject%2A> is balanced to a <xref:System.Xaml.XamlObjectWriter.WriteEndObject%2A> call.</span></span> <span data-ttu-id="5106e-195">Daher sollte die Anzahl von <xref:System.Xaml.XamlObjectWriter.WriteGetObject%2A> Plus <xref:System.Xaml.XamlObjectWriter.WriteStartObject%2A> aufrufen gleich der Anzahl von <xref:System.Xaml.XamlObjectWriter.WriteEndObject%2A> aufrufen im Rahmen einer vollständigen Objekt Schreib Auswertung des XAML-knotenstreams sein.</span><span class="sxs-lookup"><span data-stu-id="5106e-195">Therefore, the number of <xref:System.Xaml.XamlObjectWriter.WriteGetObject%2A> plus <xref:System.Xaml.XamlObjectWriter.WriteStartObject%2A> calls should equal the number of <xref:System.Xaml.XamlObjectWriter.WriteEndObject%2A> calls as part of a complete object-writing evaluation of the XAML node stream.</span></span>  
+  
+ <span data-ttu-id="5106e-196">Die konzeptionelle `StartObject` Position für ein implizites Objekt im Objekt Diagramm ist erforderlich, da der Objektwert selbst ein impliziter Standardwert ist, aber dieses Objekt kann weiterhin Member aufweisen, die auf der Grundlage des XAML-knotenstreams geschrieben werden müssen.</span><span class="sxs-lookup"><span data-stu-id="5106e-196">The conceptual `StartObject` position for an implicit object in the object graph is necessary because although the object value itself is an implicit default, that object might still have members that need to be written based on the XAML node stream.</span></span> <span data-ttu-id="5106e-197">Ein typisches Szenario, in dem dieses Problem <xref:System.Xaml.XamlObjectWriter> auftritt, ist das Schreiben von Elementknoten für eine Auflistungs Eigenschaft, und die Auflistungs Initialisierung ist implizit zum Erstellen des Objekts, das Besitzer der Sammlungs Eigenschaft ist.</span><span class="sxs-lookup"><span data-stu-id="5106e-197">A typical scenario where this occurs is when <xref:System.Xaml.XamlObjectWriter> writes member nodes for a collection property, and the collection initialization is implicit to creating the object that owns the collection property.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteNamespace">
+      <MemberSignature Language="C#" Value="public override void WriteNamespace (System.Xaml.NamespaceDeclaration namespaceDeclaration);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteNamespace(class System.Xaml.NamespaceDeclaration namespaceDeclaration) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.WriteNamespace(System.Xaml.NamespaceDeclaration)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteNamespace(System::Xaml::NamespaceDeclaration ^ namespaceDeclaration);" />
+      <MemberSignature Language="F#" Value="override this.WriteNamespace : System.Xaml.NamespaceDeclaration -&gt; unit" Usage="xamlObjectWriter.WriteNamespace namespaceDeclaration" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="namespaceDeclaration" Type="System.Xaml.NamespaceDeclaration" />
+      </Parameters>
+      <Docs>
+        <param name="namespaceDeclaration"><span data-ttu-id="5106e-198">Die zu schreibende Namespacedeklaration.</span><span class="sxs-lookup"><span data-stu-id="5106e-198">The namespace declaration to write.</span></span></param>
+        <summary><span data-ttu-id="5106e-199">Definiert eine Namespacedeklaration, die für den nächsten Objekt- oder Memberbereich übernommen wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-199">Defines a namespace declaration that applies to the next object scope or member scope.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="5106e-200">Eine Namespace Deklaration kann geschrieben werden, wenn der aktuelle Bereich ein Stamm Bereich, ein Objektbereich oder ein Element Bereich ist.</span><span class="sxs-lookup"><span data-stu-id="5106e-200">A namespace declaration can be written if the current scope is a root scope, object scope, or member scope.</span></span> <span data-ttu-id="5106e-201">Kann jedoch nur unmittelbar vor einem Aufruf eines der folgenden aufgerufen werden: <xref:System.Xaml.XamlObjectWriter.WriteNamespace%2A>, <xref:System.Xaml.XamlObjectWriter.WriteStartObject%2A>oder  <xref:System.Xaml.XamlObjectWriter.WriteStartMember%2A> .  <xref:System.Xaml.XamlObjectWriter.WriteNamespace%2A></span><span class="sxs-lookup"><span data-stu-id="5106e-201">However, <xref:System.Xaml.XamlObjectWriter.WriteNamespace%2A> can only be called immediately before a call to one of the following: <xref:System.Xaml.XamlObjectWriter.WriteNamespace%2A>, <xref:System.Xaml.XamlObjectWriter.WriteStartObject%2A>, or <xref:System.Xaml.XamlObjectWriter.WriteStartMember%2A>.</span></span> <span data-ttu-id="5106e-202">Der aufeinanderfolgende <xref:System.Xaml.XamlObjectWriter.WriteNamespace%2A> Fall ist das Schreiben mehrerer Namespace Deklarationen in denselben Knoten.</span><span class="sxs-lookup"><span data-stu-id="5106e-202">The consecutive <xref:System.Xaml.XamlObjectWriter.WriteNamespace%2A> case is for writing multiple namespace declarations to the same node.</span></span> <span data-ttu-id="5106e-203">Schließlich muss entweder <xref:System.Xaml.XamlObjectWriter.WriteStartObject%2A> oder <xref:System.Xaml.XamlObjectWriter.WriteStartMember%2A> aufgerufen werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-203">Eventually, either <xref:System.Xaml.XamlObjectWriter.WriteStartObject%2A> or <xref:System.Xaml.XamlObjectWriter.WriteStartMember%2A> must be called.</span></span>  
+  
+ <span data-ttu-id="5106e-204"><xref:System.Xaml.XamlObjectWriter.WriteNamespace%2A>verwendet `Start` / keine Metapher. `End`</span><span class="sxs-lookup"><span data-stu-id="5106e-204"><xref:System.Xaml.XamlObjectWriter.WriteNamespace%2A> does not use a `Start`/`End` metaphor.</span></span> <span data-ttu-id="5106e-205">Obwohl ein XAML-Namespace Member im CLR-Darstellungs Sinn hat, sind die Member bekannt und müssen nicht als spezieller Typ von <xref:System.Xaml.XamlMember> für die Erweiterbarkeit dargestellt werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-205">Although a XAML namespace has members in the CLR representation sense, the members are known and do not need to be represented as a special type of <xref:System.Xaml.XamlMember> for extensibility.</span></span> <span data-ttu-id="5106e-206">Um auf die Werte einer <xref:System.Xaml.NamespaceDeclaration>zuzugreifen, <xref:System.Xaml.NamespaceDeclaration.Namespace%2A> greifen Sie auf die <xref:System.Xaml.NamespaceDeclaration.Prefix%2A> -Eigenschaft und die-Eigenschaft zu.</span><span class="sxs-lookup"><span data-stu-id="5106e-206">To access the values of a <xref:System.Xaml.NamespaceDeclaration>, you access its <xref:System.Xaml.NamespaceDeclaration.Namespace%2A> and <xref:System.Xaml.NamespaceDeclaration.Prefix%2A> properties.</span></span>  
+  
+ <span data-ttu-id="5106e-207">Eine Namespace Deklaration kann einen <xref:System.String.Empty?displayProperty=nameWithType> Wert für das Präfix aufweisen.</span><span class="sxs-lookup"><span data-stu-id="5106e-207">A namespace declaration may have a <xref:System.String.Empty?displayProperty=nameWithType> value for the prefix.</span></span> <span data-ttu-id="5106e-208">Ein <xref:System.String.Empty?displayProperty=nameWithType> Präfix stellt eine Deklaration des standardmäßigen XAML-Namespace dar.</span><span class="sxs-lookup"><span data-stu-id="5106e-208">A <xref:System.String.Empty?displayProperty=nameWithType> prefix represents a declaration of the default XAML namespace.</span></span> <span data-ttu-id="5106e-209">Versuchen Sie nicht, NULL zu verwenden, um das Standard Präfix darzustellen.  in dieser API wird eine Ausnahme ausgelöst.</span><span class="sxs-lookup"><span data-stu-id="5106e-209">Do not attempt to use null to represent the default prefix;  it throws an exception in this API.</span></span> <span data-ttu-id="5106e-210">Weitere Informationen finden Sie unter <xref:System.Xaml.NamespaceDeclaration>.</span><span class="sxs-lookup"><span data-stu-id="5106e-210">For more information, see <xref:System.Xaml.NamespaceDeclaration>.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="5106e-211"><paramref name="namespaceDeclaration" /> ist <see langword="null" />.</span><span class="sxs-lookup"><span data-stu-id="5106e-211">The <paramref name="namespaceDeclaration" /> is <see langword="null" />.</span></span></exception>
+        <exception cref="T:System.ArgumentException"><span data-ttu-id="5106e-212">Eine Komponenten von <paramref name="namespaceDeclaration" /> lautet <see langword="null" />.</span><span class="sxs-lookup"><span data-stu-id="5106e-212">A component of <paramref name="namespaceDeclaration" /> is <see langword="null" />.</span></span></exception>
+        <exception cref="T:System.Xaml.XamlObjectReaderException"><span data-ttu-id="5106e-213">Versucht, einen XAML-Namespace-Knoten in einen ungültigen Bereich zu schreiben.</span><span class="sxs-lookup"><span data-stu-id="5106e-213">Tried to write a XAML namespace node in an invalid scope.</span></span></exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteStartMember">
+      <MemberSignature Language="C#" Value="public override void WriteStartMember (System.Xaml.XamlMember property);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteStartMember(class System.Xaml.XamlMember property) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.WriteStartMember(System.Xaml.XamlMember)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteStartMember (property As XamlMember)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteStartMember(System::Xaml::XamlMember ^ property);" />
+      <MemberSignature Language="F#" Value="override this.WriteStartMember : System.Xaml.XamlMember -&gt; unit" Usage="xamlObjectWriter.WriteStartMember property" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="property" Type="System.Xaml.XamlMember" />
+      </Parameters>
+      <Docs>
+        <param name="property"><span data-ttu-id="5106e-214">Die zu schreibende XAML-Eigenschaft.</span><span class="sxs-lookup"><span data-stu-id="5106e-214">The XAML property to write.</span></span> <span data-ttu-id="5106e-215">In der Regel wird dieser Wert aus einem XAML-Reader über den dazwischen liegenden XAML-Knotenstream abgerufen.</span><span class="sxs-lookup"><span data-stu-id="5106e-215">Typically you obtain this value from a XAML reader through the XAML node stream intermediate.</span></span></param>
+        <summary><span data-ttu-id="5106e-216">Schreibt einen neuen Memberknoten in den aktuellen Objektbereich, und der Bereich wird ein neuer Memberbereich.</span><span class="sxs-lookup"><span data-stu-id="5106e-216">Writes a new member node into the current object scope, and the scope becomes a new member scope.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!TIP]
+>  <span data-ttu-id="5106e-217">Achten Sie auf <xref:System.Xaml.XamlDuplicateMemberException>einen, der auftritt, wenn dieselbe XAML-Eigenschaft in der XAML-Eingabe zweimal festgelegt wird.</span><span class="sxs-lookup"><span data-stu-id="5106e-217">Watch for a <xref:System.Xaml.XamlDuplicateMemberException>, which occurs when the same XAML property is set twice in the XAML input.</span></span> <span data-ttu-id="5106e-218">In einfachen Fällen, z. b. wenn die gleiche Eigenschaft sowohl in der Attribut Syntax als auch in der Eigenschafts Element Syntax festgelegt ist, können Sie diese Ausnahme im Eingabe Markup leicht erkennen.</span><span class="sxs-lookup"><span data-stu-id="5106e-218">In simple cases, such as when the same property is set in both attribute syntax and property element syntax, you can easily see this exception in the input markup.</span></span> <span data-ttu-id="5106e-219">Allerdings können kleinere Fälle auftreten, die schwieriger zu erkennen sind.</span><span class="sxs-lookup"><span data-stu-id="5106e-219">However, more subtle cases can occur that are more difficult to spot.</span></span> <span data-ttu-id="5106e-220">Diese Ausnahme kann z. b. auftreten, wenn Sie eine XAML-Inhalts Eigenschaft festlegen, wenn Sie XAML-Ambient-Eigenschaften einschließen und eine Eigenschaft eine anfügbare Verwendung und eine instanzverwendung ermöglicht.</span><span class="sxs-lookup"><span data-stu-id="5106e-220">For example, this exception might occur if you set a XAML content property, if you involve XAML ambient properties, and if a property enables both an attachable usage and an instance usage.</span></span> <span data-ttu-id="5106e-221">In den debugsphasen der Entwicklung können Sie diese Ausnahme häufig ermitteln, indem Sie die XAML-Basis Knoten Darstellung anzeigen, die den Markup Lesevorgang und den Schreibvorgang des Objekt Diagramms verbindet.</span><span class="sxs-lookup"><span data-stu-id="5106e-221">In the debugging phases of development, you can often locate this exception by viewing the intermediate XAML node representation that connects the markup read and the object graph write.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Xaml.XamlObjectWriterException"><span data-ttu-id="5106e-222">In <paramref name="property" /> ist <see cref="P:System.Xaml.XamlMember.IsUnknown" /> auf <see langword="true" /> festgelegt.</span><span class="sxs-lookup"><span data-stu-id="5106e-222"><paramref name="property" /> has <see cref="P:System.Xaml.XamlMember.IsUnknown" /> set to <see langword="true" />.</span></span>  
+  
+<span data-ttu-id="5106e-223">- oder -</span><span class="sxs-lookup"><span data-stu-id="5106e-223">-or-</span></span> 
+ <span data-ttu-id="5106e-224"><see cref="P:System.Xaml.XamlLanguage.UnknownContent" /> wurde übergeben, was darauf hinweist, dass der XAML-Knotenstream Inhalt für ein Objekt enthalten hat, das keinen Inhalt unterstützt.</span><span class="sxs-lookup"><span data-stu-id="5106e-224"><see cref="P:System.Xaml.XamlLanguage.UnknownContent" /> passed, which indicates that the XAML node stream contained content for an object that does not support content.</span></span>  
+  
+<span data-ttu-id="5106e-225">- oder -</span><span class="sxs-lookup"><span data-stu-id="5106e-225">-or-</span></span> 
+<span data-ttu-id="5106e-226">Versucht, einen Startmember in einen ungültigen Bereich zu schreiben.</span><span class="sxs-lookup"><span data-stu-id="5106e-226">Attempted to write a start member in an invalid scope.</span></span></exception>
+        <exception cref="T:System.Xaml.XamlDuplicateMemberException"><span data-ttu-id="5106e-227"><paramref name="property" /> gibt eine Eigenschaft an, die bereits im übergeordneten Objektbereich explizit festgelegt ist.</span><span class="sxs-lookup"><span data-stu-id="5106e-227"><paramref name="property" /> specifies a property that is already explicitly set in the parent object scope.</span></span></exception>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="5106e-228"><paramref name="property" /> ist <see langword="null" />.</span><span class="sxs-lookup"><span data-stu-id="5106e-228"><paramref name="property" /> is <see langword="null" />.</span></span></exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteStartObject">
+      <MemberSignature Language="C#" Value="public override void WriteStartObject (System.Xaml.XamlType xamlType);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteStartObject(class System.Xaml.XamlType xamlType) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.WriteStartObject(System.Xaml.XamlType)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteStartObject(System::Xaml::XamlType ^ xamlType);" />
+      <MemberSignature Language="F#" Value="override this.WriteStartObject : System.Xaml.XamlType -&gt; unit" Usage="xamlObjectWriter.WriteStartObject xamlType" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="xamlType" Type="System.Xaml.XamlType" />
+      </Parameters>
+      <Docs>
+        <param name="xamlType"><span data-ttu-id="5106e-229">Der zu schreibende Typ.</span><span class="sxs-lookup"><span data-stu-id="5106e-229">The type to write.</span></span> <span data-ttu-id="5106e-230">In der Regel wird dieser Wert von einem XAML-Reader abgerufen.</span><span class="sxs-lookup"><span data-stu-id="5106e-230">Typically you obtain this value from a XAML reader.</span></span></param>
+        <summary><span data-ttu-id="5106e-231">Schreibt einen Objektknoten in den aktuellen Objektbereich und legt den Bereich auf einen neuen Objektbereich fest.</span><span class="sxs-lookup"><span data-stu-id="5106e-231">Writes an object node into the current scope, and sets the scope to a new object scope.</span></span></summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.Xaml.XamlObjectWriterException"><span data-ttu-id="5106e-232">Die Verarbeitung eines Objekts vom Typ <see cref="P:System.Xaml.XamlType.IsUnknown" /> und kann kein Objekt erstellen.</span><span class="sxs-lookup"><span data-stu-id="5106e-232">Processing an <see cref="P:System.Xaml.XamlType.IsUnknown" /> type and cannot create an object.</span></span>  
+  
+<span data-ttu-id="5106e-233">- oder -</span><span class="sxs-lookup"><span data-stu-id="5106e-233">-or-</span></span> 
+<span data-ttu-id="5106e-234">Versucht, ein Startobjekt in einen ungültigen Bereich zu schreiben.</span><span class="sxs-lookup"><span data-stu-id="5106e-234">Attempted to write a start object in an invalid scope.</span></span></exception>
+        <exception cref="T:System.Xaml.XamlParseException"><span data-ttu-id="5106e-235">Versucht, ein Stammobjekt zu schreiben, wenn bereits ein Stammobjekt in den Einstellungen bereitgestellt wurde.</span><span class="sxs-lookup"><span data-stu-id="5106e-235">Attempted to write a root object when the root object was already provided in the settings.</span></span></exception>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="5106e-236"><paramref name="xamlType" /> ist <see langword="null" />.</span><span class="sxs-lookup"><span data-stu-id="5106e-236"><paramref name="xamlType" /> is <see langword="null" />.</span></span></exception>
+        <block subset="none" type="overrides"><para><span data-ttu-id="5106e-237">Wenn sich der aktuelle Bereich in einer Auflistung, einem Wörterbuch oder einem Array befindet, sollte die neue Instanz mithilfe der <see langword="Add" /> -Methode des entsprechenden Typs der Auflistung, dem Wörterbuch oder dem Array hinzugefügt werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-237">If the current scope is inside a collection, dictionary, or array, the new instance should be added to the collection, dictionary, or array by using the <see langword="Add" /> method of the relevant type.</span></span> <span data-ttu-id="5106e-238">Andernfalls sollte der Member der neuen Instanz zugewiesen werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-238">Otherwise, the member should be assigned to the new instance.</span></span></para></block>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteValue">
+      <MemberSignature Language="C#" Value="public override void WriteValue (object value);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteValue(object value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.XamlObjectWriter.WriteValue(System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteValue (value As Object)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteValue(System::Object ^ value);" />
+      <MemberSignature Language="F#" Value="override this.WriteValue : obj -&gt; unit" Usage="xamlObjectWriter.WriteValue value" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="value" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="value"><span data-ttu-id="5106e-239">Der zu schreibende Wert.</span><span class="sxs-lookup"><span data-stu-id="5106e-239">The value to write.</span></span></param>
+        <summary><span data-ttu-id="5106e-240">Schreibt einen Wert in den aktuellen Memberbereich.</span><span class="sxs-lookup"><span data-stu-id="5106e-240">Writes a value to the current member scope.</span></span> <span data-ttu-id="5106e-241">Wenn sich der aktuelle Bereich in einer Auflistung, einem Wörterbuch oder einem Arrayobjekt befindet, sollte der Wert der Auflistung, dem Wörterbuch oder dem Array hinzugefügt werden.</span><span class="sxs-lookup"><span data-stu-id="5106e-241">If the current scope is inside a collection, dictionary, or array object, the value should be added to the collection, dictionary, or array.</span></span></summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.Xaml.XamlObjectWriterException"><span data-ttu-id="5106e-242">Versucht, einen Wert in einen ungültigen Bereich zu schreiben.</span><span class="sxs-lookup"><span data-stu-id="5106e-242">Attempted to write a value in an invalid scope.</span></span></exception>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
