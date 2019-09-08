@@ -1,0 +1,246 @@
+<Type Name="MethodExpression" FullName="System.Web.UI.WebControls.Expressions.MethodExpression">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="18f5a5cc687c76ffbdde27195ed9789b21921d2f" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70510851" /></Metadata><TypeSignature Language="C#" Value="public class MethodExpression : System.Web.UI.WebControls.Expressions.ParameterDataSourceExpression" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit MethodExpression extends System.Web.UI.WebControls.Expressions.ParameterDataSourceExpression" />
+  <TypeSignature Language="DocId" Value="T:System.Web.UI.WebControls.Expressions.MethodExpression" />
+  <TypeSignature Language="VB.NET" Value="Public Class MethodExpression&#xA;Inherits ParameterDataSourceExpression" />
+  <TypeSignature Language="C++ CLI" Value="public ref class MethodExpression : System::Web::UI::WebControls::Expressions::ParameterDataSourceExpression" />
+  <TypeSignature Language="F#" Value="type MethodExpression = class&#xA;    inherit ParameterDataSourceExpression" />
+  <AssemblyInfo>
+    <AssemblyName>System.Web.Extensions</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Web.UI.WebControls.Expressions.ParameterDataSourceExpression</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>Stellt eine Möglichkeit zum Angeben einer benutzerdefinierte LINQ-Abfrage bereit, die in einer Methode definiert wird.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Das <xref:System.Web.UI.WebControls.QueryExtender> Steuerelement unterstützt benutzerdefinierte LINQ-Abfragen. Sie können eine benutzerdefinierte LINQ-Abfrage in einer Methode definieren und <xref:System.Web.UI.WebControls.Expressions.MethodExpression> die Filteroption verwenden, um die Abfrage <xref:System.Web.UI.WebControls.QueryExtender> im-Steuerelement aufzurufen.  
+  
+ Die Methode, die die benutzerdefinierte LINQ-Abfrage enthält, muss die folgenden Kriterien erfüllen:  
+  
+-   Die Methode muss statisch sein (`Shared` in Visual Basic). Der erste Parameter muss ein <xref:System.Linq.IQueryable%601> -oder <xref:System.Collections.Generic.IEnumerable%601> -Objekt sein. Die-Methode kann über mehr als einen Parameter verfügen.  
+  
+-   Der Rückgabewert kann den <xref:System.Linq.IQueryable%601> abgefragten Typ oder <xref:System.Collections.Generic.IEnumerable%601> nicht ändern.  
+  
+ Der <xref:System.Web.UI.WebControls.Expressions.MethodExpression> sucht nach der Methode, die die Abfrage enthält, in der folgenden Reihenfolge:  
+  
+1.  Wenn eine <xref:System.Web.UI.WebControls.Expressions.MethodExpression.TypeName%2A> Eigenschaft <xref:System.Web.UI.WebControls.QueryExtender> im-Steuerelement angegeben wird, <xref:System.Web.UI.WebControls.Expressions.MethodExpression> sucht das-Objekt nach der-Methode im angegebenen Typ.  
+  
+2.  Wenn die Datenquelle implementiert <xref:System.Web.DynamicData.IDynamicDataSource>, sucht die-Methode nach der-Methode für den Kontexttyp (<xref:System.Data.Linq.DataContext> oder <xref:System.Data.Objects.ObjectContext> das-Objekt).  
+  
+3.  Die-Methode sucht in einem Vorlagen Steuerelement, in der Basisklasse für die Seite oder in einem Benutzer Steuerelement nach der-Methode.  
+  
+ Die <xref:System.Web.UI.WebControls.Expressions.MethodExpression> -Klasse ähnelt der <xref:System.Web.UI.WebControls.Expressions.CustomExpression> -Klasse, mit der Ausnahme, dass der Methoden Ausdruck als Antwort auf einen Methoden Aufrufwert ausgeführt wird und der benutzerdefinierte Ausdruck als Reaktion auf ein Ereignis ausgeführt wird.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie das Feld "ListPrice" der Tabelle "Products" in der AdventureWorks-Datenbank für Produkte mit einem Listenpreis von 400 oder mehr durchsucht wird. In diesem Beispiel wird gezeigt, wie eine benutzerdefinierte LINQ-Abfrage in einer Methode im Seitencode erstellt wird und wie die <xref:System.Web.UI.WebControls.QueryExtender> -Methode im-Steuerelement aufgerufen wird.  
+  
+```vb  
+Public Shared Function FilterStandardPrice(ByVal query As _  
+        IQueryable(Of Product)) As IQueryable(Of Product)  
+        Return From p In query _  
+            Where p.ListPrice >= 400 _  
+            Select p  
+    End Function  
+```  
+  
+```csharp  
+public static IQueryable<Product>   
+        FilterStandardPrice(IQueryable<Product> query)  
+{  
+        return from p in query  
+                  where p.ListPrice >= 400  
+                  select p;  
+  
+    }  
+```  
+  
+ Im folgenden Beispiel wird gezeigt, wie die-Methode auf der Seite aufgerufen wird.  
+  
+```  
+<html>  
+<head runat="server">  
+  <title>Custom Filter</title>  
+</head>  
+<body>  
+  <form id="form1" runat="server">  
+    <asp:LinqDataSource ID="LinqDataSource1" runat="server"   
+        ContextTypeName="AdventureworksDataContext" EntityTypeName=""   
+        TableName="Products">  
+    </asp:LinqDataSource>  
+  
+    <asp:QueryExtender ID="QueryExtender1" runat="server"   
+        TargetControlID="LinqDataSource1">  
+      <asp:MethodExpression MethodName="FilterStandardPrice" >  
+      </asp:MethodExpression>  
+    </asp:QueryExtender>  
+  
+    <asp:GridView ID="GridView1" runat="server"   
+        DataSourceID="LinqDataSource1"   
+        DataKeyNames="ProductID"   
+    </asp:GridView>  
+  </form>  
+</body>  
+</html>  
+```  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public MethodExpression ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.WebControls.Expressions.MethodExpression.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; MethodExpression();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Web.UI.WebControls.Expressions.MethodExpression" />-Klasse.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetQueryable">
+      <MemberSignature Language="C#" Value="public override System.Linq.IQueryable GetQueryable (System.Linq.IQueryable source);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Linq.IQueryable GetQueryable(class System.Linq.IQueryable source) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.WebControls.Expressions.MethodExpression.GetQueryable(System.Linq.IQueryable)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetQueryable (source As IQueryable) As IQueryable" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Linq::IQueryable ^ GetQueryable(System::Linq::IQueryable ^ source);" />
+      <MemberSignature Language="F#" Value="override this.GetQueryable : System.Linq.IQueryable -&gt; System.Linq.IQueryable" Usage="methodExpression.GetQueryable source" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Linq.IQueryable</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="source" Type="System.Linq.IQueryable" />
+      </Parameters>
+      <Docs>
+        <param name="source">Das zu verwendende Datenquellen-Steuerelement.</param>
+        <summary>Löst den Ausdruck mithilfe des angegebenen <see cref="T:System.Linq.IQueryable" />-Objekts auf.</summary>
+        <returns>Eine Instanz des <see cref="T:System.Linq.IQueryable" />-Objekts, mit dem der Ausdruck aufgelöst wurde.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException">Das Datenquellensteuerelement ist <see langword="null" />.</exception>
+        <exception cref="T:System.InvalidOperationException">Die Methode wurde nicht gefunden.  
+  
+- oder - 
+Die Methode ist nicht statisch.  
+  
+- oder - 
+Der Typ des übergebenen <see langword="IQueryable&lt;T&gt;" />-Objekts wurde geändert.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="IgnoreIfNotFound">
+      <MemberSignature Language="C#" Value="public bool IgnoreIfNotFound { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IgnoreIfNotFound" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.Expressions.MethodExpression.IgnoreIfNotFound" />
+      <MemberSignature Language="VB.NET" Value="Public Property IgnoreIfNotFound As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IgnoreIfNotFound { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.IgnoreIfNotFound : bool with get, set" Usage="System.Web.UI.WebControls.Expressions.MethodExpression.IgnoreIfNotFound" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der angibt, ob der Ausdruck ignoriert werden soll, oder legt ihn fest.</summary>
+        <value><see langword="true" />, wenn der Ausdruck ignoriert wird, andernfalls <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Das <xref:System.Web.UI.WebControls.Expressions.MethodExpression> -Objekt sucht nach einer Methode, die die Abfrage enthält, indem Sie an bestimmten Positionen sucht und in einer bestimmten Reihenfolge sucht. Sie können diese Eigenschaft auf `false` festlegen, um eine Ausnahme auszulösen, wenn das <xref:System.Web.UI.WebControls.Expressions.CustomExpression> Objekt keine Methode findet, die einen LINQ-Wert enthält.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="MethodName">
+      <MemberSignature Language="C#" Value="public string MethodName { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string MethodName" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.Expressions.MethodExpression.MethodName" />
+      <MemberSignature Language="VB.NET" Value="Public Property MethodName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ MethodName { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.MethodName : string with get, set" Usage="System.Web.UI.WebControls.Expressions.MethodExpression.MethodName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den Namen der Methode ab, die eine benutzerdefinierte LINQ-Abfrage enthält.</summary>
+        <value>Der Name der Methode, die die benutzerdefinierte LINQ-Abfrage enthält.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Das <xref:System.Web.UI.WebControls.Expressions.MethodExpression> -Objekt ermöglicht es Ihnen, eine benutzerdefinierte LINQ-Abfrage aufzurufen, die in einer-Methode definiert ist. Sie geben die Methode im <xref:System.Web.UI.WebControls.QueryExtender> -Steuerelement auf der Seite an.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird gezeigt, wie die `FilterStandardPrice` -Methode <xref:System.Web.UI.WebControls.QueryExtender> im-Steuerelement angegeben wird. Die benutzerdefinierte LINQ-Abfrage wird in `FilterStandardPrice` einer Methode definiert.  
+  
+```  
+<asp:QueryExtender ID="QueryExtender1" runat="server"   
+    TargetControlID="LinqDataSource1">  
+  <asp:MethodExpression MethodName="FilterStandardPrice">  
+  </asp:MethodExpression>  
+  </asp:QueryExtender>  
+```  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="TypeName">
+      <MemberSignature Language="C#" Value="public string TypeName { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string TypeName" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.Expressions.MethodExpression.TypeName" />
+      <MemberSignature Language="VB.NET" Value="Public Property TypeName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ TypeName { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.TypeName : string with get, set" Usage="System.Web.UI.WebControls.Expressions.MethodExpression.TypeName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft die Klasse ab, deren Methode die benutzerdefinierte Abfrage enthält, oder legt diese fest.</summary>
+        <value>Die Klasse, der die Methode als Member angehört.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Mit <xref:System.Web.UI.WebControls.Expressions.MethodExpression> der-Klasse können Sie einen benutzerdefinierten Ausdruck für eine Datenquelle <xref:System.Web.UI.WebControls.QueryExtender> im-Steuerelement angeben. Sie können die <xref:System.Web.UI.WebControls.Expressions.MethodExpression.TypeName%2A> -Eigenschaft verwenden, um die Klasse anzugeben, zu der die Methode gehört.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
