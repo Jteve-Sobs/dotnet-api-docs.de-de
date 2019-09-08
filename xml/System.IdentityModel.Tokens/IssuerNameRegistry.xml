@@ -1,0 +1,245 @@
+<Type Name="IssuerNameRegistry" FullName="System.IdentityModel.Tokens.IssuerNameRegistry">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="65a0bf0b90e5e9241ee97581d3e2f5917939d093" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70723185" /></Metadata><TypeSignature Language="C#" Value="public abstract class IssuerNameRegistry : System.IdentityModel.Configuration.ICustomIdentityConfiguration" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit IssuerNameRegistry extends System.Object implements class System.IdentityModel.Configuration.ICustomIdentityConfiguration" />
+  <TypeSignature Language="DocId" Value="T:System.IdentityModel.Tokens.IssuerNameRegistry" />
+  <TypeSignature Language="VB.NET" Value="Public MustInherit Class IssuerNameRegistry&#xA;Implements ICustomIdentityConfiguration" />
+  <TypeSignature Language="C++ CLI" Value="public ref class IssuerNameRegistry abstract : System::IdentityModel::Configuration::ICustomIdentityConfiguration" />
+  <TypeSignature Language="F#" Value="type IssuerNameRegistry = class&#xA;    interface ICustomIdentityConfiguration" />
+  <AssemblyInfo>
+    <AssemblyName>System.IdentityModel</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.IdentityModel.Configuration.ICustomIdentityConfiguration</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Docs>
+    <summary>Die abstrakte Basisklasse für eine Ausstellernamen-Registrierung. Eine Ausstellernamensregistrierung wird verwendet, um einen Merknamen kryptografischen Informationen zuzuordnen, das erforderlich ist, um die Signaturen von Token zu überprüfen, die vom entsprechenden Aussteller erzeugt werden. Die Ausstellernamenregistration führt eine Liste von Ausstellern, denen von einer RP-Anwendung (relying party) vertraut wird.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Aussteller Namen Registrierung wird verwendet, um dem kryptografischen Material, das zum Überprüfen der Signaturen von Token, die vom entsprechenden Aussteller erstellt werden, einen mnetmonischen Namen zuzuordnen. Dieser Name wird dann verwendet, um die <xref:System.Security.Claims.Claim.Issuer%2A> -Eigenschaft <xref:System.Security.Claims.Claim.OriginalIssuer%2A> oder die-Eigenschaft eines Anspruchs festzulegen. Die Methoden, die von <xref:System.IdentityModel.Tokens.IssuerNameRegistry> der-Klasse verfügbar gemacht werden, werden vom Sicherheitstokenhandler, der das Token verarbeitet, von der Pipeline aufgerufen. Von Materialien signierte Token, die nicht durch eine Aussteller Namen Registrierung zugeordnet sind, werden als nicht vertrauenswürdig verworfen. Der von der Aussteller Namen Registrierung zurückgegebene Name muss innerhalb des Kontexts einer RP-Anwendung eindeutig sein.  
+  
+ Im Code können Sie die zu verwendende Aussteller Namen Registrierung angeben, indem Sie <xref:System.IdentityModel.Tokens.SecurityTokenHandlerConfiguration.IssuerNameRegistry%2A?displayProperty=nameWithType> die-Eigenschaft festlegen. In einer Konfigurationsdatei kann die Aussteller Namen Registrierung angegeben werden, indem das [ &lt;&gt; issuerNameRegistry](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/issuernameregistry.md) -Element unter dem [ &lt;securitytokenhandlerconfiguration&gt; ](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/securitytokenhandlerconfiguration.md) -Element angegeben wird.  
+  
+ Windows Identity Foundation (WIF) stellt eine Standard Implementierung <xref:System.IdentityModel.Tokens.IssuerNameRegistry> der-Klasse bereit: die <xref:System.IdentityModel.Tokens.ConfigurationBasedIssuerNameRegistry> -Klasse. Wenn Sie diese Implementierung verwenden, können Sie die Liste der vertrauenswürdigen Aussteller in der Konfigurationsdatei der RP-Anwendung unter dem [ &lt;&gt; Treuhänder](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/trustedissuers.md) -Element angeben, bei der es sich um ein `<issuerNameRegistry>` untergeordnetes Element des-Elements handelt, wenn die auf die-Klasse wird im- `type` Attribut dieses Elements verwiesen. <xref:System.IdentityModel.Tokens.ConfigurationBasedIssuerNameRegistry> Unter dem `<trustedIssuers>` -Element wird jeder Aussteller Name dem X. 509-Zertifikat zugeordnet, das zum Überprüfen der Signatur verwendet werden soll.  
+  
+ Zum Erstellen einer benutzerdefinierten Registrierung für Aussteller Namen müssen Sie die <xref:System.IdentityModel.Tokens.IssuerNameRegistry.GetIssuerName%28System.IdentityModel.Tokens.SecurityToken%29?displayProperty=nameWithType> -Methode überschreiben. Diese Methode gibt den Namen des Ausstellers für das angegebene Sicherheits Token zurück. Sie können die <xref:System.IdentityModel.Tokens.IssuerNameRegistry.GetIssuerName%28System.IdentityModel.Tokens.SecurityToken%2CSystem.String%29?displayProperty=nameWithType> -Methode optional außer Kraft setzen, um beim Abrufen von Aussteller Namen und der-Methode einen Hinweise-Mechanismus bereitzustellen, wenn Sie einen Aussteller Namen für Windows <xref:System.Security.Claims.ClaimsIdentity.DefaultIssuer>-Token bereitstellen möchten, der <xref:System.IdentityModel.Tokens.IssuerNameRegistry.GetWindowsIssuerName%2A> sich von unterscheidet. Überschreiben <xref:System.IdentityModel.Tokens.IssuerNameRegistry.LoadCustomConfiguration%2A> Sie die-Methode, um die Initialisierung der Aussteller Namen Registrierung aus einer Konfigurationsdatei zu aktivieren.  
+  
+   
+  
+## Examples  
+ Der folgende Code zeigt eine Implementierung der <xref:System.IdentityModel.Tokens.IssuerNameRegistry> -Klasse, die nur Aussteller akzeptiert, die Zertifikate mit dem Betreff "CN = localhost" verwenden.  
+  
+> [!WARNING]
+>  Der folgende Code dient nur zu Illustrations Zwecken. Das Überprüfen von Zertifikaten basierend auf dem Antragsteller Namen ist nicht empfehlenswert. Dieser Code sollte nicht in der Produktionsumgebung verwendet werden.  
+  
+ [!code-csharp[WifIssuerNameRegistry#1](~/samples/snippets/csharp/VS_Snippets_Misc/wifissuernameregistry/cs/mvcwepapp/trustedissuernameregistry.cs#1)]  
+  
+ Das folgende Beispiel zeigt die XML-Daten, die für die Konfiguration einer Anwendung mit der namens Registrierung des vertrauenswürdigen Ausstellers  
+  
+```xml  
+<system.identityModel>  
+  <identityConfiguration>  
+    <issuerNameRegistry type="System.IdentityModel.Samples.TrustedIssuerNameRegistry, MyApp" />  
+  </identityConfiguration>  
+</system.identityModel>  
+```  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.IdentityModel.Tokens.ConfigurationBasedIssuerNameRegistry" />
+    <altmember cref="T:System.IdentityModel.Tokens.SecurityTokenHandler" />
+    <related type="Article" href="https://msdn.microsoft.com/library/58b39d12-c953-40c4-88af-d7eb3343ca28">&lt;issuerNameRegistry&gt;</related>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected IssuerNameRegistry ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.IssuerNameRegistry.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; IssuerNameRegistry();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IdentityModel.Tokens.IssuerNameRegistry" />-Klasse.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="GetIssuerName">
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Gibt beim Überschreiben in einer abgeleiteten Klasse den Namen des Ausstellers für das angegebene Sicherheitstoken zurück.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wird von der Verarbeitungs Pipeline durch den Sicherheitstokenhandler aufgerufen, der das Token verarbeitet. Die-Methode sollte im Kontext der RP-Anwendung einen eindeutigen Namen für den Aussteller zurückgeben.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="GetIssuerName">
+      <MemberSignature Language="C#" Value="public abstract string GetIssuerName (System.IdentityModel.Tokens.SecurityToken securityToken);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance string GetIssuerName(class System.IdentityModel.Tokens.SecurityToken securityToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.IssuerNameRegistry.GetIssuerName(System.IdentityModel.Tokens.SecurityToken)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract System::String ^ GetIssuerName(System::IdentityModel::Tokens::SecurityToken ^ securityToken);" />
+      <MemberSignature Language="F#" Value="abstract member GetIssuerName : System.IdentityModel.Tokens.SecurityToken -&gt; string" Usage="issuerNameRegistry.GetIssuerName securityToken" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="securityToken" Type="System.IdentityModel.Tokens.SecurityToken" />
+      </Parameters>
+      <Docs>
+        <param name="securityToken">Das Sicherheitstoken, für das der Ausstellername zurückgegeben wird.</param>
+        <summary>Gibt beim Überschreiben in einer abgeleiteten Klasse den Namen des Ausstellers für das angegebene Sicherheitstoken zurück.</summary>
+        <returns>Der Ausstellername.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Implementierungen sollten eine Zeichenfolge ungleich NULL und eine nicht leere Zeichenfolge zurückgeben, um einen erkannten Aussteller zu identifizieren, oder eine NULL-Zeichenfolge, um einen nicht erkannten Aussteller zu identifizieren.  
+  
+ Wird von der Verarbeitungs Pipeline durch den Sicherheitstokenhandler aufgerufen, der das Token verarbeitet. Die-Methode sollte im Kontext der RP-Anwendung einen eindeutigen Namen für den Aussteller zurückgeben.  
+  
+   
+  
+## Examples  
+ Der folgende Code zeigt die <xref:System.IdentityModel.Tokens.IssuerNameRegistry.GetIssuerName%2A> -Methode für eine Aussteller Namen Registrierung. Das vollständige Beispiel finden Sie <xref:System.IdentityModel.Tokens.IssuerNameRegistry> im Thema Übersicht über die-Klasse.  
+  
+> [!WARNING]
+>  Der folgende Code dient nur zu Illustrations Zwecken. Das Überprüfen von Zertifikaten basierend auf dem Antragsteller Namen ist nicht empfehlenswert. Dieser Code sollte nicht in der Produktionsumgebung verwendet werden.  
+  
+ [!code-csharp[WifIssuerNameRegistry#2](~/samples/snippets/csharp/VS_Snippets_Misc/wifissuernameregistry/cs/mvcwepapp/trustedissuernameregistry.cs#2)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.IdentityModel.Tokens.SecurityTokenHandler" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetIssuerName">
+      <MemberSignature Language="C#" Value="public virtual string GetIssuerName (System.IdentityModel.Tokens.SecurityToken securityToken, string requestedIssuerName);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance string GetIssuerName(class System.IdentityModel.Tokens.SecurityToken securityToken, string requestedIssuerName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.IssuerNameRegistry.GetIssuerName(System.IdentityModel.Tokens.SecurityToken,System.String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::String ^ GetIssuerName(System::IdentityModel::Tokens::SecurityToken ^ securityToken, System::String ^ requestedIssuerName);" />
+      <MemberSignature Language="F#" Value="abstract member GetIssuerName : System.IdentityModel.Tokens.SecurityToken * string -&gt; string&#xA;override this.GetIssuerName : System.IdentityModel.Tokens.SecurityToken * string -&gt; string" Usage="issuerNameRegistry.GetIssuerName (securityToken, requestedIssuerName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="securityToken" Type="System.IdentityModel.Tokens.SecurityToken" />
+        <Parameter Name="requestedIssuerName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="securityToken">Das Sicherheitstoken, für das der Ausstellername zurückgegeben wird.</param>
+        <param name="requestedIssuerName">Ein in der Anforderung zu berücksichtigender Ausstellername.</param>
+        <summary>Gibt beim Überschreiben in einer abgeleiteten Klasse den Namen des Ausstellers für das angegebene Sicherheitstoken zurück. Der angegebene Ausstellername kann betrachtet werden, wenn der Ausstellername, der zurückgegeben werden soll, bestimmt wird.</summary>
+        <returns>Der Ausstellername.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standard Implementierung ignoriert den `requestedIssuerName` -Parameter und ruft einfach <xref:System.IdentityModel.Tokens.IssuerNameRegistry.GetIssuerName%28System.IdentityModel.Tokens.SecurityToken%29?displayProperty=nameWithType> die-Methode auf.  
+  
+ Wird von der Verarbeitungs Pipeline durch den Sicherheitstokenhandler aufgerufen, der das Token verarbeitet. Die-Methode sollte im Kontext der RP-Anwendung einen eindeutigen Namen für den Aussteller zurückgeben.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.IdentityModel.Tokens.SecurityTokenHandler" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetWindowsIssuerName">
+      <MemberSignature Language="C#" Value="public virtual string GetWindowsIssuerName ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance string GetWindowsIssuerName() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.IssuerNameRegistry.GetWindowsIssuerName" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Function GetWindowsIssuerName () As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::String ^ GetWindowsIssuerName();" />
+      <MemberSignature Language="F#" Value="abstract member GetWindowsIssuerName : unit -&gt; string&#xA;override this.GetWindowsIssuerName : unit -&gt; string" Usage="issuerNameRegistry.GetWindowsIssuerName " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Gibt den standardmäßigen Ausstellernamen zurück, der für Windows-Ansprüche zu verwenden ist.</summary>
+        <returns>Der Standardausstellername für Windows-Ansprüche.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standardimplementierung gibt <xref:System.Security.Claims.ClaimsIdentity.DefaultIssuer> zurück.  
+  
+ Wird von der Verarbeitungs Pipeline durch den Sicherheitstokenhandler aufgerufen, der das Token verarbeitet. Die-Methode sollte im Kontext der RP-Anwendung einen eindeutigen Namen für den Aussteller zurückgeben.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.IdentityModel.Tokens.SecurityTokenHandler" />
+      </Docs>
+    </Member>
+    <Member MemberName="LoadCustomConfiguration">
+      <MemberSignature Language="C#" Value="public virtual void LoadCustomConfiguration (System.Xml.XmlNodeList nodelist);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void LoadCustomConfiguration(class System.Xml.XmlNodeList nodelist) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Tokens.IssuerNameRegistry.LoadCustomConfiguration(System.Xml.XmlNodeList)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Sub LoadCustomConfiguration (nodelist As XmlNodeList)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void LoadCustomConfiguration(System::Xml::XmlNodeList ^ nodelist);" />
+      <MemberSignature Language="F#" Value="abstract member LoadCustomConfiguration : System.Xml.XmlNodeList -&gt; unit&#xA;override this.LoadCustomConfiguration : System.Xml.XmlNodeList -&gt; unit" Usage="issuerNameRegistry.LoadCustomConfiguration nodelist" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.IdentityModel.Configuration.ICustomIdentityConfiguration.LoadCustomConfiguration(System.Xml.XmlNodeList)</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="nodelist" Type="System.Xml.XmlNodeList" />
+      </Parameters>
+      <Docs>
+        <param name="nodelist">Das Konfigurations-XML-Element. Jeder Knoten in der Liste ist vom Typ <see cref="T:System.Xml.XmlElement" />.</param>
+        <summary>Lädt beim Überschreiben in einer abgeleiteten Klasse die benutzerdefinierte Konfiguration aus XML ab.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.IdentityModel.Tokens.IssuerNameRegistry.LoadCustomConfiguration%2A> -Methode wird von der-Konfigurations Infrastruktur aufgerufen. Wenn diese Methode aufgerufen wird, enthält `nodelist` die untergeordneten Elemente der obersten Ebene [ &lt;des issuerNameRegistry&gt; ](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/issuernameregistry.md) -Elements aus der Konfigurationsdatei. Diese können wiederum Attribute oder untergeordnete Elemente enthalten, je nach dem Konfigurations Schema, das Sie für die abgeleitete Klasse definieren.  
+  
+ Die Standard Implementierung löst eine <xref:System.NotImplementedException>aus. Überschreiben Sie diese Methode in der abgeleiteten Klasse, um die Initialisierung der Aussteller Namen Registrierung aus einer Konfigurationsdatei zu aktivieren.  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="https://msdn.microsoft.com/library/58b39d12-c953-40c4-88af-d7eb3343ca28">&lt;issuerNameRegistry&gt;</related>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
