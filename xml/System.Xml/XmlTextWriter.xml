@@ -1,0 +1,2542 @@
+<Type Name="XmlTextWriter" FullName="System.Xml.XmlTextWriter">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="1c85c3754011013f2f4a01e0fcf5882a1bfbcbd0" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70422186" /></Metadata><TypeSignature Language="C#" Value="public class XmlTextWriter : System.Xml.XmlWriter" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit XmlTextWriter extends System.Xml.XmlWriter" />
+  <TypeSignature Language="DocId" Value="T:System.Xml.XmlTextWriter" />
+  <TypeSignature Language="VB.NET" Value="Public Class XmlTextWriter&#xA;Inherits XmlWriter" />
+  <TypeSignature Language="C++ CLI" Value="public ref class XmlTextWriter : System::Xml::XmlWriter" />
+  <TypeSignature Language="F#" Value="type XmlTextWriter = class&#xA;    inherit XmlWriter" />
+  <AssemblyInfo>
+    <AssemblyName>System.Xml</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+    <AssemblyVersion>4.2.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Xml.XmlWriter</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes>
+    <Attribute FrameworkAlternate="netcore-2.0;netcore-2.1;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;netcore-2.2;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0;netcore-3.0;netstandard-2.1">
+      <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>Stellt einen Writer für die schnelle, nicht zwischengespeicherte Vorwärtsgenerierung von Streams oder Dateien dar, die XML-Daten gemäß den W3C-Empfehlungen zu XML (Extensible Markup Language), Version 1.0, und zu Namespaces in XML enthalten.  
+  
+Ab .NET Framework 2.0 sollten Sie stattdessen die <see cref="T:System.Xml.XmlWriter" />-Klasse verwenden.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Klasse implementiert die <xref:System.Xml.XmlWriter> -Klasse.  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ `XmlTextWriter`verwaltet einen Namespace Stapel, der allen im aktuellen Element Stapel definierten Namespaces entspricht. Mithilfe `XmlTextWriter` von können Sie Namespaces manuell deklarieren.  
+  
+```csharp  
+w.WriteStartElement("root");  
+w.WriteAttributeString("xmlns", "x", null, "urn:1");  
+ w.WriteStartElement("item","urn:1");  
+ w.WriteEndElement();  
+ w.WriteStartElement("item","urn:1");  
+ w.WriteEndElement();  
+w.WriteEndElement();  
+```  
+  
+ Der obige C# Code erzeugt die folgende Ausgabe. `XmlTextWriter`stuft die Namespace Deklaration auf das Stamm Element herauf, um zu vermeiden, dass Sie mit den beiden untergeordneten Elementen dupliziert wird. Die untergeordneten Elemente übernehmen das Präfix aus der Namespace Deklaration.  
+  
+```xml  
+<root xmlns:x="urn:1">  
+ <x:item/>  
+ <x:item/>  
+</x:root>  
+```  
+  
+ `XmlTextWriter`ermöglicht außerdem das Überschreiben der aktuellen Namespace Deklaration. Im folgenden Beispiel wird der Namespace-URI "123" von "ABC" überschrieben, um das XML-Element `<x:node xmlns:x="abc"/>`zu erhalten.  
+  
+```csharp  
+w.WriteStartElement("x","node","123");  
+w.WriteAttributeString("xmlns","x",null,"abc");  
+```  
+  
+ Durch die Verwendung der Write-Methoden, die ein Präfix als Argument akzeptieren, können Sie auch angeben, welches Präfix verwendet werden soll. Im folgenden Beispiel werden zwei unterschiedliche Präfixe dem gleichen Namespace-URI zugeordnet, um den XML-Text `<x:root xmlns:x="urn:1"><y:item xmlns:y="urn:1"/></x:root>`zu erhalten.  
+  
+```csharp  
+XmlTextWriter w = new XmlTextWriter(Console.Out);  
+w.WriteStartElement("x","root","urn:1");  
+ w.WriteStartElement("y","item","urn:1");  
+ w.WriteEndElement();  
+w.WriteEndElement();  
+w.Close();  
+```  
+  
+ Wenn mehrere Namespace Deklarationen dem gleichen Namespace-URI unterschiedliche Präfixe zugeordnet sind `XmlTextWriter` , führt den Stapel von Namespace Deklarationen rückwärts aus und wählt die nächstgelegene aus.  
+  
+```csharp  
+XmlTextWriter w = new XmlTextWriter(Console.Out);  
+w.Formatting = Formatting.Indented;  
+w.WriteStartElement("x","root","urn:1");  
+w.WriteStartElement("y","item","urn:1");  
+w.WriteAttributeString("attr","urn:1","123");  
+w.WriteEndElement();  
+w.WriteEndElement();  
+w.Close();  
+```  
+  
+ Da `WriteAttributeString`  im obigen C# Beispiel der-Befehl kein Präfix angibt, verwendet der Writer das letzte Präfix, das auf dem Namespace Stapel abgelegt wurde, und erzeugt den folgenden XML-Code:  
+  
+```xml  
+<x:root xmlns:x="urn:1">  
+ <y:item y:attr="123" xmlns:y="urn:1" />  
+</x:root>  
+```  
+  
+ Wenn Namespace Konflikte auftreten, `XmlTextWriter` werden diese durch das Erstellen alternativer Präfixe aufgelöst. Wenn ein Attribut und Element z. b. das gleiche Präfix, aber unterschiedliche Namespaces aufweisen, `XmlWriter` generiert ein alternatives Präfix für das Attribut. Die generierten Präfixe werden benannt `n{i}` , `i` wobei eine Zahl ist, die bei 1 beginnt. Die Zahl wird für jedes Element auf 1 zurückgesetzt.  
+  
+ Attribute, die einem Namespace-URI zugeordnet sind, müssen ein Präfix aufweisen (Standardnamespaces gelten nicht für Attribute). Dies entspricht Abschnitt 5,2 der Empfehlung "W3C-Namespaces in XML". Wenn ein Attribut auf einen Namespace-URI verweist, aber kein Präfix angibt, generiert der Writer ein Präfix für das Attribut.  
+  
+ Wenn Sie ein leeres-Element schreiben, wird ein zusätzlicher Platz zwischen Tagnamen und Endtag hinzugefügt, `<item />`z. b.. Dadurch wird die Kompatibilität mit älteren Browsern ermöglicht.  
+  
+ Wenn als Methoden Parameter verwendet `null`  `String.Empty` wird, sind und äquivalent. `String` `String.Empty`befolgt die W3C-Regeln.  
+  
+ Um stark typisierte Daten zu schreiben, <xref:System.Xml.XmlConvert> verwenden Sie die-Klasse zum Konvertieren von Datentypen in eine Zeichenfolge. Der folgende C# Code konvertiert z. b. die Daten `Double` von `String` in und schreibt das `<price>19.95</price>`-Element.  
+  
+```csharp  
+Double price = 19.95;  
+writer.WriteElementString("price", XmlConvert.ToString(price));  
+```  
+  
+ `XmlTextWriter`überprüft nicht Folgendes:  
+  
+-   Ungültige Zeichen in Attribut-und Elementnamen.  
+  
+-   Unicode-Zeichen, die nicht der angegebenen Codierung entsprechen. Wenn die Unicode-Zeichen nicht der angegebenen Codierung entsprechen, werden `XmlTextWriter` die Unicode-Zeichen von nicht in Zeichen Entitäten mit Escapezeichen versehen.  
+  
+-   Doppelte Attribute.  
+  
+-   Zeichen im öffentlichen Bezeichner DOCTYPE oder System Bezeichner.  
+  
+## <a name="security-considerations"></a>Sicherheitsüberlegungen  
+ Beim Arbeiten mit der <xref:System.Xml.XmlTextWriter> -Klasse sind die folgenden Punkte zu beachten:  
+  
+-   Von ausgelöste Ausnahmen <xref:System.Xml.XmlTextWriter> können Pfadinformationen offenlegen, die nicht an die Anwendung weitergegeben werden sollen. Die Anwendungen müssen diese Ausnahmen abfangen und entsprechend verarbeiten.  
+  
+-   Wenn ein <xref:System.Xml.XmlTextWriter> an eine andere Anwendung übergeben wird, wird der zu Grunde liegenden Stream für diese Anwendung offengelegt. Übergeben Sie an eine teilweise vertrauenswürdige Anwendung ein von der <xref:System.Xml.XmlTextWriter>-Methode erstelltes <xref:System.Xml.XmlWriter>-Objekt anstelle eines <xref:System.Xml.XmlWriter.Create%2A>-Objekts.  
+  
+-   Überprüft keine Daten, die an die-Methode oder <xref:System.Xml.XmlTextWriter.WriteRaw%2A> die <xref:System.Xml.XmlTextWriter.WriteDocType%2A> -Methode übermittelt werden. <xref:System.Xml.XmlTextWriter> Sie sollten keine beliebigen Daten an diese Methoden übergeben.  
+  
+-   Wenn die Standardeinstellungen geändert werden, gibt es keine Garantie dafür, dass die generierte Ausgabe wohlgeformte XML-Daten ist.  
+  
+-   Akzeptieren Sie keine unterstützenden Komponenten, z. <xref:System.Text.Encoding> b. ein Objekt, von einer nicht vertrauenswürdigen Quelle.  
+  
+ ]]></format>
+    </remarks>
+    <related type="Article" href="~/docs/standard/data/xml/index.md">XML-Dokumente und XML-Daten</related>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Erstellt eine Instanz der <see langword="XmlTextWriter" />-Klasse.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XmlTextWriter (System.IO.TextWriter w);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.IO.TextWriter w) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.#ctor(System.IO.TextWriter)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (w As TextWriter)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XmlTextWriter(System::IO::TextWriter ^ w);" />
+      <MemberSignature Language="F#" Value="new System.Xml.XmlTextWriter : System.IO.TextWriter -&gt; System.Xml.XmlTextWriter" Usage="new System.Xml.XmlTextWriter w" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="w" Type="System.IO.TextWriter" />
+      </Parameters>
+      <Docs>
+        <param name="w">Der <see langword="TextWriter" />, in den geschrieben werden soll. Hierbei wird vorausgesetzt, dass der <see langword="TextWriter" /> bereits auf die korrekte Codierung eingestellt ist.</param>
+        <summary>Erstellt mithilfe des angegebenen <see cref="T:System.IO.TextWriter" /> eine Instanz der <see langword="XmlTextWriter" />-Klasse.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XmlTextWriter (System.IO.Stream w, System.Text.Encoding encoding);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.IO.Stream w, class System.Text.Encoding encoding) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.#ctor(System.IO.Stream,System.Text.Encoding)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XmlTextWriter(System::IO::Stream ^ w, System::Text::Encoding ^ encoding);" />
+      <MemberSignature Language="F#" Value="new System.Xml.XmlTextWriter : System.IO.Stream * System.Text.Encoding -&gt; System.Xml.XmlTextWriter" Usage="new System.Xml.XmlTextWriter (w, encoding)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="w" Type="System.IO.Stream" />
+        <Parameter Name="encoding" Type="System.Text.Encoding" />
+      </Parameters>
+      <Docs>
+        <param name="w">Der Stream, in den geschrieben werden soll.</param>
+        <param name="encoding">Die zu generierende Codierung. Wenn die Codierung <see langword="null" /> ist, wird der Stream UTF-8-codiert ausgegeben, und das Codierungsattribut der <see langword="ProcessingInstruction" /> wird nicht berücksichtigt.</param>
+        <summary>Erstellt mithilfe des angegebenen Streams und der angegebenen Codierung eine Instanz der <see langword="XmlTextWriter" />-Klasse.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Die Codierung wird nicht unterstützt, oder es kann nicht in den Stream geschrieben werden.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="w" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XmlTextWriter (string filename, System.Text.Encoding encoding);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string filename, class System.Text.Encoding encoding) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.#ctor(System.String,System.Text.Encoding)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XmlTextWriter(System::String ^ filename, System::Text::Encoding ^ encoding);" />
+      <MemberSignature Language="F#" Value="new System.Xml.XmlTextWriter : string * System.Text.Encoding -&gt; System.Xml.XmlTextWriter" Usage="new System.Xml.XmlTextWriter (filename, encoding)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="filename" Type="System.String" />
+        <Parameter Name="encoding" Type="System.Text.Encoding" />
+      </Parameters>
+      <Docs>
+        <param name="filename">Der Name der Datei, in die geschrieben werden soll. Wenn die Datei vorhanden ist, wird diese abgeschnitten und mit dem neuen Inhalt überschrieben.</param>
+        <param name="encoding">Die zu generierende Codierung. Wenn die Codierung <see langword="null" /> ist, wird die Datei UTF-8-codiert ausgegeben, und das Codierungsattribut der <see langword="ProcessingInstruction" /> wird nicht berücksichtigt.</param>
+        <summary>Erstellt mithilfe der angegebenen Datei eine Instanz der <see cref="T:System.Xml.XmlTextWriter" />-Klasse.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Die Codierung wird nicht unterstützt; der Dateiname ist leer oder enthält nur Leerraum bzw. ein oder mehrere ungültige(s) Zeichen.</exception>
+        <exception cref="T:System.UnauthorizedAccessException">Der Zugriff wird verweigert.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Dateiname ist <see langword="null" />.</exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Das Verzeichnis, in das geschrieben werden soll, wurde nicht gefunden.</exception>
+        <exception cref="T:System.IO.IOException">Der Dateiname enthält eine falsche oder ungültige Syntax für den Dateinamen, Verzeichnisnamen oder die Volumebezeichnung.</exception>
+        <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="BaseStream">
+      <MemberSignature Language="C#" Value="public System.IO.Stream BaseStream { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.IO.Stream BaseStream" />
+      <MemberSignature Language="DocId" Value="P:System.Xml.XmlTextWriter.BaseStream" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property BaseStream As Stream" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::IO::Stream ^ BaseStream { System::IO::Stream ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.BaseStream : System.IO.Stream" Usage="System.Xml.XmlTextWriter.BaseStream" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.IO.Stream</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft das zugrunde liegende Streamobjekt ab.</summary>
+        <value>Der Stream, in den der <see langword="XmlTextWriter" /> schreibt oder <see langword="null" />, wenn der <see langword="XmlTextWriter" /> mithilfe eines <see cref="T:System.IO.TextWriter" /> erstellt wurde, der nicht von der <see cref="T:System.IO.StreamWriter" />-Klasse vererbt wird.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Wenn der Writer mithilfe eines `TextWriter` erstellt wurde, der von der `StreamWriter` -Klasse abgeleitet ist, entspricht diese Eigenschaft der <xref:System.IO.StreamWriter.BaseStream%2A?displayProperty=nameWithType> -Eigenschaft. Wenn der Writer mithilfe eines <xref:System.IO.Stream>erstellt wurde, gibt diese Eigenschaft den `Stream` an den Konstruktor über gebenden zurück. Wenn der Writer mithilfe eines Datei namens erstellt wurde, gibt diese Eigenschaft den `Stream` zurück, der die Datei darstellt.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Close">
+      <MemberSignature Language="C#" Value="public override void Close ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Close() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.Close" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Close ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Close();" />
+      <MemberSignature Language="F#" Value="override this.Close : unit -&gt; unit" Usage="xmlTextWriter.Close " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Schließt diesen Stream und den zugrunde liegenden Stream.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Alle geöffneten Elemente oder Attribute werden automatisch geschlossen.  
+  
+ Diese Methode löst keine Ausnahmen aus.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird ein XML-Fragment geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.Formatting Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.Formatting Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.Formatting Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.Formatting Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.Formatting Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.Formatting Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Flush">
+      <MemberSignature Language="C#" Value="public override void Flush ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Flush() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.Flush" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Flush ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Flush();" />
+      <MemberSignature Language="F#" Value="override this.Flush : unit -&gt; unit" Usage="xmlTextWriter.Flush " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Entleert den Pufferinhalt in die zugrunde liegenden Streams und entleert den zugrunde liegenden Stream ebenfalls.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Dies wird anstelle von <xref:System.Xml.XmlTextWriter.Close%2A> aufgerufen, wenn Sie mehr in den zugrunde liegenden Stream schreiben möchten, ohne zu verlieren, was sich noch im Puffer befindet.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel werden zwei XML-Fragmente geschrieben.  
+  
+ [!code-cpp[XmlTextWriter.Flush#1](~/samples/snippets/cpp/VS_Snippets_Data/XmlTextWriter.Flush/CPP/write2docs.cpp#1)]
+ [!code-csharp[XmlTextWriter.Flush#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlTextWriter.Flush/CS/write2docs.cs#1)]
+ [!code-vb[XmlTextWriter.Flush#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlTextWriter.Flush/VB/write2docs.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Formatting">
+      <MemberSignature Language="C#" Value="public System.Xml.Formatting Formatting { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Xml.Formatting Formatting" />
+      <MemberSignature Language="DocId" Value="P:System.Xml.XmlTextWriter.Formatting" />
+      <MemberSignature Language="VB.NET" Value="Public Property Formatting As Formatting" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Xml::Formatting Formatting { System::Xml::Formatting get(); void set(System::Xml::Formatting value); };" />
+      <MemberSignature Language="F#" Value="member this.Formatting : System.Xml.Formatting with get, set" Usage="System.Xml.XmlTextWriter.Formatting" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Xml.Formatting</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gibt die Formatierung der Ausgabe an.</summary>
+        <value>Einer der <see cref="T:System.Xml.Formatting" />-Werte. Der Standardwert ist <see langword="Formatting.None" /> (keine besondere Formatierung).</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Wenn die `Indented` Option festgelegt ist, werden untergeordnete Elemente mithilfe der <xref:System.Xml.XmlTextWriter.Indentation%2A> - <xref:System.Xml.XmlTextWriter.IndentChar%2A> Eigenschaft und der-Eigenschaft eingezogen. Nur Element Inhalt wird eingezogen. Der folgende C# Code schreibt HTML-Elemente einschließlich gemischtem Inhalt:  
+  
+```csharp  
+XmlTextWriter w = new XmlTextWriter(Console.Out);   
+ w.Formatting = Formatting.Indented;   
+ w.WriteStartElement("ol");   
+ w.WriteStartElement("li");   
+ w.WriteString("The big "); // This means "li" now has a mixed content model.  
+ w.WriteElementString("b", "E");   
+ w.WriteElementString("i", "lephant");   
+ w.WriteString(" walks slowly.");   
+ w.WriteEndElement();   
+ w.WriteEndElement();  
+```  
+  
+ Mit dem obigen Code wird die folgende Ausgabe erzeugt:  
+  
+```xml  
+<ol>   
+  <li>The big <b>E</b><i>lephant</i> walks slowly.</li>   
+</ol>  
+```  
+  
+ Wenn dies in HTML angezeigt wird, wird kein Leerraum zwischen den Fetten und kursiv formatierten Elementen angezeigt. In diesem Beispiel würde das Wort "Elephant" in diesem Beispiel fälschlicherweise beschädigt werden, wenn zwischen diesen Elementen ein Einzug hinzugefügt wurde.  
+  
+> [!NOTE]
+> Wenn Sie Textinhalte schreiben, `String.Empty` wird das Element in den gemischten Inhalts Modus versetzt. Untergeordnete Elemente erben den Status "gemischter Modus" nicht. Ein untergeordnetes Element eines "gemischten" Elements führt einen Einzug durch, es sei denn, es enthält auch gemischte Inhalte. [Element Inhalt](https://www.w3.org/TR/1998/REC-xml-19980210#sec-element-content) und [gemischter Inhalt](https://www.w3.org/TR/1998/REC-xml-19980210#sec-mixed-content) werden gemäß den XML 1,0-Definitionen dieser Begriffe definiert.  
+  
+## Examples  
+ Im folgenden Beispiel wird ein XML-Fragment geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.Formatting Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.Formatting Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.Formatting Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.Formatting Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.Formatting Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.Formatting Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Xml.Formatting" />
+      </Docs>
+    </Member>
+    <Member MemberName="Indentation">
+      <MemberSignature Language="C#" Value="public int Indentation { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 Indentation" />
+      <MemberSignature Language="DocId" Value="P:System.Xml.XmlTextWriter.Indentation" />
+      <MemberSignature Language="VB.NET" Value="Public Property Indentation As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int Indentation { int get(); void set(int value); };" />
+      <MemberSignature Language="F#" Value="member this.Indentation : int with get, set" Usage="System.Xml.XmlTextWriter.Indentation" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft ab oder legt fest, wie viele IndentChars für jede Ebene der Hierarchie geschrieben werden sollen, wenn <see cref="P:System.Xml.XmlTextWriter.Formatting" /> auf <see langword="Formatting.Indented" /> festgelegt ist.</summary>
+        <value>Anzahl von <see langword="IndentChars" /> für jede Ebene. Der Standardwert ist&amp;#160;2.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Der Einzug wird für die folgenden Knoten Typen ausgeführt: `DocumentType`, `Element`, `Comment`, `ProcessingInstruction`und `CDATASection`. Alle anderen Knoten Typen sind nicht betroffen. Der `XmlTextWriter` führt nicht zum Einzug der internen DTD-Teilmenge. Sie können jedoch wie folgt vorgehen, um die Formatierung auf die interne DTD-Teilmenge anzuwenden.  
+  
+```csharp  
+String name = "Employees";  
+String pubid = null;  
+String sysid = null;  
+String subset =  
+@"  
+    <!ELEMENT Employees (Employee)+>  
+    <!ELEMENT Employee EMPTY>  
+    <!ATTLIST Employee firstname CDATA #REQUIRED>  
+    <!ENTITY Company 'Microsoft'>]>  
+";  
+XmlTextWriter tw = new XmlTextWriter(Console.Out);  
+tw.WriteDocType(name, pubid, sysid, subset);  
+```  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird ein XML-Fragment geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.Formatting Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.Formatting Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.Formatting Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.Formatting Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.Formatting Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.Formatting Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Diese Eigenschaft wird auf einen negativen Wert festgelegt.</exception>
+        <altmember cref="P:System.Xml.XmlTextWriter.IndentChar" />
+        <altmember cref="T:System.Xml.Formatting" />
+      </Docs>
+    </Member>
+    <Member MemberName="IndentChar">
+      <MemberSignature Language="C#" Value="public char IndentChar { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance char IndentChar" />
+      <MemberSignature Language="DocId" Value="P:System.Xml.XmlTextWriter.IndentChar" />
+      <MemberSignature Language="VB.NET" Value="Public Property IndentChar As Char" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property char IndentChar { char get(); void set(char value); };" />
+      <MemberSignature Language="F#" Value="member this.IndentChar : char with get, set" Usage="System.Xml.XmlTextWriter.IndentChar" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Char</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft ab oder legt fest, welches Zeichen für den Einzug verwendet werden soll, wenn <see cref="P:System.Xml.XmlTextWriter.Formatting" /> auf <see langword="Formatting.Indented" /> festgelegt ist.</summary>
+        <value>Das für den Einzug zu verwendende Zeichen. Standardmäßig wird ein Leerzeichen verwendet.  
+  
+ <block subset="none" type="note"><para>  
+ Sie können diese Eigenschaft mit dem <see langword="XmlTextWriter" /> auf ein beliebiges Zeichen festlegen. Um die Gültigkeit des XML-Codes sicherzustellen, müssen Sie ein gültiges Leerraumzeichen wie 0x9, 0x10, 0x13 oder 0x20 angeben.  
+  
+</para></block></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Xml.XmlTextWriter.Indentation" />
+        <altmember cref="T:System.Xml.Formatting" />
+      </Docs>
+    </Member>
+    <Member MemberName="LookupPrefix">
+      <MemberSignature Language="C#" Value="public override string LookupPrefix (string ns);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string LookupPrefix(string ns) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.LookupPrefix(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function LookupPrefix (ns As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::String ^ LookupPrefix(System::String ^ ns);" />
+      <MemberSignature Language="F#" Value="override this.LookupPrefix : string -&gt; string" Usage="xmlTextWriter.LookupPrefix ns" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ns" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="ns">Der Namespace-URI, dessen Präfix gesucht werden soll.</param>
+        <summary>Gibt das nächstliegende Präfix zurück, das im aktuellen Namespacebereich für den Namespace-URI definiert ist.</summary>
+        <returns>Das passende Präfix. Oder <see langword="null" />, wenn im aktuellen Gültigkeitsbereich kein übereinstimmender Namespace-URI gefunden wird.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird ein Buch geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteStartElement Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartElement Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteStartElement Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartElement Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteStartElement Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartElement Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="ns" /> ist entweder <see langword="null" /> oder <see langword="String.Empty" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Namespaces">
+      <MemberSignature Language="C#" Value="public bool Namespaces { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool Namespaces" />
+      <MemberSignature Language="DocId" Value="P:System.Xml.XmlTextWriter.Namespaces" />
+      <MemberSignature Language="VB.NET" Value="Public Property Namespaces As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool Namespaces { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.Namespaces : bool with get, set" Usage="System.Xml.XmlTextWriter.Namespaces" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab, der angibt, ob Namespaces unterstützt werden, oder legt diesen fest.</summary>
+        <value><see langword="true" />, um Namespaces zu unterstützen, andernfalls <see langword="false" />.  
+  
+Die Standardeinstellung ist <see langword="true" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Diese Eigenschaft bestimmt, ob der Writer die W3C-Empfehlung " [Namespaces in XML](https://www.w3.org/TR/REC-xml-names) " unterstützt.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">Diese Eigenschaft können Sie nur im Zustand <see langword="WriteState.Start" /> ändern.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="QuoteChar">
+      <MemberSignature Language="C#" Value="public char QuoteChar { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance char QuoteChar" />
+      <MemberSignature Language="DocId" Value="P:System.Xml.XmlTextWriter.QuoteChar" />
+      <MemberSignature Language="VB.NET" Value="Public Property QuoteChar As Char" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property char QuoteChar { char get(); void set(char value); };" />
+      <MemberSignature Language="F#" Value="member this.QuoteChar : char with get, set" Usage="System.Xml.XmlTextWriter.QuoteChar" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Char</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft ab oder legt fest, welches Zeichen als Anführungszeichen für Attributwerte verwendet werden soll.</summary>
+        <value>Das als Anführungszeichen für Attributwerte zu verwendende Zeichen. Dabei muss es sich um ein einzelnes&amp;Anführungszeichen (#39;) oder doppelte Anführungszeichen (&amp;#34;). Standardmäßig werden doppelte Anführungszeichen verwendet.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Diese Eigenschaft wird statt auf ein einfaches oder doppeltes Anführungszeichen auf einen anderen Wert festgelegt.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteBase64">
+      <MemberSignature Language="C#" Value="public override void WriteBase64 (byte[] buffer, int index, int count);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteBase64(unsigned int8[] buffer, int32 index, int32 count) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteBase64(System.Byte[],System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteBase64 (buffer As Byte(), index As Integer, count As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteBase64(cli::array &lt;System::Byte&gt; ^ buffer, int index, int count);" />
+      <MemberSignature Language="F#" Value="override this.WriteBase64 : byte[] * int * int -&gt; unit" Usage="xmlTextWriter.WriteBase64 (buffer, index, count)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="buffer" Type="System.Byte[]" />
+        <Parameter Name="index" Type="System.Int32" />
+        <Parameter Name="count" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="buffer">Zu codierendes Bytearray.</param>
+        <param name="index">Die Position innerhalb des Puffers, die den Anfang der zu schreibenden Bytes kennzeichnet.</param>
+        <param name="count">Die Anzahl der zu schreibenden Bytes.</param>
+        <summary>Codiert die angegebenen binären Bytes als base64 und schreibt den resultierenden Text.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird eine Eingabedatei mit `WriteBase64` codiert und eine temporäre XML-Datei generiert. Die temporäre XML-Datei wird mit der <xref:System.Xml.XmlTextReader.ReadBase64%2A> -Methode decodiert und mit der ursprünglichen Datei verglichen.  
+  
+ [!code-cpp[XmlWriter.WriteBase64#1](~/samples/snippets/cpp/VS_Snippets_Data/XmlWriter.WriteBase64/CPP/writebase64.cpp#1)]
+ [!code-csharp[XmlWriter.WriteBase64#1](~/samples/snippets/csharp/VS_Snippets_Data/XmlWriter.WriteBase64/CS/writebase64.cs#1)]
+ [!code-vb[XmlWriter.WriteBase64#1](~/samples/snippets/visualbasic/VS_Snippets_Data/XmlWriter.WriteBase64/VB/writebase64.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="buffer" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException">Die Pufferlänge minus <paramref name="index" /> ist kleiner als <paramref name="count" />.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> oder <paramref name="count" /> ist kleiner als 0.</exception>
+        <exception cref="T:System.InvalidOperationException"><see cref="P:System.Xml.XmlTextWriter.WriteState" /> ist <see langword="Closed" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteBinHex">
+      <MemberSignature Language="C#" Value="public override void WriteBinHex (byte[] buffer, int index, int count);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteBinHex(unsigned int8[] buffer, int32 index, int32 count) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteBinHex(System.Byte[],System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteBinHex (buffer As Byte(), index As Integer, count As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteBinHex(cli::array &lt;System::Byte&gt; ^ buffer, int index, int count);" />
+      <MemberSignature Language="F#" Value="override this.WriteBinHex : byte[] * int * int -&gt; unit" Usage="xmlTextWriter.WriteBinHex (buffer, index, count)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="buffer" Type="System.Byte[]" />
+        <Parameter Name="index" Type="System.Int32" />
+        <Parameter Name="count" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="buffer">Zu codierendes Bytearray.</param>
+        <param name="index">Die Position innerhalb des Puffers, die den Anfang der zu schreibenden Bytes kennzeichnet.</param>
+        <param name="count">Die Anzahl der zu schreibenden Bytes.</param>
+        <summary>Codiert die angegebenen binären Bytes als Binhex und schreibt den resultierenden Text.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="buffer" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException">Die Pufferlänge minus <paramref name="index" /> ist kleiner als <paramref name="count" />.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> oder <paramref name="count" /> ist kleiner als 0.</exception>
+        <exception cref="T:System.InvalidOperationException">Der <see cref="P:System.Xml.XmlTextWriter.WriteState" /> ist Closed.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteCData">
+      <MemberSignature Language="C#" Value="public override void WriteCData (string text);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteCData(string text) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteCData(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteCData (text As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteCData(System::String ^ text);" />
+      <MemberSignature Language="F#" Value="override this.WriteCData : string -&gt; unit" Usage="xmlTextWriter.WriteCData text" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="text" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="text">Text, der in den CDATA-Block eingefügt werden soll.</param>
+        <summary>Schreibt einen &lt;![CDATA[...]]&gt;-Block mit dem angegebenen Text.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Wenn `text` entweder `null` oder \<ist, wird von dieser Methode ein leerer CDATA-Block geschrieben, z. b.! [ `String.Empty` CDATA []]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Der Text ergibt kein wohlgeformtes XML-Dokument.</exception>
+        <exception cref="T:System.InvalidOperationException"><see cref="P:System.Xml.XmlTextWriter.WriteState" /> ist <see langword="Closed" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteCharEntity">
+      <MemberSignature Language="C#" Value="public override void WriteCharEntity (char ch);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteCharEntity(char ch) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteCharEntity(System.Char)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteCharEntity (ch As Char)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteCharEntity(char ch);" />
+      <MemberSignature Language="F#" Value="override this.WriteCharEntity : char -&gt; unit" Usage="xmlTextWriter.WriteCharEntity ch" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ch" Type="System.Char" />
+      </Parameters>
+      <Docs>
+        <param name="ch">Unicode-Zeichen, für das eine Zeichenentität generiert werden soll.</param>
+        <summary>Erzwingt das Generieren einer Zeichenentität für den angegebenen Unicode-Zeichenwert.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Diese Methode schreibt das Unicode-Zeichen im Entitäts Verweis Format des hexadezimal Zeichensatzes.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird die `WriteCharEntity` -Methode zum Schreiben einer e-Mail-Adresse verwendet.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteTimeSpan Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteTimeSpan Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteTimeSpan Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteTimeSpan Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteTimeSpan Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteTimeSpan Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Das Zeichen liegt im Ersatzzeichenpaar-Bereich, <see langword="0xd800" /> - <see langword="0xdfff" />, oder aus dem Text würde ein wohlgeformtes XML-Dokument resultieren.</exception>
+        <exception cref="T:System.InvalidOperationException"><see cref="P:System.Xml.XmlTextWriter.WriteState" /> ist <see langword="Closed" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteChars">
+      <MemberSignature Language="C#" Value="public override void WriteChars (char[] buffer, int index, int count);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteChars(char[] buffer, int32 index, int32 count) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteChars(System.Char[],System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteChars (buffer As Char(), index As Integer, count As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteChars(cli::array &lt;char&gt; ^ buffer, int index, int count);" />
+      <MemberSignature Language="F#" Value="override this.WriteChars : char[] * int * int -&gt; unit" Usage="xmlTextWriter.WriteChars (buffer, index, count)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="buffer" Type="System.Char[]" />
+        <Parameter Name="index" Type="System.Int32" />
+        <Parameter Name="count" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="buffer">Zeichenarray, das den zu schreibenden Text enthält.</param>
+        <param name="index">Die Position innerhalb des Puffers, die den Anfang des zu schreibenden Texts kennzeichnet.</param>
+        <param name="count">Die Anzahl der zu schreibenden Zeichen.</param>
+        <summary>Schreibt Text in jeweils einen Puffer.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Diese Methode kann verwendet werden, um große Mengen von Text jeweils einen Puffer zu schreiben.  
+  
+ Eine spezielle Behandlung muss durchgeführt werden, `WriteChars` um sicherzustellen, dass die Methode Ersatzpaar Zeichen nicht über mehrere Puffer Schreibvorgänge hinweg trennt. In der XML-Spezifikation werden die gültigen Bereiche für Ersatz Zeichenpaare definiert.  
+  
+ Eine Ausnahme wird ausgelöst, wenn Ersatzpaar Zeichen geschrieben werden, die dazu führen, dass die Ersatz Zeichenpaar Zeichen im Puffer aufgeteilt werden.  
+  
+   
+  
+## Examples  
+ [!code-csharp[XmlTextWriter.WriteChars#1](~/samples/snippets/csharp/VS_Snippets_Data/xmltextwriter.writechars/cs/xmlwriterwritecharsexample.cs#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="buffer" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> oder <paramref name="count" /> ist kleiner als 0.  
+  
+- oder - 
+Die Länge des Puffers minus <paramref name="index" /> ist kleiner als <paramref name="count" />. Der Aufruf führt zur Aufteilung eines Ersatzzeichenpaars oder zum Schreiben eines ungültigen Ersatzzeichenpaars.</exception>
+        <exception cref="T:System.InvalidOperationException">Der <see cref="P:System.Xml.XmlTextWriter.WriteState" /> ist Closed.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteComment">
+      <MemberSignature Language="C#" Value="public override void WriteComment (string text);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteComment(string text) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteComment(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteComment (text As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteComment(System::String ^ text);" />
+      <MemberSignature Language="F#" Value="override this.WriteComment : string -&gt; unit" Usage="xmlTextWriter.WriteComment text" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="text" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="text">Text, der in den Kommentar eingefügt werden soll.</param>
+        <summary>Schreibt den Kommentar &lt;!--...--&gt; mit dem angegebenen Text.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Wenn `text` entweder `null` oder `Comment` \<ist , schreibt diese Methode einen ohne Dateninhalt, z. `String.Empty` b.!---->.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird eine XML-Datei geschrieben, die ein Buch darstellt.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Der Text ergibt kein wohlgeformtes XML-Dokument.</exception>
+        <exception cref="T:System.InvalidOperationException"><see cref="P:System.Xml.XmlTextWriter.WriteState" /> ist <see langword="Closed" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteDocType">
+      <MemberSignature Language="C#" Value="public override void WriteDocType (string name, string pubid, string sysid, string subset);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteDocType(string name, string pubid, string sysid, string subset) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteDocType(System.String,System.String,System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteDocType (name As String, pubid As String, sysid As String, subset As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteDocType(System::String ^ name, System::String ^ pubid, System::String ^ sysid, System::String ^ subset);" />
+      <MemberSignature Language="F#" Value="override this.WriteDocType : string * string * string * string -&gt; unit" Usage="xmlTextWriter.WriteDocType (name, pubid, sysid, subset)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="pubid" Type="System.String" />
+        <Parameter Name="sysid" Type="System.String" />
+        <Parameter Name="subset" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">Der Name des DOCTYPE. Dieser darf nicht leer sein.</param>
+        <param name="pubid">Bei einem Wert ungleich NULL wird auch PUBLIC "pubid" "sysid" geschrieben, wobei <paramref name="pubid" /> und <paramref name="sysid" /> durch die Werte der angegebenen Argumente ersetzt werden.</param>
+        <param name="sysid">Wenn <paramref name="pubid" /> NULL und <paramref name="sysid" /> ungleich NULL ist, wird SYSTEM "sysid" geschrieben, wobei <paramref name="sysid" /> durch den Wert dieses Arguments ersetzt wird.</param>
+        <param name="subset">Wenn nicht NULL, wird [subset] geschrieben, wobei subset durch den Wert dieses Arguments ersetzt wird.</param>
+        <summary>Schreibt die DOCTYPE-Deklaration mit dem angegebenen Namen und optionalen Attributen.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Diese Methode überprüft nicht in `pubid`, `sysid` oder `subset`auf ungültige Zeichen. Außerdem wird nicht überprüft, ob die interne Teilmenge wohl geformt ist.  
+  
+> [!IMPORTANT]
+>  Überprüft keine Daten, die an die <xref:System.Xml.XmlTextWriter.WriteDocType%2A> -Methode übermittelt werden. <xref:System.Xml.XmlTextWriter> Sie sollten keine beliebigen Daten an diese Methode übergeben.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird eine XML-Datei geschrieben, die ein Buch darstellt.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">Diese Methode wurde außerhalb des Prologs (nach dem Stammelement) aufgerufen.</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="name" /> oder <see langword="null" /> ist <see langword="String.Empty" />.  
+  
+- oder - 
+Der Wert für <paramref name="name" /> würde zu ungültigem XML-Code führen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteEndAttribute">
+      <MemberSignature Language="C#" Value="public override void WriteEndAttribute ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteEndAttribute() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteEndAttribute" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteEndAttribute ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteEndAttribute();" />
+      <MemberSignature Language="F#" Value="override this.WriteEndAttribute : unit -&gt; unit" Usage="xmlTextWriter.WriteEndAttribute " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Schließt den vorherigen Aufruf von <see cref="M:System.Xml.XmlTextWriter.WriteStartAttribute(System.String,System.String,System.String)" />.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Wenn Sie aufzurufen `WriteStartAttribute`, können Sie das-Attribut mit dieser Methode schließen.  
+  
+ Sie können das Attribut auch schließen, indem `WriteStartAttribute` Sie erneut aufrufen <xref:System.Xml.XmlWriter.WriteAttributeString%2A>, aufrufen oder <xref:System.Xml.XmlTextWriter.WriteEndElement%2A>aufrufen.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird ein Buch geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteStartElement Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartElement Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteStartElement Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartElement Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteStartElement Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartElement Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteEndDocument">
+      <MemberSignature Language="C#" Value="public override void WriteEndDocument ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteEndDocument() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteEndDocument" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteEndDocument ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteEndDocument();" />
+      <MemberSignature Language="F#" Value="override this.WriteEndDocument : unit -&gt; unit" Usage="xmlTextWriter.WriteEndDocument " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Schließt alle geöffneten Elemente oder Attribute und setzt den Writer in den Startzustand zurück.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird eine XML-Datei geschrieben, die ein Buch darstellt.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Das XML-Dokument ist ungültig.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteEndElement">
+      <MemberSignature Language="C#" Value="public override void WriteEndElement ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteEndElement() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteEndElement" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteEndElement ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteEndElement();" />
+      <MemberSignature Language="F#" Value="override this.WriteEndElement : unit -&gt; unit" Usage="xmlTextWriter.WriteEndElement " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Schließt ein Element und löst den entsprechenden Namespacebereich auf.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Wenn das Element keinen Inhalt enthält, wird ein kurzes Endtag "/>" geschrieben. Andernfalls wird ein vollständiges Endtag geschrieben.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird eine XML-Datei geschrieben, die ein Buch darstellt.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteEndElement Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteEndElement Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteEndElement Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteEndElement Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteEndElement Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteEndElement Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteEntityRef">
+      <MemberSignature Language="C#" Value="public override void WriteEntityRef (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteEntityRef(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteEntityRef(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteEntityRef (name As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteEntityRef(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="override this.WriteEntityRef : string -&gt; unit" Usage="xmlTextWriter.WriteEntityRef name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">Name des Entitätsverweises.</param>
+        <summary>Schreibt einen Entitätsverweis als <see langword="&amp;name;" />.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird eine XML-Datei geschrieben, die ein Buch darstellt.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Der Text ergibt kein wohlgeformtes XML-Dokument, oder <paramref name="name" /> ist entweder <see langword="null" /> oder <see langword="String.Empty" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteFullEndElement">
+      <MemberSignature Language="C#" Value="public override void WriteFullEndElement ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteFullEndElement() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteFullEndElement" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteFullEndElement ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteFullEndElement();" />
+      <MemberSignature Language="F#" Value="override this.WriteFullEndElement : unit -&gt; unit" Usage="xmlTextWriter.WriteFullEndElement " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Schließt ein Element und löst den entsprechenden Namespacebereich auf.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Diese Methode schreibt immer das vollständige Endtag. Dies ist nützlich, wenn Sie mit Elementen arbeiten, die ein vollständiges Endtag enthalten müssen. Beispielsweise erwarten Browser, dass HTML-Skriptblöcke mit "\</script >" geschlossen werden.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird ein Element ohne Inhalt geschrieben. Es verwendet "Write-fullEndElement", um das vollständige Endelementtag zu schreiben.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteFullEndElement Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteFullEndElement Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteFullEndElement Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteFullEndElement Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteFullEndElement Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteFullEndElement Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteName">
+      <MemberSignature Language="C#" Value="public override void WriteName (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteName(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteName(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteName (name As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteName(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="override this.WriteName : string -&gt; unit" Usage="xmlTextWriter.WriteName name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">Zu schreibender Name.</param>
+        <summary>Schreibt den angegebenen Namen und prüft dessen Gültigkeit entsprechend der <see href="https://www.w3.org/TR/1998/REC-xml-19980210#NT-Name">W3C-Empfehlung für XML, Version 1.0</see>.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Wenn <xref:System.Xml.XmlTextWriter.Namespaces%2A> auf `true`festgelegt ist `WriteName` , prüft auch, ob der Name auch gemäß der W3C-Empfehlung "Namespaces in XML" gültig ist.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="name" /> ist kein gültiger XML-Name, oder <paramref name="name" /> ist <see langword="null" /> oder <see langword="String.Empty" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteNmToken">
+      <MemberSignature Language="C#" Value="public override void WriteNmToken (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteNmToken(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteNmToken(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteNmToken (name As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteNmToken(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="override this.WriteNmToken : string -&gt; unit" Usage="xmlTextWriter.WriteNmToken name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">Zu schreibender Name.</param>
+        <summary>Schreibt den angegebenen Namen und prüft, ob es ein gültiger <see langword="NmToken" /> ist, entsprechend der <see href="https://www.w3.org/TR/1998/REC-xml-19980210#NT-Name">W3C-Empfehlung für XML, Version 1.0</see>.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="name" /> ist kein gültiges <see langword="NmToken" />; oder <paramref name="name" /> ist <see langword="null" /> oder <see langword="String.Empty" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteProcessingInstruction">
+      <MemberSignature Language="C#" Value="public override void WriteProcessingInstruction (string name, string text);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteProcessingInstruction(string name, string text) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteProcessingInstruction(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteProcessingInstruction (name As String, text As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteProcessingInstruction(System::String ^ name, System::String ^ text);" />
+      <MemberSignature Language="F#" Value="override this.WriteProcessingInstruction : string * string -&gt; unit" Usage="xmlTextWriter.WriteProcessingInstruction (name, text)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="text" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">Name der Verarbeitungsanweisung.</param>
+        <param name="text">In die Verarbeitungsanweisung einzufügender Text.</param>
+        <summary>Schreibt eine Verarbeitungsanweisung mit einem Leerzeichen zwischen dem Namen und dem Text wie folgt: &lt;?name text?&gt;.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Wenn `text` entweder `null` oder `ProcessingInstruction` \<ist , schreibt diese Methode einen ohne Dateninhalt, z. b. `String.Empty` ? Name? >.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird eine XML-Datei geschrieben, die ein Buch darstellt.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Der Text ergibt kein wohlgeformtes XML-Dokument.  
+  
+ <paramref name="name" /> ist entweder <see langword="null" /> oder <see langword="String.Empty" />.  
+  
+Diese Methode wird zum Erstellen einer XML-Deklaration nach einem Aufruf von <see cref="M:System.Xml.XmlTextWriter.WriteStartDocument" /> verwendet.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteQualifiedName">
+      <MemberSignature Language="C#" Value="public override void WriteQualifiedName (string localName, string ns);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteQualifiedName(string localName, string ns) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteQualifiedName(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteQualifiedName (localName As String, ns As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteQualifiedName(System::String ^ localName, System::String ^ ns);" />
+      <MemberSignature Language="F#" Value="override this.WriteQualifiedName : string * string -&gt; unit" Usage="xmlTextWriter.WriteQualifiedName (localName, ns)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="localName" Type="System.String" />
+        <Parameter Name="ns" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="localName">Der zu schreibende lokale Name.</param>
+        <param name="ns">Der Namespace-URI, der dem Namen zugeordnet werden soll.</param>
+        <summary>Schreibt den durch den Namespace angegebenen Namen. Diese Methode sucht das Präfix im Gültigkeitsbereich des Namespaces.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Beispielsweise der folgende Microsoft Visual C# Code:  
+  
+```csharp  
+writer.Formatting = Formatting.Indented;  
+writer.WriteStartElement("root");  
+ writer.WriteAttributeString("xmlns","x",null,"urn:abc");  
+ writer.WriteStartElement("item");  
+ writer.WriteStartAttribute("href",null);  
+ writer.WriteString("#");  
+ writer.WriteQualifiedName("test","urn:abc");  
+ writer.WriteEndAttribute();  
+ writer.WriteEndElement();  
+ writer.WriteEndElement();  
+ writer.Close();  
+```  
+  
+ Generiert die folgende Ausgabe:  
+  
+```xml  
+<root xmlns:x="urn:abc">  
+ <item href="#x:test"/>  
+ </root>  
+```  
+  
+ Wenn `ns` dem aktuellen Standard Namespace zugeordnet ist, wird kein Präfix generiert.  
+  
+ Beim Schreiben von Attributwerten generiert diese Methode ein Präfix `ns` , wenn nicht gefunden wird. Beim Schreiben von Element Inhalt wird eine Ausnahme ausgelöst, `ns` wenn nicht gefunden wird.  
+  
+ Wenn dieser Writer Namespaces unterstützt<xref:System.Xml.XmlTextWriter.Namespaces%2A> (ist auf `true`festgelegt), überprüft diese Methode auch, ob der Name gemäß der [W3C-Empfehlung "Namespaces in XML](https://www.w3.org/TR/REC-xml-names)" gültig ist.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird ein Teil eines XSD-Schemas geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteQualifiedName Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteQualifiedName Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteQualifiedName Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteQualifiedName Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteQualifiedName Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteQualifiedName Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="localName" /> ist entweder <see langword="null" /> oder <see langword="String.Empty" />.  
+  
+ <paramref name="localName" /> ist kein entsprechend der W3C-Spezifikation für Namespaces gültiger Name.</exception>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="WriteRaw">
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Schreibt unformatiertes Markup manuell.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="WriteRaw">
+      <MemberSignature Language="C#" Value="public override void WriteRaw (string data);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteRaw(string data) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteRaw(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteRaw (data As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteRaw(System::String ^ data);" />
+      <MemberSignature Language="F#" Value="override this.WriteRaw : string -&gt; unit" Usage="xmlTextWriter.WriteRaw data" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="data" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="data">Zeichenfolge, die den zu schreibenden Text enthält.</param>
+        <summary>Schreibt unformatiertes Markup manuell aus einer Zeichenfolge.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Diese Methode führt keine Escapezeichen für Sonderzeichen aus.  
+  
+> [!IMPORTANT]
+>  Überprüft keine Daten, die an die <xref:System.Xml.XmlTextWriter.WriteRaw%2A> -Methode übermittelt werden. <xref:System.Xml.XmlTextWriter> Sie sollten keine beliebigen Daten an diese Methode übergeben.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird mithilfe der `WriteRaw` -Methode eine Zeichenfolge geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteRaw1 Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteRaw1 Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteRaw1 Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteRaw1 Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteRaw1 Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteRaw1 Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteRaw">
+      <MemberSignature Language="C#" Value="public override void WriteRaw (char[] buffer, int index, int count);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteRaw(char[] buffer, int32 index, int32 count) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteRaw(System.Char[],System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteRaw (buffer As Char(), index As Integer, count As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteRaw(cli::array &lt;char&gt; ^ buffer, int index, int count);" />
+      <MemberSignature Language="F#" Value="override this.WriteRaw : char[] * int * int -&gt; unit" Usage="xmlTextWriter.WriteRaw (buffer, index, count)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="buffer" Type="System.Char[]" />
+        <Parameter Name="index" Type="System.Int32" />
+        <Parameter Name="count" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="buffer">Zeichenarray, das den zu schreibenden Text enthält.</param>
+        <param name="index">Die Position innerhalb des Puffers, die den Anfang des zu schreibenden Texts kennzeichnet.</param>
+        <param name="count">Die Anzahl der zu schreibenden Zeichen.</param>
+        <summary>Schreibt unformatiertes Markup manuell aus einem Zeichenpuffer.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Diese Methode führt keine Escapezeichen für Sonderzeichen aus.  
+  
+> [!IMPORTANT]
+>  Überprüft keine Daten, die an die <xref:System.Xml.XmlTextWriter.WriteRaw%2A> -Methode übermittelt werden. <xref:System.Xml.XmlTextWriter> Sie sollten keine beliebigen Daten an diese Methode übergeben.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="buffer" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> oder <paramref name="count" /> ist kleiner als 0.  
+  
+- oder - 
+Die Pufferlänge minus <paramref name="index" /> ist kleiner als <paramref name="count" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteStartAttribute">
+      <MemberSignature Language="C#" Value="public override void WriteStartAttribute (string prefix, string localName, string ns);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteStartAttribute(string prefix, string localName, string ns) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteStartAttribute(System.String,System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteStartAttribute (prefix As String, localName As String, ns As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteStartAttribute(System::String ^ prefix, System::String ^ localName, System::String ^ ns);" />
+      <MemberSignature Language="F#" Value="override this.WriteStartAttribute : string * string * string -&gt; unit" Usage="xmlTextWriter.WriteStartAttribute (prefix, localName, ns)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="prefix" Type="System.String" />
+        <Parameter Name="localName" Type="System.String" />
+        <Parameter Name="ns" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="prefix"><see langword="Namespace" />-Präfix des Attributs.</param>
+        <param name="localName"><see langword="LocalName" /> des Attributs.</param>
+        <param name="ns"><see langword="NamespaceURI" /> des Attributs.</param>
+        <summary>Schreibt den Anfang eines Attributs.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Dies ist eine erweiterte Version von, <xref:System.Xml.XmlWriter.WriteAttributeString%2A> mit der Sie einen Attribut Wert mit mehreren Schreib Methoden, <xref:System.Xml.XmlTextWriter.WriteString%2A>z. b., schreiben können.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird ein Buch geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteStartElement Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartElement Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteStartElement Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartElement Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteStartElement Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartElement Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="localName" /> ist entweder <see langword="null" /> oder <see langword="String.Empty" />.</exception>
+        <altmember cref="M:System.Xml.XmlTextWriter.WriteEndAttribute" />
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="WriteStartDocument">
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Schreibt die XML-Deklaration mit der Version "1.0".</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="WriteStartDocument">
+      <MemberSignature Language="C#" Value="public override void WriteStartDocument ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteStartDocument() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteStartDocument" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteStartDocument ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteStartDocument();" />
+      <MemberSignature Language="F#" Value="override this.WriteStartDocument : unit -&gt; unit" Usage="xmlTextWriter.WriteStartDocument " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Schreibt die XML-Deklaration mit der Version "1.0".</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Die Codierungs Ebene des Dokuments hängt von der Implementierung des Writers ab. Wenn z. b. <xref:System.Text.Encoding> ein Objekt `XmlTextWriter` im Konstruktor angegeben ist, bestimmt dies den Wert des Codierungs Attributs. Diese Methode erstellt kein eigenständiges Attribut.  
+  
+ Wenn `WriteStartDocument` aufgerufen wird, überprüft der Writer, ob es sich um ein wohl geformtes XML-Dokument handelt. Beispielsweise wird überprüft, ob die XML-Deklaration der erste Knoten ist, dass nur ein Element auf Stamm Ebene vorhanden ist usw. Wenn diese Methode nicht aufgerufen wird, geht der Writer davon aus, dass ein XML-Fragment geschrieben wird, und wendet keine Regeln auf Stamm Ebene an.  
+  
+ Wenn `WriteStartDocument` aufgerufen wurde und dann die <xref:System.Xml.XmlTextWriter.WriteProcessingInstruction%2A> -Methode verwendet wird, um eine andere XML-Deklaration zu erstellen, wird eine-Ausnahme ausgelöst.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird eine XML-Datei geschrieben, die ein Buch darstellt.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteStartDocument Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartDocument Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">Dies ist nicht die erste nach dem Konstruktor aufgerufene Schreibmethode.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteStartDocument">
+      <MemberSignature Language="C#" Value="public override void WriteStartDocument (bool standalone);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteStartDocument(bool standalone) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteStartDocument(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteStartDocument (standalone As Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteStartDocument(bool standalone);" />
+      <MemberSignature Language="F#" Value="override this.WriteStartDocument : bool -&gt; unit" Usage="xmlTextWriter.WriteStartDocument standalone" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="standalone" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="standalone">Wenn <see langword="true" />, wird "standalone=yes" geschrieben, wenn <see langword="false" />, wird "standalone=no" geschrieben.</param>
+        <summary>Schreibt die XML-Deklaration mit der Version "1.0" und dem eigenständigen Attribut.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Die Codierungs Ebene des Dokuments hängt von der Implementierung des Writers ab. Wenn z. b. <xref:System.Text.Encoding> ein Objekt `XmlTextWriter` im Konstruktor angegeben ist, bestimmt dies den Wert des Codierungs Attributs.  
+  
+ Wenn `WriteStartDocument` aufgerufen wird, überprüft der Writer, ob es sich um ein wohl geformtes XML-Dokument handelt. Beispielsweise wird überprüft, ob die XML-Deklaration der erste Knoten ist, dass nur ein Element auf Stamm Ebene vorhanden ist usw. Wenn diese Methode nicht aufgerufen wird, geht der Writer davon aus, dass ein XML-Fragment geschrieben wird, und wendet keine Regeln auf Stamm Ebene an.  
+  
+ Wenn `WriteStartDocument` aufgerufen wurde und dann die <xref:System.Xml.XmlTextWriter.WriteProcessingInstruction%2A> -Methode verwendet wird, um eine andere XML-Deklaration zu erstellen, wird eine-Ausnahme ausgelöst.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">Dies ist nicht die erste nach dem Konstruktor aufgerufene Schreibmethode.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteStartElement">
+      <MemberSignature Language="C#" Value="public override void WriteStartElement (string prefix, string localName, string ns);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteStartElement(string prefix, string localName, string ns) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteStartElement(System.String,System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteStartElement (prefix As String, localName As String, ns As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteStartElement(System::String ^ prefix, System::String ^ localName, System::String ^ ns);" />
+      <MemberSignature Language="F#" Value="override this.WriteStartElement : string * string * string -&gt; unit" Usage="xmlTextWriter.WriteStartElement (prefix, localName, ns)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="prefix" Type="System.String" />
+        <Parameter Name="localName" Type="System.String" />
+        <Parameter Name="ns" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="prefix">Das Namespacepräfix des Elements.</param>
+        <param name="localName">Der lokale Name des Elements.</param>
+        <param name="ns">Der Namespace-URI, der dem Element zugeordnet werden soll. Wenn sich dieser Namespace bereits im Gültigkeitsbereich befindet und dem Namespace ein Präfix zugeordnet ist, schreibt der Writer automatisch auch das Präfix.</param>
+        <summary>Schreibt das angegebene Starttag und ordnet dieses dem angegebenen Namespace und Präfix zu.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Nachdem Sie diese Methode aufgerufen haben, können Sie entweder Attribute schreiben oder <xref:System.Xml.XmlTextWriter.WriteComment%2A>mithilfe <xref:System.Xml.XmlTextWriter.WriteString%2A>von, <xref:System.Xml.XmlTextWriter.WriteStartElement%2A> oder für untergeordnete Elemente Inhalte erstellen. Sie können das-Element mit <xref:System.Xml.XmlTextWriter.WriteEndElement%2A> schließen, wenn ein Endtag geschrieben wird.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird ein Buch geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.WriteStartElement Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartElement Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.WriteStartElement Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartElement Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.WriteStartElement Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.WriteStartElement Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">Der Writer ist geschlossen.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteState">
+      <MemberSignature Language="C#" Value="public override System.Xml.WriteState WriteState { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Xml.WriteState WriteState" />
+      <MemberSignature Language="DocId" Value="P:System.Xml.XmlTextWriter.WriteState" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property WriteState As WriteState" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Xml::WriteState WriteState { System::Xml::WriteState get(); };" />
+      <MemberSignature Language="F#" Value="member this.WriteState : System.Xml.WriteState" Usage="System.Xml.XmlTextWriter.WriteState" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Xml.WriteState</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den Zustand des Writers ab.</summary>
+        <value>Einer der <see cref="T:System.Xml.WriteState" />-Werte.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteString">
+      <MemberSignature Language="C#" Value="public override void WriteString (string text);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteString(string text) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteString(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteString (text As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteString(System::String ^ text);" />
+      <MemberSignature Language="F#" Value="override this.WriteString : string -&gt; unit" Usage="xmlTextWriter.WriteString text" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="text" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="text">Zu schreibender Text.</param>
+        <summary>Schreibt den angegebenen Textinhalt.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ `WriteString`führt Folgendes aus:  
+  
+-   Die Zeichen `&`, `<`, und `>` werden durch ersetzt `&amp;`, `&lt;`, und `&gt;`bzw.  
+  
+-   Zeichen Werte im Bereich 0x-0x1F (ausgenommen Leerraum Zeichen 0x9, 0xA und 0xD) werden durch numerische Zeichen Entitäten ersetzt (`&#0;` bis `&#0x1F`).  
+  
+-   Wenn `WriteString` heißt im Kontext eines Attributwerts durch doppelte und einfache Anführungszeichen ersetzt `&quot;` und `&apos;` bzw.  
+  
+ Diese Eingabe Zeichenfolge `test<item>test` wird z. b. wie folgt geschrieben:  
+  
+```  
+test&lt;item&gt;test  
+```  
+  
+ Wenn `text` entweder `null` oder `String.Empty` ist, schreibt diese Methode einen Textknoten ohne Dateninhalt.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird ein XML-Fragment geschrieben.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.Formatting Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.Formatting Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.Formatting Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.Formatting Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.Formatting Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.Formatting Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Die Textzeichenfolge enthält ein ungültiges Ersatzzeichenpaar.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteSurrogateCharEntity">
+      <MemberSignature Language="C#" Value="public override void WriteSurrogateCharEntity (char lowChar, char highChar);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteSurrogateCharEntity(char lowChar, char highChar) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteSurrogateCharEntity(System.Char,System.Char)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteSurrogateCharEntity (lowChar As Char, highChar As Char)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteSurrogateCharEntity(char lowChar, char highChar);" />
+      <MemberSignature Language="F#" Value="override this.WriteSurrogateCharEntity : char * char -&gt; unit" Usage="xmlTextWriter.WriteSurrogateCharEntity (lowChar, highChar)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="lowChar" Type="System.Char" />
+        <Parameter Name="highChar" Type="System.Char" />
+      </Parameters>
+      <Docs>
+        <param name="lowChar">Das niedrige Ersatzzeichen. Dabei muss es sich um einen Wert zwischen <see langword="0xDC00" /> und <see langword="0xDFFF" /> handeln.</param>
+        <param name="highChar">Das hohe Ersatzzeichen. Dabei muss es sich um einen Wert zwischen <see langword="0xD800" /> und <see langword="0xDBFF" /> handeln.</param>
+        <summary>Generiert und schreibt die Ersatzzeichenentität für das Ersatzzeichenpaar.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Diese Methode gilt nur für Systeme, die UTF-16-Codierung verwenden.  
+  
+ Die Ersatz Zeichen Entität wird im hexadezimalen Format geschrieben. Der Bereich für Ersatz Zeichen ist  `#x10000` . `#x10FFFF` Die folgende Formel wird verwendet, um die Ersatz Zeichen Entität zu`highChar`generieren: `0x400` (`0xDC00` -  - `0xD800`) * + `0x10000`(`lowChar`) +.  
+  
+ Sowohl für HTML als auch für XML basiert der Dokument Zeichensatz (und damit auch die Notation numerischer Zeichen Verweise) auf UCS [ISO-10646]. Ein einzelner numerischer Zeichen Verweis in einem Quelldokument kann daher in einigen Fällen 2 16-Bit-Einheiten in einer Zeichenfolge entsprechen (ein hohes Ersatz Zeichen und ein niedriges Ersatz Zeichen). Diese 16-Bit-Einheiten werden als Ersatz Zeichenpaar bezeichnet.  
+  
+ Weitere Informationen zu Ersatz Zeichen oder Zeichen finden Sie im Abschnitt 3,7 des [Unicode-Standards 3.0/Unicode 2,0](https://www.unicode.org)oder [im Abschnitt 2,2 der W3C-Empfehlung zu XML 1,0](https://www.w3.org/TR/REC-xml#charsets).
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Exception">Es wurde ein ungültiges Ersatzzeichenpaar übergeben.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteWhitespace">
+      <MemberSignature Language="C#" Value="public override void WriteWhitespace (string ws);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void WriteWhitespace(string ws) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.XmlTextWriter.WriteWhitespace(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub WriteWhitespace (ws As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void WriteWhitespace(System::String ^ ws);" />
+      <MemberSignature Language="F#" Value="override this.WriteWhitespace : string -&gt; unit" Usage="xmlTextWriter.WriteWhitespace ws" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ws" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="ws">Die Zeichenfolge von Leerraumzeichen.</param>
+        <summary>Schreibt den angegebenen Leerraum.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Diese Methode wird verwendet, um das Dokument manuell zu formatieren. Verwenden Sie <xref:System.Xml.XmlTextWriter.Formatting%2A> die-Eigenschaft, damit das Writer die Ausgabe automatisch formatiert.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird die `WriteWhitespace` -Methode verwendet, um zu steuern, wie die Datei formatiert wird.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.XmlSpace Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.XmlSpace Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.XmlSpace Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.XmlSpace Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.XmlSpace Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.XmlSpace Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">Die Zeichenfolge enthält Zeichen, die keine Leerraumzeichen sind.</exception>
+        <altmember cref="P:System.Xml.XmlTextWriter.Formatting" />
+      </Docs>
+    </Member>
+    <Member MemberName="XmlLang">
+      <MemberSignature Language="C#" Value="public override string XmlLang { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string XmlLang" />
+      <MemberSignature Language="DocId" Value="P:System.Xml.XmlTextWriter.XmlLang" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property XmlLang As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ XmlLang { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.XmlLang : string" Usage="System.Xml.XmlTextWriter.XmlLang" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den aktuellen <see langword="xml:lang" />-Bereich ab.</summary>
+        <value>Der aktuelle <see langword="xml:lang" /> oder <see langword="null" />, wenn im aktuellen Bereich kein <see langword="xml:lang" /> vorhanden ist.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Diese Eigenschaft ermöglicht es einer Komponente, herauszufinden, in welchem Zustand eine andere Komponente den Writer hinterlassen hat. Beispielsweise möchte eine Komponente einer anderen Komponente mitteilen, welche Sprache der Hilfe Text generieren soll. Die Sprachinformationen werden durch das Schreiben eines `xml:lang` Attributs kommuniziert.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="XmlSpace">
+      <MemberSignature Language="C#" Value="public override System.Xml.XmlSpace XmlSpace { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Xml.XmlSpace XmlSpace" />
+      <MemberSignature Language="DocId" Value="P:System.Xml.XmlTextWriter.XmlSpace" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property XmlSpace As XmlSpace" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Xml::XmlSpace XmlSpace { System::Xml::XmlSpace get(); };" />
+      <MemberSignature Language="F#" Value="member this.XmlSpace : System.Xml.XmlSpace" Usage="System.Xml.XmlTextWriter.XmlSpace" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.ReaderWriter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Xml.XmlSpace</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen <see cref="T:System.Xml.XmlSpace" /> ab, der den aktuellen <see langword="xml:space" />-Bereich darstellt.</summary>
+        <value>Ein <see langword="XmlSpace" />, der den aktuellen <see langword="xml:space" />-Bereich darstellt.  
+  
+ <list type="table"><listheader><term> Wert 
+ </term><description> Bedeutung 
+ </description></listheader><item><term> Keine 
+ </term><description> Dies ist der Standardwert, wenn kein <see langword="xml:space" />-Bereich vorhanden ist.  
+  
+ </description></item><item><term> Standard 
+ </term><description> Der aktuelle Bereich ist <see langword="xml:space" />="default".  
+  
+ </description></item><item><term> Preserve 
+ </term><description> Der aktuelle Bereich ist <see langword="xml:space" />="preserve".  
+  
+ </description></item></list></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Ab .NET Framework 2,0 wird empfohlen,-Instanzen mit der <xref:System.Xml.XmlWriter> <xref:System.Xml.XmlWriter.Create%2A?displayProperty=nameWithType> -Methode und der <xref:System.Xml.XmlWriterSettings> -Klasse zu erstellen, um die neuen Funktionen zu nutzen.  
+  
+ Mit dieser Eigenschaft kann eine Komponente herausfinden, in welchem Zustand eine andere Komponente den Writer verlassen hat.  
+  
+   
+  
+## Examples  
+ Im folgenden Beispiel wird die `WriteWhitespace` -Methode verwendet, um zu steuern, wie die Datei formatiert wird.  
+  
+ [!code-cpp[Classic WebData XmlTextWriter.XmlSpace Example#1](~/samples/snippets/cpp/VS_Snippets_Data/Classic WebData XmlTextWriter.XmlSpace Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic WebData XmlTextWriter.XmlSpace Example#1](~/samples/snippets/csharp/VS_Snippets_Data/Classic WebData XmlTextWriter.XmlSpace Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData XmlTextWriter.XmlSpace Example#1](~/samples/snippets/visualbasic/VS_Snippets_Data/Classic WebData XmlTextWriter.XmlSpace Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
