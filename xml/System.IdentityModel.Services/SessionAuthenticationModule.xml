@@ -1,0 +1,963 @@
+<Type Name="SessionAuthenticationModule" FullName="System.IdentityModel.Services.SessionAuthenticationModule">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="62f0f61a3c52bab77b13deb299045ef39e220ddc" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70670282" /></Metadata><TypeSignature Language="C#" Value="public class SessionAuthenticationModule : System.IdentityModel.Services.HttpModuleBase" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit SessionAuthenticationModule extends System.IdentityModel.Services.HttpModuleBase" />
+  <TypeSignature Language="DocId" Value="T:System.IdentityModel.Services.SessionAuthenticationModule" />
+  <TypeSignature Language="VB.NET" Value="Public Class SessionAuthenticationModule&#xA;Inherits HttpModuleBase" />
+  <TypeSignature Language="C++ CLI" Value="public ref class SessionAuthenticationModule : System::IdentityModel::Services::HttpModuleBase" />
+  <TypeSignature Language="F#" Value="type SessionAuthenticationModule = class&#xA;    inherit HttpModuleBase" />
+  <AssemblyInfo>
+    <AssemblyName>System.IdentityModel.Services</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.IdentityModel.Services.HttpModuleBase</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>Implementiert ein ASP.NET-Modul, das Sitzungscookies in den WS-Federation-Szenarien verarbeitet.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wenn Sie in der ASP.NET-Pipeline vorhanden <xref:System.IdentityModel.Services.SessionAuthenticationModule> ist, verarbeitet das (Sam) Sitzungs Cookies in WS-Verbund-Szenarios. Er verwendet den von der <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> -Eigenschaft angegebenen Cookie-Handler, um das unformatierte Sitzungs Cookie aus der HTTP-Anforderung zu lesen und in die HTTP-Antwort zu schreiben. Sie verwendet die <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> , die für eine Anwendung konfiguriert ist, um das unformatierte Sitzungs Cookie <xref:System.IdentityModel.Tokens.SessionSecurityToken> in-Objekte zu deserialisieren. Das Sitzungs Sicherheits Token enthält die Ansprüche (<xref:System.Security.Claims.Claim>) und den Prinzipal (<xref:System.Security.Claims.ClaimsPrincipal>), die der Entität zugeordnet sind, für die die Anforderung verarbeitet wird.  
+  
+ Sam fügt den <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> Ereignishandler dem <xref:System.Web.HttpApplication.AuthenticateRequest?displayProperty=nameWithType> -Ereignis in der ASP.NET-Pipeline hinzu. Dieser Handler fängt Anmelde Anforderungen ab, und wenn ein Sitzungs Cookie vorhanden ist, wird er in ein Sitzungs Token deserialisiert, und die <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=nameWithType> -Eigenschaft und die- <xref:System.Web.HttpContext.User%2A?displayProperty=nameWithType> Eigenschaft werden auf den Anspruchs Prinzipal festgelegt, der im Sitzungs Token enthalten ist. Es werden mehrere der anderen Methoden aufgerufen, die während dieses Prozesses von Sam verfügbar gemacht werden.  
+  
+ Die <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> -Methode kann aufgerufen werden, um den Benutzer von einer Sitzung zu signieren (z. b. in einer SignOut.aspx.cs-Code Behind-Datei).  
+  
+ Sam macht mehrere Ereignisse verfügbar, die Zugriff auf seine Verarbeitungs Pipeline ermöglichen. Das <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived> - <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated> Ereignis und das-Ereignis ermöglichen es Ihnen, Sitzungs Token zu ändern, die aus Cookies gelesen oder während der Verarbeitung erstellt werden. Dies erfolgt in der Regel, um Ansprüche im Token hinzuzufügen, zu entfernen oder zu transformieren oder um deren Ablaufzeit anzupassen. Die <xref:System.IdentityModel.Services.SessionAuthenticationModule.SigningOut>- <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignedOut>,- <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOutError> und-Ereignisse stellen Hooks für die Verarbeitung von Abmelde Anforderungen bereit. In vielen Szenarien ist das einfache Hinzufügen von Handlern für diese Ereignisse, häufig in der Global.asax.cs-Datei, ausreichend.  
+  
+ Für kompliziertere Szenarien können Sie von <xref:System.IdentityModel.Services.SessionAuthenticationModule> ableiten, um ein benutzerdefiniertes Sam zu implementieren. Zu diesem Zweck werden viele der Methoden, die während <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> und <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> aufgerufen werden, verfügbar gemacht, sodass Sie benutzerdefiniertes Verhalten in bestimmten Phasen des Lebenszyklus der Sitzungs Verarbeitung bereitstellen können.  
+  
+ Sie können Sam der ASP.NET-Pipeline in einer Konfigurationsdatei hinzufügen, indem Sie Sie den HTTP-Modulen unter dem `<system.webServer>` -Element für IIS Version 7 und höher oder unter `<system.web>` dem-Element für Versionen vor IIS 7 hinzufügen. Der von Sam verwendete cookiehandler kann mit dem [ &lt;&gt; cookiehandler](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/cookiehandler.md) -Element konfiguriert werden.  
+  
+   
+  
+## Examples  
+ [!code-csharp[WifSAM#1](~/samples/snippets/csharp/VS_Snippets_Misc/wifsam/cs/webapplication1/global.asax.cs#1)]  
+  
+ Der folgende XML-Code zeigt, wie Sie Sam in der ASP.NET-Pipeline konfigurieren. Viele andere Elemente, die in einer typischen Konfiguration vorhanden sind, werden aus Gründen der Kürze ausgelassen.  
+  
+```xml  
+<configuration>  
+  <system.webServer>  
+    <modules>  
+      <!--WIF 4.5 modules -->  
+      <add name="SessionAuthenticationModule" type="System.IdentityModel.Services.SessionAuthenticationModule, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>  
+      <add name="WsFederationAuthenticationModule" type="System.IdentityModel.Services.WSFederationAuthenticationModule, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>  
+    </modules>  
+  </system.webServer>  
+</configuration>  
+```  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SessionAuthenticationModule ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SessionAuthenticationModule();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IdentityModel.Services.SessionAuthenticationModule" />-Klasse.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode%2A> -Eigenschaft wird auf `false` festgelegt <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> , und die-Eigenschaft wird mit einer Standard Instanz <xref:System.IdentityModel.Services.CookieHandlerElement.ChunkedCookieHandler%2A> der-Klasse initialisiert.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AuthenticateSessionSecurityToken">
+      <MemberSignature Language="C#" Value="public virtual void AuthenticateSessionSecurityToken (System.IdentityModel.Tokens.SessionSecurityToken sessionToken, bool writeCookie);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void AuthenticateSessionSecurityToken(class System.IdentityModel.Tokens.SessionSecurityToken sessionToken, bool writeCookie) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken(System.IdentityModel.Tokens.SessionSecurityToken,System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Sub AuthenticateSessionSecurityToken (sessionToken As SessionSecurityToken, writeCookie As Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void AuthenticateSessionSecurityToken(System::IdentityModel::Tokens::SessionSecurityToken ^ sessionToken, bool writeCookie);" />
+      <MemberSignature Language="F#" Value="abstract member AuthenticateSessionSecurityToken : System.IdentityModel.Tokens.SessionSecurityToken * bool -&gt; unit&#xA;override this.AuthenticateSessionSecurityToken : System.IdentityModel.Tokens.SessionSecurityToken * bool -&gt; unit" Usage="sessionAuthenticationModule.AuthenticateSessionSecurityToken (sessionToken, writeCookie)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sessionToken" Type="System.IdentityModel.Tokens.SessionSecurityToken" />
+        <Parameter Name="writeCookie" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="sessionToken">Das Sitzungssicherheitstoken, das zur Authentifizierung der eingehenden HTTP-Anforderung verwendet werden soll.</param>
+        <param name="writeCookie"><see langword="true" />, um den Sitzungscookie zu schreiben; andernfalls <see langword="false" />.</param>
+        <summary>Authentifiziert die eingehende Anforderung durch Überprüfen des eingehenden Sitzungstokens. Nach erfolgreicher Validierung wird der aktuelle HTTP-Kontext und der Prinzipal des Threads mit dem angegebenen <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" /> aktualisiert.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken%2A> -Methode wird von der <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> -Methode aufgerufen. Die- <xref:System.IdentityModel.Services.SessionAuthenticationModule.SetPrincipalFromSessionToken%2A> Methode wird aufgerufen, um das eingehende Token zu validieren <xref:System.Web.HttpContext.User%2A?displayProperty=nameWithType> und die <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=nameWithType> -und-Eigenschaften zu aktualisieren. Wenn der `writeCookie` -Parameter `true`ist, <xref:System.IdentityModel.Services.SessionAuthenticationModule.WriteSessionTokenToCookie%2A> wird die-Methode aufgerufen, um das Sitzungs Token in ein Cookie zu schreiben.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ContainsSessionTokenCookie">
+      <MemberSignature Language="C#" Value="public bool ContainsSessionTokenCookie (System.Web.HttpCookieCollection httpCookieCollection);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool ContainsSessionTokenCookie(class System.Web.HttpCookieCollection httpCookieCollection) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.ContainsSessionTokenCookie(System.Web.HttpCookieCollection)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool ContainsSessionTokenCookie(System::Web::HttpCookieCollection ^ httpCookieCollection);" />
+      <MemberSignature Language="F#" Value="member this.ContainsSessionTokenCookie : System.Web.HttpCookieCollection -&gt; bool" Usage="sessionAuthenticationModule.ContainsSessionTokenCookie httpCookieCollection" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="httpCookieCollection" Type="System.Web.HttpCookieCollection" />
+      </Parameters>
+      <Docs>
+        <param name="httpCookieCollection">Das Cookieauflistung in der gesucht werden soll.</param>
+        <summary>Bestimmt, ob ein Sitzungscookie an der angegebenen Cookieauflistung ist.</summary>
+        <returns><see langword="true" />, wenn ein Sitzungscookie gefunden wird; andernfalls <see langword="false" />.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="httpCookieCollection" /> ist <see langword="null" />.</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ContextSessionSecurityToken">
+      <MemberSignature Language="C#" Value="public virtual System.IdentityModel.Tokens.SessionSecurityToken ContextSessionSecurityToken { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.IdentityModel.Tokens.SessionSecurityToken ContextSessionSecurityToken" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Services.SessionAuthenticationModule.ContextSessionSecurityToken" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable ReadOnly Property ContextSessionSecurityToken As SessionSecurityToken" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::IdentityModel::Tokens::SessionSecurityToken ^ ContextSessionSecurityToken { System::IdentityModel::Tokens::SessionSecurityToken ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.ContextSessionSecurityToken : System.IdentityModel.Tokens.SessionSecurityToken" Usage="System.IdentityModel.Services.SessionAuthenticationModule.ContextSessionSecurityToken" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.IdentityModel.Tokens.SessionSecurityToken</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft das aktive <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" /> für den aktuellen <see cref="T:System.Web.HttpContext" />.</summary>
+        <value>Das Sicherheitstoken der aktiven Sitzung.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CookieHandler">
+      <MemberSignature Language="C#" Value="public System.IdentityModel.Services.CookieHandler CookieHandler { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.IdentityModel.Services.CookieHandler CookieHandler" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler" />
+      <MemberSignature Language="VB.NET" Value="Public Property CookieHandler As CookieHandler" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::IdentityModel::Services::CookieHandler ^ CookieHandler { System::IdentityModel::Services::CookieHandler ^ get(); void set(System::IdentityModel::Services::CookieHandler ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.CookieHandler : System.IdentityModel.Services.CookieHandler with get, set" Usage="System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.IdentityModel.Services.CookieHandler</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den Cookie Handler ab, der verwendet wird, um Sitzungscookies zu lesen, zu schreiben und zu löschen.</summary>
+        <value>Der Cookie-Handler.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> -Eigenschaft wird von der <xref:System.IdentityModel.Services.SessionAuthenticationModule.InitializePropertiesFromConfiguration%2A> -Methode initialisiert. Diese Methode initialisiert die-Eigenschaft auf Grundlage des cookiehandlers <xref:System.IdentityModel.Services.Configuration.FederationConfiguration> , der für das-Objekt <xref:System.IdentityModel.Services.FederatedAuthentication.FederationConfiguration%2A?displayProperty=nameWithType> angegeben ist, das für die-Eigenschaft festgelegt Sie können den cookiehandler in einer Konfigurationsdatei über das [ &lt;cookiehandler&gt; ](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/cookiehandler.md) -Element festlegen.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie" />
+        <altmember cref="M:System.IdentityModel.Services.SessionAuthenticationModule.TryReadSessionTokenFromCookie(System.IdentityModel.Tokens.SessionSecurityToken@)" />
+        <altmember cref="M:System.IdentityModel.Services.SessionAuthenticationModule.WriteSessionTokenToCookie(System.IdentityModel.Tokens.SessionSecurityToken)" />
+      </Docs>
+    </Member>
+    <Member MemberName="CreateSessionSecurityToken">
+      <MemberSignature Language="C#" Value="public System.IdentityModel.Tokens.SessionSecurityToken CreateSessionSecurityToken (System.Security.Claims.ClaimsPrincipal principal, string context, DateTime validFrom, DateTime validTo, bool isPersistent);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.IdentityModel.Tokens.SessionSecurityToken CreateSessionSecurityToken(class System.Security.Claims.ClaimsPrincipal principal, string context, valuetype System.DateTime validFrom, valuetype System.DateTime validTo, bool isPersistent) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.CreateSessionSecurityToken(System.Security.Claims.ClaimsPrincipal,System.String,System.DateTime,System.DateTime,System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Function CreateSessionSecurityToken (principal As ClaimsPrincipal, context As String, validFrom As DateTime, validTo As DateTime, isPersistent As Boolean) As SessionSecurityToken" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::IdentityModel::Tokens::SessionSecurityToken ^ CreateSessionSecurityToken(System::Security::Claims::ClaimsPrincipal ^ principal, System::String ^ context, DateTime validFrom, DateTime validTo, bool isPersistent);" />
+      <MemberSignature Language="F#" Value="member this.CreateSessionSecurityToken : System.Security.Claims.ClaimsPrincipal * string * DateTime * DateTime * bool -&gt; System.IdentityModel.Tokens.SessionSecurityToken" Usage="sessionAuthenticationModule.CreateSessionSecurityToken (principal, context, validFrom, validTo, isPersistent)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.IdentityModel.Tokens.SessionSecurityToken</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="principal" Type="System.Security.Claims.ClaimsPrincipal" />
+        <Parameter Name="context" Type="System.String" />
+        <Parameter Name="validFrom" Type="System.DateTime" />
+        <Parameter Name="validTo" Type="System.DateTime" />
+        <Parameter Name="isPersistent" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="principal">Der Prinzipal, der im Token aufgezeichnet werden soll.</param>
+        <param name="context">Eine anwendungsspezifische Kontextzeichenfolge.</param>
+        <param name="validFrom">Der erste Zeitpunkt, an dem dieses Token gültig ist.</param>
+        <param name="validTo">Der letzte Zeitpunkt, an dem dieses Token gültig ist.</param>
+        <param name="isPersistent"><see langword="true" />, wenn der Wert vom Benutzer-Agent beibehalten werden soll; andernfalls <see langword="false" />.</param>
+        <summary>Erstellt ein <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" /> aus den angegebenen Parametern mithilfe des konfigurierten Sitzungentokenhandlers.</summary>
+        <returns>Das Sitzungstoken.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.InvalidOperationException">Kein gültiger Handler für Sitzungstoken konfiguriert. (Es gibt kein <see cref="T:System.IdentityModel.Tokens.SessionSecurityTokenHandler" />, das in der <see cref="P:System.IdentityModel.Configuration.IdentityConfiguration.SecurityTokenHandlers" />-Eigenschaft konfiguriert ist).</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="DeleteSessionTokenCookie">
+      <MemberSignature Language="C#" Value="public void DeleteSessionTokenCookie ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void DeleteSessionTokenCookie() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie" />
+      <MemberSignature Language="VB.NET" Value="Public Sub DeleteSessionTokenCookie ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void DeleteSessionTokenCookie();" />
+      <MemberSignature Language="F#" Value="member this.DeleteSessionTokenCookie : unit -&gt; unit" Usage="sessionAuthenticationModule.DeleteSessionTokenCookie " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Löscht das Sitzungscookie und entfernt es aus dem Cache.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Löscht das Sitzungs Cookie mithilfe des Cookie-Handlers, der <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> von der-Eigenschaft angegeben wird. Diese Methode wird während der Abmeldung durch die <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> -Methode aufgerufen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="InitializeModule">
+      <MemberSignature Language="C#" Value="protected override void InitializeModule (System.Web.HttpApplication context);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void InitializeModule(class System.Web.HttpApplication context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.InitializeModule(System.Web.HttpApplication)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Sub InitializeModule (context As HttpApplication)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override void InitializeModule(System::Web::HttpApplication ^ context);" />
+      <MemberSignature Language="F#" Value="override this.InitializeModule : System.Web.HttpApplication -&gt; unit" Usage="sessionAuthenticationModule.InitializeModule context" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="context" Type="System.Web.HttpApplication" />
+      </Parameters>
+      <Docs>
+        <param name="context">Das HTTP-Anwendungsobjekt, das dieses Modul enthält.</param>
+        <summary>Initialisiert das Modul und bereitet es auf die Verarbeitung von Ereignissen des [!INCLUDE[vstecasp](~/includes/vstecasp-md.md)]-Anwendungsobjekts des Moduls vor.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Fügt dem <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> <xref:System.Web.HttpApplication.AuthenticateRequest?displayProperty=nameWithType> -Ereignis <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnPostAuthenticateRequest%2A> und dem- <xref:System.Web.HttpApplication.PostAuthenticateRequest?displayProperty=nameWithType> Ereignis des Anwendungs Objekts, das durch den `context` -Parameter angegeben wird, die-und-Handler hinzu.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="InitializePropertiesFromConfiguration">
+      <MemberSignature Language="C#" Value="protected override void InitializePropertiesFromConfiguration ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void InitializePropertiesFromConfiguration() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.InitializePropertiesFromConfiguration" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Sub InitializePropertiesFromConfiguration ()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override void InitializePropertiesFromConfiguration();" />
+      <MemberSignature Language="F#" Value="override this.InitializePropertiesFromConfiguration : unit -&gt; unit" Usage="sessionAuthenticationModule.InitializePropertiesFromConfiguration " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert die Moduleigenschaften auf Grundlage von Definitionen in der Konfigurationsdatei.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Initialisiert die <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> -Eigenschaft des in der Konfiguration angegebenen Handlers <xref:System.IdentityModel.Services.Configuration.FederationConfiguration?displayProperty=nameWithType> durch das-Objekt, das <xref:System.IdentityModel.Services.FederatedAuthentication.FederationConfiguration%2A?displayProperty=nameWithType> für die-Eigenschaft festgelegt ist. Sie können den cookiehandler in einer Konfigurationsdatei über das [ &lt;cookiehandler&gt; ](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/cookiehandler.md) -Element angeben.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsReferenceMode">
+      <MemberSignature Language="C#" Value="public bool IsReferenceMode { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsReferenceMode" />
+      <MemberSignature Language="DocId" Value="P:System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode" />
+      <MemberSignature Language="VB.NET" Value="Public Property IsReferenceMode As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsReferenceMode { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.IsReferenceMode : bool with get, set" Usage="System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen Wert ab oder legt einen Wert fest, der angibt, ob die Sitzungsinformationen (Anspruchswerte usw.) im Sitzungscookie gespeichert werden sollen oder ob der Sitzungsinhalt auf der Serverseite über das Cookie als Referenz gespeichert werden soll.</summary>
+        <value><see langword="true" />, wenn sich ausgestellte Cookies im Referenzmodus befinden; andernfalls <see langword="false" />. Der Standardwert ist <see langword="false" /> und gibt an, dass sich ausgestellte Cookies nicht im Referenzmodus befinden.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Im Verweis Modus wird der <xref:System.IdentityModel.Tokens.SessionSecurityToken> in einem serverseitigen Cache (einem Objekt, das von <xref:System.IdentityModel.Tokens.SessionSecurityTokenCache>abgeleitet wird) gespeichert. Das ausgegebene Cookie enthält lediglich einen Kontext Bezeichner, der verwendet wird, um das Token aus dem Cache abzurufen.  
+  
+> [!IMPORTANT]
+>  Zum Arbeiten im Verweis Modus empfiehlt Microsoft die Bereitstellung eines Handlers <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SessionSecurityTokenCreated?displayProperty=nameWithType> für das Ereignis in der Global.asax.cs-Datei <xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A?displayProperty=nameWithType> und das Festlegen der-Eigenschaft für <xref:System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs.SessionToken%2A?displayProperty=nameWithType> das Token, das in der-Eigenschaft weitergegeben wurde. Dadurch wird sichergestellt, dass das Sitzungs Token im Verweis Modus für jede Anforderung ausgeführt wird, und es wird <xref:System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode%2A?displayProperty=nameWithType> bevorzugt, wenn nur die Eigenschaft für das Sitzungs Authentifizierungs Modul festgelegt wird.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnAuthenticateRequest">
+      <MemberSignature Language="C#" Value="protected virtual void OnAuthenticateRequest (object sender, EventArgs eventArgs);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnAuthenticateRequest(object sender, class System.EventArgs eventArgs) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest(System.Object,System.EventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnAuthenticateRequest(System::Object ^ sender, EventArgs ^ eventArgs);" />
+      <MemberSignature Language="F#" Value="abstract member OnAuthenticateRequest : obj * EventArgs -&gt; unit&#xA;override this.OnAuthenticateRequest : obj * EventArgs -&gt; unit" Usage="sessionAuthenticationModule.OnAuthenticateRequest (sender, eventArgs)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sender" Type="System.Object" />
+        <Parameter Name="eventArgs" Type="System.EventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="sender">Die Quelle für das Ereignis. Dies ist ein <see cref="T:System.Web.HttpApplication" />-Objekt.</param>
+        <param name="eventArgs">Die Daten für das Ereignis.</param>
+        <summary>Behandelt das <see cref="E:System.Web.HttpApplication.AuthenticateRequest" />-Ereignis aus der [!INCLUDE[vstecasp](~/includes/vstecasp-md.md)] Pipeline.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode führt Folgendes aus:  
+  
+1.  Ruft die <xref:System.IdentityModel.Services.SessionAuthenticationModule.TryReadSessionTokenFromCookie%2A> -Methode auf, <xref:System.IdentityModel.Tokens.SessionSecurityToken> um eine aus dem Sitzungs Cookie zu lesen, sofern eine vorhanden ist.  
+  
+2.  Wenn ein Sitzungs Sicherheits Token nicht gelesen werden kann (wahrscheinlich weil eine Sitzung nicht eingerichtet wurde), wird zurückgegeben.  
+  
+3.  Ruft die <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenReceived%2A> Methode auf, um <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived> das-Ereignis zu erhöhen. Dadurch haben Sie die Möglichkeit, das von dem Cookie gelesene Token zu ändern, oder die Anforderung muss abgebrochen werden. Der Handler kann auch angeben, dass das Token erneut ausgestellt werden soll, indem die <xref:System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs.ReissueCookie%2A?displayProperty=nameWithType> -Eigenschaft festgelegt wird.  
+  
+4.  Wenn das Token erneut ausgestellt werden soll, wird es aus dem Cache entfernt, und die <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenCreated%2A> -Methode wird aufgerufen, um das <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated> -Ereignis zu erhöhen. Dies bietet die Möglichkeit, das Token erneut zu ändern. Das ressue-Verhalten kann auch durch Festlegen der <xref:System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs.WriteSessionCookie%2A?displayProperty=nameWithType> -Eigenschaft im-Ereignishandler geändert werden.  
+  
+5.  Ruft die <xref:System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken%2A> -Methode auf, um den Benutzer zu authentifizieren. Bei erfolgreicher Ausführung hat dies den Effekt, dass die <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=nameWithType> -Eigenschaft auf den Prinzipal festgelegt wird <xref:System.IdentityModel.Tokens.SessionSecurityToken.ClaimsPrincipal%2A?displayProperty=nameWithType> , der in der-Eigenschaft des eingehenden Tokens enthalten ist.  
+  
+6.  Wenn die Sitzung abgelaufen ist, ruft die <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> -Methode auf.  
+  
+ Die <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> -Methode wird den Handlern für das <xref:System.Web.HttpApplication.AuthenticateRequest?displayProperty=nameWithType> -Ereignis in der <xref:System.IdentityModel.Services.SessionAuthenticationModule.InitializeModule%2A> -Methode hinzugefügt.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">Kein gültiger Handler für Sitzungstoken konfiguriert. (Es gibt kein <see cref="T:System.IdentityModel.Tokens.SessionSecurityTokenHandler" />, das in der <see cref="P:System.IdentityModel.Configuration.IdentityConfiguration.SecurityTokenHandlers" />-Eigenschaft konfiguriert ist).</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="OnPostAuthenticateRequest">
+      <MemberSignature Language="C#" Value="protected virtual void OnPostAuthenticateRequest (object sender, EventArgs e);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnPostAuthenticateRequest(object sender, class System.EventArgs e) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.OnPostAuthenticateRequest(System.Object,System.EventArgs)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnPostAuthenticateRequest (sender As Object, e As EventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnPostAuthenticateRequest(System::Object ^ sender, EventArgs ^ e);" />
+      <MemberSignature Language="F#" Value="abstract member OnPostAuthenticateRequest : obj * EventArgs -&gt; unit&#xA;override this.OnPostAuthenticateRequest : obj * EventArgs -&gt; unit" Usage="sessionAuthenticationModule.OnPostAuthenticateRequest (sender, e)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sender" Type="System.Object" />
+        <Parameter Name="e" Type="System.EventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="sender">Die Quelle für das Ereignis. Dies ist ein <see cref="T:System.Web.HttpApplication" />-Objekt.</param>
+        <param name="e">Die Daten für das Ereignis.</param>
+        <summary>Behandelt das <see cref="E:System.Web.HttpApplication.PostAuthenticateRequest" />-Ereignis aus der [!INCLUDE[vstecasp](~/includes/vstecasp-md.md)] Pipeline.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standardimplementierung ist leer.  
+  
+ Der <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnPostAuthenticateRequest%2A> Handler wird den Handlern für das <xref:System.Web.HttpApplication.PostAuthenticateRequest?displayProperty=nameWithType> -Ereignis in der <xref:System.IdentityModel.Services.SessionAuthenticationModule.InitializeModule%2A> -Methode hinzugefügt.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnSessionSecurityTokenCreated">
+      <MemberSignature Language="C#" Value="protected virtual void OnSessionSecurityTokenCreated (System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs args);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnSessionSecurityTokenCreated(class System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs args) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenCreated(System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnSessionSecurityTokenCreated (args As SessionSecurityTokenCreatedEventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnSessionSecurityTokenCreated(System::IdentityModel::Services::SessionSecurityTokenCreatedEventArgs ^ args);" />
+      <MemberSignature Language="F#" Value="abstract member OnSessionSecurityTokenCreated : System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs -&gt; unit&#xA;override this.OnSessionSecurityTokenCreated : System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs -&gt; unit" Usage="sessionAuthenticationModule.OnSessionSecurityTokenCreated args" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="args" Type="System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="args">Die Daten für das Ereignis.</param>
+        <summary>Löst das <see cref="E:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated" />-Ereignis aus.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wird von der <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> -Methode aufgerufen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnSessionSecurityTokenReceived">
+      <MemberSignature Language="C#" Value="protected virtual void OnSessionSecurityTokenReceived (System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs args);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnSessionSecurityTokenReceived(class System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs args) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenReceived(System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnSessionSecurityTokenReceived (args As SessionSecurityTokenReceivedEventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnSessionSecurityTokenReceived(System::IdentityModel::Services::SessionSecurityTokenReceivedEventArgs ^ args);" />
+      <MemberSignature Language="F#" Value="abstract member OnSessionSecurityTokenReceived : System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs -&gt; unit&#xA;override this.OnSessionSecurityTokenReceived : System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs -&gt; unit" Usage="sessionAuthenticationModule.OnSessionSecurityTokenReceived args" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="args" Type="System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="args">Die Daten für das Ereignis.</param>
+        <summary>Löst das <see cref="E:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived" />-Ereignis aus.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wird von der <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> -Methode aufgerufen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnSignedOut">
+      <MemberSignature Language="C#" Value="protected virtual void OnSignedOut (EventArgs e);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnSignedOut(class System.EventArgs e) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.OnSignedOut(System.EventArgs)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnSignedOut (e As EventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnSignedOut(EventArgs ^ e);" />
+      <MemberSignature Language="F#" Value="abstract member OnSignedOut : EventArgs -&gt; unit&#xA;override this.OnSignedOut : EventArgs -&gt; unit" Usage="sessionAuthenticationModule.OnSignedOut e" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="e" Type="System.EventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="e">Die Daten für das Ereignis.</param>
+        <summary>Löst das <see cref="E:System.IdentityModel.Services.SessionAuthenticationModule.SignedOut" />-Ereignis aus.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode wird von der <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> -Methode aufgerufen, nachdem die Abmeldung ausgeführt wurde und das Sitzungs Cookie gelöscht wurde.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnSigningOut">
+      <MemberSignature Language="C#" Value="protected virtual void OnSigningOut (System.IdentityModel.Services.SigningOutEventArgs e);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnSigningOut(class System.IdentityModel.Services.SigningOutEventArgs e) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.OnSigningOut(System.IdentityModel.Services.SigningOutEventArgs)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnSigningOut (e As SigningOutEventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnSigningOut(System::IdentityModel::Services::SigningOutEventArgs ^ e);" />
+      <MemberSignature Language="F#" Value="abstract member OnSigningOut : System.IdentityModel.Services.SigningOutEventArgs -&gt; unit&#xA;override this.OnSigningOut : System.IdentityModel.Services.SigningOutEventArgs -&gt; unit" Usage="sessionAuthenticationModule.OnSigningOut e" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="e" Type="System.IdentityModel.Services.SigningOutEventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="e">Die Daten für das Ereignis.</param>
+        <summary>Löst das <see cref="E:System.IdentityModel.Services.SessionAuthenticationModule.SigningOut" />-Ereignis aus.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode wird von der- <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> Methode aufgerufen, um die Abmeldung auszuführen. Sie wird aufgerufen, bevor das Sitzungs Cookie gelöscht wird.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnSignOutError">
+      <MemberSignature Language="C#" Value="protected virtual void OnSignOutError (System.IdentityModel.Services.ErrorEventArgs e);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnSignOutError(class System.IdentityModel.Services.ErrorEventArgs e) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.OnSignOutError(System.IdentityModel.Services.ErrorEventArgs)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnSignOutError (e As ErrorEventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnSignOutError(System::IdentityModel::Services::ErrorEventArgs ^ e);" />
+      <MemberSignature Language="F#" Value="abstract member OnSignOutError : System.IdentityModel.Services.ErrorEventArgs -&gt; unit&#xA;override this.OnSignOutError : System.IdentityModel.Services.ErrorEventArgs -&gt; unit" Usage="sessionAuthenticationModule.OnSignOutError e" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="e" Type="System.IdentityModel.Services.ErrorEventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="e">Die Daten für das Ereignis.</param>
+        <summary>Löst das <see cref="E:System.IdentityModel.Services.SessionAuthenticationModule.SignOutError" />-Ereignis aus.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode wird von der <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> -Methode aufgerufen, wenn während der Abmeldung ein Fehler auftritt.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ReadSessionTokenFromCookie">
+      <MemberSignature Language="C#" Value="public System.IdentityModel.Tokens.SessionSecurityToken ReadSessionTokenFromCookie (byte[] sessionCookie);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.IdentityModel.Tokens.SessionSecurityToken ReadSessionTokenFromCookie(unsigned int8[] sessionCookie) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.ReadSessionTokenFromCookie(System.Byte[])" />
+      <MemberSignature Language="VB.NET" Value="Public Function ReadSessionTokenFromCookie (sessionCookie As Byte()) As SessionSecurityToken" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::IdentityModel::Tokens::SessionSecurityToken ^ ReadSessionTokenFromCookie(cli::array &lt;System::Byte&gt; ^ sessionCookie);" />
+      <MemberSignature Language="F#" Value="member this.ReadSessionTokenFromCookie : byte[] -&gt; System.IdentityModel.Tokens.SessionSecurityToken" Usage="sessionAuthenticationModule.ReadSessionTokenFromCookie sessionCookie" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.IdentityModel.Tokens.SessionSecurityToken</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sessionCookie" Type="System.Byte[]" />
+      </Parameters>
+      <Docs>
+        <param name="sessionCookie">Das Cookie, in der unformatierten Form, welches das Sitzungtoken enthält.</param>
+        <summary>Liest ein <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" /> aus dem angegebenen Sitzungscookie.</summary>
+        <returns>Das Sitzungstoken, das aus dem Cookie gelesen wurde.</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.InvalidOperationException">Kein gültiger Handler für Sitzungstoken konfiguriert. (Es gibt kein <see cref="T:System.IdentityModel.Tokens.SessionSecurityTokenHandler" />, das in der <see cref="P:System.IdentityModel.Configuration.IdentityConfiguration.SecurityTokenHandlers" />-Eigenschaft konfiguriert ist).</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="SessionSecurityTokenCreated">
+      <MemberSignature Language="C#" Value="public event EventHandler&lt;System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs&gt; SessionSecurityTokenCreated;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler`1&lt;class System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs&gt; SessionSecurityTokenCreated" />
+      <MemberSignature Language="DocId" Value="E:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated" />
+      <MemberSignature Language="VB.NET" Value="Public Event SessionSecurityTokenCreated As EventHandler(Of SessionSecurityTokenCreatedEventArgs) " />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; event EventHandler&lt;System::IdentityModel::Services::SessionSecurityTokenCreatedEventArgs ^&gt; ^ SessionSecurityTokenCreated;" />
+      <MemberSignature Language="F#" Value="member this.SessionSecurityTokenCreated : EventHandler&lt;System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs&gt; " Usage="member this.SessionSecurityTokenCreated : System.EventHandler&lt;System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs&gt; " />
+      <MemberType>Event</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.EventHandler&lt;System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs&gt;</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Tritt ein, wenn ein Sitzungssicherheitstoken erstellt wurde.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Sie können dieses Ereignis verwenden, um das Sitzungs Sicherheits Token zu ändern, bevor es in ein Cookie geschrieben wird.  
+  
+ Das <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated> -Ereignis wird innerhalb der <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> -Methode ausgelöst, nachdem ein Sitzungs<xref:System.IdentityModel.Tokens.SessionSecurityToken>Token () erstellt wurde. Dies ist beispielsweise der Fall, wenn ein Ereignishandler für <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived> das Ereignis das Token ändert.  
+  
+ Sie können dieses Ereignis verwenden, um die Eigenschaften des Sitzungs Tokens zu ändern, bevor es weiter entlang der Pipeline weitergeleitet wird. es wird verwendet, um die Entität zu authentifizieren, die die Anforderung sendet (Benutzer).  
+  
+ In einem Ereignishandler können Sie über die <xref:System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs.SessionToken%2A?displayProperty=nameWithType> -Eigenschaft auf das Token zugreifen. Nachdem Sie das Token geändert haben, können Sie sicherstellen, dass es in das Cookie zurückgeschrieben <xref:System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs.WriteSessionCookie%2A?displayProperty=nameWithType> wird, `true`indem Sie die-Eigenschaft auf festlegen. Anders als <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated> ist <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated> das-Ereignis kein Abbruch bares Ereignis.  
+  
+   
+  
+## Examples  
+ Der folgende Code zeigt einen Handler für das <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated> -Ereignis, das in der Global.asax.cs-Datei einer ASP.NET-Webanwendung implementiert ist. Außerdem müssen Sie dem-Ereignis den-Handler hinzufügen. Ein ausführlichere Beispiel finden Sie im <xref:System.IdentityModel.Services.SessionAuthenticationModule> Übersichts Thema.  
+  
+ [!code-csharp[WifSAM#6](~/samples/snippets/csharp/VS_Snippets_Misc/wifsam/cs/webapplication1/global.asax.cs#6)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SessionSecurityTokenReceived">
+      <MemberSignature Language="C#" Value="public event EventHandler&lt;System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs&gt; SessionSecurityTokenReceived;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler`1&lt;class System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs&gt; SessionSecurityTokenReceived" />
+      <MemberSignature Language="DocId" Value="E:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived" />
+      <MemberSignature Language="VB.NET" Value="Public Event SessionSecurityTokenReceived As EventHandler(Of SessionSecurityTokenReceivedEventArgs) " />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; event EventHandler&lt;System::IdentityModel::Services::SessionSecurityTokenReceivedEventArgs ^&gt; ^ SessionSecurityTokenReceived;" />
+      <MemberSignature Language="F#" Value="member this.SessionSecurityTokenReceived : EventHandler&lt;System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs&gt; " Usage="member this.SessionSecurityTokenReceived : System.EventHandler&lt;System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs&gt; " />
+      <MemberType>Event</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.EventHandler&lt;System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs&gt;</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Tritt ein, wenn ein Sitzungssicherheitstoken von einem Cookie gelesen wurde.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Das <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived> -Ereignis wird innerhalb der <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> -Methode ausgelöst, nachdem ein Sitzungs<xref:System.IdentityModel.Tokens.SessionSecurityToken>Token () erfolgreich aus dem Sitzungs Cookie gelesen wurde.  
+  
+ Sie können dieses Ereignis verwenden, um die Eigenschaften des Sitzungs Tokens zu ändern, bevor es weiter entlang der Pipeline weitergeleitet wird. es wird verwendet, um die Entität zu authentifizieren, die die Anforderung sendet (Benutzer). Eines der gängigsten Szenarien umfasst das Ändern der Sitzungs Ablaufzeit (auf die über <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A?displayProperty=nameWithType> die-Eigenschaft zugegriffen werden kann), um die in der Konfiguration `lifetime` festgelegte Sitzungs Ablaufzeit über das-Attribut von [ &lt; zu überschreiben. sessiontokenrequirements&gt; ](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/sessiontokenrequirement.md) -Element. Wenn Sie diese Eigenschaft für jede Anforderung ändern, können Sie eine gleitende Sitzung implementieren. Das heißt, eine Sitzung, in der die Lebensdauer jedes Mal verlängert wird, wenn der Benutzer auf die Website zugreift.  
+  
+ In einem Ereignishandler können Sie über die <xref:System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs.SessionToken%2A?displayProperty=nameWithType> -Eigenschaft auf das Token zugreifen. Nachdem Sie das Token geändert haben, können Sie sicherstellen, dass es in das Cookie zurückgeschrieben <xref:System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs.ReissueCookie%2A?displayProperty=nameWithType> wird `true`, indem Sie den auf festlegen. Schließlich handelt es <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived> sich bei dem Ereignis <xref:System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs> um ein abbrechbares Ereignis, und <xref:System.ComponentModel.CancelEventArgs.Cancel%2A> Sie können die-Eigenschaft des-Objekts festlegen, um die weitere Verarbeitung der Anforderung abzubrechen.  
+  
+   
+  
+## Examples  
+ Der folgende Code zeigt einen Handler für das <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived> -Ereignis, das in der Global.asax.cs-Datei einer ASP.NET-Webanwendung implementiert ist. Außerdem müssen Sie dem-Ereignis den-Handler hinzufügen. Ein ausführlichere Beispiel finden Sie im <xref:System.IdentityModel.Services.SessionAuthenticationModule> Übersichts Thema.  
+  
+ [!code-csharp[WifSAM#5](~/samples/snippets/csharp/VS_Snippets_Misc/wifsam/cs/webapplication1/global.asax.cs#5)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetPrincipalFromSessionToken">
+      <MemberSignature Language="C#" Value="protected virtual void SetPrincipalFromSessionToken (System.IdentityModel.Tokens.SessionSecurityToken sessionSecurityToken);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void SetPrincipalFromSessionToken(class System.IdentityModel.Tokens.SessionSecurityToken sessionSecurityToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.SetPrincipalFromSessionToken(System.IdentityModel.Tokens.SessionSecurityToken)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void SetPrincipalFromSessionToken(System::IdentityModel::Tokens::SessionSecurityToken ^ sessionSecurityToken);" />
+      <MemberSignature Language="F#" Value="abstract member SetPrincipalFromSessionToken : System.IdentityModel.Tokens.SessionSecurityToken -&gt; unit&#xA;override this.SetPrincipalFromSessionToken : System.IdentityModel.Tokens.SessionSecurityToken -&gt; unit" Usage="sessionAuthenticationModule.SetPrincipalFromSessionToken sessionSecurityToken" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sessionSecurityToken" Type="System.IdentityModel.Tokens.SessionSecurityToken" />
+      </Parameters>
+      <Docs>
+        <param name="sessionSecurityToken">Das Sitzungstoken, aus dem der Prinzipal festgelegt wird.</param>
+        <summary>Legt den Prinzipal im <see cref="T:System.Web.HttpContext" /> und <see cref="T:System.Threading.Thread" /> auf den Prinzipal fest, der im angegebenen Sitzungstoken enthalten ist.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Ruft die <xref:System.IdentityModel.Services.SessionAuthenticationModule.ValidateSessionToken%2A> -Methode <xref:System.Web.HttpContext.User%2A?displayProperty=nameWithType> auf <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=nameWithType> und legt die-Eigenschaft und die-Eigenschaft mithilfe der zurückgegebenen Identitäten fest. <xref:System.Web.HttpContext.Current%2A?displayProperty=nameWithType>  
+  
+ Diese Methode wird von der <xref:System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken%2A> -Methode aufgerufen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SignedOut">
+      <MemberSignature Language="C#" Value="public event EventHandler SignedOut;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler SignedOut" />
+      <MemberSignature Language="DocId" Value="E:System.IdentityModel.Services.SessionAuthenticationModule.SignedOut" />
+      <MemberSignature Language="VB.NET" Value="Public Event SignedOut As EventHandler " />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; event EventHandler ^ SignedOut;" />
+      <MemberSignature Language="F#" Value="member this.SignedOut : EventHandler " Usage="member this.SignedOut : System.EventHandler " />
+      <MemberType>Event</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.EventHandler</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Tritt auf, nachdem der Benutzer abgemeldet ist.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wird von der <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> -Methode ausgelöst, <xref:System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie%2A> unmittelbar nachdem die-Methode aufgerufen wurde.  
+  
+ Es ist nicht garantiert, dass für jede Sitzung aufgerufen wird. Beispielsweise können die Cookies auf Clientseite gelöscht werden. in diesem Fall würde dieses Ereignis nie ausgelöst, da kein serverseitiges Ereignis zum Löschen der Sitzung vorhanden ist.  
+  
+   
+  
+## Examples  
+ Der folgende Code zeigt einen Handler für das <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignedOut> -Ereignis, das in der Global.asax.cs-Datei einer ASP.NET-Webanwendung implementiert ist. Außerdem müssen Sie dem-Ereignis den-Handler hinzufügen. Ein ausführlichere Beispiel finden Sie im <xref:System.IdentityModel.Services.SessionAuthenticationModule> Übersichts Thema.  
+  
+ [!code-csharp[WifSAM#3](~/samples/snippets/csharp/VS_Snippets_Misc/wifsam/cs/webapplication1/global.asax.cs#3)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SigningOut">
+      <MemberSignature Language="C#" Value="public event EventHandler&lt;System.IdentityModel.Services.SigningOutEventArgs&gt; SigningOut;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler`1&lt;class System.IdentityModel.Services.SigningOutEventArgs&gt; SigningOut" />
+      <MemberSignature Language="DocId" Value="E:System.IdentityModel.Services.SessionAuthenticationModule.SigningOut" />
+      <MemberSignature Language="VB.NET" Value="Public Event SigningOut As EventHandler(Of SigningOutEventArgs) " />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; event EventHandler&lt;System::IdentityModel::Services::SigningOutEventArgs ^&gt; ^ SigningOut;" />
+      <MemberSignature Language="F#" Value="member this.SigningOut : EventHandler&lt;System.IdentityModel.Services.SigningOutEventArgs&gt; " Usage="member this.SigningOut : System.EventHandler&lt;System.IdentityModel.Services.SigningOutEventArgs&gt; " />
+      <MemberType>Event</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.EventHandler&lt;System.IdentityModel.Services.SigningOutEventArgs&gt;</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Tritt vor dem Löschen der Anmeldung auf.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wird von der <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> -Methode ausgelöst, <xref:System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie%2A> kurz bevor die-Methode aufgerufen wird.  
+  
+ Es ist nicht garantiert, dass für jede Sitzung aufgerufen wird. Beispielsweise können die Cookies auf Clientseite gelöscht werden. in diesem Fall würde dieses Ereignis nie ausgelöst, da kein serverseitiges Ereignis zum Löschen der Sitzung vorhanden ist.  
+  
+   
+  
+## Examples  
+ Der folgende Code zeigt einen Handler für das <xref:System.IdentityModel.Services.SessionAuthenticationModule.SigningOut> -Ereignis, das in der Global.asax.cs-Datei einer ASP.NET-Webanwendung implementiert ist. Außerdem müssen Sie dem-Ereignis den-Handler hinzufügen. Ein ausführlichere Beispiel finden Sie im <xref:System.IdentityModel.Services.SessionAuthenticationModule> Übersichts Thema.  
+  
+ [!code-csharp[WifSAM#4](~/samples/snippets/csharp/VS_Snippets_Misc/wifsam/cs/webapplication1/global.asax.cs#4)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SignOut">
+      <MemberSignature Language="C#" Value="public virtual void SignOut ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void SignOut() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.SignOut" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Sub SignOut ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void SignOut();" />
+      <MemberSignature Language="F#" Value="abstract member SignOut : unit -&gt; unit&#xA;override this.SignOut : unit -&gt; unit" Usage="sessionAuthenticationModule.SignOut " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Meldet den aktuellen Benutzer ab und löst die entsprechenden Ereignisse aus.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Ruft die <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnSigningOut%2A>Methoden <xref:System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie%2A>, und <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnSignedOut%2A> auf, um die Abmeldung auszuführen. Wenn eine Ausnahme auftritt, wird <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnSignOutError%2A> die-Methode aufgerufen, um <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOutError> das-Ereignis zu erhöhen. Sie können die <xref:System.ComponentModel.CancelEventArgs.Cancel%2A> -Eigenschaft <xref:System.IdentityModel.Services.ErrorEventArgs> des-Objekts festlegen, das an den-Ereignishandler für dieses Ereignis weitergeleitet wird, um die Abmeldung abzubrechen und zu verhindern, dass die Ausnahme an den Client weitergegeben wird.  
+  
+ Sie können diese Methode überschreiben, um anwendungsspezifisches Verhalten hinzuzufügen.  
+  
+   
+  
+## Examples  
+ Der folgende Code zeigt den Code zum Aufrufen <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> der-Methode von einer SignOut. aspx-Seite (SignOut.aspx.cs) in einer ASP.NET-Webanwendung. Ein ausführlichere Beispiel finden Sie im <xref:System.IdentityModel.Services.SessionAuthenticationModule> Übersichts Thema.  
+  
+ [!code-csharp[WifSAM#7](~/samples/snippets/csharp/VS_Snippets_Misc/wifsam/cs/webapplication1/global.asax.cs#7)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SignOutError">
+      <MemberSignature Language="C#" Value="public event EventHandler&lt;System.IdentityModel.Services.ErrorEventArgs&gt; SignOutError;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler`1&lt;class System.IdentityModel.Services.ErrorEventArgs&gt; SignOutError" />
+      <MemberSignature Language="DocId" Value="E:System.IdentityModel.Services.SessionAuthenticationModule.SignOutError" />
+      <MemberSignature Language="VB.NET" Value="Public Event SignOutError As EventHandler(Of ErrorEventArgs) " />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; event EventHandler&lt;System::IdentityModel::Services::ErrorEventArgs ^&gt; ^ SignOutError;" />
+      <MemberSignature Language="F#" Value="member this.SignOutError : EventHandler&lt;System.IdentityModel.Services.ErrorEventArgs&gt; " Usage="member this.SignOutError : System.EventHandler&lt;System.IdentityModel.Services.ErrorEventArgs&gt; " />
+      <MemberType>Event</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.EventHandler&lt;System.IdentityModel.Services.ErrorEventArgs&gt;</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Tritt ein, wenn ein Fehler während der Abmeldung auftritt.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Wird von der <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> -Methode ausgelöst, wenn während des Abmelde Fehlers ein Fehler auftritt.  
+  
+ In einem Ereignishandler können Sie die Ausnahme erhalten, die dazu geführt hat, dass das Ereignis aus <xref:System.IdentityModel.Services.ErrorEventArgs.Exception%2A?displayProperty=nameWithType> der-Eigenschaft ausgelöst wurde. Sie können die weitere Verarbeitung der Ausnahme abbrechen, bei der die Ausnahme nicht an den Client weitergegeben wird, indem Sie die <xref:System.ComponentModel.CancelEventArgs.Cancel%2A> -Eigenschaft <xref:System.IdentityModel.Services.ErrorEventArgs> von auf `true`festlegen.  
+  
+ Es ist nicht garantiert, dass für jede Sitzung aufgerufen wird. Beispielsweise können die Cookies auf Clientseite gelöscht werden. in diesem Fall würde dieses Ereignis nie ausgelöst, da kein serverseitiges Ereignis zum Löschen der Sitzung vorhanden ist.  
+  
+   
+  
+## Examples  
+ Der folgende Code zeigt einen Handler für das <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOutError> -Ereignis, das in der Global.asax.cs-Datei einer ASP.NET-Webanwendung implementiert ist. Außerdem müssen Sie dem-Ereignis den-Handler hinzufügen. Ein ausführlichere Beispiel finden Sie im <xref:System.IdentityModel.Services.SessionAuthenticationModule> Übersichts Thema.  
+  
+ [!code-csharp[WifSAM#2](~/samples/snippets/csharp/VS_Snippets_Misc/wifsam/cs/webapplication1/global.asax.cs#2)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="TryReadSessionTokenFromCookie">
+      <MemberSignature Language="C#" Value="public bool TryReadSessionTokenFromCookie (out System.IdentityModel.Tokens.SessionSecurityToken sessionToken);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryReadSessionTokenFromCookie([out] class System.IdentityModel.Tokens.SessionSecurityToken&amp; sessionToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.TryReadSessionTokenFromCookie(System.IdentityModel.Tokens.SessionSecurityToken@)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryReadSessionTokenFromCookie (ByRef sessionToken As SessionSecurityToken) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryReadSessionTokenFromCookie([Runtime::InteropServices::Out] System::IdentityModel::Tokens::SessionSecurityToken ^ % sessionToken);" />
+      <MemberSignature Language="F#" Value="member this.TryReadSessionTokenFromCookie :  -&gt; bool" Usage="sessionAuthenticationModule.TryReadSessionTokenFromCookie sessionToken" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sessionToken" Type="System.IdentityModel.Tokens.SessionSecurityToken" RefType="out" />
+      </Parameters>
+      <Docs>
+        <param name="sessionToken">Enthält nach dem Beenden dieser Methode das Sicherheitstoken der Sitzung, das aus dem Sitzungscookie gelesen wurde.</param>
+        <summary>Versucht, ein <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" /> aus einem Sitzungscookie zu lesen und gibt einen Wert zurück, der angibt, ob das Sitzungscookie erfolgreich gelesen wurde.</summary>
+        <returns><see langword="true" />, wenn das Sitzungscookie aus der Anforderung erfolgreich gelesen wurde; andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Liest das Cookie mithilfe des cookiehandlers, der in <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> der-Eigenschaft konfiguriert ist <xref:System.IdentityModel.Services.SessionAuthenticationModule.ReadSessionTokenFromCookie%2A> , und ruft dann die-Methode auf, um das Token aus dem Cookie zu lesen.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ValidateSessionToken">
+      <MemberSignature Language="C#" Value="protected System.Collections.ObjectModel.ReadOnlyCollection&lt;System.Security.Claims.ClaimsIdentity&gt; ValidateSessionToken (System.IdentityModel.Tokens.SessionSecurityToken sessionSecurityToken);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig instance class System.Collections.ObjectModel.ReadOnlyCollection`1&lt;class System.Security.Claims.ClaimsIdentity&gt; ValidateSessionToken(class System.IdentityModel.Tokens.SessionSecurityToken sessionSecurityToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.ValidateSessionToken(System.IdentityModel.Tokens.SessionSecurityToken)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; System::Collections::ObjectModel::ReadOnlyCollection&lt;System::Security::Claims::ClaimsIdentity ^&gt; ^ ValidateSessionToken(System::IdentityModel::Tokens::SessionSecurityToken ^ sessionSecurityToken);" />
+      <MemberSignature Language="F#" Value="member this.ValidateSessionToken : System.IdentityModel.Tokens.SessionSecurityToken -&gt; System.Collections.ObjectModel.ReadOnlyCollection&lt;System.Security.Claims.ClaimsIdentity&gt;" Usage="sessionAuthenticationModule.ValidateSessionToken sessionSecurityToken" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.ObjectModel.ReadOnlyCollection&lt;System.Security.Claims.ClaimsIdentity&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sessionSecurityToken" Type="System.IdentityModel.Tokens.SessionSecurityToken" />
+      </Parameters>
+      <Docs>
+        <param name="sessionSecurityToken">Das zu validierende Token.</param>
+        <summary>Überprüft das angegebene <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" /> und gibt seine Identität zurück.</summary>
+        <returns>Die Auflistung der im Token enthaltenen Identitäten.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Diese Methode wird von der <xref:System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken%2A> -Methode aufgerufen. Sie ruft die <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.ValidateToken%2A?displayProperty=nameWithType> -Methode des konfigurierten Sitzungs Token-Handlers auf, um das Token zu validieren und seine Identitäten zu extrahieren.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IdentityModel.Services.FederatedSessionExpiredException">Das Token wurde überschritten.</exception>
+        <exception cref="T:System.IdentityModel.Services.FederationException">Die Tokenstartzeit ist noch nicht gültig.</exception>
+        <exception cref="T:System.InvalidOperationException">Kein gültiger Handler für Sitzungstoken konfiguriert. (Es gibt kein <see cref="T:System.IdentityModel.Tokens.SessionSecurityTokenHandler" />, das in der <see cref="P:System.IdentityModel.Configuration.IdentityConfiguration.SecurityTokenHandlers" />-Eigenschaft konfiguriert ist).</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="WriteSessionTokenToCookie">
+      <MemberSignature Language="C#" Value="public void WriteSessionTokenToCookie (System.IdentityModel.Tokens.SessionSecurityToken sessionToken);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void WriteSessionTokenToCookie(class System.IdentityModel.Tokens.SessionSecurityToken sessionToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IdentityModel.Services.SessionAuthenticationModule.WriteSessionTokenToCookie(System.IdentityModel.Tokens.SessionSecurityToken)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub WriteSessionTokenToCookie (sessionToken As SessionSecurityToken)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void WriteSessionTokenToCookie(System::IdentityModel::Tokens::SessionSecurityToken ^ sessionToken);" />
+      <MemberSignature Language="F#" Value="member this.WriteSessionTokenToCookie : System.IdentityModel.Tokens.SessionSecurityToken -&gt; unit" Usage="sessionAuthenticationModule.WriteSessionTokenToCookie sessionToken" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel.Services</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sessionToken" Type="System.IdentityModel.Tokens.SessionSecurityToken" />
+      </Parameters>
+      <Docs>
+        <param name="sessionToken">Das zu schreibende Sitzungssicherheitstoken.</param>
+        <summary>Schreibt das angegebene <see cref="T:System.IdentityModel.Tokens.SessionSecurityToken" /> in ein Sitzungscookie.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Schreibt das Cookie mithilfe des cookiehandlers, der in <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> der-Eigenschaft konfiguriert ist.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="sessionToken" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.InvalidOperationException">Kein gültiger Handler für Sitzungstoken konfiguriert. (Es gibt kein <see cref="T:System.IdentityModel.Tokens.SessionSecurityTokenHandler" />, das in der <see cref="P:System.IdentityModel.Configuration.IdentityConfiguration.SecurityTokenHandlers" />-Eigenschaft konfiguriert ist).</exception>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
