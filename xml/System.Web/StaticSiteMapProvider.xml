@@ -1,0 +1,446 @@
+<Type Name="StaticSiteMapProvider" FullName="System.Web.StaticSiteMapProvider">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="24e8f91292a8774b0e64333231fd6d9ebd84efcd" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70452166" /></Metadata><TypeSignature Language="C#" Value="public abstract class StaticSiteMapProvider : System.Web.SiteMapProvider" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit StaticSiteMapProvider extends System.Web.SiteMapProvider" />
+  <TypeSignature Language="DocId" Value="T:System.Web.StaticSiteMapProvider" />
+  <TypeSignature Language="VB.NET" Value="Public MustInherit Class StaticSiteMapProvider&#xA;Inherits SiteMapProvider" />
+  <TypeSignature Language="C++ CLI" Value="public ref class StaticSiteMapProvider abstract : System::Web::SiteMapProvider" />
+  <TypeSignature Language="F#" Value="type StaticSiteMapProvider = class&#xA;    inherit SiteMapProvider" />
+  <AssemblyInfo>
+    <AssemblyName>System.Web</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Web.SiteMapProvider</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>Fungiert als Teilimplementierung einer abstrakten <see cref="T:System.Web.SiteMapProvider" />-Klasse sowie als Basisklasse für die <see cref="T:System.Web.XmlSiteMapProvider" />-Klasse, die Standardsiteübersichtsanbieter in ASP.NET ist.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.StaticSiteMapProvider> -Klasse ist eine partielle Implementierung der <xref:System.Web.SiteMapProvider> abstrakten-Klasse und bietet zwei zusätzliche <xref:System.Web.StaticSiteMapProvider.AddNode%2A> Methoden <xref:System.Web.StaticSiteMapProvider.RemoveNode%2A>: und sowie die abstrakten <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> und geschützten <xref:System.Web.StaticSiteMapProvider.Clear%2A> Methoden.  
+  
+ Die <xref:System.Web.StaticSiteMapProvider> -Klasse unterstützt das Schreiben eines Site Übersichts Anbieters (z <xref:System.Web.XmlSiteMapProvider>. b. ein), der eine im persistenten Speicher gespeicherte Site Map in eine im Arbeitsspeicher gespeicherte Site Map übersetzt. Die <xref:System.Web.StaticSiteMapProvider> -Klasse stellt grundlegende Implementierungen zum Speichern und <xref:System.Web.SiteMapNode> Abrufen von-Objekten bereit.  
+  
+ Die <xref:System.Web.SiteMapProvider> Klassen <xref:System.Web.StaticSiteMapProvider> und unterstützen das Konzept einer Site Übersichts Anbieter Hierarchie, in der ein Site Übersichts Anbieter eine hierarchische Beziehung zu anderen Site Übersichts Anbietern aufweisen kann. Dieses Muster wird mit der- <xref:System.Web.SiteMapProvider.RootProvider%2A> Eigenschaft <xref:System.Web.SiteMapProvider.ParentProvider%2A> und der-Eigenschaft implementiert.  
+  
+ Die <xref:System.Web.StaticSiteMapProvider> -Klasse <xref:System.Web.SiteMapNode> speichert die Objekte in Hash Tabellen und verwendet intern <xref:System.Web.SiteMapNode.Url%2A?displayProperty=nameWithType> die-Eigenschaft der Seiten, die von Site Übersichts Knoten dargestellt werden, als Schlüssel. (Wenn ein Site Übersichts Knoten keine URL angibt, wird er mit einem automatisch generierten eindeutigen Schlüssel nachverfolgt.) Daher ist es nicht möglich, Site Übersichts Knoten zu verwenden, in denen ein Site Übersichts Knoten mit derselben URL mehrmals verwendet wird. Wenn Sie z. b. versuchen, den im folgenden Codebeispiel dargestellten Site Übersichts Knoten mit <xref:System.Web.XmlSiteMapProvider> der-Klasse zu laden, die den standardmäßigen ASP.net Site Übersichts Anbieter oder einen beliebigen Site Übersichts Anbieter enthält <xref:System.Web.StaticSiteMapProvider> , der von der-Klasse abgeleitet wird, funktioniert nicht, da die Die Seite "aboutus. aspx" wird mehrmals verwendet.  
+  
+```  
+<sitemap>  
+  <sitemapnode title="Home" description="Home" url="default.aspx" >  
+    <sitemapnode title="Catalog" description="Our catalog" url="catalog.aspx"/>  
+    <sitemapnode title="About Us" description="All about our company" url="aboutus.aspx"/>  
+    <sitemapnode title="Driving Directions" description="Directions to our store" url="aboutus.aspx"/>  
+  </sitemapnode>  
+</sitemap>  
+```  
+  
+ Wenn Sie die <xref:System.Web.StaticSiteMapProvider> -Klasse erweitern, sind die drei wichtigsten Methoden die <xref:System.Web.SiteMapProvider.GetRootNodeCore%2A>Methoden, <xref:System.Configuration.Provider.ProviderBase.Initialize%2A>und <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> . Die <xref:System.Web.StaticSiteMapProvider.Clear%2A> - <xref:System.Web.StaticSiteMapProvider.FindSiteMapNode%2A> und-Methoden verfügen über Standard Implementierungen, die für die meisten benutzerdefinierten Site Übersichts Anbieter-Implementierungen ausreichend sind.  
+  
+ Die <xref:System.Configuration.Provider.ProviderBase.Initialize%2A> -Methode wird aufgerufen, um abgeleitete Site Übersichts Anbieter zu initialisieren. dazu zählen auch alle Ressourcen, die zum Laden von Site Übersichts Daten erforderlich sind, aber es wird versucht, den Site Übersichts Knoten im Arbeitsspeicher zu erstellen. Wenn die abgeleitete Klasse Dateien zum Speichern von Site Übersichts Daten verwendet, kann hier eine beliebige Datei Initialisierung durchgeführt werden. Wenn der Site Übersichts Knoten einen anderen Typ von Datenspeicher verwendet, z. b. eine relationale Datenbank, kann hier eine Verbindung initialisiert werden. Zusätzliche Attribute, wie z. b. Dateinamen oder Verbindungs Zeichenfolgen, die im Site Map-Anbieter Element in der Konfiguration platziert werden, werden vom ASP.net- <xref:System.Configuration.Provider.ProviderBase.Initialize%2A> Konfigurationssystem verarbeitet `attributes` und mit dem-Parameter an die-Methode übergeben.  
+  
+ Die <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> -Methode muss von allen Klassen überschrieben werden, die von der <xref:System.Web.StaticSiteMapProvider> -Klasse abgeleitet sind, und wird aufgerufen, um den Site Übersichts Knoten aus dem permanenten Speicher zu laden und in eine interne Darstellung zu konvertieren. Die <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> <xref:System.Web.StaticSiteMapProvider> -Methode wird intern in vielen der Standardmember-Implementierungen der- <xref:System.Web.XmlSiteMapProvider> Klasse und der-Klasse aufgerufen. Wenn Sie einen eigenen Site Übersichts Anbieter implementieren, stellen Sie sicher, dass die Datenverarbeitung der Site Map einmal erfolgt <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> und dass nachfolgende Aufrufe der Methode sofort zurückgegeben werden, wenn die Site Übersichts Informationen bereits geladen wurden. Wenn Sie die <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> -Methode implementieren, stellen Sie sicher, dass Sie Thread sicher ist, da mehrere gleichzeitige Seiten Anforderungen indirekt zu mehreren Aufrufen zum Laden von Site Übersichts Informationen führen können. Die Site Übersichts Infrastruktur unterstützt die Anzeige von Site Übersichts Informationen basierend auf der Rolle des Benutzers. Abhängig von der <xref:System.Web.SiteMapNode.Roles%2A> Eigenschaft, die von den einzelnen <xref:System.Web.SiteMapNode> Objekten unterstützt wird, kann für verschiedene Benutzer eine andere Navigationsstruktur vorhanden sein. Die Standard Implementierungen des Site Übersichts Knotens, die Member der <xref:System.Web.StaticSiteMapProvider> -Klasse abrufen, führen die Sicherheits Kürzung <xref:System.Web.SiteMapProvider.IsAccessibleToUser%2A> automatisch durch Aufrufen der-Methode aus.  
+  
+ Die <xref:System.Web.StaticSiteMapProvider.AddNode%2A>Methoden <xref:System.Web.StaticSiteMapProvider.Clear%2A> , und <xref:System.Web.StaticSiteMapProvider.RemoveNode%2A>  bearbeiten die internen Auflistungen, die zum Nachverfolgen von Site Übersichts Knoten auf Thread sichere Weise verwendet werden.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie Sie die <xref:System.Web.StaticSiteMapProvider> -Klasse so erweitern, dass Sie Microsoft Access als Site Übersichts Anbieter verwendet. Bei `AccessSiteMapProvider` der-Klasse handelt es sich um einen Site Übersichts Anbieter, der nur eine einfache Hierarchie mit einer Ebene unterstützt. Die Tabelle, in der die Daten der Site Map gespeichert werden, weist die folgende Struktur auf:  
+  
+```  
+NODEID URL            NAME       PARENTNODEID  
+ ---------------------------------------------  
+ 1      default.aspx   Default    <NULL>  
+ 2      catalog.aspx   Catalog    1  
+ 3      aboutus.aspx   Contact Us 1  
+...  
+```  
+  
+ Die `AccessSiteMapProvider` -Klasse wird von der <xref:System.Web.StaticSiteMapProvider> -Klasse abgeleitet und ruft Ihre Informationen aus einer Microsoft Access-Datenbank mithilfe grundlegender SQL <xref:System.Data.OleDb.OleDbCommand> - <xref:System.Data.OleDb.OleDbDataReader> Abfragen und der-und-Objekte ab.  
+  
+ [!code-cpp[Urtue.Samples.Alexkr.AccessSiteMapProvider_1#1](~/samples/snippets/cpp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.AccessSiteMapProvider_1/CPP/accesssitemapprovider.cpp#1)]
+ [!code-csharp[Urtue.Samples.Alexkr.AccessSiteMapProvider_1#1](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.AccessSiteMapProvider_1/CS/accesssitemapprovider.cs#1)]
+ [!code-vb[Urtue.Samples.Alexkr.AccessSiteMapProvider_1#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.AccessSiteMapProvider_1/VB/accesssitemapprovider.vb#1)]  
+  
+ Schließlich wird der `AccessSiteMapProvider` als Standardanbieter in der folgenden Web. config-Datei konfiguriert.  
+  
+```  
+<configuration>  
+  <system.web>  
+    <siteMap defaultProvider="AccessSiteMapProvider">  
+     <providers>  
+       <add   
+         name="AccessSiteMapProvider"  
+         type="Samples.AspNet.AccessSiteMapProvider,Samples.AspNet "  
+         accessSiteMapConnectionString="PROVIDER=MICROSOFT.JET.OLEDB.4.0;DATA SOURCE=sitemap.mdb "/>  
+     </providers>   
+    </siteMap>  
+  </system.web>  
+</configuration>  
+```  
+  
+ ]]></format>
+    </remarks>
+    <block subset="none" type="overrides"><para>Wenn Sie von der <see cref="T:System.Web.StaticSiteMapProvider" /> -Klasse erben, müssen Sie den folgenden Member überschreiben:. <see cref="M:System.Web.StaticSiteMapProvider.BuildSiteMap" /></para></block>
+    <altmember cref="T:System.Web.SiteMapProvider" />
+    <altmember cref="T:System.Web.XmlSiteMapProvider" />
+    <altmember cref="T:System.Web.SiteMapNode" />
+    <altmember cref="T:System.Web.SiteMap" />
+    <related type="Article" href="https://msdn.microsoft.com/library/23de8a05-cac3-4693-b508-39f1d4b7053d">ASP.net Übersicht über die Site Navigation</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/6b85a558-1df8-44cf-bea6-62e61bcc8d20">ASP.net Site Maps</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/4f3ce72a-4fa3-4c3a-94c8-3e2bc4a92d85">ASP.net Site-Navigations Anbieter</related>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected StaticSiteMapProvider ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.StaticSiteMapProvider.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; StaticSiteMapProvider();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Web.StaticSiteMapProvider" />-Klasse.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ **Hinweis** Diese Klasse wird nicht direkt instanziiert. Dieser Konstruktor wird vom Konstruktor von Klassen aufgerufen, die von der <xref:System.Web.StaticSiteMapProvider> -Klasse abgeleitet werden.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddNode">
+      <MemberSignature Language="C#" Value="protected internal override void AddNode (System.Web.SiteMapNode node, System.Web.SiteMapNode parentNode);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig virtual instance void AddNode(class System.Web.SiteMapNode node, class System.Web.SiteMapNode parentNode) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.StaticSiteMapProvider.AddNode(System.Web.SiteMapNode,System.Web.SiteMapNode)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overrides Sub AddNode (node As SiteMapNode, parentNode As SiteMapNode)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; override void AddNode(System::Web::SiteMapNode ^ node, System::Web::SiteMapNode ^ parentNode);" />
+      <MemberSignature Language="F#" Value="override this.AddNode : System.Web.SiteMapNode * System.Web.SiteMapNode -&gt; unit" Usage="staticSiteMapProvider.AddNode (node, parentNode)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+        <Parameter Name="parentNode" Type="System.Web.SiteMapNode" />
+      </Parameters>
+      <Docs>
+        <param name="node">Der dem Siteübersichtsanbieter hinzuzufügende <see cref="T:System.Web.SiteMapNode" />.</param>
+        <param name="parentNode">Der <see cref="T:System.Web.SiteMapNode" />, unter dem <paramref name="node" /> hinzugefügt werden soll.</param>
+        <summary>Fügt den vom Siteübersichtsanbieter verwalteten Auflistungen einen <see cref="T:System.Web.SiteMapNode" /> hinzu und richtet eine Über- bzw. Unterordnungsbeziehung zwischen den <see cref="T:System.Web.SiteMapNode" />-Objekten ein.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Der durch den `node` -Parameter identifizierte Site Übersichts Knoten wird einer internen Auflistung hinzugefügt, und zwischen diesem und dem durch den `parentNode` -Parameter identifizierten Site Übersichts Knoten wird eine Beziehung zwischen über-und untergeordneten Elementen erstellt.  
+  
+ Die URL für einen Site Übersichts Knoten wird möglicherweise interpretiert, wenn er den internen Auflistungen hinzugefügt wird. Anwendungs relative und relative URLs werden auf virtuelle Anwendungs absolute Pfade erweitert, die dann intern verwendet werden, um die einzelnen Instanzen der <xref:System.Web.SiteMapNode> Klasse zu speichern und darauf zuzugreifen. Andere URLs, z. b. physische Pfade, Pfade mit Protokollen in Ihnen und UNC-Pfade, werden nicht interpretiert.  
+  
+ Die <xref:System.Web.XmlSiteMapProvider> -Klasse, die von der <xref:System.Web.StaticSiteMapProvider> -Klasse abgeleitet ist und der Standard-Site Übersichts Anbieter für ASP.net, <xref:System.Web.SiteMapNode> verwendet <xref:System.Web.SiteMapNode.Url%2A> standardmäßig die-Eigenschaft eines-Objekts als Suchschlüssel in den internen Auflistungen. Wenn die <xref:System.Web.SiteMapNode.Url%2A> -Eigenschaft <xref:System.Web.SiteMapNode> von festgelegt ist, muss Sie innerhalb des Bereichs des Site Übersichts Anbieters eindeutig sein. Die <xref:System.Web.StaticSiteMapProvider.FindSiteMapNode%2A> -Methode versucht, Site Übersichts Knoten auf der Grundlage <xref:System.Web.SiteMapNode.Url%2A> ihrer-Eigenschaft abzurufen. Andernfalls können Sie die <xref:System.Web.SiteMapNode.Key%2A> -Eigenschaft und die entsprechende <xref:System.Web.StaticSiteMapProvider.FindSiteMapNodeFromKey%2A> -Methode zum Abrufen von Site Übersichts Knoten verwenden. Wenn weder <xref:System.Web.SiteMapNode.Url%2A> noch <xref:System.Web.SiteMapNode.Key%2A> angegeben wird, generiert der Site Übersichts Anbieter automatisch eine <xref:System.Web.SiteMapNode.Key%2A> zum Nachverfolgen der Site Übersichts Knoten.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="node" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.InvalidOperationException">Der <see cref="P:System.Web.SiteMapNode.Url" /> oder der <see cref="P:System.Web.SiteMapNode.Key" /> ist bereits beim <see cref="T:System.Web.StaticSiteMapProvider" /> registriert. Ein Siteübersichtsknoten muss aus Seiten mit eindeutigen URLs oder Schlüsseln bestehen.</exception>
+        <block subset="none" type="overrides"><para>Stellen Sie beim <see cref="M:System.Web.StaticSiteMapProvider.AddNode(System.Web.SiteMapNode,System.Web.SiteMapNode)" /> Überschreiben der-Methode <see cref="P:System.Web.SiteMapNode.Key" /> sicher, dass die-Eigenschaft beim Hinzufügen des Site Übersichts Knotens mithilfe <see cref="Overload:System.Web.StaticSiteMapProvider.AddNode" /> der-Methode auf einen eindeutigen Wert festgelegt wird.</para></block>
+        <altmember cref="M:System.Web.StaticSiteMapProvider.RemoveNode(System.Web.SiteMapNode)" />
+      </Docs>
+    </Member>
+    <Member MemberName="BuildSiteMap">
+      <MemberSignature Language="C#" Value="public abstract System.Web.SiteMapNode BuildSiteMap ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Web.SiteMapNode BuildSiteMap() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.StaticSiteMapProvider.BuildSiteMap" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Function BuildSiteMap () As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract System::Web::SiteMapNode ^ BuildSiteMap();" />
+      <MemberSignature Language="F#" Value="abstract member BuildSiteMap : unit -&gt; System.Web.SiteMapNode" Usage="staticSiteMapProvider.BuildSiteMap " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Lädt beim Überschreiben in einer abgeleiteten Klasse die Siteübersichtsinformationen aus dem permanenten Speicher und erstellt sie im Arbeitsspeicher.</summary>
+        <returns>Der Stamm-<see cref="T:System.Web.SiteMapNode" /> der Navigationsstruktur für die Siteübersicht.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> -Methode ist der einzige abstrakte Member <xref:System.Web.StaticSiteMapProvider> der-Klasse. Die <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> -Methode wird aufgerufen, um den Site Übersichts Knoten aus dem permanenten Speicher zu laden und zu erstellen. Wenn Sie die <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> -Methode implementieren, stellen Sie sicher, dass Sie Thread sicher ist, da mehrere gleichzeitige Seiten Anforderungen indirekt zu mehreren Aufrufen zum Laden von Site Übersichts Informationen führen können.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie die <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> -Methode zum Abrufen von Daten aus einer Microsoft Access- <xref:System.Web.SiteMapNode> Datenbank und zum Erstellen von Objekten <xref:System.Web.SiteMapNode.ChildNodes%2A> implementiert wird, die der-Auflistung des root Site Map-Knotens hinzugefügt werden. Zum Schluss wird <xref:System.Web.SiteMapProvider.RootNode%2A> die-Eigenschaft an den Aufrufer zurückgegeben.  
+  
+ Dieses Codebeispiel ist Teil eines größeren Beispiels, das für die <xref:System.Web.StaticSiteMapProvider> -Klasse bereitgestellt wird.  
+  
+ [!code-cpp[Urtue.Samples.Alexkr.AccessSiteMapProvider_1#4](~/samples/snippets/cpp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.AccessSiteMapProvider_1/CPP/accesssitemapprovider.cpp#4)]
+ [!code-csharp[Urtue.Samples.Alexkr.AccessSiteMapProvider_1#4](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.AccessSiteMapProvider_1/CS/accesssitemapprovider.cs#4)]
+ [!code-vb[Urtue.Samples.Alexkr.AccessSiteMapProvider_1#4](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.AccessSiteMapProvider_1/VB/accesssitemapprovider.vb#4)]  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie die <see cref="M:System.Web.StaticSiteMapProvider.BuildSiteMap" /> Methode in einer abgeleiteten Klasse überschreiben, müssen Sie sicherstellen, <see cref="T:System.Web.SiteMapNode" /> dass die URLs von Objekten normalisiert werden, die Sie Ihrem Site <see cref="M:System.Web.StaticSiteMapProvider.FindSiteMapNode(System.String)" /> Übersichts Anbieter hinzufügen, damit die Methode einen Site Übersichts Knoten abrufen kann, unabhängig davon, ob die URL für die Site Map der Knoten wird als absoluter virtueller Pfad oder Anwendungs relativer Pfad bereitgestellt. Die Implementierer von Site Map <see cref="Overload:System.Web.StaticSiteMapProvider.AddNode" /> -Anbietern, die die-Methode verwenden <see cref="T:System.Web.SiteMapNode" /> , sollten alle URLs normalisieren, bevor Objekte in den internen Hash Tabellen im Namen des Site Übersichts Anbieters gespeichert werden.  
+  
+Das sicherheitseinschränkungs Verhalten ist in <see cref="T:System.Web.SiteMapProvider" /> den <see cref="T:System.Web.StaticSiteMapProvider" /> -und-Klassen Implementierungen enthalten. Damit die Sicherheits Kürzung in abgeleiteten Klassen funktioniert, müssen Sie jedoch die <see cref="P:System.Web.SiteMapNode.Roles" /> -Eigenschaft <see cref="T:System.Web.SiteMapNode" /> aller Objekte festlegen, die Sie während der Erstellung eines Site Übersichts Anbieters erstellen, wenn <see cref="M:System.Web.StaticSiteMapProvider.BuildSiteMap" /> Sie die-Methode überschreiben.</para></block>
+        <altmember cref="P:System.Web.SiteMapProvider.RootNode" />
+        <altmember cref="M:System.Configuration.Provider.ProviderBase.Initialize(System.String,System.Collections.Specialized.NameValueCollection)" />
+        <altmember cref="M:System.Web.StaticSiteMapProvider.Clear" />
+      </Docs>
+    </Member>
+    <Member MemberName="Clear">
+      <MemberSignature Language="C#" Value="protected virtual void Clear ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void Clear() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.StaticSiteMapProvider.Clear" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub Clear ()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void Clear();" />
+      <MemberSignature Language="F#" Value="abstract member Clear : unit -&gt; unit&#xA;override this.Clear : unit -&gt; unit" Usage="staticSiteMapProvider.Clear " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Entfernt alle Elemente in den Auflistungen von untergeordneten und übergeordneten Siteübersichtsknoten, die der <see cref="T:System.Web.StaticSiteMapProvider" /> gemäß seinem Zustand nachverfolgt.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Klassen, die von der <xref:System.Web.StaticSiteMapProvider> -Klasse abgeleitet werden, können die <xref:System.Web.StaticSiteMapProvider.Clear%2A> -Methode überschreiben, um zusätzliche Bereinigungs Vorgänge auszuführen, je nachdem, welchen Zustand die abgeleiteten Klassen behalten  
+  
+ Die <xref:System.Web.StaticSiteMapProvider.Clear%2A> -Methode setzt den Status nicht zurück, der während der <xref:System.Configuration.Provider.ProviderBase.Initialize%2A> -Methode initialisiert wird. Sie setzt nur den Zustand zurück, <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> der während der-Methode initialisiert wird.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie die <xref:System.Web.StaticSiteMapProvider.Clear%2A> -Methode überschrieben wird, um einen zusätzlichen Bereinigung des Zustands auszuführen, der von der-Klasse verwaltet wird.  
+  
+ Dieses Codebeispiel ist Teil eines größeren Beispiels, das für die <xref:System.Web.StaticSiteMapProvider> -Klasse bereitgestellt wird.  
+  
+ [!code-cpp[Urtue.Samples.Alexkr.AccessSiteMapProvider_1#3](~/samples/snippets/cpp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.AccessSiteMapProvider_1/CPP/accesssitemapprovider.cpp#3)]
+ [!code-csharp[Urtue.Samples.Alexkr.AccessSiteMapProvider_1#3](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.AccessSiteMapProvider_1/CS/accesssitemapprovider.cs#3)]
+ [!code-vb[Urtue.Samples.Alexkr.AccessSiteMapProvider_1#3](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.AccessSiteMapProvider_1/VB/accesssitemapprovider.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Configuration.Provider.ProviderBase.Initialize(System.String,System.Collections.Specialized.NameValueCollection)" />
+        <altmember cref="M:System.Web.StaticSiteMapProvider.BuildSiteMap" />
+      </Docs>
+    </Member>
+    <Member MemberName="FindSiteMapNode">
+      <MemberSignature Language="C#" Value="public override System.Web.SiteMapNode FindSiteMapNode (string rawUrl);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Web.SiteMapNode FindSiteMapNode(string rawUrl) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.StaticSiteMapProvider.FindSiteMapNode(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function FindSiteMapNode (rawUrl As String) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Web::SiteMapNode ^ FindSiteMapNode(System::String ^ rawUrl);" />
+      <MemberSignature Language="F#" Value="override this.FindSiteMapNode : string -&gt; System.Web.SiteMapNode" Usage="staticSiteMapProvider.FindSiteMapNode rawUrl" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rawUrl" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="rawUrl">Eine URL, die die Seite angibt, für die ein <see cref="T:System.Web.SiteMapNode" /> abgerufen werden soll.</param>
+        <summary>Ruft ein <see cref="T:System.Web.SiteMapNode" />-Objekt ab, das die Seite an der angegebenen URL darstellt.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der die Seite darstellt, die durch <paramref name="rawURL" /> identifiziert wird. Andernfalls <see langword="null" />, wenn kein entsprechender Siteübersichtsknoten gefunden wird.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die angegebene URL ist in der Regel ein virtueller oder absolute URL. Es kann sich auch um eine URL handeln, die die Anwendungs relative Syntax ASP.NET verwendet `"~/apprelativedirectory"`, z. b.. Die <xref:System.Web.StaticSiteMapProvider> -Klasse normalisiert Anwendungs relative Rohdaten-URLs automatisch in einen absoluten virtuellen Pfad.  
+  
+ Das <xref:System.Web.XmlSiteMapProvider> <xref:System.Web.StaticSiteMapProvider> -Objekt, das von abgeleitet ist und der Standard-Site Übersichts Anbieter für ASP.net, <xref:System.Web.SiteMapNode> verwendet die <xref:System.Web.SiteMapNode.Url%2A> -Eigenschaft eines-Objekts standardmäßig als Suchschlüssel in seinen internen Auflistungen. Wenn die <xref:System.Web.SiteMapNode.Url%2A> -Eigenschaft <xref:System.Web.SiteMapNode> von festgelegt ist, muss Sie innerhalb des Bereichs des Site Übersichts Anbieters eindeutig sein. Die <xref:System.Web.StaticSiteMapProvider.FindSiteMapNode%2A> -Methode versucht, Site Übersichts Knoten basierend auf Ihren <xref:System.Web.SiteMapNode.Url%2A>abzurufen. Andernfalls können Sie die <xref:System.Web.SiteMapNode.Key%2A> -Eigenschaft und die entsprechende <xref:System.Web.StaticSiteMapProvider.FindSiteMapNodeFromKey%2A> -Methode zum Abrufen von Site Übersichts Knoten verwenden. Wenn weder <xref:System.Web.SiteMapNode.Url%2A> noch <xref:System.Web.SiteMapNode.Key%2A> angegeben wird, generiert der Site Übersichts Anbieter automatisch eine <xref:System.Web.SiteMapNode.Key%2A> Eigenschaft zum Nachverfolgen der Site Übersichts Knoten.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rawURL" /> ist <see langword="null" />.</exception>
+        <block subset="none" type="overrides"><para>Wenn Sie die <see cref="M:System.Web.StaticSiteMapProvider.FindSiteMapNode(System.String)" /> Methode in einer abgeleiteten Klasse überschreiben, stellen Sie sicher, dass Sie <see cref="T:System.Web.SiteMapNode" /> die URLs der Objekte, die Sie Ihrem Site Übersichts Anbieter hinzufügen <see cref="M:System.Web.StaticSiteMapProvider.FindSiteMapNode(System.String)" /> , normalisieren, damit die Methode unabhängig von der URL für die Site Übersicht einen Site Übersichts Knoten abrufen kann. der Knoten wird als absoluter virtueller Pfad oder als relativer Anwendungspfad angegeben.  
+  
+Das sicherheitseinschränkungs Verhalten ist in <see cref="T:System.Web.SiteMapProvider" /> den <see cref="T:System.Web.StaticSiteMapProvider" /> -und-Klassen Implementierungen enthalten. Damit die Sicherheits Kürzung in abgeleiteten Klassen funktioniert, müssen Sie jedoch die <see cref="P:System.Web.SiteMapNode.Roles" /> -Eigenschaft <see cref="T:System.Web.SiteMapNode" /> aller Objekte festlegen, die Sie während der Erstellung eines Site Übersichts Anbieters erstellen, wenn <see cref="M:System.Web.StaticSiteMapProvider.BuildSiteMap" /> Sie die-Methode überschreiben.</para></block>
+        <altmember cref="M:System.Web.StaticSiteMapProvider.BuildSiteMap" />
+        <altmember cref="M:System.Web.StaticSiteMapProvider.FindSiteMapNodeFromKey(System.String)" />
+      </Docs>
+    </Member>
+    <Member MemberName="FindSiteMapNodeFromKey">
+      <MemberSignature Language="C#" Value="public override System.Web.SiteMapNode FindSiteMapNodeFromKey (string key);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Web.SiteMapNode FindSiteMapNodeFromKey(string key) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.StaticSiteMapProvider.FindSiteMapNodeFromKey(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function FindSiteMapNodeFromKey (key As String) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Web::SiteMapNode ^ FindSiteMapNodeFromKey(System::String ^ key);" />
+      <MemberSignature Language="F#" Value="override this.FindSiteMapNodeFromKey : string -&gt; System.Web.SiteMapNode" Usage="staticSiteMapProvider.FindSiteMapNodeFromKey key" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="key" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="key">Ein Suchschlüssel, mit dem ein <see cref="T:System.Web.SiteMapNode" /> erstellt wird.</param>
+        <summary>Ruft ein <see cref="T:System.Web.SiteMapNode" />-Objekt auf Grundlage eines angegebenen Schlüssels ab.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der die von <paramref name="key" /> identifizierte Seite darstellt. Andernfalls <see langword="null" />, wenn Einschränkungen aus Sicherheitsgründen aktiviert sind und der Siteübersichtsknoten dem aktuellen Benutzer nicht angezeigt werden kann bzw. der Siteübersichtsknoten von <paramref name="key" /> in der Siteübersichtsknotenauflistung nicht gefunden wird.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.StaticSiteMapProvider.FindSiteMapNodeFromKey%2A> -Methode ruft einen Site Übersichts Knoten von einem internen <xref:System.Collections.Hashtable> -Objekt ab `key`, das auf basiert.  
+  
+ Das <xref:System.Web.XmlSiteMapProvider> -Objekt, das von der <xref:System.Web.StaticSiteMapProvider> -Klasse abgeleitet ist und der Standard-Site Übersichts Anbieter für ASP.net ist <xref:System.Web.SiteMapNode.Url%2A> , <xref:System.Web.SiteMapNode> verwendet standardmäßig die-Eigenschaft eines-Objekts als Suchschlüssel in seinen internen Auflistungen. Wenn die <xref:System.Web.SiteMapNode.Url%2A> -Eigenschaft <xref:System.Web.SiteMapNode> von festgelegt ist, muss Sie innerhalb des Bereichs des Site Übersichts Anbieters eindeutig sein. Die <xref:System.Web.StaticSiteMapProvider.FindSiteMapNode%2A> -Methode versucht, Site Übersichts Knoten basierend auf Ihren <xref:System.Web.SiteMapNode.Url%2A>abzurufen. Andernfalls können Sie die <xref:System.Web.SiteMapNode.Key%2A> -Eigenschaft und die entsprechende <xref:System.Web.StaticSiteMapProvider.FindSiteMapNodeFromKey%2A> -Methode zum Abrufen von Site Übersichts Knoten verwenden.  
+  
+ Der <xref:System.Web.StaticSiteMapProvider> verfügt über eine Standard Implementierung, die Instanzen <xref:System.Web.SiteMapNode> der-Klasse basierend auf dem `key` -Parameter sucht. Wenn ein sitemapanbieterimplementierer <xref:System.Web.StaticSiteMapProvider.AddNode%2A> die-Methode <xref:System.Web.StaticSiteMapProvider> verwendet hat, wird von bereits ein Verweis <xref:System.Web.SiteMapNode> auf die einzelnen Daten auf Grundlage <xref:System.Web.SiteMapNode.Key%2A?displayProperty=nameWithType> des Werts der-Eigenschaft gespeichert. Standardmäßig <xref:System.Web.XmlSiteMapProvider> generiert GUIDs für Instanzen <xref:System.Web.SiteMapNode> der-Klasse, die nicht über einen Wert für die <xref:System.Web.SiteMapNode.Url%2A?displayProperty=nameWithType> -Eigenschaft verfügen.  Die Implementierer von benutzerdefinierten Site Übersichts Anbietern müssen einen eigenen Mechanismus zum Erstellen <xref:System.Web.SiteMapNode.Key%2A?displayProperty=nameWithType> <xref:System.Web.SiteMapNode> eindeutiger Werte für die-Eigenschaft bereitstellen, wenn eine Instanz der-Klasse über keinen <xref:System.Web.SiteMapNode.Url%2A?displayProperty=nameWithType> Wert für die-Eigenschaft verfügt.  
+  
+ Die <xref:System.Web.SiteMapProvider> - <xref:System.Web.XmlSiteMapProvider> und-Klassen, bei denen es sich um die Standard Implementierung des Site Map-Anbieters für <xref:System.Web.SiteMapNode> ASP.net handelt, verwenden die URL eines-Objekts als Schlüssel in den verschiedenen Auflistungen, die die-Klassen verwalten.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="Overload:System.Web.StaticSiteMapProvider.FindSiteMapNode" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetChildNodes">
+      <MemberSignature Language="C#" Value="public override System.Web.SiteMapNodeCollection GetChildNodes (System.Web.SiteMapNode node);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Web.SiteMapNodeCollection GetChildNodes(class System.Web.SiteMapNode node) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.StaticSiteMapProvider.GetChildNodes(System.Web.SiteMapNode)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetChildNodes (node As SiteMapNode) As SiteMapNodeCollection" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Web::SiteMapNodeCollection ^ GetChildNodes(System::Web::SiteMapNode ^ node);" />
+      <MemberSignature Language="F#" Value="override this.GetChildNodes : System.Web.SiteMapNode -&gt; System.Web.SiteMapNodeCollection" Usage="staticSiteMapProvider.GetChildNodes node" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNodeCollection</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+      </Parameters>
+      <Docs>
+        <param name="node">Der <see cref="T:System.Web.SiteMapNode" />, für den alle untergeordneten Siteübersichtsknoten abgerufen werden sollen.</param>
+        <summary>Ruft die untergeordneten Siteübersichtsknoten eines bestimmten <see cref="T:System.Web.SiteMapNode" />-Objekts ab.</summary>
+        <returns>Eine schreibgeschützte <see cref="T:System.Web.SiteMapNodeCollection" />, die die untergeordneten Siteübersichtsknoten von <paramref name="node" /> enthält. Wenn Einschränkungen aus Sicherheitsgründen aktiviert sind, enthält die Auflistung nur Siteübersichtsknoten, die der Benutzer sehen darf.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.SiteMapNode> -Objekte, die an den Site Übersichts Anbieter delegiert werden, um die untergeordneten und übergeordneten Site Übersichts Knoten nachzuverfolgen. Daher müssen Klassen, die einen Site Übersichts Anbieter für eine hierarchische Struktur von Standort Zuordnungen implementieren, <xref:System.Web.StaticSiteMapProvider>z. b <xref:System.Web.SiteMapNode> ., und-Objekte verwenden, um Site Übersichts Knoten darzustellen, die hierarchischen Beziehungen aller Site Übersichts Knoten nachverfolgen, um Navigieren Sie zu einer gesamten hierarchischen Struktur.  
+  
+ Die <xref:System.Web.StaticSiteMapProvider.GetChildNodes%2A> -Methode ruft <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> intern die- <xref:System.Web.SiteMapNodeCollection> Methode auf, um eine schreibgeschützte Auflistung von Site Übersichts Knoten abzurufen, die relativ zum angegebenen Site Übersichts Knoten und für den aktuellen Benutzer relevant sind.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="node" /> ist <see langword="null" />.</exception>
+        <altmember cref="M:System.Web.SiteMapProvider.IsAccessibleToUser(System.Web.HttpContext,System.Web.SiteMapNode)" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetParentNode">
+      <MemberSignature Language="C#" Value="public override System.Web.SiteMapNode GetParentNode (System.Web.SiteMapNode node);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Web.SiteMapNode GetParentNode(class System.Web.SiteMapNode node) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.StaticSiteMapProvider.GetParentNode(System.Web.SiteMapNode)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetParentNode (node As SiteMapNode) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Web::SiteMapNode ^ GetParentNode(System::Web::SiteMapNode ^ node);" />
+      <MemberSignature Language="F#" Value="override this.GetParentNode : System.Web.SiteMapNode -&gt; System.Web.SiteMapNode" Usage="staticSiteMapProvider.GetParentNode node" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+      </Parameters>
+      <Docs>
+        <param name="node">Der <see cref="T:System.Web.SiteMapNode" />, für den der übergeordnete Siteübersichtsknoten abgerufen werden soll.</param>
+        <summary>Ruft den übergeordneten Siteübersichtsknoten eines bestimmten <see cref="T:System.Web.SiteMapNode" />-Objekts ab.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der den übergeordneten Knoten des angegebenen <see cref="T:System.Web.SiteMapNode" /> darstellt. Andernfalls <see langword="null" />, wenn kein übergeordneter Siteübersichtsknoten vorhanden ist oder der Benutzer nicht berechtigt ist, den übergeordneten Siteübersichtsknoten zu sehen.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.SiteMapNode> -Objekte, die an den Site Übersichts Anbieter delegiert werden, um die untergeordneten und übergeordneten Site Übersichts Knoten nachzuverfolgen. Daher müssen Klassen, die einen Site Übersichts Anbieter für eine hierarchische Site Übersichts Struktur implementieren, z. b <xref:System.Web.StaticSiteMapProvider> . die <xref:System.Web.SiteMapNode> -Klasse, die hierarchischen Beziehungen aller Site Übersichts Knoten nachverfolgen, um kann in einer gesamten hierarchischen Struktur navigieren.  
+  
+ Wenn eine <xref:System.Web.SiteMapNode.ParentNode%2A> Eigenschaft nicht gefunden wird, erkennt <xref:System.Web.StaticSiteMapProvider> die Klasse, ob der aktuelle Site Übersichts Anbieter über <xref:System.Web.SiteMapProvider.ParentProvider%2A> eine-Eigenschaft verfügt. Wenn dies der Fall ist, ruft der Site <xref:System.Web.StaticSiteMapProvider.GetParentNode%2A> Übersichts Anbieter die-Eigenschaft für den übergeordneten Site Übersichts Anbieter auf. Dies ermöglicht das Szenario, in dem der übergeordnete Site Übersichts Knoten eines Site Übersichts Knotens von einem anderen Site Übersichts Anbieter verwaltet wird.  
+  
+ Die <xref:System.Web.StaticSiteMapProvider.GetParentNode%2A> -Methode ruft <xref:System.Web.StaticSiteMapProvider.BuildSiteMap%2A> intern die-Methode auf <xref:System.Web.SiteMapNode> , um den abzurufen, der das übergeordnete Element des angegebenen Site Übersichts Knotens darstellt. Wenn die Sicherheits Kürzung aktiviert ist, wird der Site Übersichts Knoten nur zurückgegeben, wenn der Benutzer ihn sehen darf.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="node" /> ist <see langword="null" />.</exception>
+        <altmember cref="M:System.Web.SiteMapProvider.IsAccessibleToUser(System.Web.HttpContext,System.Web.SiteMapNode)" />
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveNode">
+      <MemberSignature Language="C#" Value="protected internal override void RemoveNode (System.Web.SiteMapNode node);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig virtual instance void RemoveNode(class System.Web.SiteMapNode node) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.StaticSiteMapProvider.RemoveNode(System.Web.SiteMapNode)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overrides Sub RemoveNode (node As SiteMapNode)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; override void RemoveNode(System::Web::SiteMapNode ^ node);" />
+      <MemberSignature Language="F#" Value="override this.RemoveNode : System.Web.SiteMapNode -&gt; unit" Usage="staticSiteMapProvider.RemoveNode node" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+      </Parameters>
+      <Docs>
+        <param name="node">Der aus den Auflistungen der Siteübersichtsknoten zu entfernende Siteübersichtsknoten.</param>
+        <summary>Entfernt das angegebene <see cref="T:System.Web.SiteMapNode" />-Objekt aus allen Siteübersichtsknotenauflistungen, die vom Siteübersichtsanbieter nachverfolgt werden.</summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="node" /> ist <see langword="null" />.</exception>
+        <altmember cref="Overload:System.Web.StaticSiteMapProvider.AddNode" />
+      </Docs>
+    </Member>
+  </Members>
+</Type>

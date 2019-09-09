@@ -1,0 +1,1245 @@
+<Type Name="SiteMapProvider" FullName="System.Web.SiteMapProvider">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="2186133d49fa475570255bffedfa4f83b045130f" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70505681" /></Metadata><TypeSignature Language="C#" Value="public abstract class SiteMapProvider : System.Configuration.Provider.ProviderBase" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit SiteMapProvider extends System.Configuration.Provider.ProviderBase" />
+  <TypeSignature Language="DocId" Value="T:System.Web.SiteMapProvider" />
+  <TypeSignature Language="VB.NET" Value="Public MustInherit Class SiteMapProvider&#xA;Inherits ProviderBase" />
+  <TypeSignature Language="C++ CLI" Value="public ref class SiteMapProvider abstract : System::Configuration::Provider::ProviderBase" />
+  <TypeSignature Language="F#" Value="type SiteMapProvider = class&#xA;    inherit ProviderBase" />
+  <AssemblyInfo>
+    <AssemblyName>System.Web</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Configuration.Provider.ProviderBase</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>Stellt eine allgemeine Basisklasse für alle Anbieter von Siteübersichtsdaten bereit sowie eine Methode, mit der Entwickler Anbieter von benutzerdefinierten Siteübersichtsdaten implementieren können, die mit der Siteübersichtsinfrastruktur von ASP.NET als permanente Speicher für <see cref="T:System.Web.SiteMap" />-Objekte verwendet werden können.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.StaticSiteMapProvider> - <xref:System.Web.XmlSiteMapProvider> Klasse und die-Klasse stellen die Standard <xref:System.Web.SiteMapProvider> Implementierungen der abstrakten-Klasse dar. <xref:System.Web.XmlSiteMapProvider> Verwendet eine XML-Datei mit dem Namen Web. Sitemap, um Site Übersichts Daten zu speichern. Weitere Informationen zur Datei "Web. Sitemap" finden Sie unter [ASP.net Site Maps](https://msdn.microsoft.com/library/6b85a558-1df8-44cf-bea6-62e61bcc8d20).  
+  
+ Die <xref:System.Web.SiteMapProvider> -Klasse unterstützt das Konzept einer Site Übersichts Anbieter Hierarchie, indem <xref:System.Web.SiteMapProvider.RootProvider%2A> die <xref:System.Web.SiteMapProvider.ParentProvider%2A> -Eigenschaft und die-Eigenschaft deklariert werden. Ein <xref:System.Web.SiteMapProvider> kann ein untergeordnetes Element oder ein übergeordnetes Element eines anderen Anbieters sein. Dies ermöglicht Szenarien, in denen verschiedene Inhaltsbereiche einer Website im Besitz von unterschiedlichen Entwicklungsgruppen sind, die ihre eigenen Site Maps und Site Übersichts Anbieter verwalten.  
+  
+ Alle <xref:System.Web.SiteMapProvider> Objekte werden in den Web. config-Dateien konfiguriert. Alle Site Übersichts Anbieter, die in diesen Konfigurationsdateien deklariert sind, werden zur Laufzeit geladen und zum Laden und Verarbeiten von Daten zur Standort Navigation verwendet. Das <xref:System.Web.SiteMap> -Objekt, das alle Anbieter nachverfolgt, die über seine <xref:System.Web.SiteMap.Providers%2A> Eigenschafts Auflistung verfügbar sind, bietet programmgesteuerten Zugriff auf die Navigationsdaten, die von den Anbietern verwaltet werden. Im folgenden Codebeispiel wird das Format veranschaulicht, das verwendet wird, um einen Site Übersichts Anbieter in einer Web. config-Datei zu deklarieren.  
+  
+```  
+<siteMap defaultProvider="<name>">  
+  <providers>  
+    <add  
+      name="<friendly name>"  
+      type="<fully qualified class name>, <assembly name (optional)>"   
+      siteMapFile = "<file name>" />  
+  </providers>  
+</siteMap>  
+```  
+  
+ Die von diesen Anbietern geladenen Website Navigationsdaten werden von anderen Komponenten der Site Übersichts Infrastruktur verwendet, z. b. die <xref:System.Web.UI.WebControls.SiteMapPath> Steuerelemente und <xref:System.Web.UI.WebControls.TreeView> , um Site Übersichts Informationen für Benutzer anzuzeigen.  
+  
+ Wenn Sie einen eigenen Site Übersichts Anbieter implementieren, können Sie die Quelldatei im Verzeichnis App_Code Ihrer ASP.NET-Anwendung platzieren, und die Assembly wird automatisch kompiliert. Sie können auch einen eigenen Site Übersichts Anbieter in den globalen Assemblycache (GAC) einfügen und in der Datei "Web. config" einen voll qualifizierten Verweis darauf bereitstellen. Weitere Informationen zu Compilerdiensten finden Sie unter Arbeiten mit Assemblys [und dem globalen Assemblycache](~/docs/framework/app-domains/working-with-assemblies-and-the-gac.md).  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie Sie eine Klasse schreiben, die <xref:System.Web.SiteMapProvider> die abstrakte-Klasse implementiert. Dieses Beispiel enthält nur ein <xref:System.Web.SiteMapProvider> Beispiel und eine Beispiel Textdatei, die damit zusammenarbeiten. Um das Beispiel auszuführen, benötigen Sie auch einen Eintrag in der Datei "Web. config" und eine ASPX-Seite. Diese finden Sie in der Dokumentation für die <xref:System.Web.UI.WebControls.SiteMapDataSource.SiteMapProvider%2A?displayProperty=nameWithType> -Eigenschaft.  
+  
+ Das Beispiel verwendet eine durch Trennzeichen getrennte Datei, die einer erwarteten Struktur folgt, um die Sitemap-Informationen zu laden. Die erste Zeile der Datei stellt den Stamm Knoten der Sitemap dar, und nachfolgende Zeilen sind untergeordnete Knoten. Jeder unter Knoten identifiziert seinen übergeordneten Knoten über die URL. Ein Beispiel für eine Datei, die diese Kriterien erfüllt, ist unten dargestellt.  
+  
+```  
+default.aspx,Home,MyCompany Home Page,  
+sale.aspx,Now On Sale,Check Out These Great Deals!,default.aspx  
+catalog.aspx,Online Catalog,Browse Our Many Great Items!,default.aspx  
+```  
+  
+ Bietet Beispiel Implementierungen für <xref:System.Web.SiteMapProvider> alle Eigenschaften und Methoden. `SimpleTextSiteMapProvider`  
+  
+ [!code-csharp[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#1](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/CS/simpletextsitemapprovider.cs#1)]
+ [!code-vb[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/VB/simpletextsitemapprovider.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <block subset="none" type="overrides"><para>Wenn Sie von <see cref="T:System.Web.SiteMapProvider" /> der-Klasse erben, müssen Sie die folgenden Member überschreiben: <see cref="M:System.Web.SiteMapProvider.GetChildNodes(System.Web.SiteMapNode)" /> <see cref="M:System.Web.SiteMapProvider.GetRootNodeCore" />, <see cref="M:System.Web.SiteMapProvider.FindSiteMapNode(System.String)" />, <see cref="M:System.Web.SiteMapProvider.GetParentNode(System.Web.SiteMapNode)" />und.</para></block>
+    <altmember cref="T:System.Web.SiteMapProvider" />
+    <altmember cref="T:System.Web.XmlSiteMapProvider" />
+    <related type="Article" href="https://msdn.microsoft.com/library/23de8a05-cac3-4693-b508-39f1d4b7053d">ASP.net Übersicht über die Site Navigation</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/6b85a558-1df8-44cf-bea6-62e61bcc8d20">ASP.net Site Maps</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/4f3ce72a-4fa3-4c3a-94c8-3e2bc4a92d85">ASP.net Site-Navigations Anbieter</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/1686b4cd-435a-42dc-b22d-713d7763f97d">Sichern ASP.net Site Navigation</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/8a18e5c2-d41d-49ef-abcb-7c27e2469433">Arbeiten mit Assemblys und dem globalen Assemblychache</related>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected SiteMapProvider ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; SiteMapProvider();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Web.SiteMapProvider" />-Klasse.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Die <xref:System.Web.SiteMapProvider> Klasse wird nicht direkt instanziiert. Der <xref:System.Web.SiteMapProvider.%23ctor%2A> Konstruktor wird vom Konstruktor von Klassen aufgerufen, die von der <xref:System.Web.StaticSiteMapProvider> -Klasse abgeleitet werden.  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="AddNode">
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Fügt der vom Siteübersichtsanbieter verwalteten Knotenauflistung ein <see cref="T:System.Web.SiteMapNode" />-Objekt hinzu.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="AddNode">
+      <MemberSignature Language="C#" Value="protected virtual void AddNode (System.Web.SiteMapNode node);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void AddNode(class System.Web.SiteMapNode node) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.AddNode(System.Web.SiteMapNode)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub AddNode (node As SiteMapNode)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void AddNode(System::Web::SiteMapNode ^ node);" />
+      <MemberSignature Language="F#" Value="abstract member AddNode : System.Web.SiteMapNode -&gt; unit&#xA;override this.AddNode : System.Web.SiteMapNode -&gt; unit" Usage="siteMapProvider.AddNode node" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+      </Parameters>
+      <Docs>
+        <param name="node">Der <see cref="T:System.Web.SiteMapNode" />, der der vom Anbieter verwalteten Knotenauflistung hinzugefügt werden soll.</param>
+        <summary>Fügt der vom Siteübersichtsanbieter verwalteten Knotenauflistung ein <see cref="T:System.Web.SiteMapNode" />-Objekt hinzu.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Klassen, die von <xref:System.Web.SiteMapProvider> der-Klasse abgeleitet <xref:System.Web.SiteMapProvider.AddNode%2A> werden, können die-Methode über <xref:System.Web.SiteMapNode> schreiben und Logik zum Hinzufügen eines-Objekts zur Knoten Auflistung bereitstellen, die vom Site Übersichts Anbieter verwaltet wird. Die Standard Implementierung der- <xref:System.Web.SiteMapProvider.AddNode%2A> Methode löst eine <xref:System.NotImplementedException> -Ausnahme aus.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Web.SiteMapProvider.AddNode(System.Web.SiteMapNode,System.Web.SiteMapNode)" />
+        <altmember cref="T:System.Web.SiteMapNodeCollection" />
+        <altmember cref="T:System.Web.XmlSiteMapProvider" />
+      </Docs>
+    </Member>
+    <Member MemberName="AddNode">
+      <MemberSignature Language="C#" Value="protected internal virtual void AddNode (System.Web.SiteMapNode node, System.Web.SiteMapNode parentNode);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance void AddNode(class System.Web.SiteMapNode node, class System.Web.SiteMapNode parentNode) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.AddNode(System.Web.SiteMapNode,System.Web.SiteMapNode)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Sub AddNode (node As SiteMapNode, parentNode As SiteMapNode)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual void AddNode(System::Web::SiteMapNode ^ node, System::Web::SiteMapNode ^ parentNode);" />
+      <MemberSignature Language="F#" Value="abstract member AddNode : System.Web.SiteMapNode * System.Web.SiteMapNode -&gt; unit&#xA;override this.AddNode : System.Web.SiteMapNode * System.Web.SiteMapNode -&gt; unit" Usage="siteMapProvider.AddNode (node, parentNode)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+        <Parameter Name="parentNode" Type="System.Web.SiteMapNode" />
+      </Parameters>
+      <Docs>
+        <param name="node">Der <see cref="T:System.Web.SiteMapNode" />, der der vom Anbieter verwalteten Knotenauflistung hinzugefügt werden soll.</param>
+        <param name="parentNode">Der <see cref="T:System.Web.SiteMapNode" />, der das übergeordnete Element von <paramref name="node" /> ist.</param>
+        <summary>Fügt der vom Siteübersichtsanbieter verwalteten Knotenauflistung ein <see cref="T:System.Web.SiteMapNode" />-Objekt hinzu und gibt das übergeordnete <see cref="T:System.Web.SiteMapNode" />-Objekt an.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Klassen, die von <xref:System.Web.SiteMapProvider> der-Klasse abgeleitet <xref:System.Web.SiteMapProvider.AddNode%2A> werden, können die-Methode über <xref:System.Web.SiteMapNode> schreiben und Logik zum Hinzufügen eines-Objekts mit einem angegebenen übergeordneten Element zur Knoten Auflistung bereitstellen, die vom Site Übersichts Anbieter verwaltet wird. Beispielsweise fügt die <xref:System.Web.XmlSiteMapProvider.AddNode%2A?displayProperty=nameWithType> -Methode das <xref:System.Web.SiteMapNode> Objekt, das von `node` angegeben wird, <xref:System.Web.SiteMapNodeCollection> der Auflistung hinzu, die durch <xref:System.Web.XmlSiteMapProvider> das-Objekt verwaltet wird, und erstellt eine Beziehung <xref:System.Web.SiteMapNode> zwischen übergeordneten und untergeordneten Elementen zwischen dem Objekt, das von `node` und `parentNode`angegeben wird. Die Standard Implementierung der- <xref:System.Web.SiteMapProvider.AddNode%2A> Methode löst eine <xref:System.NotImplementedException> -Ausnahme aus.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotImplementedException">In allen Fällen.</exception>
+        <altmember cref="M:System.Web.SiteMapProvider.AddNode(System.Web.SiteMapNode)" />
+        <altmember cref="T:System.Web.SiteMapNodeCollection" />
+        <altmember cref="T:System.Web.XmlSiteMapProvider" />
+      </Docs>
+    </Member>
+    <Member MemberName="CurrentNode">
+      <MemberSignature Language="C#" Value="public virtual System.Web.SiteMapNode CurrentNode { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Web.SiteMapNode CurrentNode" />
+      <MemberSignature Language="DocId" Value="P:System.Web.SiteMapProvider.CurrentNode" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable ReadOnly Property CurrentNode As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Web::SiteMapNode ^ CurrentNode { System::Web::SiteMapNode ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.CurrentNode : System.Web.SiteMapNode" Usage="System.Web.SiteMapProvider.CurrentNode" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft das <see cref="T:System.Web.SiteMapNode" />-Objekt ab, das die gerade angeforderte Seite darstellt.</summary>
+        <value>Ein <see cref="T:System.Web.SiteMapNode" />, der die gerade angeforderte Seite darstellt. Andernfalls <see langword="null" />, wenn der <see cref="T:System.Web.SiteMapNode" /> nicht gefunden wird oder für den aktuellen Benutzer nicht zurückgegeben werden kann.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Das <xref:System.Web.SiteMapProvider.SiteMapResolve> -Ereignis wird ausgelöst, bevor versucht wird <xref:System.Web.SiteMapNode> , ein-Objekt abzurufen, damit Ereignis Abonnenten eine Instanz der <xref:System.Web.SiteMapNode> -Klasse zurückgeben können. Wenn keine Ereignis Abonnenten vorhanden sind, ruft <xref:System.Web.SiteMapProvider> die-Klasse <xref:System.Web.SiteMapProvider.FindSiteMapNode%2A> die-Methode mit dem aktuellen HTTP-Kontext <xref:System.Web.SiteMapNode> auf, um einen abzurufen, der die aktuell angeforderte Seite darstellt.  
+  
+ Wenn die aktuell angeforderte Seite nicht mit <xref:System.Web.SiteMapNode>übereinstimmt, `null` wird zurückgegeben. Wenn die Sicherheits Kürzung aktiviert ist und der Benutzer nicht auf das <xref:System.Web.SiteMapNode>zugreifen darf, `null` wird zurückgegeben.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie die <xref:System.Web.SiteMapProvider.CurrentNode%2A> -Eigenschaft in einer Klasse implementiert wird, <xref:System.Web.SiteMapProvider> die die abstrakte-Klasse implementiert.  
+  
+ Dieses Codebeispiel ist Teil eines größeren Beispiels, das für die <xref:System.Web.SiteMapProvider> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#2](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/CS/simpletextsitemapprovider.cs#2)]
+ [!code-vb[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#2](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/VB/simpletextsitemapprovider.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Web.SiteMapProvider.RootNode" />
+        <altmember cref="P:System.Web.SiteMapProvider.SecurityTrimmingEnabled" />
+      </Docs>
+    </Member>
+    <Member MemberName="EnableLocalization">
+      <MemberSignature Language="C#" Value="public bool EnableLocalization { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool EnableLocalization" />
+      <MemberSignature Language="DocId" Value="P:System.Web.SiteMapProvider.EnableLocalization" />
+      <MemberSignature Language="VB.NET" Value="Public Property EnableLocalization As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool EnableLocalization { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.EnableLocalization : bool with get, set" Usage="System.Web.SiteMapProvider.EnableLocalization" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen booleschen Wert ab, der angibt, ob lokalisierte Werte von <see cref="T:System.Web.SiteMapNode" />-Attributen zurückgegeben werden, oder legt diesen Wert fest.</summary>
+        <value><see langword="true" />, wenn ein lokalisierter Wert der <see cref="T:System.Web.SiteMapNode" />-Attribute zurückgegeben wird, andernfalls <see langword="false" />. Die Standardeinstellung ist <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.SiteMapProvider.EnableLocalization%2A> <xref:System.Web.SiteMapNode.Title%2A> -Eigenschaft wird für den Get-Accessor der Eigenschaften <xref:System.Web.SiteMapNode.Description%2A> und sowie zusätzliche <xref:System.Web.SiteMapNode.Attributes%2A> Eigenschaften eines <xref:System.Web.SiteMapNode> -Objekts verwendet.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Web.SiteMapNode.Title" />
+        <altmember cref="P:System.Web.SiteMapNode.Description" />
+        <altmember cref="P:System.Web.SiteMapNode.Attributes" />
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="FindSiteMapNode">
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>Ruft beim Überschreiben in einer abgeleiteten Klasse ein <see cref="T:System.Web.SiteMapNode" />-Objekt ab, das eine Seite darstellt.</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="FindSiteMapNode">
+      <MemberSignature Language="C#" Value="public abstract System.Web.SiteMapNode FindSiteMapNode (string rawUrl);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Web.SiteMapNode FindSiteMapNode(string rawUrl) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.FindSiteMapNode(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Function FindSiteMapNode (rawUrl As String) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract System::Web::SiteMapNode ^ FindSiteMapNode(System::String ^ rawUrl);" />
+      <MemberSignature Language="F#" Value="abstract member FindSiteMapNode : string -&gt; System.Web.SiteMapNode" Usage="siteMapProvider.FindSiteMapNode rawUrl" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rawUrl" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="rawUrl">Eine URL, die die Seite angibt, für die ein <see cref="T:System.Web.SiteMapNode" /> abgerufen werden soll.</param>
+        <summary>Ruft beim Überschreiben in einer abgeleiteten Klasse ein <see cref="T:System.Web.SiteMapNode" />-Objekt ab, das die Seite bei der angegebenen URL darstellt.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der die von <paramref name="rawURL" /> angegebene Seite darstellt. Andernfalls <see langword="null" />, wenn kein entsprechender <see cref="T:System.Web.SiteMapNode" /> gefunden wird oder wenn Einschränkungen aus Sicherheitsgründen aktiviert sind und der <see cref="T:System.Web.SiteMapNode" /> für den aktuellen Benutzer nicht zurückgegeben werden kann.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Klassen, die von der <xref:System.Web.SiteMapProvider> -Klasse abgeleitet werden, <xref:System.Web.SiteMapProvider.FindSiteMapNode%2A> müssen die abstrakte-Methode implementieren.  
+  
+ Die angegebene URL kann ein virtueller oder absolute URL sein. Es kann sich auch um eine URL handeln, die Anwendungs relative Syntax verwendet, `~/apprelativedirectory`z. b.. Stellen Sie sicher, dass jede <xref:System.Web.SiteMapProvider.FindSiteMapNode%2A> Implementierung der-Methode die Anwendungs relative Syntax ordnungsgemäß analysiert und behandelt.  
+  
+ Die <xref:System.Web.XmlSiteMapProvider> -Klasse, bei der es sich um den Standard-Site Übersichts Anbieter für ASP.net handelt <xref:System.Web.SiteMapNode> , verwendet die URL eines-Objekts als Schlüssel in den verschiedenen Auflistungen, die von den Klassen verwaltet werden. Wenn eine <xref:System.Web.SiteMapNode> eine URL bereitstellt, muss Sie daher innerhalb des Bereichs des Site Übersichts Anbieters eindeutig sein. Wenn keine URL angegeben wird, wird ein eindeutiger Bezeichner generiert, <xref:System.Web.SiteMapNode>um die zu identifizieren.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie die <xref:System.Web.SiteMapProvider.FindSiteMapNode%2A> -Methode in einer Klasse implementiert wird, <xref:System.Web.SiteMapProvider> die die abstrakte-Klasse implementiert. Die `SimpleTextSiteMapProvider` verwendet eine Hilfsmethode mit dem `FindUrl`Namen, um die URL der aktuell angezeigten Seite aus dem <xref:System.Web.HttpContext> -Objekt zu erhalten.  
+  
+ Dieses Codebeispiel ist Teil eines größeren Beispiels, das für die <xref:System.Web.SiteMapProvider> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#5](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/CS/simpletextsitemapprovider.cs#5)]
+ [!code-vb[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#5](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/VB/simpletextsitemapprovider.vb#5)]  
+  
+ [!code-csharp[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#8](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/CS/simpletextsitemapprovider.cs#8)]
+ [!code-vb[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#8](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/VB/simpletextsitemapprovider.vb#8)]  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie die <see cref="M:System.Web.SiteMapProvider.FindSiteMapNode(System.String)" /> Methode in einer abgeleiteten Klasse überschreiben, stellen Sie sicher, dass Sie die Suche auf alle <see cref="T:System.Web.SiteMapNode" /> untergeordneten Anbieter ausweiten, wenn ein-Objekt, das mit der URL übereinstimmt, vom Anbieter in der aktuellen Site Übersicht nicht gefunden wird und der Anbieter untergeordnete Anbieter unterstützt.</para></block>
+        <altmember cref="P:System.Web.SiteMapProvider.CurrentNode" />
+        <altmember cref="M:System.Web.SiteMapProvider.FindSiteMapNode(System.Web.HttpContext)" />
+      </Docs>
+    </Member>
+    <Member MemberName="FindSiteMapNode">
+      <MemberSignature Language="C#" Value="public virtual System.Web.SiteMapNode FindSiteMapNode (System.Web.HttpContext context);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Web.SiteMapNode FindSiteMapNode(class System.Web.HttpContext context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.FindSiteMapNode(System.Web.HttpContext)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Function FindSiteMapNode (context As HttpContext) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::Web::SiteMapNode ^ FindSiteMapNode(System::Web::HttpContext ^ context);" />
+      <MemberSignature Language="F#" Value="abstract member FindSiteMapNode : System.Web.HttpContext -&gt; System.Web.SiteMapNode&#xA;override this.FindSiteMapNode : System.Web.HttpContext -&gt; System.Web.SiteMapNode" Usage="siteMapProvider.FindSiteMapNode context" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="context" Type="System.Web.HttpContext" />
+      </Parameters>
+      <Docs>
+        <param name="context">Der <see cref="T:System.Web.HttpContext" />, der verwendet wird, um Knoteninformationen mit der URL der angeforderten Seite abzugleichen.</param>
+        <summary>Ruft ein <see cref="T:System.Web.SiteMapNode" />-Objekt ab, das die gerade angeforderte Seite mithilfe des angegebenen <see cref="T:System.Web.HttpContext" />-Objekts darstellt.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der die gerade angeforderte Seite darstellt. Andernfalls <see langword="null" />, wenn kein entsprechender <see cref="T:System.Web.SiteMapNode" /> im <see cref="T:System.Web.SiteMapNode" /> gefunden werden kann oder wenn der Seitenkontext <see langword="null" /> ist.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.SiteMapProvider.FindSiteMapNode%2A> -Methode ruft die <xref:System.Web.SiteMapProvider.FindSiteMapNode%2A> abstrakte-Methode auf <xref:System.Web.SiteMapNode> , um ein-Objekt für die aktuell angeforderte Seite basierend auf der unformatierten URL oder dem virtuellen Pfad der Anforderung abzurufen. Wenn keine entsprechende <xref:System.Web.SiteMapNode> in der <xref:System.Web.SiteMap>gefunden wird, `null` wird zurückgegeben.  
+  
+ Die <xref:System.Web.SiteMapProvider.FindSiteMapNode%2A> -Methode überprüft nicht, ob <xref:System.Web.SiteMapNode> ein Benutzer standardmäßig auf einen zugreifen kann.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Web.SiteMapProvider.FindSiteMapNode(System.String)" />
+      </Docs>
+    </Member>
+    <Member MemberName="FindSiteMapNodeFromKey">
+      <MemberSignature Language="C#" Value="public virtual System.Web.SiteMapNode FindSiteMapNodeFromKey (string key);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Web.SiteMapNode FindSiteMapNodeFromKey(string key) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.FindSiteMapNodeFromKey(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Function FindSiteMapNodeFromKey (key As String) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::Web::SiteMapNode ^ FindSiteMapNodeFromKey(System::String ^ key);" />
+      <MemberSignature Language="F#" Value="abstract member FindSiteMapNodeFromKey : string -&gt; System.Web.SiteMapNode&#xA;override this.FindSiteMapNodeFromKey : string -&gt; System.Web.SiteMapNode" Usage="siteMapProvider.FindSiteMapNodeFromKey key" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="key" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="key">Ein Suchschlüssel, mit dem ein <see cref="T:System.Web.SiteMapNode" /> erstellt wird.</param>
+        <summary>Ruft ein <see cref="T:System.Web.SiteMapNode" />-Objekt auf Grundlage eines angegebenen Schlüssels ab.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der die von <paramref name="key" /> angegebene Seite darstellt. Andernfalls <see langword="null" />, wenn kein entsprechender <see cref="T:System.Web.SiteMapNode" /> gefunden wird oder wenn Einschränkungen aus Sicherheitsgründen aktiviert sind und der <see cref="T:System.Web.SiteMapNode" /> für den aktuellen Benutzer nicht zurückgegeben werden kann. Die Standardeinstellung ist <see langword="null" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.SiteMapProvider> Implementierung gibt `null` in allen Fällen zurück. Klassen, die von der <xref:System.Web.SiteMapProvider> -Klasse abgeleitet werden <xref:System.Web.SiteMapProvider.FindSiteMapNodeFromKey%2A> , können die-Methode überschreiben, um Suchfunktionen auf Grundlage eines eindeutigen Schlüssels (anstelle einer URL, die <xref:System.Web.SiteMapProvider.FindSiteMapNode%2A> von der-Methode verwendet wird) bereitzustellen. Implementieren Sie <xref:System.Web.SiteMapProvider.FindSiteMapNodeFromKey%2A> die-Methode, wenn die Implementierung des Site <xref:System.Web.SiteMapNode.Key%2A?displayProperty=nameWithType> Map-Anbieters <xref:System.Web.SiteMapNode> die-Eigenschaft eines-Objekts als primären Bezeichner in einer Site Übersichts Struktur verwendet.  
+  
+ Die <xref:System.Web.StaticSiteMapProvider> -Klasse stellt eine-Implementierung bereit, die die Suche nach Site Übersichts Knoten behandelt, die keine URL definieren.  
+  
+ Die <xref:System.Web.XmlSiteMapProvider> -Klasse, bei der es sich um den Standard-Site Übersichts Anbieter für ASP.net handelt <xref:System.Web.SiteMapNode> , verwendet die URL eines als Schlüssel in den verschiedenen Auflistungen, die von den Klassen verwaltet werden. Wenn ein Knoten eine URL bereitstellt, muss er daher innerhalb des Bereichs des Site Übersichts Anbieters eindeutig sein. Wenn keine URL angegeben wird, wird ein eindeutiger Bezeichner generiert, <xref:System.Web.SiteMapNode>um die zu identifizieren.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="Overload:System.Web.SiteMapProvider.FindSiteMapNode" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetChildNodes">
+      <MemberSignature Language="C#" Value="public abstract System.Web.SiteMapNodeCollection GetChildNodes (System.Web.SiteMapNode node);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Web.SiteMapNodeCollection GetChildNodes(class System.Web.SiteMapNode node) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.GetChildNodes(System.Web.SiteMapNode)" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Function GetChildNodes (node As SiteMapNode) As SiteMapNodeCollection" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract System::Web::SiteMapNodeCollection ^ GetChildNodes(System::Web::SiteMapNode ^ node);" />
+      <MemberSignature Language="F#" Value="abstract member GetChildNodes : System.Web.SiteMapNode -&gt; System.Web.SiteMapNodeCollection" Usage="siteMapProvider.GetChildNodes node" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNodeCollection</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+      </Parameters>
+      <Docs>
+        <param name="node">Der <see cref="T:System.Web.SiteMapNode" />, für den alle unmittelbar untergeordneten Knoten abgerufen werden sollen.</param>
+        <summary>Ruft beim Überschreiben in einer abgeleiteten Klasse die unmittelbar untergeordneten Knoten eines bestimmten <see cref="T:System.Web.SiteMapNode" /> ab.</summary>
+        <returns>Eine schreibgeschützte <see cref="T:System.Web.SiteMapNodeCollection" />, die die unmittelbar untergeordneten Knoten des angegebenen <see cref="T:System.Web.SiteMapNode" /> enthält, andernfalls <see langword="null" /> oder eine leere Auflistung, wenn keine unmittelbar untergeordneten Knoten vorhanden sind.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Klassen, die von der <xref:System.Web.SiteMapProvider> -Klasse abgeleitet werden, <xref:System.Web.SiteMapProvider.GetChildNodes%2A> müssen die abstrakte-Methode implementieren.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie die <xref:System.Web.SiteMapProvider.GetChildNodes%2A> -Methode in einer Klasse implementiert wird, <xref:System.Web.SiteMapProvider> die die abstrakte-Klasse implementiert. Speichert die hierarchischen Beziehungen zwischen übergeordneten und unter <xref:System.Collections.Hashtable> geordneten Elementen in <xref:System.Web.SiteMapNode> einem-Objekt und alle-Objekte in einem anderen. `SimpleTextSiteMapProvider` Die <xref:System.Web.SiteMapProvider.GetChildNodes%2A> -Methode führt ein Reverse-Lookup mithilfe <xref:System.Collections.ArrayList> beider-Objekte aus.  
+  
+ Dieses Codebeispiel ist Teil eines größeren Beispiels, das für die <xref:System.Web.SiteMapProvider> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#6](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/CS/simpletextsitemapprovider.cs#6)]
+ [!code-vb[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#6](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/VB/simpletextsitemapprovider.vb#6)]  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie die <see cref="M:System.Web.SiteMapProvider.GetChildNodes(System.Web.SiteMapNode)" /> Methode in einer abgeleiteten Klasse überschreiben, achten Sie darauf, die Sicherheits Kürzung für die untergeordneten Knoten durchzuführen und sicherzustellen, dass die zurückgegebene Auflistung schreibgeschützt ist. Die-Auflistung enthält nur die unmittelbar untergeordneten Elemente <paramref name="node" />des angegebenen.</para></block>
+        <altmember cref="M:System.Web.SiteMapProvider.GetParentNode(System.Web.SiteMapNode)" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetCurrentNodeAndHintAncestorNodes">
+      <MemberSignature Language="C#" Value="public virtual System.Web.SiteMapNode GetCurrentNodeAndHintAncestorNodes (int upLevel);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Web.SiteMapNode GetCurrentNodeAndHintAncestorNodes(int32 upLevel) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.GetCurrentNodeAndHintAncestorNodes(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Function GetCurrentNodeAndHintAncestorNodes (upLevel As Integer) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::Web::SiteMapNode ^ GetCurrentNodeAndHintAncestorNodes(int upLevel);" />
+      <MemberSignature Language="F#" Value="abstract member GetCurrentNodeAndHintAncestorNodes : int -&gt; System.Web.SiteMapNode&#xA;override this.GetCurrentNodeAndHintAncestorNodes : int -&gt; System.Web.SiteMapNode" Usage="siteMapProvider.GetCurrentNodeAndHintAncestorNodes upLevel" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="upLevel" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="upLevel">Die Anzahl der Generationen mittelbar übergeordneter Siteübersichtsknoten, die abgerufen werden sollen. Der Wert -1 gibt an, dass alle mittelbar übergeordneten Knoten vom Anbieter abgerufen und zwischengespeichert werden können.</param>
+        <summary>Stellt Siteübersichtsanbietern eine optimierte Nachschlagemethode zum Abrufen des Knotens für die gerade angeforderte Seite und zum Abrufen der mittelbar und unmittelbar übergeordneten Knoten für die aktuelle Seite bereit.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der die gerade angeforderte Seite darstellt. Andernfalls <see langword="null" />, wenn der <see cref="T:System.Web.SiteMapNode" /> nicht gefunden wird oder für den aktuellen Benutzer nicht zurückgegeben werden kann.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standard Implementierung <xref:System.Web.SiteMapProvider.GetCurrentNodeAndHintAncestorNodes%2A> der-Methode gibt die <xref:System.Web.SiteMapProvider.CurrentNode%2A> -Eigenschaft zurück. Site Übersichts Anbieter können jedoch die <xref:System.Web.SiteMapProvider.GetCurrentNodeAndHintAncestorNodes%2A> -Methode überschreiben und eine optimierte Implementierung bereitstellen, die benutzerdefinierte zwischen Speicherungs Mechanismen verwendet, um den aktuellen <xref:System.Web.SiteMapNode>sowie die über-und übergeordneten Knoten des übergeordneten Knotens.  
+  
+ Der `upLevel` -Parameter wird verwendet, um anzugeben, wie viele Ebenen von übergeordneten und übergeordneten Knoten abgerufen werden sollen. Wenn Sie dies bevorzugen, können der übergeordnete Knoten und der über <xref:System.Web.SiteMapNode> geordnete Knoten mit dem Objekt verknüpft <xref:System.Web.SiteMapProvider.GetCurrentNodeAndHintAncestorNodes%2A> werden, das von <xref:System.Web.SiteMapNode.ParentNode%2A> der-Methode zurückgegeben wird, mithilfe der-Eigenschaft  
+  
+ Die <xref:System.Web.XmlSiteMapProvider> -Klasse, bei der es sich um den Standard-Site Übersichts Anbieter für ASP.net handelt, speichert die gesamte Site Map im Speicher zwischen, was bei der Abfrage <xref:System.Web.XmlSiteMapProvider> von für <xref:System.Web.SiteMapNode> bestimmte Objekte zu wenig oder gar keinen Aufwand führt.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="upLevel" /> ist kleiner als -1.</exception>
+        <altmember cref="M:System.Web.SiteMapProvider.GetCurrentNodeAndHintNeighborhoodNodes(System.Int32,System.Int32)" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetCurrentNodeAndHintNeighborhoodNodes">
+      <MemberSignature Language="C#" Value="public virtual System.Web.SiteMapNode GetCurrentNodeAndHintNeighborhoodNodes (int upLevel, int downLevel);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Web.SiteMapNode GetCurrentNodeAndHintNeighborhoodNodes(int32 upLevel, int32 downLevel) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.GetCurrentNodeAndHintNeighborhoodNodes(System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Function GetCurrentNodeAndHintNeighborhoodNodes (upLevel As Integer, downLevel As Integer) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::Web::SiteMapNode ^ GetCurrentNodeAndHintNeighborhoodNodes(int upLevel, int downLevel);" />
+      <MemberSignature Language="F#" Value="abstract member GetCurrentNodeAndHintNeighborhoodNodes : int * int -&gt; System.Web.SiteMapNode&#xA;override this.GetCurrentNodeAndHintNeighborhoodNodes : int * int -&gt; System.Web.SiteMapNode" Usage="siteMapProvider.GetCurrentNodeAndHintNeighborhoodNodes (upLevel, downLevel)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="upLevel" Type="System.Int32" />
+        <Parameter Name="downLevel" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="upLevel">Die Anzahl der mittelbar übergeordneten <see cref="T:System.Web.SiteMapNode" />-Generationen, die abgerufen werden sollen. 0 (null) gibt an, dass keine mittelbar übergeordneten Knoten abgerufen werden, und -1 gibt an, dass alle mittelbar übergeordneten Knoten vom Anbieter abgerufen und zwischengespeichert werden können.</param>
+        <param name="downLevel">Die Anzahl der unmittelbar untergeordneten <see cref="T:System.Web.SiteMapNode" />-Generationen, die abgerufen werden sollen. 0 (null) gibt an, dass keine mittelbar untergeordneten Knoten abgerufen werden, und -1 gibt an, dass alle mittelbar untergeordneten Knoten vom Anbieter abgerufen und zwischengespeichert werden können.</param>
+        <summary>Stellt Siteübersichtsanbietern eine optimierte Nachschlagemethode zum Abrufen des Knotens für die gerade angeforderte Seite und zum Abrufen der Siteübersichtsknoten im unmittelbaren Umfeld des aktuellen Knotens bereit.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der die gerade angeforderte Seite darstellt. Andernfalls <see langword="null" />, wenn der <see cref="T:System.Web.SiteMapNode" /> nicht gefunden wird oder für den aktuellen Benutzer nicht zurückgegeben werden kann.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standard Implementierung <xref:System.Web.SiteMapProvider.GetCurrentNodeAndHintNeighborhoodNodes%2A> der-Methode gibt die <xref:System.Web.SiteMapProvider.CurrentNode%2A> -Eigenschaft zurück. Site Übersichts Anbieter können jedoch die <xref:System.Web.SiteMapProvider.GetCurrentNodeAndHintNeighborhoodNodes%2A> -Methode überschreiben und eine optimierte Implementierung bereitstellen, die benutzerdefinierte zwischen Speicherungs Mechanismen verwendet, um den aktuellen -Objekt sowie <xref:System.Web.SiteMapNode> -Objekte, die sich in der Nähe des aktuellen <xref:System.Web.SiteMapNode>befinden. <xref:System.Web.SiteMapNode>  
+  
+ Der `upLevel` -Parameter wird verwendet, um anzugeben, wie viele Ebenen von übergeordneten und übergeordneten Knoten zusammen mit den unmittelbar untergeordneten Knoten abgerufen und zwischengespeichert werden sollen. Der `downLevel` -Parameter wird verwendet, um anzugeben, wie viele Ebenen von Nachfolger Knoten <xref:System.Web.SiteMapNode> vom aktuellen abgerufen werden sollen. Wenn Sie dies bevorzugen, können der Vorgänger Knoten und der Nachfolger Knoten <xref:System.Web.SiteMapNode> mit dem verknüpft werden, der vom  
+  
+ <xref:System.Web.SiteMapProvider.GetCurrentNodeAndHintNeighborhoodNodes%2A>-Methode, mithilfe <xref:System.Web.SiteMapNode.ParentNode%2A> der <xref:System.Web.SiteMapNode.ChildNodes%2A> -Eigenschaft und der-Eigenschaft. Wenn es weniger Vorgänger-oder untergeordnete Knoten Ebenen gibt, als `upLevel` von `downLevel`oder angegeben werden, werden nur die verfügbaren Knoten abgerufen.  
+  
+ Die <xref:System.Web.XmlSiteMapProvider> -Klasse, bei der es sich um den Standard-Site Übersichts Anbieter für ASP.net handelt, speichert die gesamte Site Map im Speicher zwischen, was bei der Abfrage <xref:System.Web.XmlSiteMapProvider> von für <xref:System.Web.SiteMapNode> bestimmte Objekte zu wenig oder gar keinen Aufwand führt.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="upLevel" /> oder <paramref name="downLevel" /> ist kleiner als -1.</exception>
+        <altmember cref="M:System.Web.SiteMapProvider.GetCurrentNodeAndHintAncestorNodes(System.Int32)" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetParentNode">
+      <MemberSignature Language="C#" Value="public abstract System.Web.SiteMapNode GetParentNode (System.Web.SiteMapNode node);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Web.SiteMapNode GetParentNode(class System.Web.SiteMapNode node) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.GetParentNode(System.Web.SiteMapNode)" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Function GetParentNode (node As SiteMapNode) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract System::Web::SiteMapNode ^ GetParentNode(System::Web::SiteMapNode ^ node);" />
+      <MemberSignature Language="F#" Value="abstract member GetParentNode : System.Web.SiteMapNode -&gt; System.Web.SiteMapNode" Usage="siteMapProvider.GetParentNode node" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+      </Parameters>
+      <Docs>
+        <param name="node">Der <see cref="T:System.Web.SiteMapNode" />, für den der unmittelbar übergeordnete Knoten abgerufen werden soll.</param>
+        <summary>Ruft beim Überschreiben in einer abgeleiteten Klasse den unmittelbar übergeordneten Knoten eines bestimmten <see cref="T:System.Web.SiteMapNode" />-Objekts ab.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der den unmittelbar übergeordneten Knoten von <paramref name="node" /> darstellt. Andernfalls <see langword="null" />, wenn <see cref="T:System.Web.SiteMapNode" /> keinen unmittelbar übergeordneten Knoten hat oder wenn Einschränkungen aus Sicherheitsgründen aktiviert sind und der aktuelle Benutzer nicht auf den unmittelbar übergeordneten Knoten zugreifen kann.  
+  
+ <block subset="none" type="note"><para><see cref="M:System.Web.SiteMapProvider.GetParentNode(System.Web.SiteMapNode)" /> kann auch <see langword="null" /> zurückgeben, wenn der übergeordnete Knoten zu einem anderen Anbieter gehört. Verwenden Sie in diesem Fall stattdessen die <see cref="P:System.Web.SiteMapNode.ParentNode" />-Eigenschaft von <paramref name="node" />.  
+  
+</para></block></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie die <xref:System.Web.SiteMapProvider.GetParentNode%2A> -Methode in einer Klasse implementiert wird, <xref:System.Web.SiteMapProvider> die die abstrakte-Klasse implementiert. Speichert die hierarchische Beziehung zwischen über-und <xref:System.Web.SiteMapNode> untergeordneten Elementen <xref:System.Collections.IList> zwischen Objekten in einer Schnitt <xref:System.Collections.ArrayList> Stelle, z. b. einem-Objekt. `SimpleTextSiteMapProvider`  
+  
+ Dieses Codebeispiel ist Teil eines größeren Beispiels, das für die <xref:System.Web.SiteMapProvider> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#6](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/CS/simpletextsitemapprovider.cs#6)]
+ [!code-vb[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#6](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/VB/simpletextsitemapprovider.vb#6)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Web.SiteMapProvider.GetChildNodes(System.Web.SiteMapNode)" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetParentNodeRelativeToCurrentNodeAndHintDownFromParent">
+      <MemberSignature Language="C#" Value="public virtual System.Web.SiteMapNode GetParentNodeRelativeToCurrentNodeAndHintDownFromParent (int walkupLevels, int relativeDepthFromWalkup);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Web.SiteMapNode GetParentNodeRelativeToCurrentNodeAndHintDownFromParent(int32 walkupLevels, int32 relativeDepthFromWalkup) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.GetParentNodeRelativeToCurrentNodeAndHintDownFromParent(System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Function GetParentNodeRelativeToCurrentNodeAndHintDownFromParent (walkupLevels As Integer, relativeDepthFromWalkup As Integer) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::Web::SiteMapNode ^ GetParentNodeRelativeToCurrentNodeAndHintDownFromParent(int walkupLevels, int relativeDepthFromWalkup);" />
+      <MemberSignature Language="F#" Value="abstract member GetParentNodeRelativeToCurrentNodeAndHintDownFromParent : int * int -&gt; System.Web.SiteMapNode&#xA;override this.GetParentNodeRelativeToCurrentNodeAndHintDownFromParent : int * int -&gt; System.Web.SiteMapNode" Usage="siteMapProvider.GetParentNodeRelativeToCurrentNodeAndHintDownFromParent (walkupLevels, relativeDepthFromWalkup)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="walkupLevels" Type="System.Int32" />
+        <Parameter Name="relativeDepthFromWalkup" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="walkupLevels">Die beim Abrufen des angeforderten mittelbar übergeordneten Knotens zu durchlaufende Anzahl von Ebenen mittelbar übergeordneter Knoten.</param>
+        <param name="relativeDepthFromWalkup">Die abzurufende Anzahl von Ebenen mittelbar untergeordneter Knoten aus dem mittelbar übergeordneten Zielknoten.</param>
+        <summary>Stellt Siteübersichtsanbietern eine optimierte Nachschlagemethode zum Abrufen eines mittelbar übergeordneten Knotens für die gerade angeforderte Seite und zum Abrufen der mittelbar untergeordneten Knoten für den übergeordneten Knoten bereit.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der einen mittelbar übergeordneten <see cref="T:System.Web.SiteMapNode" /> der gerade angeforderten Seite darstellt. Andernfalls <see langword="null" />, wenn der aktuelle oder mittelbar übergeordnete <see cref="T:System.Web.SiteMapNode" /> nicht gefunden wird oder für den aktuellen Benutzer nicht zurückgegeben werden kann.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standard <xref:System.Web.SiteMapProvider> Implementierung der-Klasse bietet eine nicht optimierte Implementierung <xref:System.Web.SiteMapProvider.GetCurrentNodeAndHintAncestorNodes%2A> <xref:System.Web.SiteMapProvider.GetParentNodeRelativeToCurrentNodeAndHintDownFromParent%2A> der-Methode, die die-Methode <xref:System.Web.SiteMapProvider.HintNeighborhoodNodes%2A> und die-Methode aufrufen. Site Übersichts Anbieter können <xref:System.Web.SiteMapProvider.GetParentNodeRelativeToCurrentNodeAndHintDownFromParent%2A> jedoch die-Methode überschreiben und Bereitstellen einer optimierten Implementierung, die benutzerdefinierte zwischen Speicherungs Mechanismen verwendet, um den übergeordneten Knoten zurückzugeben und <xref:System.Web.SiteMapNode> eine optimierte Suche der anderen Objekte auszuführen.  
+  
+ Der `walkupLevels` -Parameter wird verwendet, um anzugeben, wie viele Ebenen von übergeordneten und übergeordneten Knoten beim Abrufen des Ziel Knotens durchlaufen werden sollen. Wenn weniger Ebenen vorhanden sind, als angefordert `null` werden, wird zurückgegeben. Der `downLevel` -Parameter wird verwendet, um anzugeben, wie viele Ebenen von Nachfolger Knoten vom Zielknoten des übergeordneten Knotens abgerufen werden sollen. Bei <xref:System.Web.SiteMapNode> bevorzugter Verwendung <xref:System.Web.SiteMapProvider.GetParentNodeRelativeToCurrentNodeAndHintDownFromParent%2A> <xref:System.Web.SiteMapNode.ParentNode%2A> der-Eigenschaft und der-Eigenschaft können die Vorgänger-und Nachfolger Knoten mit der verknüpft werden, <xref:System.Web.SiteMapNode.ChildNodes%2A> die von der-Methode zurückgegeben wird.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="walkupLevels" /> oder <paramref name="relativeDepthFromWalkup" /> ist kleiner als 0 (null).</exception>
+        <altmember cref="M:System.Web.SiteMapProvider.GetParentNodeRelativeToNodeAndHintDownFromParent(System.Web.SiteMapNode,System.Int32,System.Int32)" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetParentNodeRelativeToNodeAndHintDownFromParent">
+      <MemberSignature Language="C#" Value="public virtual System.Web.SiteMapNode GetParentNodeRelativeToNodeAndHintDownFromParent (System.Web.SiteMapNode node, int walkupLevels, int relativeDepthFromWalkup);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Web.SiteMapNode GetParentNodeRelativeToNodeAndHintDownFromParent(class System.Web.SiteMapNode node, int32 walkupLevels, int32 relativeDepthFromWalkup) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.GetParentNodeRelativeToNodeAndHintDownFromParent(System.Web.SiteMapNode,System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Function GetParentNodeRelativeToNodeAndHintDownFromParent (node As SiteMapNode, walkupLevels As Integer, relativeDepthFromWalkup As Integer) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::Web::SiteMapNode ^ GetParentNodeRelativeToNodeAndHintDownFromParent(System::Web::SiteMapNode ^ node, int walkupLevels, int relativeDepthFromWalkup);" />
+      <MemberSignature Language="F#" Value="abstract member GetParentNodeRelativeToNodeAndHintDownFromParent : System.Web.SiteMapNode * int * int -&gt; System.Web.SiteMapNode&#xA;override this.GetParentNodeRelativeToNodeAndHintDownFromParent : System.Web.SiteMapNode * int * int -&gt; System.Web.SiteMapNode" Usage="siteMapProvider.GetParentNodeRelativeToNodeAndHintDownFromParent (node, walkupLevels, relativeDepthFromWalkup)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+        <Parameter Name="walkupLevels" Type="System.Int32" />
+        <Parameter Name="relativeDepthFromWalkup" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="node">Der <see cref="T:System.Web.SiteMapNode" />, der als Bezugspunkt für <paramref name="walkupLevels" /> und <paramref name="relativeDepthFromWalkup" /> fungiert.</param>
+        <param name="walkupLevels">Die beim Abrufen des angeforderten mittelbar übergeordneten Knotens zu durchlaufende Anzahl von Ebenen mittelbar übergeordneter Knoten.</param>
+        <param name="relativeDepthFromWalkup">Die abzurufende Anzahl von Ebenen mittelbar untergeordneter Knoten aus dem mittelbar übergeordneten Zielknoten.</param>
+        <summary>Stellt Siteübersichtsanbietern eine optimierte Nachschlagemethode zum Abrufen eines mittelbar übergeordneten Knotens für das angegebene <see cref="T:System.Web.SiteMapNode" />-Objekt und zum Abrufen der unmittelbar untergeordneten Knoten bereit.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der einen mittelbar übergeordneten Knoten von <paramref name="node" /> darstellt. Andernfalls <see langword="null" />, wenn der aktuelle oder mittelbar übergeordnete <see cref="T:System.Web.SiteMapNode" /> nicht gefunden wird oder für den aktuellen Benutzer nicht zurückgegeben werden kann.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standard <xref:System.Web.SiteMapProvider> Implementierung der-Klasse bietet eine nicht optimierte Implementierung <xref:System.Web.SiteMapProvider.HintAncestorNodes%2A> <xref:System.Web.SiteMapProvider.GetParentNodeRelativeToNodeAndHintDownFromParent%2A> der-Methode, die die-Methode <xref:System.Web.SiteMapProvider.HintNeighborhoodNodes%2A> und die-Methode aufrufen. Site Übersichts Anbieter können <xref:System.Web.SiteMapProvider.GetParentNodeRelativeToNodeAndHintDownFromParent%2A> jedoch die-Methode überschreiben und Bereitstellen einer optimierten Implementierung, die benutzerdefinierte zwischen Speicherungs Mechanismen verwendet, um den übergeordneten Knoten zurückzugeben und <xref:System.Web.SiteMapNode> eine optimierte Suche der anderen Objekte auszuführen.  Die <xref:System.Web.SiteMapProvider.GetParentNodeRelativeToNodeAndHintDownFromParent%2A> -Methode ähnelt der <xref:System.Web.SiteMapProvider.GetParentNodeRelativeToCurrentNodeAndHintDownFromParent%2A> -Methode.  
+  
+ Der `walkupLevels` -Parameter wird verwendet, um anzugeben, wie viele Ebenen von übergeordneten und übergeordneten Knoten beim Abrufen des Ziel Knotens durchlaufen werden sollen. Wenn weniger Ebenen vorhanden sind, als angefordert `null` werden, wird zurückgegeben. Der `downLevel` -Parameter wird verwendet, um anzugeben, wie viele Ebenen von Nachfolger Knoten vom Zielknoten des übergeordneten Knotens abgerufen werden sollen. Bei <xref:System.Web.SiteMapNode> bevorzugter Verwendung <xref:System.Web.SiteMapProvider.GetParentNodeRelativeToNodeAndHintDownFromParent%2A> <xref:System.Web.SiteMapNode.ParentNode%2A> der-Eigenschaft und der-Eigenschaft können die Vorgänger-und Nachfolger Knoten mit der verknüpft werden, <xref:System.Web.SiteMapNode.ChildNodes%2A> die von der-Methode zurückgegeben wird. Wenn weniger übergeordnete Knoten Ebenen vorhanden sind, als durch `upLevel` den- `null` Parameter angegeben werden, wird zurückgegeben.  Es liegt an der Implementierung des Anbieters, zu entscheiden, wie die Situation behandelt werden soll, in der die Anzahl der verfügbaren untergeordneten Knoten Ebenen kleiner ist als der `downLevel` Wert, der durch den-Parameter angegeben wird.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der angegebene Wert für <paramref name="walkupLevels" /> oder <paramref name="relativeDepthFromWalkup" /> ist kleiner als 0 (null).</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="node" /> ist <see langword="null" />.</exception>
+        <altmember cref="M:System.Web.SiteMapProvider.GetParentNodeRelativeToCurrentNodeAndHintDownFromParent(System.Int32,System.Int32)" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetRootNodeCore">
+      <MemberSignature Language="C#" Value="protected internal abstract System.Web.SiteMapNode GetRootNodeCore ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance class System.Web.SiteMapNode GetRootNodeCore() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.GetRootNodeCore" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend MustOverride Function GetRootNodeCore () As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; abstract System::Web::SiteMapNode ^ GetRootNodeCore();" />
+      <MemberSignature Language="F#" Value="abstract member GetRootNodeCore : unit -&gt; System.Web.SiteMapNode" Usage="siteMapProvider.GetRootNodeCore " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Ruft beim Überschreiben in einer abgeleiteten Klasse den Stammknoten aller Knoten ab, die gegenwärtig vom aktuellen Anbieter verwaltet werden.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der den Stammknoten der Knoten darstellt, die der aktuelle Anbieter verwaltet.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.SiteMapProvider.GetRootNodeCore%2A> -Methode ermöglicht einem übergeordneten Anbieter in einer Anbieter Hierarchie <xref:System.Web.SiteMapNode> das Abrufen eines-Objekts, das als Referenzrahmen zum Aufbauen der Anbieter Hierarchie fungiert, und der größeren Site Übersichts Knoten Hierarchie, die die Summe der Site Übersichts Daten ist, die jeweils der Anbieter verwaltet.  
+  
+   
+  
+## Examples  
+ [!code-csharp[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#3](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/CS/simpletextsitemapprovider.cs#3)]
+ [!code-vb[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#3](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/VB/simpletextsitemapprovider.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Web.SiteMapProvider.GetRootNodeCoreFromProvider(System.Web.SiteMapProvider)" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetRootNodeCoreFromProvider">
+      <MemberSignature Language="C#" Value="protected static System.Web.SiteMapNode GetRootNodeCoreFromProvider (System.Web.SiteMapProvider provider);" />
+      <MemberSignature Language="ILAsm" Value=".method familystatic hidebysig class System.Web.SiteMapNode GetRootNodeCoreFromProvider(class System.Web.SiteMapProvider provider) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.GetRootNodeCoreFromProvider(System.Web.SiteMapProvider)" />
+      <MemberSignature Language="VB.NET" Value="Protected Shared Function GetRootNodeCoreFromProvider (provider As SiteMapProvider) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; static System::Web::SiteMapNode ^ GetRootNodeCoreFromProvider(System::Web::SiteMapProvider ^ provider);" />
+      <MemberSignature Language="F#" Value="static member GetRootNodeCoreFromProvider : System.Web.SiteMapProvider -&gt; System.Web.SiteMapNode" Usage="System.Web.SiteMapProvider.GetRootNodeCoreFromProvider provider" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="provider" Type="System.Web.SiteMapProvider" />
+      </Parameters>
+      <Docs>
+        <param name="provider">Der Anbieter, der den <see cref="M:System.Web.SiteMapProvider.GetRootNodeCore" /> aufruft.</param>
+        <summary>Ruft den Stammknoten aller Knoten ab, die gegenwärtig vom angegebenen Siteübersichtsanbieter verwaltet werden.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der den Stammknoten der Knoten darstellt, die vom <paramref name="provider" /> verwaltet werden.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standard Implementierung ruft die abstrakte <xref:System.Web.SiteMapProvider.GetRootNodeCore%2A> -Methode für den `provider`angegebenen auf.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Web.SiteMapProvider.GetRootNodeCore" />
+      </Docs>
+    </Member>
+    <Member MemberName="HintAncestorNodes">
+      <MemberSignature Language="C#" Value="public virtual void HintAncestorNodes (System.Web.SiteMapNode node, int upLevel);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void HintAncestorNodes(class System.Web.SiteMapNode node, int32 upLevel) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.HintAncestorNodes(System.Web.SiteMapNode,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Sub HintAncestorNodes (node As SiteMapNode, upLevel As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void HintAncestorNodes(System::Web::SiteMapNode ^ node, int upLevel);" />
+      <MemberSignature Language="F#" Value="abstract member HintAncestorNodes : System.Web.SiteMapNode * int -&gt; unit&#xA;override this.HintAncestorNodes : System.Web.SiteMapNode * int -&gt; unit" Usage="siteMapProvider.HintAncestorNodes (node, upLevel)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+        <Parameter Name="upLevel" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="node">Der <see cref="T:System.Web.SiteMapNode" />, der als Bezugspunkt für <paramref name="upLevel" /> fungiert.</param>
+        <param name="upLevel">Die Anzahl der mittelbar übergeordneten <see cref="T:System.Web.SiteMapNode" />-Generationen, die abgerufen werden sollen. 0 (null) gibt an, dass keine mittelbar übergeordneten Knoten abgerufen werden, und -1 gibt an, dass alle mittelbar übergeordneten Knoten abgerufen und zwischengespeichert werden können.</param>
+        <summary>Stellt eine Methode bereit, die Siteübersichtsanbieter überschreiben können, um mindestens eine Ebene mittelbar und unmittelbar übergeordneter Knoten (relativ zum angegebenen <see cref="T:System.Web.SiteMapNode" />-Objekt) optimal abzurufen.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standard <xref:System.Web.SiteMapProvider.HintAncestorNodes%2A> Methode überprüft nur einen `upLevel` Parameter, der kleiner als-1 ist, und `node` einen Parameter, `null`der ist. Da die <xref:System.Web.XmlSiteMapProvider> -Klasse Site Übersichts Informationen im Arbeitsspeicher zwischen <xref:System.Web.SiteMapProvider.HintAncestorNodes%2A> speichert, wird die-Methode nicht verwendet.  
+  
+ Site Übersichts Anbieter können die <xref:System.Web.SiteMapProvider.HintAncestorNodes%2A> -Methode überschreiben, um ein optimiertes Abrufen von übergeordneten Knoten und Vorgänger Knoten des angegebenen <xref:System.Web.SiteMapNode> Objekts auszuführen.  
+  
+ Der `upLevel` -Parameter wird verwendet, um anzugeben, wie viele Ebenen von übergeordneten und übergeordneten Knoten <xref:System.Web.SiteMapNode>vom angegebenen durchlaufen werden sollen. Wenn weniger Ebenen vorhanden sind, als angefordert werden, werden alle verfügbaren übergeordneten Knoten innerhalb der angegebenen Grenze zurückgegeben. Wenn dies gewünscht ist, kann der übergeordnete Knoten mithilfe der <xref:System.Web.SiteMapNode> <xref:System.Web.SiteMapNode.ParentNode%2A> -Eigenschaft mit dem angegebenen verknüpft werden.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="upLevel" /> ist kleiner als -1.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="node" /> ist <see langword="null" />.</exception>
+        <altmember cref="M:System.Web.SiteMapProvider.HintNeighborhoodNodes(System.Web.SiteMapNode,System.Int32,System.Int32)" />
+      </Docs>
+    </Member>
+    <Member MemberName="HintNeighborhoodNodes">
+      <MemberSignature Language="C#" Value="public virtual void HintNeighborhoodNodes (System.Web.SiteMapNode node, int upLevel, int downLevel);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void HintNeighborhoodNodes(class System.Web.SiteMapNode node, int32 upLevel, int32 downLevel) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.HintNeighborhoodNodes(System.Web.SiteMapNode,System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Sub HintNeighborhoodNodes (node As SiteMapNode, upLevel As Integer, downLevel As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void HintNeighborhoodNodes(System::Web::SiteMapNode ^ node, int upLevel, int downLevel);" />
+      <MemberSignature Language="F#" Value="abstract member HintNeighborhoodNodes : System.Web.SiteMapNode * int * int -&gt; unit&#xA;override this.HintNeighborhoodNodes : System.Web.SiteMapNode * int * int -&gt; unit" Usage="siteMapProvider.HintNeighborhoodNodes (node, upLevel, downLevel)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+        <Parameter Name="upLevel" Type="System.Int32" />
+        <Parameter Name="downLevel" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="node">Der <see cref="T:System.Web.SiteMapNode" />, der als Bezugspunkt für <paramref name="upLevel" /> fungiert.</param>
+        <param name="upLevel">Die Anzahl der mittelbar übergeordneten <see cref="T:System.Web.SiteMapNode" />-Generationen, die abgerufen werden sollen. 0 (null) gibt an, dass keine mittelbar übergeordneten Knoten abgerufen werden, und -1 gibt an, dass alle mittelbar übergeordneten Knoten (und ihre mittelbar untergeordneten Knoten bis zur Ebene von <paramref name="node" />) abgerufen und zwischengespeichert werden können.</param>
+        <param name="downLevel">Die Anzahl der mittelbar untergeordneten <see cref="T:System.Web.SiteMapNode" />-Generationen, die abgerufen werden sollen. 0 (null) gibt an, dass keine mittelbar untergeordneten Knoten abgerufen werden, und -1 gibt an, dass alle mittelbar untergeordneten Knoten abgerufen und zwischengespeichert werden können.</param>
+        <summary>Stellt eine Methode bereit, die Siteübersichtsanbieter überschreiben können, um einen optimierten Abruf von Knoten auszuführen, die im unmittelbaren Umfeld des angegebenen Knotens gefunden werden.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standard <xref:System.Web.SiteMapProvider.HintNeighborhoodNodes%2A> Methode überprüft nur einen `upLevel` -Parameter `downLevel` und einen-Parameter, die kleiner als- `node` 1 sind, `null`und einen-Parameter, der ist. Da das <xref:System.Web.XmlSiteMapProvider> -Objekt Site Übersichts Informationen im Arbeitsspeicher zwischen <xref:System.Web.SiteMapProvider.HintNeighborhoodNodes%2A> speichert, wird die-Methode nicht verwendet.  
+  
+ Site Übersichts Anbieter können die <xref:System.Web.SiteMapProvider.HintNeighborhoodNodes%2A> -Methode überschreiben, um eine optimierte Suche <xref:System.Web.SiteMapNode> der Objekte in der Nähe des angegebenen <xref:System.Web.SiteMapNode>durchzuführen. Der `upLevel` -Parameter wird verwendet, um anzugeben, wie viele Ebenen von übergeordneten und übergeordneten Knoten <xref:System.Web.SiteMapNode>vom angegebenen durchlaufen werden sollen. Der `downLevel` -Parameter wird verwendet, um anzugeben, wie viele Ebenen von untergeordneten Knoten vom aktuellen Knoten abgerufen werden sollen. Bei <xref:System.Web.SiteMapNode> bevorzugter Verwendung <xref:System.Web.SiteMapProvider.HintNeighborhoodNodes%2A> <xref:System.Web.SiteMapNode.ParentNode%2A> der-Eigenschaft und der-Eigenschaft können die Vorgänger-und Nachfolger Knoten mit der verknüpft werden, <xref:System.Web.SiteMapNode.ChildNodes%2A> die von der-Methode zurückgegeben wird.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="upLevel" /> oder <paramref name="downLevel" /> ist kleiner als -1.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="node" /> ist <see langword="null" />.</exception>
+        <altmember cref="M:System.Web.SiteMapProvider.HintAncestorNodes(System.Web.SiteMapNode,System.Int32)" />
+      </Docs>
+    </Member>
+    <Member MemberName="Initialize">
+      <MemberSignature Language="C#" Value="public override void Initialize (string name, System.Collections.Specialized.NameValueCollection attributes);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Initialize(string name, class System.Collections.Specialized.NameValueCollection attributes) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Initialize (name As String, attributes As NameValueCollection)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Initialize(System::String ^ name, System::Collections::Specialized::NameValueCollection ^ attributes);" />
+      <MemberSignature Language="F#" Value="override this.Initialize : string * System.Collections.Specialized.NameValueCollection -&gt; unit" Usage="siteMapProvider.Initialize (name, attributes)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="attributes" Type="System.Collections.Specialized.NameValueCollection" />
+      </Parameters>
+      <Docs>
+        <param name="name">Der <see cref="P:System.Configuration.Provider.ProviderBase.Name" /> des zu initialisierenden Anbieters.</param>
+        <param name="attributes">Eine <see cref="T:System.Collections.Specialized.NameValueCollection" />, die zusätzliche Attribute enthalten kann, um das Initialisieren des Anbieters zu unterstützen. Diese Attribute werden aus der Konfiguration der Siteübersichtsanbieter in der Datei Web.config gelesen.</param>
+        <summary>Initialisiert die <see cref="T:System.Web.SiteMapProvider" />-Implementierung einschließlich aller Ressourcen, die benötigt werden, um Siteübersichtsdaten aus dem permanenten Speicher zu laden.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.SiteMapProvider.Initialize%2A> -Methode erstellt nicht tatsächlich eine Site Übersicht, sondern bereitet nur den Zustand <xref:System.Web.SiteMapProvider> des-Objekts vor. Mit der Standard Implementierung wird die <xref:System.Web.SiteMapProvider.SecurityTrimmingEnabled%2A> -Eigenschaft für den Site Übersichts Anbieter aus der Site Navigations Konfiguration initialisiert.  
+  
+ Klassen, die von <xref:System.Web.SiteMapProvider> abgeleitet werden, können die <xref:System.Web.SiteMapProvider.Initialize%2A> -Methode überschreiben, um alle Zustände und Ressourcen zu initialisieren, die zum Laden von Site Übersichts Daten aus dem persistenten Speicher erforderlich sind. Wenn die abgeleitete Klasse z. b. Dateien zum Speichern von Site Übersichts Daten verwendet, kann jede Datei Initialisierung in der <xref:System.Web.SiteMapProvider.Initialize%2A> -Methode ausgeführt werden. Wenn die abgeleitete Klasse einen anderen Typ von Datenspeicher verwendet, z. b. eine relationale Datenbank, kann die Initialisierung einer Datenbankverbindung ausgeführt werden.  
+  
+ Zusätzliche Attribute, wie z. b. Dateinamen oder Verbindungs Zeichenfolgen, werden vom ASP.NET-Konfigurationssystem <xref:System.Web.SiteMapProvider.Initialize%2A> gelesen und <xref:System.Collections.Specialized.NameValueCollection> mit dem-Parameter an die-Methode übergeben.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie die <xref:System.Web.SiteMapProvider.Initialize%2A> -Methode zum Vorbereiten einer Microsoft Access-Datenbankverbindung außer Kraft gesetzt wird.  
+  
+ Die Verbindungs Zeichenfolge <xref:System.Data.OleDb.OleDbConnection> für das-Objekt wird <xref:System.Collections.Specialized.NameValueCollection> im-Parameter <xref:System.Web.SiteMapProvider.Initialize%2A> der-Methode übergeben. In diesem Fall wird die Verbindungs Zeichenfolge durch den anbieterspezifischen Abschnitt in der Datei "Web. config" bereitgestellt. `accessSiteMapConnectionString` Hier enthält eine Verbindungs Zeichenfolge zu einer Microsoft Access-Datenbank, die die Site Übersichts Daten hostet.  
+  
+```  
+<siteMap defaultProvider="AccessSiteMapProvider">  
+  <providers>  
+     <add  
+       name="AccessSiteMapProvider"  
+       type="Samples.AspNet.AccessSiteMapProvider,Samples.AspNet"  
+       accessSiteMapConnectionString="PROVIDER=MICROSOFT.JET.OLEDB.4.0;DATA SOURCE=\\SomeUNCShare\\sitemap.mdb"/>  
+  </providers>   
+ </siteMap>  
+```  
+  
+ Dieses Codebeispiel ist Teil eines größeren Beispiels, das für die <xref:System.Web.SiteMapProvider> -Klasse bereitgestellt wird.  
+  
+ [!code-cpp[Urtue.Samples.Alexkr.AccessSiteMapProvider_1#2](~/samples/snippets/cpp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.AccessSiteMapProvider_1/CPP/accesssitemapprovider.cpp#2)]
+ [!code-csharp[Urtue.Samples.Alexkr.AccessSiteMapProvider_1#2](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.AccessSiteMapProvider_1/CS/accesssitemapprovider.cs#2)]
+ [!code-vb[Urtue.Samples.Alexkr.AccessSiteMapProvider_1#2](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.AccessSiteMapProvider_1/VB/accesssitemapprovider.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie die <see cref="M:System.Web.SiteMapProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)" /> Methode in einer abgeleiteten Klasse überschreiben, müssen Sie zuerst <see cref="M:System.Web.SiteMapProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)" /> die-Methode für die Basisklasse aufzurufen, bevor Sie Ihre eigenen Initialisierungen durchführen.</para></block>
+        <altmember cref="T:System.Configuration.Provider.ProviderBase" />
+        <altmember cref="M:System.Web.StaticSiteMapProvider.BuildSiteMap" />
+        <altmember cref="M:System.Web.StaticSiteMapProvider.Clear" />
+      </Docs>
+    </Member>
+    <Member MemberName="IsAccessibleToUser">
+      <MemberSignature Language="C#" Value="public virtual bool IsAccessibleToUser (System.Web.HttpContext context, System.Web.SiteMapNode node);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance bool IsAccessibleToUser(class System.Web.HttpContext context, class System.Web.SiteMapNode node) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.IsAccessibleToUser(System.Web.HttpContext,System.Web.SiteMapNode)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Function IsAccessibleToUser (context As HttpContext, node As SiteMapNode) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual bool IsAccessibleToUser(System::Web::HttpContext ^ context, System::Web::SiteMapNode ^ node);" />
+      <MemberSignature Language="F#" Value="abstract member IsAccessibleToUser : System.Web.HttpContext * System.Web.SiteMapNode -&gt; bool&#xA;override this.IsAccessibleToUser : System.Web.HttpContext * System.Web.SiteMapNode -&gt; bool" Usage="siteMapProvider.IsAccessibleToUser (context, node)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="context" Type="System.Web.HttpContext" />
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+      </Parameters>
+      <Docs>
+        <param name="context">Der <see cref="T:System.Web.HttpContext" />, der Benutzerinformationen enthält.</param>
+        <param name="node">Der <see cref="T:System.Web.SiteMapNode" />, der vom Benutzer angefordert wird.</param>
+        <summary>Ruft einen booleschen Wert ab, der angibt, ob das angegebene <see cref="T:System.Web.SiteMapNode" />-Objekt vom Benutzer im angegebenen Kontext angezeigt werden kann.</summary>
+        <returns><see langword="true" />, wenn Einschränkungen aus Sicherheitsgründen aktiviert sind und der <paramref name="node" /> vom Benutzer angezeigt werden kann oder wenn keine Einschränkungen aus Sicherheitsgründen aktiviert sind, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Das Standardverhalten beim Aktivieren der Sicherheits Kürzung ist wie in der folgenden Tabelle beschrieben.  
+  
+|Bedingung|Rückgabewert|  
+|---------------|------------------|  
+|Der <xref:System.Web.SiteMapNode.Roles%2A> ist auf `node` festgelegt, und der aktuelle Benutzer befindet sich in mindestens einer der angegebenen Rollen.<br /><br /> - oder -<br /><br /> Der aktuelle Thread verfügt über einen `WindowsIdentity` zugeordneten, der über Dateizugriff auf die angeforderte URL verfügt, und die URL befindet sich in der Verzeichnisstruktur der Anwendung.<br /><br /> - oder -<br /><br /> Der aktuelle Benutzer wird speziell für die angeforderte URL im `authorization` -Element für die aktuelle Anwendung autorisiert, und die URL befindet sich innerhalb der Verzeichnisstruktur für die Anwendung.|`true`|  
+|Keine der vorangehenden Bedingungen ist erfüllt.|`false`|  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="context" /> ist <see langword="null" />.  
+  
+- oder - 
+ <paramref name="node" /> ist <see langword="null" />.</exception>
+        <altmember cref="P:System.Web.SiteMapProvider.SecurityTrimmingEnabled" />
+      </Docs>
+    </Member>
+    <Member MemberName="ParentProvider">
+      <MemberSignature Language="C#" Value="public virtual System.Web.SiteMapProvider ParentProvider { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Web.SiteMapProvider ParentProvider" />
+      <MemberSignature Language="DocId" Value="P:System.Web.SiteMapProvider.ParentProvider" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Property ParentProvider As SiteMapProvider" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Web::SiteMapProvider ^ ParentProvider { System::Web::SiteMapProvider ^ get(); void set(System::Web::SiteMapProvider ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.ParentProvider : System.Web.SiteMapProvider with get, set" Usage="System.Web.SiteMapProvider.ParentProvider" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapProvider</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft das übergeordnete <see cref="T:System.Web.SiteMapProvider" />-Objekt des aktuellen Anbieters ab oder legt dieses fest.</summary>
+        <value>Der übergeordnete Anbieter des aktuellen <see cref="T:System.Web.SiteMapProvider" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Alle Klassen, die die abstrakte <xref:System.Web.SiteMapProvider> -Klasse implementieren, können das Konzept einer Site Übersichts Anbieter Hierarchie unterstützen. Alle hierarchischen Beziehungen zwischen Anbietern werden von den Anbietern selbst außerhalb <xref:System.Web.SiteMapProviderCollection> des Bereichs einer Sammlung verwaltet. Ein Beispiel für eine Funktions Anbieter Hierarchie finden <xref:System.Web.XmlSiteMapProvider>Sie unter.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie die <xref:System.Web.SiteMapProvider.ParentProvider%2A> -Eigenschaft in einer Klasse implementiert wird, <xref:System.Web.SiteMapProvider> die die abstrakte-Klasse implementiert.  
+  
+ Dieses Codebeispiel ist Teil eines größeren Beispiels, das für die <xref:System.Web.SiteMapProvider> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#4](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/CS/simpletextsitemapprovider.cs#4)]
+ [!code-vb[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#4](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/VB/simpletextsitemapprovider.vb#4)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Web.SiteMapProvider.RootProvider" />
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveNode">
+      <MemberSignature Language="C#" Value="protected internal virtual void RemoveNode (System.Web.SiteMapNode node);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance void RemoveNode(class System.Web.SiteMapNode node) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.RemoveNode(System.Web.SiteMapNode)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Sub RemoveNode (node As SiteMapNode)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual void RemoveNode(System::Web::SiteMapNode ^ node);" />
+      <MemberSignature Language="F#" Value="abstract member RemoveNode : System.Web.SiteMapNode -&gt; unit&#xA;override this.RemoveNode : System.Web.SiteMapNode -&gt; unit" Usage="siteMapProvider.RemoveNode node" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="node" Type="System.Web.SiteMapNode" />
+      </Parameters>
+      <Docs>
+        <param name="node">Der aus der vom Anbieter verwalteten Knotenauflistung zu entfernende <see cref="T:System.Web.SiteMapNode" />.</param>
+        <summary>Entfernt das angegebene <see cref="T:System.Web.SiteMapNode" />-Objekt aus der Knotenauflistung, die vom Siteübersichtsanbieter verwaltet wird.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Klassen, die von <xref:System.Web.SiteMapProvider> der-Klasse abgeleitet <xref:System.Web.SiteMapProvider.RemoveNode%2A> werden, können die-Methode <xref:System.Web.SiteMapNode> überschreiben und Logik zum Entfernen von Objekten aus der Knoten Auflistung bereitstellen, die vom Site Übersichts Anbieter verwaltet wird. Die Standard Implementierung der- <xref:System.Web.SiteMapProvider.RemoveNode%2A> Methode löst eine <xref:System.NotImplementedException> -Ausnahme aus.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotImplementedException">In allen Fällen.</exception>
+        <altmember cref="Overload:System.Web.SiteMapProvider.AddNode" />
+      </Docs>
+    </Member>
+    <Member MemberName="ResolveSiteMapNode">
+      <MemberSignature Language="C#" Value="protected System.Web.SiteMapNode ResolveSiteMapNode (System.Web.HttpContext context);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig instance class System.Web.SiteMapNode ResolveSiteMapNode(class System.Web.HttpContext context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SiteMapProvider.ResolveSiteMapNode(System.Web.HttpContext)" />
+      <MemberSignature Language="VB.NET" Value="Protected Function ResolveSiteMapNode (context As HttpContext) As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; System::Web::SiteMapNode ^ ResolveSiteMapNode(System::Web::HttpContext ^ context);" />
+      <MemberSignature Language="F#" Value="member this.ResolveSiteMapNode : System.Web.HttpContext -&gt; System.Web.SiteMapNode" Usage="siteMapProvider.ResolveSiteMapNode context" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="context" Type="System.Web.HttpContext" />
+      </Parameters>
+      <Docs>
+        <param name="context">Der <see cref="T:System.Web.HttpContext" />, für den die Siteübersicht gegenwärtig vorhanden ist.</param>
+        <summary>Löst das <see cref="E:System.Web.SiteMapProvider.SiteMapResolve" />-Ereignis aus.</summary>
+        <returns>Ein <see cref="T:System.Web.SiteMapNode" />, der vom Ereignishandlerdelegaten bereitgestellt wird, der für die Behandlung des Ereignisses registriert ist, oder, falls mehrere Delegaten für die Behandlung des Ereignisses registriert sind, der Rückgabewert des letzten Delegaten in der Delegatenkette, andernfalls <see langword="null" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Der `context` -Parameter und ein Verweis auf den Anbieter, der <xref:System.Web.SiteMapProvider.ResolveSiteMapNode%2A> die-Methode aufgerufen hat, werden an den- <xref:System.Web.SiteMapResolveEventArgs> Konstruktor eines beliebigen zugeordneten-Objekts übergeben.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="E:System.Web.SiteMapProvider.SiteMapResolve" />
+        <altmember cref="T:System.Web.SiteMapResolveEventArgs" />
+        <altmember cref="T:System.Web.SiteMapResolveEventHandler" />
+      </Docs>
+    </Member>
+    <Member MemberName="ResourceKey">
+      <MemberSignature Language="C#" Value="public string ResourceKey { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string ResourceKey" />
+      <MemberSignature Language="DocId" Value="P:System.Web.SiteMapProvider.ResourceKey" />
+      <MemberSignature Language="VB.NET" Value="Public Property ResourceKey As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ ResourceKey { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.ResourceKey : string with get, set" Usage="System.Web.SiteMapProvider.ResourceKey" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft den Ressourcenschlüssel zum Lokalisieren von <see cref="T:System.Web.SiteMapNode" />-Attributen ab oder legt diesen fest.</summary>
+        <value>Eine Zeichenfolge, die den Ressourcenschlüsselnamen enthält.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die <xref:System.Web.SiteMapProvider.ResourceKey%2A> -Eigenschaft wird mit der <xref:System.Web.SiteMapNode.GetImplicitResourceString%2A> -Methode der <xref:System.Web.SiteMapNode> -Klasse verwendet. Bei den <xref:System.Web.SiteMapNode.Title%2A> - <xref:System.Web.SiteMapNode.Description%2A> und-Eigenschaften sowie allen zusätzlichen Attributen, die <xref:System.Web.SiteMapNode> in der <xref:System.Web.SiteMapNode.Attributes%2A> -Auflistung des-Objekts definiert sind, <xref:System.Web.SiteMapNode.GetImplicitResourceString%2A> hat die-Methode Vorrang <xref:System.Web.SiteMapNode.GetExplicitResourceString%2A> vor dem, wenn der die Lokalisierung wird aktiviert, <xref:System.Web.SiteMapProvider.EnableLocalization%2A> wenn die- `true`Eigenschaft auf festgelegt ist.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Web.SiteMapNode.Title" />
+        <altmember cref="P:System.Web.SiteMapNode.Description" />
+        <altmember cref="P:System.Web.SiteMapNode.Attributes" />
+        <altmember cref="M:System.Web.SiteMapNode.GetImplicitResourceString(System.String)" />
+        <altmember cref="M:System.Web.SiteMapNode.GetExplicitResourceString(System.String,System.String,System.Boolean)" />
+      </Docs>
+    </Member>
+    <Member MemberName="RootNode">
+      <MemberSignature Language="C#" Value="public virtual System.Web.SiteMapNode RootNode { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Web.SiteMapNode RootNode" />
+      <MemberSignature Language="DocId" Value="P:System.Web.SiteMapProvider.RootNode" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable ReadOnly Property RootNode As SiteMapNode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Web::SiteMapNode ^ RootNode { System::Web::SiteMapNode ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.RootNode : System.Web.SiteMapNode" Usage="System.Web.SiteMapProvider.RootNode" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapNode</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft das <see cref="T:System.Web.SiteMapNode" />-Stammobjekt der Siteübersichtsdaten ab, die der aktuelle Anbieter darstellt.</summary>
+        <value>Der Stamm-<see cref="T:System.Web.SiteMapNode" /> des aktuellen Anbieters von Siteübersichtsdaten. Die Standardimplementierung nimmt für den zurückgegebenen Knoten Einschränkungen aus Sicherheitsgründen vor.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Standard Implementierung ruft die abstrakte <xref:System.Web.SiteMapProvider.GetRootNodeCore%2A> -Methode auf.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie die <xref:System.Web.SiteMapProvider.RootNode%2A> -Eigenschaft in einer Klasse implementiert wird, <xref:System.Web.SiteMapProvider> die die abstrakte-Klasse implementiert.  
+  
+ Dieses Codebeispiel ist Teil eines größeren Beispiels, das für die <xref:System.Web.SiteMapProvider> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#2](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/CS/simpletextsitemapprovider.cs#2)]
+ [!code-vb[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#2](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/VB/simpletextsitemapprovider.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>Wenn Sie die <see cref="P:System.Web.SiteMapProvider.RootNode" /> Eigenschaft in einer abgeleiteten Klasse überschreiben, stellen Sie sicher, dass die Implementierung nicht in der Anbieter Hierarchie navigiert, wenn eine solche vorhanden ist, um den absoluten Stamm Knoten der Site zu ermitteln.</para></block>
+        <altmember cref="M:System.Web.SiteMapProvider.GetRootNodeCore" />
+        <altmember cref="P:System.Web.SiteMapProvider.CurrentNode" />
+      </Docs>
+    </Member>
+    <Member MemberName="RootProvider">
+      <MemberSignature Language="C#" Value="public virtual System.Web.SiteMapProvider RootProvider { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Web.SiteMapProvider RootProvider" />
+      <MemberSignature Language="DocId" Value="P:System.Web.SiteMapProvider.RootProvider" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable ReadOnly Property RootProvider As SiteMapProvider" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Web::SiteMapProvider ^ RootProvider { System::Web::SiteMapProvider ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.RootProvider : System.Web.SiteMapProvider" Usage="System.Web.SiteMapProvider.RootProvider" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapProvider</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft das <see cref="T:System.Web.SiteMapProvider" />-Stammobjekt in der aktuellen Anbieterhierarchie ab.</summary>
+        <value>Ein <see cref="T:System.Web.SiteMapProvider" />, der der Siteübersichtsanbieter der obersten Ebene in der Anbieterhierarchie ist, zu der der aktuelle Anbieter gehört.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Alle Klassen, die die <xref:System.Web.SiteMapProvider> -Klasse implementieren, können das Konzept einer Site Übersichts Anbieter Hierarchie unterstützen. Alle hierarchischen Beziehungen zwischen Anbietern werden von den Anbietern selbst außerhalb <xref:System.Web.SiteMapProviderCollection> des Bereichs einer Sammlung verwaltet. Ein Beispiel für eine Funktions Anbieter Hierarchie finden <xref:System.Web.XmlSiteMapProvider>Sie unter.  
+  
+   
+  
+## Examples  
+ Im folgenden Codebeispiel wird veranschaulicht, wie die <xref:System.Web.SiteMapProvider.RootProvider%2A> -Eigenschaft in einer Klasse implementiert wird, <xref:System.Web.SiteMapProvider> die die abstrakte-Klasse implementiert. `SimpleTextSiteMapProvider` Verwendet einfache Logik, um zu bestimmen, ob der aktuelle Anbieter Teil einer Anbieter Hierarchie ist. Wenn der Anbieter Teil einer Hierarchie ist, wird die <xref:System.Web.SiteMapProvider.RootProvider%2A> -Eigenschaft für den übergeordneten Anbieter als eigener Anbieter verwendet. Wenn der Anbieter nicht Teil einer Hierarchie ist, ist der Anbieter sein eigener Stamm Anbieter.  
+  
+ Dieses Codebeispiel ist Teil eines größeren Beispiels, das für die <xref:System.Web.SiteMapProvider> -Klasse bereitgestellt wird.  
+  
+ [!code-csharp[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#4](~/samples/snippets/csharp/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/CS/simpletextsitemapprovider.cs#4)]
+ [!code-vb[Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1#4](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Urtue.Samples.Alexkr.SimpleTextSiteMapProvider_1/VB/simpletextsitemapprovider.vb#4)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Configuration.Provider.ProviderException">Es ist ein Zirkelverweis auf den aktuellen Siteübersichtsanbieter vorhanden.</exception>
+        <altmember cref="P:System.Web.SiteMapProvider.ParentProvider" />
+      </Docs>
+    </Member>
+    <Member MemberName="SecurityTrimmingEnabled">
+      <MemberSignature Language="C#" Value="public bool SecurityTrimmingEnabled { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool SecurityTrimmingEnabled" />
+      <MemberSignature Language="DocId" Value="P:System.Web.SiteMapProvider.SecurityTrimmingEnabled" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property SecurityTrimmingEnabled As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool SecurityTrimmingEnabled { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.SecurityTrimmingEnabled : bool" Usage="System.Web.SiteMapProvider.SecurityTrimmingEnabled" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Ruft einen booleschen Wert ab, der angibt, ob ein Siteübersichtsanbieter Siteübersichtsknoten auf seiner Benutzerrolle basierend filtert.</summary>
+        <value><see langword="true" />, wenn der Anbieter so konfiguriert wird, dass Knoten rollenbasiert gefiltert werden, andernfalls <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Die Sicherheits Kürzung kann nicht Programm gesteuert festgelegt werden. Sie wird in der Konfiguration für den Anbieter festgelegt.  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Web.SiteMapProvider.IsAccessibleToUser(System.Web.HttpContext,System.Web.SiteMapNode)" />
+        <related type="Article" href="https://msdn.microsoft.com/library/4028528f-e01c-4ae3-bd8d-bb161718fe61">ASP.net Site-Map-Sicherheits Kürzung</related>
+      </Docs>
+    </Member>
+    <Member MemberName="SiteMapResolve">
+      <MemberSignature Language="C#" Value="public event System.Web.SiteMapResolveEventHandler SiteMapResolve;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.Web.SiteMapResolveEventHandler SiteMapResolve" />
+      <MemberSignature Language="DocId" Value="E:System.Web.SiteMapProvider.SiteMapResolve" />
+      <MemberSignature Language="VB.NET" Value="Public Event SiteMapResolve As SiteMapResolveEventHandler " />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; event System::Web::SiteMapResolveEventHandler ^ SiteMapResolve;" />
+      <MemberSignature Language="F#" Value="member this.SiteMapResolve : System.Web.SiteMapResolveEventHandler " Usage="member this.SiteMapResolve : System.Web.SiteMapResolveEventHandler " />
+      <MemberType>Event</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SiteMapResolveEventHandler</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Tritt ein, wenn die <see cref="P:System.Web.SiteMapProvider.CurrentNode" />-Eigenschaft aufgerufen wird.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Sie können eine <xref:System.Web.SiteMapNode> Darstellung der aktuell angeforderten Seite erstellen, ohne einen benutzerdefinierten Site Übersichts Anbieter zu implementieren, indem Sie <xref:System.Web.SiteMapProvider.SiteMapResolve> das-Ereignis abonnieren. Abonnenten fügen ein <xref:System.Web.SiteMapResolveEventHandler> -Objekt an, um eine <xref:System.Web.SiteMapProvider.CurrentNode%2A> Benachrichtigung zu empfangen, wenn die-Eigenschaft <xref:System.Web.SiteMapNode> aufgerufen wird, und können anstelle der von der <xref:System.Web.SiteMapProvider.CurrentNode%2A> -Eigenschaft zurückgegebenen standardmäßigen ein benutzerdefiniertes-Objekt zurückgeben  
+  
+ Weitere Informationen zum Behandeln von Ereignissen finden Sie unter [behandeln und Auslösen von Ereignissen](~/docs/standard/events/index.md).  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="E:System.Web.SiteMap.SiteMapResolve" />
+        <altmember cref="T:System.Web.SiteMapResolveEventHandler" />
+        <altmember cref="T:System.Web.SiteMapResolveEventArgs" />
+      </Docs>
+    </Member>
+  </Members>
+</Type>
