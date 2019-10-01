@@ -1,5 +1,5 @@
 <Type Name="Version" FullName="System.Version">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="57c7ef67da4aee74c30344ae7003e40f05caebd3" /><Meta Name="ms.sourcegitcommit" Value="a22d0855bbf24d893f43605f8b7e3a44bd9551a5" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70372152" /></Metadata><TypeSignature Language="C#" Value="public sealed class Version : ICloneable, IComparable, IComparable&lt;Version&gt;, IEquatable&lt;Version&gt;" />
+  <TypeSignature Language="C#" Value="public sealed class Version : ICloneable, IComparable, IComparable&lt;Version&gt;, IEquatable&lt;Version&gt;" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi serializable sealed beforefieldinit Version extends System.Object implements class System.ICloneable, class System.IComparable, class System.IComparable`1&lt;class System.Version&gt;, class System.IEquatable`1&lt;class System.Version&gt;" />
   <TypeSignature Language="DocId" Value="T:System.Version" />
   <TypeSignature Language="VB.NET" Value="Public NotInheritable Class Version&#xA;Implements ICloneable, IComparable, IComparable(Of Version), IEquatable(Of Version)" />
@@ -658,7 +658,7 @@
       <Docs>
         <param name="value">Ein <see cref="T:System.Version" />-Objekt, das mit dem aktuellen <see cref="T:System.Version" />-Objekt verglichen werden soll, oder <see langword="null" />.</param>
         <summary>Vergleicht das aktuelle <see cref="T:System.Version" />-Objekt mit einem angegebenen <see cref="T:System.Version" />-Objekt und gibt eine Angabe über das Verhältnis der jeweiligen Werte zurück.</summary>
-        <returns>Eine ganze Zahl mit Vorzeichen, die die relativen Werte der beiden Objekte angibt, wie in der folgenden Tabelle veranschaulicht.  
+        <returns>Eine Ganzzahl mit Vorzeichen, die die relativen Werte der beiden Objekte angibt, wie in der folgenden Tabelle veranschaulicht.  
   
  <list type="table"><listheader><term> Rückgabewert 
  </term><description> Bedeutung 
@@ -1390,10 +1390,26 @@
         <Parameter Name="input" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
       </Parameters>
       <Docs>
-        <param name="input">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="input">Eine schreibgeschützte Spanne von Zeichen, die eine zu konvertierende Versionsnummer enthält.</param>
+        <summary>Konvertiert die angegebene schreibgeschützte Zeichenspanne, die eine Versionsnummer für ein entsprechendes <see cref="T:System.Version" />-Objekt darstellt.</summary>
+        <returns>Ein Objekt, das der im <paramref name="input" />-Parameter angegebenen Versionsnummer entspricht.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+Der `input` -Parameter muss folgendes Format aufweisen:
+
+`major.minor[.build[.revision]]`
+
+Dabei sind `major`, `minor`, `build` und `revision` die Zeichen folgen Darstellungen der vier Komponenten der Versionsnummer: Hauptversionsnummer, neben Versionsnummer, Buildnummer und Revisionsnummer. Optionale Komponenten werden in eckigen Klammern ([und]) angezeigt. Die Komponenten müssen in der angegebenen Reihenfolge angezeigt werden und müssen durch Zeiträume getrennt werden.
+
+          ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="input" /> enthält weniger als zwei oder mehr als vier Versionskomponenten.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Mindestens eine Komponente in <paramref name="input" /> ist kleiner als 0 (null).</exception>
+        <exception cref="T:System.FormatException">Mindestens eine Komponente in <paramref name="input" /> ist keine ganze Zahl.</exception>
+        <exception cref="T:System.OverflowException">Mindestens eine Komponente in <paramref name="input" /> stellt eine Zahl größer als <see cref="F:System.Int32.MaxValue" /> dar.</exception>
       </Docs>
     </Member>
     <Member MemberName="Parse">
@@ -1439,12 +1455,9 @@
 ## Remarks  
  Der `input` -Parameter muss folgendes Format aufweisen:  
   
-```  
+`major.minor[.build[.revision]]`  
   
-major.minor[.build[.revision]]  
-```  
-  
- Dabei sind " *Major*", " *Minor*", " *Build*" und " *Revision* " die Zeichen folgen Darstellungen der vier Komponenten der Versionsnummer: Hauptversionsnummer, neben Versionsnummer, Buildnummer und Revisionsnummer. Optionale Komponenten werden in eckigen Klammern ([und]) angezeigt. Die Komponenten müssen in der angegebenen Reihenfolge angezeigt werden und müssen durch Zeiträume getrennt werden.  
+ Dabei sind `major`, `minor`, `build` und `revision` die Zeichen folgen Darstellungen der vier Komponenten der Versionsnummer: Hauptversionsnummer, neben Versionsnummer, Buildnummer und Revisionsnummer. Optionale Komponenten werden in eckigen Klammern ([und]) angezeigt. Die Komponenten müssen in der angegebenen Reihenfolge angezeigt werden und müssen durch Zeiträume getrennt werden.
   
 > [!IMPORTANT]
 >  Da die Zeichen folgen Darstellung einer Versionsnummer einem erkannten Muster entsprechen muss, sollten Anwendungen immer die Ausnahmebehandlung verwenden, wenn die <xref:System.Version.Parse%2A> -Methode aufgerufen wird, um Benutzereingaben zu analysieren. Alternativ können Sie die <xref:System.Version.TryParse%2A> -Methode zum Analysieren der Zeichen folgen Darstellung einer Versionsnummer und zum Zurückgeben eines Werts, der angibt, ob der Analyse Vorgang erfolgreich war, abrufen.  
@@ -1554,10 +1567,39 @@ major.minor[.build[.revision]]
         <Parameter Name="version" Type="System.Object" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
       </Parameters>
       <Docs>
-        <param name="version">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="version">Ein Vergleichsobjekt oder <see langword="null" />.</param>
+        <summary>Vergleicht das aktuelle <see cref="T:System.Version" />-Objekt mit einem angegebenen Objekt und gibt eine Angabe über das Verhältnis der jeweiligen Werte zurück.</summary>
+        <returns>Eine ganze Zahl mit Vorzeichen, die die relativen Werte der beiden Objekte angibt, wie in der folgenden Tabelle veranschaulicht: <list type="table">
+            <listheader>
+              <term>Rückgabewert</term>
+              <description>Bedeutung</description>
+            </listheader>
+            <item>
+              <term>Kleiner als 0 (null)</term>
+              <description>Das aktuelle <see cref="T:System.Version" />-Objekt ist eine Version vor <paramref name="version" />.</description>
+            </item>
+            <item>
+              <term>Zero</term>
+              <description>Das aktuelle <see cref="T:System.Version" />-Objekt ist mit der Version <paramref name="version" /> identisch.</description>
+            </item>
+            <item>
+              <term>Größer als 0 (null)</term>
+              <description>Das aktuelle <see cref="T:System.Version" />-Objekt ist eine Version nach <paramref name="version" />.
+
+- oder -
+
+<paramref name="version" /> ist <see langword="null" />.</description>
+            </item>
+          </list></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+Bei diesem Member handelt es sich um eine explizite Schnittstellenmemberimplementierung.
+
+          ]]></format>
+        </remarks>
       </Docs>
     </Member>
     <MemberGroup MemberName="ToString">
@@ -1704,10 +1746,10 @@ Wenn Sie z.B. ein <see cref="T:System.Version" />-Objekt mithilfe des Konstrukto
         <Parameter Name="charsWritten" Type="System.Int32" RefType="out" Index="1" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
       </Parameters>
       <Docs>
-        <param name="destination">To be added.</param>
-        <param name="charsWritten">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="destination">Wenn diese Methode zurückgegeben wird, ergibt sich die formatierte Version in der Zeichenspanne.</param>
+        <param name="charsWritten">Mit dieser Methode wird die Anzahl von Chars zurückgegeben, die in <paramref name="destination" /> geschrieben wurden.</param>
+        <summary>Versucht, diese Versionsinstanz in eine Zeichenspanne zu formatieren</summary>
+        <returns><see langword="true" />, wenn die Formatierung erfolgreich war, andernfalls <see langword="false" /></returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -1739,11 +1781,11 @@ Wenn Sie z.B. ein <see cref="T:System.Version" />-Objekt mithilfe des Konstrukto
         <Parameter Name="charsWritten" Type="System.Int32" RefType="out" Index="2" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
       </Parameters>
       <Docs>
-        <param name="destination">To be added.</param>
-        <param name="fieldCount">To be added.</param>
-        <param name="charsWritten">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="destination">Wenn diese Methode zurückgegeben wird, ergibt sich die formatierte Version in der Zeichenspanne.</param>
+        <param name="fieldCount">Die Anzahl der zurückzugebenden Komponenten. Es sind Werte zwischen 0 und 4 möglich.</param>
+        <param name="charsWritten">Mit dieser Methode wird die Anzahl von Chars zurückgegeben, die in <paramref name="destination" /> geschrieben wurden.</param>
+        <summary>Versucht, diese Versionsinstanz in eine Zeichenspanne zu formatieren</summary>
+        <returns><see langword="true" />, wenn die Formatierung erfolgreich war, andernfalls <see langword="false" /></returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -1774,11 +1816,26 @@ Wenn Sie z.B. ein <see cref="T:System.Version" />-Objekt mithilfe des Konstrukto
         <Parameter Name="result" Type="System.Version" RefType="out" Index="1" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
       </Parameters>
       <Docs>
-        <param name="input">To be added.</param>
-        <param name="result">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="input">Eine schreibgeschützte Spanne von Zeichen, die eine zu konvertierende Versionsnummer enthält</param>
+        <param name="result">Enthält nach dem Beenden dieser Methode die <see cref="T:System.Version" />-Entsprechung der Zahl in <paramref name="input" />, wenn die Konvertierung erfolgreich war Wenn <paramref name="input" /> <see langword="null" /> oder <see cref="F:System.String.Empty" /> ist oder, wenn bei der Konvertierung ein Fehler auftritt, dann ist <paramref name="result" /> <see langword="null" />, wenn die Methode zurückgegeben wird.</param>
+        <summary>Versucht, die angegebene schreibgeschützte Zeichenspanne einer Versionsnummer in ein entsprechendes <see cref="T:System.Version" />-Objekt zu konvertieren, und gibt einen Wert zurück, der angibt, ob die Konvertierung erfolgreich durchgeführt wurde</summary>
+        <returns><see langword="true" />, wenn der <paramref name="input" />-Parameter erfolgreich konvertiert wurde, andernfalls <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown">
+<![CDATA
+
+## Remarks
+
+Die `TryParse`-Methode ähnelt der <xref:System.Version.Parse%2A>-Methode, mit der Ausnahme, dass keine Ausnahme ausgelöst wird, wenn bei der Konvertierung ein Fehler auftritt. Stattdessen wird `false` zurückgegeben, wenn `input` `null` ist, weniger als zwei oder mehr als vier Komponenten aufweist, mindestens eine Komponente aufweist, die keine ganze Zahl ist, mindestens eine Komponente kleiner als 0 (null) ist oder mindestens eine Komponente größer als <xref:System.Int32.MaxValue?displayProperty=nameWithType> ist.
+
+Damit der Analyse Vorgang erfolgreich ausgeführt werden kann, `input` muss der-Parameter das folgende Format aufweisen:
+
+`major.minor[.build[.revision]]`
+
+Dabei sind `major`, `minor`, `build` und `revision` die Zeichen folgen Darstellungen der vier Komponenten der Versionsnummer: Hauptversionsnummer, neben Versionsnummer, Buildnummer und Revisionsnummer. Optionale Komponenten werden in eckigen Klammern ([und]) angezeigt. Die Komponenten müssen in der richtigen Reihenfolge angezeigt werden und müssen durch Zeiträume getrennt werden.
+
+          ]]></format>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="TryParse">
@@ -1824,16 +1881,13 @@ Wenn Sie z.B. ein <see cref="T:System.Version" />-Objekt mithilfe des Konstrukto
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die <xref:System.Version.TryParse%2A> -Methode ähnelt der <xref:System.Version.Parse%2A> -Methode, mit der Ausnahme, dass keine Ausnahme ausgelöst wird, wenn bei der Konvertierung ein Fehler auftritt. Stattdessen wird zurück `false` gegeben, `input` wenn NULL ist, weniger als zwei oder mehr als vier Komponenten aufweist, mindestens eine Komponente aufweist, die keine ganze Zahl ist, mindestens eine Komponente kleiner als 0 (null) ist oder mindestens eine Komponente größer als <xref:System.Int32.MaxValue?displayProperty=nameWithType>.  
+ Die `TryParse`-Methode ähnelt der <xref:System.Version.Parse%2A>-Methode, mit der Ausnahme, dass keine Ausnahme ausgelöst wird, wenn bei der Konvertierung ein Fehler auftritt. Stattdessen wird `false` zurückgegeben, wenn `input` `null` ist, weniger als zwei oder mehr als vier Komponenten aufweist, mindestens eine Komponente aufweist, die keine ganze Zahl ist, mindestens eine Komponente kleiner als 0 (null) ist oder mindestens eine Komponente größer als <xref:System.Int32.MaxValue?displayProperty=nameWithType> ist.  
   
  Damit der Analyse Vorgang erfolgreich ausgeführt werden kann, `input` muss der-Parameter das folgende Format aufweisen:  
   
-```  
+`major.minor[.build[.revision]]`  
   
-major.minor[.build[.revision]]  
-```  
-  
- Dabei sind " *Major*", " *Minor*", " *Build*" und " *Revision* " die Zeichen folgen Darstellungen der vier Komponenten der Versionsnummer: Hauptversionsnummer, neben Versionsnummer, Buildnummer und Revisionsnummer. Optionale Komponenten werden in eckigen Klammern ([und]) angezeigt. Die Komponenten müssen in der Reihenfolge angezeigt werden und müssen durch Zeiträume getrennt werden.  
+ Dabei sind `major`, `minor`, `build` und `revision` die Zeichen folgen Darstellungen der vier Komponenten der Versionsnummer: Hauptversionsnummer, neben Versionsnummer, Buildnummer und Revisionsnummer. Optionale Komponenten werden in eckigen Klammern ([und]) angezeigt. Die Komponenten müssen in der richtigen Reihenfolge angezeigt werden und müssen durch Zeiträume getrennt werden.  
   
    
   
