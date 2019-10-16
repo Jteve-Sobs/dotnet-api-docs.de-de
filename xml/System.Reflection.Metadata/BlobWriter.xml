@@ -1,5 +1,5 @@
 <Type Name="BlobWriter" FullName="System.Reflection.Metadata.BlobWriter">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="b7f5a4fd511925e435fa17dbe88e7eebb3d9c32a" /><Meta Name="ms.sourcegitcommit" Value="a22d0855bbf24d893f43605f8b7e3a44bd9551a5" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70353890" /></Metadata><TypeSignature Language="C#" Value="public struct BlobWriter" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="a442a17be61ef9b71b495ea7c57943370f1932bd" /><Meta Name="ms.sourcegitcommit" Value="d1af8ab61054695d17357d52554f7141e99fc367" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="10/11/2019" /><Meta Name="ms.locfileid" Value="72275139" /></Metadata><TypeSignature Language="C#" Value="public struct BlobWriter" />
   <TypeSignature Language="ILAsm" Value=".class public sequential ansi sealed beforefieldinit BlobWriter extends System.ValueType" />
   <TypeSignature Language="DocId" Value="T:System.Reflection.Metadata.BlobWriter" />
   <TypeSignature Language="VB.NET" Value="Public Structure BlobWriter" />
@@ -754,7 +754,19 @@
       <Docs>
         <param name="value">To be added.</param>
         <summary>Implementiert einen komprimierten Integerwert ohne Vorzeichen, Codierung gemäß ECMA-335-II, Kapitel 23.2: Blobs und Signaturen.</summary>
-        <remarks>To be added.</remarks>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+Wenn der Wert zwischen 0 (0x00) und 127 (0x7f) (einschließlich) liegt, codieren Sie als eine 1-Byte-Ganzzahl (Bit 7 ist eindeutig, der Wert wird in Bits 6 bis 0 gehalten).
+
+Wenn der Wert zwischen 28 (0x80) und 214-1 (0x3fff) (einschließlich) liegt, codieren Sie als 2-Byte-Ganzzahl, bei der Bit 15 festgelegt ist, Bit 14 Clear (der Wert wird in Bits 13 bis 0 gehalten).
+
+Andernfalls codieren Sie als 4-Byte-Ganzzahl, wenn Bit 31, Bit 30 festgelegt, Bit 29 Clear (der Wert wird in Bits 28 bis 0 gehalten).
+
+          ]]></format>
+        </remarks>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="value" /> kann nicht als komprimierter Integerwert ohne Vorzeichen dargestellt werden.</exception>
       </Docs>
     </Member>
@@ -782,7 +794,19 @@
       <Docs>
         <param name="value">To be added.</param>
         <summary>Implementiert einen komprimierten Integerwert mit Vorzeichen, Codierung gemäß ECMA-335-II, Kapitel 23.2: Blobs und Signaturen.</summary>
-        <remarks>To be added.</remarks>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+Wenn der Wert zwischen-64 (0xffffffc0) und 63 (0x3f) (inklusiv) liegt, codieren Sie als eine 1-Byte-Ganzzahl: Bits 7 Clear, Value Bits 5 bis 0 in Bits 6 bis 1, Signier Bit (Wert Bit 31) in Bit 0.
+
+Wenn der Wert zwischen-8192 (0xffffe000) und 8191 (0x1fff) (einschließlich) liegt, codieren Sie als 2-Byte-Ganzzahl: 15 Set, Bit 14 Clear, Value Bits 12 bis 0 in Bits 13 bis 1, Sign Bit (Value Bit 31) in Bit 0.
+
+Wenn der Wert zwischen-268435456 (0xf000000) und 268435455 (0x0fffffff) (einschließlich) liegt, codieren Sie als 4-Byte-Ganzzahl: 31 Set, 30 Set, Bit 29 Clear, Value Bits 27 bis 0 in Bits 28 bis 1, Sign Bit (Value Bit 31) in Bit 0.
+
+          ]]></format>
+        </remarks>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="value" /> kann nicht als komprimierter Integerwert mit Vorzeichen dargestellt werden.</exception>
       </Docs>
     </Member>
@@ -1137,7 +1161,17 @@
       <Docs>
         <param name="str">To be added.</param>
         <summary>Schreibt eine Zeichenfolge im SerString-Format (siehe ECMA-335-II 23.3: Benutzerdefinierte Attribute).</summary>
-        <remarks>To be added.</remarks>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+Die Zeichenfolge ist UTF8-codiert und weist die zugehörige Größe in Byte als Präfix auf.
+
+Eine @no__t 0-Zeichenfolge wird als einzelnes Byte 0xFF dargestellt.
+
+          ]]></format>
+        </remarks>
         <exception cref="T:System.InvalidOperationException">Der Generator ist nicht beschreibbar. Er wurde mit einem anderen Generator verknüpft.</exception>
       </Docs>
     </Member>
@@ -1327,7 +1361,19 @@
       <Docs>
         <param name="value">To be added.</param>
         <summary>Schreibt eine Zeichenfolge im Benutzerzeichenfolgen-Heapformat (#US) (siehe ECMA-335-II 24.2.4: #US- und #Blob-Heaps).</summary>
-        <remarks>To be added.</remarks>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+Die Zeichenfolge ist UTF16 codiert und weist die Größe in Bytes als Präfix auf.
+
+Dieses endgültige Byte enthält nur dann den Wert 1, wenn für ein UTF16-Zeichen innerhalb der Zeichenfolge ein beliebiges Bit im oberen Byte festgelegt ist, oder das niedrige Byte ist eines der folgenden: 0x01-0x08, 0x0E-0x1F, 0x27, 0x2D, 0x7F. Andernfalls ist der Wert 0.
+
+Der Wert 1 steht für Unicode-Zeichen, für die eine andere Verarbeitung erforderlich ist als für 8-Bit-Codierungs Gruppen.
+
+          ]]></format>
+        </remarks>
         <exception cref="T:System.InvalidOperationException">Der Generator ist nicht beschreibbar. Er wurde mit einem anderen Generator verknüpft.</exception>
       </Docs>
     </Member>
