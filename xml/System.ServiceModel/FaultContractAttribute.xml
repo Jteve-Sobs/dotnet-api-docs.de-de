@@ -1,5 +1,5 @@
 <Type Name="FaultContractAttribute" FullName="System.ServiceModel.FaultContractAttribute">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="258dde72e7912d28ac6a726677683455fbada41b" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70648392" /></Metadata><TypeSignature Language="C#" Value="public sealed class FaultContractAttribute : Attribute" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="7d55e28a240dfabc7d2afba4d320903cbf7d3484" /><Meta Name="ms.sourcegitcommit" Value="0084afad1b3b1cb2c8ad2c142ae3597d08bad4a7" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="10/31/2019" /><Meta Name="ms.locfileid" Value="73381913" /></Metadata><TypeSignature Language="C#" Value="public sealed class FaultContractAttribute : Attribute" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit FaultContractAttribute extends System.Attribute" />
   <TypeSignature Language="DocId" Value="T:System.ServiceModel.FaultContractAttribute" />
   <TypeSignature Language="VB.NET" Value="Public NotInheritable Class FaultContractAttribute&#xA;Inherits Attribute" />
@@ -19,6 +19,7 @@
     <AssemblyVersion>4.2.0.0</AssemblyVersion>
     <AssemblyVersion>4.5.0.1</AssemblyVersion>
     <AssemblyVersion>4.5.0.3</AssemblyVersion>
+    <AssemblyVersion>4.6.0.0</AssemblyVersion>
   </AssemblyInfo>
   <Base>
     <BaseTypeName>System.Attribute</BaseTypeName>
@@ -63,7 +64,7 @@
  Soll ein angegebener Fehler von einem mit <xref:System.ServiceModel.FaultContractAttribute> markierten Vorgang zurückgegeben werden, lösen Sie eine <xref:System.ServiceModel.FaultException%601> aus (wobei der Typparameter die serialisierbare Fehlerinformation ist), wenn die verwaltete Ausnahme während des Vorgangs auftritt. WCF-Client Anwendungen übersetzen den SOAP-Fehler als denselben Typ, der in der Client Implementierung ausgelöst wurde, also als <xref:System.ServiceModel.FaultException%601> (wobei der typeparameter die serialisierbaren Fehlerinformationen ist). Der <xref:System.ServiceModel.FaultContractAttribute> kann nur zur Angabe von SOAP-Fehlern für bidirektionale Dienstvorgänge und für asynchrone Vorgangspaare verwendet werden. Unidirektionale Vorgänge unterstützen keine SOAP-Fehler und unterstützen daher auch keinen <xref:System.ServiceModel.FaultContractAttribute>.  
   
 > [!NOTE]
->  Sie können zur Übermittlung von Fehlerinformationen jeden serialisierbaren Typ verwenden. Die einzige Einschränkung in dieser Version von WCF besteht darin, dass in einem <xref:System.ServiceModel.FaultContractAttribute> angegebene Typen <xref:System.Runtime.Serialization.DataContractSerializer?displayProperty=nameWithType>von serialisierbar sein müssen. Informationen zu den von <xref:System.Runtime.Serialization.DataContractSerializer> bereitgestellten Serialisierungsunterstützung finden Sie unter [Data Contract Serializer](~/docs/framework/wcf/feature-details/data-contract-serializer.md).  
+>  Sie können zur Übermittlung von Fehlerinformationen jeden serialisierbaren Typ verwenden. Die einzige Einschränkung in dieser Version von WCF besteht darin, dass die in einem <xref:System.ServiceModel.FaultContractAttribute> angegebenen Typen vom <xref:System.Runtime.Serialization.DataContractSerializer?displayProperty=nameWithType>serialisierbar sein müssen. Informationen zur Serialisierungsunterstützung, die der <xref:System.Runtime.Serialization.DataContractSerializer> bereitstellt, finden Sie unter [Data Contract Serializer](~/docs/framework/wcf/feature-details/data-contract-serializer.md).  
   
  Um beispielsweise anzugeben, dass Clients einen SOAP-Fehler mit einem <xref:System.Int32> erwarten können, fügen Sie den Typparameter in den <xref:System.ServiceModel.FaultContractAttribute> Ihrer Dienstmethode ein.  
   
@@ -73,7 +74,7 @@
  [!code-csharp[C_FCA#1](~/samples/snippets/csharp/VS_Snippets_CFX/c_fca/cs/fcademo.cs#1)]
  [!code-vb[C_FCA#1](~/samples/snippets/visualbasic/VS_Snippets_CFX/c_fca/vb/fcademo.vb#1)]  
   
- Lösen Sie dann in Ihrer Dienstmethode einen neuen <xref:System.ServiceModel.FaultException%601> aus, wobei der Typparameter der Typ ist, der die Fehlerinformationen enthält (im voranstehendem Beispiel einen <xref:System.Int32>). Beispiel:  
+ Lösen Sie dann in Ihrer Dienstmethode einen neuen <xref:System.ServiceModel.FaultException%601> aus, wobei der Typparameter der Typ ist, der die Fehlerinformationen enthält (im voranstehendem Beispiel einen <xref:System.Int32>). Zum Beispiel:  
   
  [!code-csharp[C_FCA#2](~/samples/snippets/csharp/VS_Snippets_CFX/c_fca/cs/fcademo.cs#2)]
  [!code-vb[C_FCA#2](~/samples/snippets/visualbasic/VS_Snippets_CFX/c_fca/vb/fcademo.vb#2)]  
@@ -83,14 +84,14 @@
 > [!NOTE]
 >  Wenn Sie einen <xref:System.ServiceModel.FaultException%601> angeben, in dem der Typparameter ein <xref:System.String?displayProperty=nameWithType> ist, wird der Zeichenfolgenwert der Detaileigenschaft in der Clientanwendung zugewiesen. Clients können diese Zeichenfolge nicht durch Aufruf der <xref:System.ServiceModel.FaultException%601.ToString%2A?displayProperty=nameWithType>-Methode abrufen. Damit der Zeichenfolgewert zurückgegeben wird, wenn die Clientanwendung <xref:System.Exception.ToString%2A?displayProperty=nameWithType> aufruft, lösen Sie im Vorgang eine <xref:System.ServiceModel.FaultException?displayProperty=nameWithType>-Ausnahme aus, und übergeben Sie die Zeichenfolge dem Konstruktor.  
   
- Um das Anwendungsverhalten explizit zu steuern, wenn eine Ausnahme oder <xref:System.ServiceModel.FaultException%601> ausgelöst wird, implementieren Sie die <xref:System.ServiceModel.Dispatcher.IErrorHandler?displayProperty=nameWithType>-Schnittstelle auf einem <xref:System.ServiceModel.Description.IServiceBehavior?displayProperty=nameWithType>, <xref:System.ServiceModel.Description.IContractBehavior?displayProperty=nameWithType> oder <xref:System.ServiceModel.Description.IEndpointBehavior?displayProperty=nameWithType> und weisen Sie sie der <xref:System.ServiceModel.Dispatcher.ChannelDispatcher.ErrorHandlers%2A?displayProperty=nameWithType>-Eigenschaft zu. <xref:System.ServiceModel.Dispatcher.IErrorHandler>ermöglicht es Ihnen, den generierten SOAP-Fehler explizit zu steuern und an den Client zurückzusenden.  
+ Um das Anwendungsverhalten explizit zu steuern, wenn eine Ausnahme oder <xref:System.ServiceModel.FaultException%601> ausgelöst wird, implementieren Sie die <xref:System.ServiceModel.Dispatcher.IErrorHandler?displayProperty=nameWithType>-Schnittstelle auf einem <xref:System.ServiceModel.Description.IServiceBehavior?displayProperty=nameWithType>, <xref:System.ServiceModel.Description.IContractBehavior?displayProperty=nameWithType> oder <xref:System.ServiceModel.Description.IEndpointBehavior?displayProperty=nameWithType> und weisen Sie sie der <xref:System.ServiceModel.Dispatcher.ChannelDispatcher.ErrorHandlers%2A?displayProperty=nameWithType>-Eigenschaft zu. <xref:System.ServiceModel.Dispatcher.IErrorHandler> ermöglicht es Ihnen, den generierten SOAP-Fehler explizit zu steuern und zurück an den Client zu senden.  
   
- Um das Debuggen zu <xref:System.ServiceModel.ServiceBehaviorAttribute.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> vereinfachen `true` , legen Sie im Code auf fest <xref:System.ServiceModel.Description.ServiceDebugBehavior.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> , oder Sie können in einer Anwendungs Konfigurationsdatei verwenden. Bei Aktivierung gibt der Dienst automatisch Ausnahmeinformationen an den Aufrufer zurück. Diese Fehler erscheinen auf dem Client als <xref:System.ServiceModel.FaultException>-Ausnahmen.  
+ Um das Debuggen zu vereinfachen, legen Sie die <xref:System.ServiceModel.ServiceBehaviorAttribute.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> auf `true` im Code fest, oder Sie können die <xref:System.ServiceModel.Description.ServiceDebugBehavior.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> in einer Anwendungs Konfigurationsdatei verwenden. Bei Aktivierung gibt der Dienst automatisch Ausnahmeinformationen an den Aufrufer zurück. Diese Fehler erscheinen auf dem Client als <xref:System.ServiceModel.FaultException>-Ausnahmen.  
   
 > [!IMPORTANT]
->  Da von verwalteten Ausnahmen interne Anwendungsinformationen verfügbar gemacht werden <xref:System.ServiceModel.ServiceBehaviorAttribute.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> können <xref:System.ServiceModel.Description.ServiceDebugBehavior.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> , `true` kann das Festlegen von oder auf es WCF-Clients ermöglichen, Informationen zu internen Dienst Vorgangs Ausnahmen, einschließlich persönlich, abzurufen. identifizierbare oder andere vertrauliche Informationen.  
+>  Da verwaltete Ausnahmen interne Anwendungsinformationen verfügbar machen können, kann das Festlegen von <xref:System.ServiceModel.ServiceBehaviorAttribute.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> oder <xref:System.ServiceModel.Description.ServiceDebugBehavior.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> auf `true` den WCF-Clients das Abrufen von Informationen über interne Dienst Vorgangs Ausnahmen, einschließlich persönlich identifizierbarer oder anderer, ermöglichen. vertrauliche Informationen.  
 >   
->  Daher wird die Festlegung von <xref:System.ServiceModel.ServiceBehaviorAttribute.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> für <xref:System.ServiceModel.Description.ServiceDebugBehavior.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> oder `true` nur für das vorübergehende Debuggen einer Dienstanwendung empfohlen. Außerdem beinhaltet die WSDL für eine Methode, die nicht behandelte verwaltete Ausnahmen auf diese Weise zurückgibt, keinen Vertrag für die <xref:System.ServiceModel.FaultException%601> vom Typ <xref:System.String>. Clients müssen die Möglichkeit eines unbekannten SOAP-Fehlers erwarten (zurückgegeben an WCF- <xref:System.ServiceModel.FaultException?displayProperty=nameWithType> Clients als Objekte), um die Debuginformationen ordnungsgemäß abzurufen.  
+>  Daher wird die Festlegung von <xref:System.ServiceModel.ServiceBehaviorAttribute.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> für <xref:System.ServiceModel.Description.ServiceDebugBehavior.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> oder `true` nur für das vorübergehende Debuggen einer Dienstanwendung empfohlen. Außerdem beinhaltet die WSDL für eine Methode, die nicht behandelte verwaltete Ausnahmen auf diese Weise zurückgibt, keinen Vertrag für die <xref:System.ServiceModel.FaultException%601> vom Typ <xref:System.String>. Clients müssen die Möglichkeit eines unbekannten SOAP-Fehlers erwarten (zurückgegeben an WCF-Clients als <xref:System.ServiceModel.FaultException?displayProperty=nameWithType>-Objekte), um die Debuginformationen ordnungsgemäß abzurufen.  
   
    
   
@@ -100,7 +101,7 @@
  [!code-csharp[FaultContractAttribute#1](~/samples/snippets/csharp/VS_Snippets_CFX/faultcontractattribute/cs/services.cs#1)]
  [!code-vb[FaultContractAttribute#1](~/samples/snippets/visualbasic/VS_Snippets_CFX/faultcontractattribute/vb/services.vb#1)]  
   
- Das folgende Codebeispiel zeigt, dass WCF- `ISampleService` Clients dieses SOAP-Fehlers <xref:System.ServiceModel.FaultException%601> als vom Typ `GreetingFault`haben.  
+ Das folgende Codebeispiel zeigt, dass WCF-Clients von `ISampleService` diesen SOAP-Fehler als <xref:System.ServiceModel.FaultException%601> vom Typ `GreetingFault`erleben.  
   
  [!code-csharp[FaultContractAttribute#3](~/samples/snippets/csharp/VS_Snippets_CFX/faultcontractattribute/cs/client.cs#3)]
  [!code-vb[FaultContractAttribute#3](~/samples/snippets/visualbasic/VS_Snippets_CFX/faultcontractattribute/vb/client.vb#3)]  
@@ -131,6 +132,7 @@
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.5.0.1</AssemblyVersion>
         <AssemblyVersion>4.5.0.3</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Parameters>
         <Parameter Name="detailType" Type="System.Type" />
@@ -179,6 +181,7 @@
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.5.0.1</AssemblyVersion>
         <AssemblyVersion>4.5.0.3</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0">
@@ -223,6 +226,7 @@
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.5.0.1</AssemblyVersion>
         <AssemblyVersion>4.5.0.3</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0">
@@ -308,6 +312,7 @@
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.5.0.1</AssemblyVersion>
         <AssemblyVersion>4.5.0.3</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0">
@@ -345,6 +350,7 @@
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.5.0.1</AssemblyVersion>
         <AssemblyVersion>4.5.0.3</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0">
