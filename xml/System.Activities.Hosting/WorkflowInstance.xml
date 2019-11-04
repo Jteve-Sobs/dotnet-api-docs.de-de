@@ -1,5 +1,5 @@
 <Type Name="WorkflowInstance" FullName="System.Activities.Hosting.WorkflowInstance">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="fc28f05dc1d614b37de8e2d163b658a13b622888" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70411396" /></Metadata><TypeSignature Language="C#" Value="public abstract class WorkflowInstance" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="7515c1e78c10083fc9644beb8219dc6cacc08083" /><Meta Name="ms.sourcegitcommit" Value="0084afad1b3b1cb2c8ad2c142ae3597d08bad4a7" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="10/31/2019" /><Meta Name="ms.locfileid" Value="73376583" /></Metadata><TypeSignature Language="C#" Value="public abstract class WorkflowInstance" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract WorkflowInstance extends System.Object" />
   <TypeSignature Language="DocId" Value="T:System.Activities.Hosting.WorkflowInstance" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class WorkflowInstance" />
@@ -19,7 +19,7 @@
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Activities.Hosting.WorkflowInstance>ist Single Thread und geht davon aus, dass der Host den gesamten Zugriff darauf synchronisiert. Ein Versuch, mehrere APIs gleichzeitig aufzurufen, führt dazu, dass eine <xref:System.InvalidOperationException> ausgegeben wird.  
+ <xref:System.Activities.Hosting.WorkflowInstance> ist Single Thread und geht davon aus, dass der Host den gesamten Zugriff darauf synchronisiert. Ein Versuch, mehrere APIs gleichzeitig aufzurufen, führt dazu, dass eine <xref:System.InvalidOperationException> ausgegeben wird.  
   
  Intern hat eine <xref:System.Activities.Hosting.WorkflowInstance> zwei Zustände: den Zustand der Ausführung und den angehaltenen Zustand. Die einzige Möglichkeit, die Laufzeit zu einem Wechsel vom angehaltenen Zustand in den Zustand der Ausführung zu bringen, besteht darin, <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.Run%2A> aufzurufen. Alle Aktionen (außer PAUSE) können nur ausgeführt werden, während sich die Laufzeit im angehaltenen Zustand befindet. Die Laufzeit wird in den folgenden Situationen spontan angehalten:  
   
@@ -27,15 +27,15 @@
   
 -   Eine Ausnahme im Workflow wurde nicht abgefangen und hat den Stamm verlassen. Der Host wird durch die <xref:System.Activities.Hosting.WorkflowInstance.OnNotifyUnhandledException%2A>-Methode benachrichtigt.  
   
--   Dem Planer sind Arbeitsaufgaben ausgegangen. Er befindet sich jetzt im Zustand <xref:System.Activities.Hosting.WorkflowInstanceState.Idle>. Der Host wird durch die <xref:System.Activities.Hosting.WorkflowInstance.OnNotifyPaused%2A>-Methode benachrichtigt. Beachten Sie, dass dem Planer Arbeitsaufgaben ausgegangen sein könnten, da sich die Instanz im Leerlauf befindet oder abgeschlossen ist. Mithilfe des <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.State%2A>-Werts der <xref:System.Activities.Hosting.WorkflowInstance.Controller%2A>-Eigenschaft kann zwischen den beiden Werten unterschieden werden.  
+-   Dem Planer sind Arbeitselemente ausgegangen. Er befindet sich jetzt im Zustand <xref:System.Activities.Hosting.WorkflowInstanceState.Idle>. Der Host wird durch die <xref:System.Activities.Hosting.WorkflowInstance.OnNotifyPaused%2A>-Methode benachrichtigt. Beachten Sie, dass dem Planer Arbeitselemente ausgegangen sein könnten, da sich die Instanz im Leerlauf befindet oder abgeschlossen ist. Mithilfe des <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.State%2A>-Werts der <xref:System.Activities.Hosting.WorkflowInstance.Controller%2A>-Eigenschaft kann zwischen den beiden Werten unterschieden werden.  
   
  Der Host kann einen Wechsel vom Zustand der Ausführung in den angehaltenen Zustand anfordern, indem er die <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.RequestPause%2A>-Methode oder <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.PauseWhenPersistable%2A>-Methode der <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl>-Instanz aufruft, die von der <xref:System.Activities.Hosting.WorkflowInstance.Controller%2A>-Eigenschaft zurückgegeben wurde. Diese Anforderung liefert keine bestimmte Antwort. Das bedeutet, dass der Host nicht versuchen sollte, einen OnNotify* oder <xref:System.Activities.Hosting.WorkflowInstance.OnRequestAbort%2A> mit einer bestimmten Anforderung zum Anhalten zu korrelieren. Als Reaktion auf eine Pausenanforderung kann die Laufzeit in den angehaltenen Status wechseln und <xref:System.Activities.Hosting.WorkflowInstance.OnNotifyPaused%2A> aufrufen, während der Planer immer noch ausstehende Arbeitsaufgaben zu bewältigen hat. Der <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.State%2A>-Wert der <xref:System.Activities.Hosting.WorkflowInstance.Controller%2A>-Eigenschaft kann verwendet werden, um zu bestimmen, ob der Planer keine weitere Arbeit aufweist oder von einer Pausenanforderung unterbrochen wurde.  
   
  Die <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.RequestPause%2A>-Methode der <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl>-Instanz, die von der <xref:System.Activities.Hosting.WorkflowInstance.Controller%2A>-Eigenschaft zurückgegeben wurde, ist die einzige Methode, die aufgerufen werden kann, während sich die <xref:System.Activities.Hosting.WorkflowInstance> im Status der Ausführung befindet. Alle anderen Methoden lösen eine <xref:System.InvalidOperationException> aus, wenn sie aufgerufen werden. Aufgrund der Regeln für den Wechsel der <xref:System.Activities.Hosting.WorkflowInstance> von einem Zustand in einen anderen kann das allgemeine Konzept für den Zustand der Ausführung und den angehaltenen Zustand wie folgt definiert werden:  
   
--   Wird ausgeführt: der Zustand zwischen einem <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.Run%2A> -Befehl und der nächsten WorkflowInstance. OnNotify *.  
+-   Wird ausgeführt: der Status zwischen einem <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.Run%2A>-und der nächsten WorkflowInstance. OnNotify *.  
   
--   Angehalten: der Zustand zwischen der letzten WorkflowInstance. OnNotify * und dem nächsten <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.Run%2A>-Befehl.  
+-   Angehalten: der Zustand zwischen der letzten WorkflowInstance. OnNotify * und dem nächsten <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.Run%2A>.  
   
  ]]></format>
     </remarks>
@@ -187,12 +187,12 @@
       </Docs>
     </Member>
     <Member MemberName="EndFlushTrackingRecords">
-      <MemberSignature Language="C#" Value="protected void EndFlushTrackingRecords (IAsyncResult result);" />
-      <MemberSignature Language="ILAsm" Value=".method familyhidebysig instance void EndFlushTrackingRecords(class System.IAsyncResult result) cil managed" />
-      <MemberSignature Language="DocId" Value="M:System.Activities.Hosting.WorkflowInstance.EndFlushTrackingRecords(System.IAsyncResult)" />
-      <MemberSignature Language="VB.NET" Value="Protected Sub EndFlushTrackingRecords (result As IAsyncResult)" />
-      <MemberSignature Language="C++ CLI" Value="protected:&#xA; void EndFlushTrackingRecords(IAsyncResult ^ result);" />
-      <MemberSignature Language="F#" Value="member this.EndFlushTrackingRecords : IAsyncResult -&gt; unit" Usage="workflowInstance.EndFlushTrackingRecords result" />
+      <MemberSignature Language="C#" Value="protected void EndFlushTrackingRecords (IAsyncResult result);" FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig instance void EndFlushTrackingRecords(class System.IAsyncResult result) cil managed" FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      <MemberSignature Language="DocId" Value="M:System.Activities.Hosting.WorkflowInstance.EndFlushTrackingRecords(System.IAsyncResult)" FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub EndFlushTrackingRecords (result As IAsyncResult)" FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; void EndFlushTrackingRecords(IAsyncResult ^ result);" FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      <MemberSignature Language="F#" Value="member this.EndFlushTrackingRecords : IAsyncResult -&gt; unit" Usage="workflowInstance.EndFlushTrackingRecords result" FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>System.Activities</AssemblyName>
@@ -348,7 +348,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Wenn diese Eigenschaft festgelegt wird, nachdem die Workflow Instanz initialisiert <xref:System.Activities.Hosting.WorkflowInstance.IsReadOnly%2A> wurde `true`und zurück <xref:System.InvalidOperationException> gibt, wird eine ausgelöst.  
+ Wenn diese Eigenschaft festgelegt wird, nachdem die Workflow Instanz initialisiert wurde, und <xref:System.Activities.Hosting.WorkflowInstance.IsReadOnly%2A> `true`zurückgibt, wird eine <xref:System.InvalidOperationException> ausgelöst.  
   
  ]]></format>
         </remarks>
@@ -880,7 +880,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Wenn diese Eigenschaft festgelegt wird, nachdem die Workflow Instanz initialisiert <xref:System.Activities.Hosting.WorkflowInstance.IsReadOnly%2A> wurde `true`und zurück <xref:System.InvalidOperationException> gibt, wird eine ausgelöst.  
+ Wenn diese Eigenschaft festgelegt wird, nachdem die Workflow Instanz initialisiert wurde, und <xref:System.Activities.Hosting.WorkflowInstance.IsReadOnly%2A> `true`zurückgibt, wird eine <xref:System.InvalidOperationException> ausgelöst.  
   
  ]]></format>
         </remarks>
@@ -908,7 +908,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Wenn <xref:System.Activities.Hosting.WorkflowInstance.IsReadOnly%2A> zurück `true`gibt, wird <xref:System.InvalidOperationException> eine ausgelöst.  
+ Wenn <xref:System.Activities.Hosting.WorkflowInstance.IsReadOnly%2A> `true`zurückgibt, wird eine <xref:System.InvalidOperationException> ausgelöst.  
   
  ]]></format>
         </remarks>
