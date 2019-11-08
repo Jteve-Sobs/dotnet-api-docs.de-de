@@ -1,5 +1,5 @@
 <Type Name="AssemblyLoadContext" FullName="System.Runtime.Loader.AssemblyLoadContext">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="801fb35643fb867491653df27e6c1fb502074e9e" /><Meta Name="ms.sourcegitcommit" Value="c573d537afba2d4c1463538f1095f2f155025464" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="10/16/2019" /><Meta Name="ms.locfileid" Value="72407142" /></Metadata><TypeSignature Language="C#" Value="public abstract class AssemblyLoadContext" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="7d48bdcd93c7e80b6d4e620d0088b451acac8922" /><Meta Name="ms.sourcegitcommit" Value="a6c4dae9c1ba2cfbc4452907ef5697ad1f870c0d" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="10/30/2019" /><Meta Name="ms.locfileid" Value="73071035" /></Metadata><TypeSignature Language="C#" Value="public abstract class AssemblyLoadContext" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit AssemblyLoadContext extends System.Object" />
   <TypeSignature Language="DocId" Value="T:System.Runtime.Loader.AssemblyLoadContext" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class AssemblyLoadContext" />
@@ -21,7 +21,7 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>Stellt den Bindungsbereich einer Runtime dar. Diese Klasse ist abstrakt.</summary>
+    <summary>Stellt den Bereich zum Laden von Assemblys einer Runtime dar.</summary>
     <remarks>
       <format type="text/markdown"><![CDATA[
 
@@ -30,18 +30,18 @@
  
  <xref:System.Runtime.Loader.AssemblyLoadContext> ist eine abstrakte Klasse. Der <xref:System.Runtime.Loader.AssemblyLoadContext.Load(System.Reflection.AssemblyName)?displayProperty=nameWithType> muss implementiert werden, um eine konkrete Klasse zu erstellen.
  
- Der <xref:System.Runtime.Loader.AssemblyLoadContext> ist primär zum Bereitstellen der Isolation der Assemblybindung vorhanden. Es ermöglicht, dass mehrere Versionen der gleichen Assembly innerhalb eines einzelnen Prozesses geladen werden. Es ersetzt die Isolations Mechanismen, die von mehreren <xref:System.AppDomain>-Instanzen in der .NET Framework bereitgestellt werden.
+ Der <xref:System.Runtime.Loader.AssemblyLoadContext> ist primär zum Bereitstellen der Isolation von Assemblys vorhanden. Es ermöglicht, dass mehrere Versionen der gleichen Assembly innerhalb eines einzelnen Prozesses geladen werden. Es ersetzt die Isolations Mechanismen, die von mehreren <xref:System.AppDomain>-Instanzen in der .NET Framework bereitgestellt werden.
  
  > [!NOTE]
  > <xref:System.Runtime.Loader.AssemblyLoadContext> bietet keine Sicherheitsfunktionen. Der gesamte Code verfügt über vollständige Berechtigungen für den Prozess.
 
 ### <a name="usage-in-the-runtime"></a>Verwendung in der Laufzeit
  Die Laufzeit implementiert zwei assemblyladekontexte:
- * <xref:System.Runtime.Loader.AssemblyLoadContext.Default?displayProperty=nameWithType> stellt den Standard Bindungs Kontext der Laufzeit dar, der für die Hauptassembly der Anwendung und die zugehörigen statischen Abhängigkeiten verwendet wird.
+ * <xref:System.Runtime.Loader.AssemblyLoadContext.Default?displayProperty=nameWithType> stellt den Standardkontext der Laufzeit dar, der für die Hauptassembly der Anwendung und die zugehörigen statischen Abhängigkeiten verwendet wird.
  * Die <xref:System.Reflection.Assembly.LoadFile(System.String)?displayProperty=nameWithType>-Methode isoliert die Assemblys, die Sie lädt, indem die grundlegendsten <xref:System.Runtime.Loader.AssemblyLoadContext> instanziiert werden. Es verfügt über ein vereinfachtes Isolations Schema, das jede Assembly in ihren eigenen <xref:System.Runtime.Loader.AssemblyLoadContext> ohne Abhängigkeitsauflösung lädt.
  
-### <a name="application-usage"></a>Anwendungs Verwendung
- Eine Anwendung kann einen eigenen <xref:System.Runtime.Loader.AssemblyLoadContext> erstellen, um eine benutzerdefinierte Lösung für erweiterte Bindungs Szenarien zu erstellen. Der Schwerpunkt liegt auf der Definition von Mechanismen zur Abhängigkeitsauflösung.
+### <a name="application-usage"></a>Anwendungsnutzung
+ Eine Anwendung kann einen eigenen <xref:System.Runtime.Loader.AssemblyLoadContext> erstellen, um eine benutzerdefinierte Lösung für erweiterte Szenarios zu erstellen. Der Schwerpunkt liegt auf der Definition von Mechanismen zur Abhängigkeitsauflösung.
  
  Der <xref:System.Runtime.Loader.AssemblyLoadContext> bietet zwei Erweiterungs Punkte zum Implementieren der Auflösung verwalteter Assemblys:
  1. Der <xref:System.Runtime.Loader.AssemblyLoadContext.Load(System.Reflection.AssemblyName)?displayProperty=nameWithType> bietet die erste Möglichkeit, die Assembly durch <xref:System.Runtime.Loader.AssemblyLoadContext> aufzulösen, Sie zu laden und zurückzugeben. Wenn die <xref:System.Runtime.Loader.AssemblyLoadContext.Load(System.Reflection.AssemblyName)?displayProperty=nameWithType> `null` zurückgibt, versucht das Lade Modul, die Assembly in die <xref:System.Runtime.Loader.AssemblyLoadContext.Default?displayProperty=nameWithType> zu laden.
@@ -64,8 +64,8 @@
  
  * Durch die Implementierung von <xref:System.Runtime.Loader.AssemblyLoadContext.Load(System.Reflection.AssemblyName)?displayProperty=nameWithType> können neue Abhängigkeiten hinzugefügt werden, die möglicherweise isoliert werden müssen, damit verschiedene Versionen vorhanden sein müssen. Die natürlichste Implementierung würde diese Abhängigkeiten im Standardkontext platzieren. Der sorgfältige Entwurf kann die neuen Abhängigkeiten isolieren.
  
- * Bei der Bindungs Isolation werden mehrere Typen mit dem gleichen Typnamen erstellt.
-     * Dies kann zu verwirrenden Fehlermeldungen führen, z. b. "der Typ" foo. foo kann nicht in den Typ "foo. foo" umgewandelt werden.
+ * Dieselbe Assembly wird mehrmals in verschiedene Kontexte geladen.
+     * Dies kann zu verwirrenden Fehlermeldungen führen, z. b. "das Objekt vom Typ ' Sample. plugin' kann nicht in den Typ ' Sample. plugin' umgewandelt werden."
      * Das Marshalling über Isolations Grenzen hinweg ist nicht trivial. Eine typische Lösung wäre die Verwendung einer Schnittstelle, die in einer Assembly definiert ist, die nur in den standardmäßigen Load-Kontext geladen wird.
  
  ]]></format>
