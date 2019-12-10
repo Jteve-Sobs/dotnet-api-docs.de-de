@@ -1,5 +1,5 @@
 <Type Name="ECDsaCng" FullName="System.Security.Cryptography.ECDsaCng">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="6805504eb676aa056830a2f3b5d194b28a469b0c" /><Meta Name="ms.sourcegitcommit" Value="0084afad1b3b1cb2c8ad2c142ae3597d08bad4a7" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="10/31/2019" /><Meta Name="ms.locfileid" Value="73394049" /></Metadata><TypeSignature Language="C#" Value="public sealed class ECDsaCng : System.Security.Cryptography.ECDsa" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="20f94e9836c6b0c61d4397932295d34553c11e78" /><Meta Name="ms.sourcegitcommit" Value="6c0b6310824199ff476e4a9eec6e9ed0bd1a51c9" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/05/2019" /><Meta Name="ms.locfileid" Value="74875088" /></Metadata><TypeSignature Language="C#" Value="public sealed class ECDsaCng : System.Security.Cryptography.ECDsa" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit ECDsaCng extends System.Security.Cryptography.ECDsa" />
   <TypeSignature Language="DocId" Value="T:System.Security.Cryptography.ECDsaCng" />
   <TypeSignature Language="VB.NET" Value="Public NotInheritable Class ECDsaCng&#xA;Inherits ECDsa" />
@@ -32,7 +32,8 @@
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Klasse wird von der <xref:System.Security.Cryptography.ECDsa> abstrakten Basisklasse abgeleitet.  
+Diese Klasse sollte nur bei der plattformübergreifenden Interoperabilität mit der Windows CNG-Bibliothek direkt verwendet werden.
+Wenn eine plattformübergreifende Interoperabilität nicht erforderlich ist, sollten Sie die <xref:System.Security.Cryptography.ECDsa.Create%2A?displayProperty=nameWithType> Factorymethoden anstelle einer bestimmten abgeleiteten Implementierung verwenden.
   
    
   
@@ -92,11 +93,15 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Das Zufallsschlüssel Paar hat eine öffentliche Schlüssellänge von 521 Bits.  
+
+Dieser Konstruktor generiert nicht sofort ein neues öffentliches/privates Schlüsselpaar.
+Dieser Konstruktor legt die <xref:System.Security.Cryptography.ECDsaCng.KeySize>-Eigenschaft auf 521 fest, und wenn ein Schlüssel benötigt wird, wird die gespeicherte Größe verwendet, um die Zielkurve zu identifizieren.
+Wenn eine Taste über die <xref:System.Security.Cryptography.ECDsaCng.ImportParameters%2A>-Methode oder eine andere Schlüssel Import Methode geladen wird, hat die Schlüsselgröße dieses Konstruktors keine Bedeutung.
   
  ]]></format>
         </remarks>
         <exception cref="T:System.PlatformNotSupportedException">CNG-Klassen (Cryptography Next Generation) werden auf diesem System nicht unterstützt.</exception>
+        <altmember cref="M:System.Security.Cryptography.ECDsa.Create" />
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -134,17 +139,22 @@
       </Parameters>
       <Docs>
         <param name="keySize">Die Größe des Schlüssels. Gültige Schlüsselgrößen sind 256, 384 und 521 Bits.</param>
-        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Security.Cryptography.ECDsaCng" />-Klasse mit einem zufällig erzeugten Schlüsselpaar mit der angegebenen Schlüsselgröße.</summary>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Security.Cryptography.ECDsaCng" />-Klasse mit einer angegebenen Zielschlüsselgröße.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Das zufällige Schlüsselpaar verfügt über die Länge des öffentlichen Schlüssels, der vom `keySize`-Parameter definiert wird.  
+
+Dieser Konstruktor generiert nicht sofort ein neues öffentliches/privates Schlüsselpaar.
+Dieser Konstruktor legt die <xref:System.Security.Cryptography.ECDsaCng.KeySize>-Eigenschaft auf den angegebenen Wert fest. Wenn ein Schlüssel benötigt wird, wird die gespeicherte Größe verwendet, um die Ziel Kurve zu identifizieren.
+Wenn eine Taste über die <xref:System.Security.Cryptography.ECDsaCng.ImportParameters%2A>-Methode oder eine andere Schlüssel Import Methode geladen wird, hat die Schlüsselgröße dieses Konstruktors keine Bedeutung.
+ 
   
  ]]></format>
         </remarks>
         <exception cref="T:System.PlatformNotSupportedException">CNG-Klassen (Cryptography Next Generation) werden auf diesem System nicht unterstützt.</exception>
         <exception cref="T:System.Security.Cryptography.CryptographicException">Die <paramref name="keySize" /> gibt eine ungültige Länge an.</exception>
+        <altmember cref="Overload:System.Security.Cryptography.ECDsa.Create" />
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -266,8 +276,8 @@
         <Parameter Name="disposing" Type="System.Boolean" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
       </Parameters>
       <Docs>
-        <param name="disposing">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="disposing"><see langword="true" />, um verwaltete und nicht verwaltete Ressourcen freizugeben, <see langword="false" />, um ausschließlich nicht verwaltete Ressourcen freizugeben.</param>
+        <summary>Gibt alle von der aktuellen Instanz der <see cref="T:System.Security.Cryptography.ECDsaCng" />-Klasse verwendeten Ressourcen frei.</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -458,7 +468,7 @@
       </Parameters>
       <Docs>
         <param name="curve">Die Kurve zum Generieren des Schlüssels.</param>
-        <summary>Generiert einen Schlüssel, der für den ECDsaCng-Algorithmus verwendet werden soll.</summary>
+        <summary>Generiert ein neues kurzlebiges Paar aus privatem und öffentlichem Schlüssel für die angegebene Kurve und ersetzt den aktuellen Schlüssel.</summary>
         <remarks>To be added.</remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="curve" /> führt keine Validierung durch.</exception>
       </Docs>
@@ -541,10 +551,10 @@
         <Parameter Name="hashAlgorithm" Type="System.Security.Cryptography.HashAlgorithmName" Index="1" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
       </Parameters>
       <Docs>
-        <param name="data">To be added.</param>
-        <param name="hashAlgorithm">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="data">Der binäre Datenstrom, für den der Hashwert berechnet werden soll.</param>
+        <param name="hashAlgorithm">Der Algorithmus, der zum Bestimmen des Hashwerts der Daten verwendet werden soll.</param>
+        <summary>Berechnet den Hashwert des angegebenen Binärdatenstroms mithilfe des angegebenen Hashalgorithmus.</summary>
+        <returns>Die Daten, für die der Hashwert berechnet wurde.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -581,12 +591,12 @@
         <Parameter Name="hashAlgorithm" Type="System.Security.Cryptography.HashAlgorithmName" Index="3" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
       </Parameters>
       <Docs>
-        <param name="data">To be added.</param>
-        <param name="offset">To be added.</param>
-        <param name="count">To be added.</param>
-        <param name="hashAlgorithm">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="data">Die Daten, für die der Hashwert berechnet werden soll.</param>
+        <param name="offset">Der Index des ersten Bytes in <paramref name="data" />, für das der Hashwert berechnet werden soll.</param>
+        <param name="count">Die Anzahl der Bytes, für die der Hashwert berechnet werden soll.</param>
+        <param name="hashAlgorithm">Der Algorithmus, der zum Bestimmen des Hashwerts der Daten verwendet werden soll.</param>
+        <summary>Berechnet den Hashwert des angegebenen Teils eines Bytearrays mithilfe des angegebenen Hashalgorithmus.</summary>
+        <returns>Die Daten, für die der Hashwert berechnet wurde.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -695,9 +705,22 @@
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Ruft die Größe des vom asymmetrischen Algorithmus verwendeten Schlüsselmodulos in Bits ab oder legt diese fest.</summary>
+        <value>Die Größe des vom asymmetrischen Algorithmus verwendeten Schlüsselmodulos in Bits.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+Das Festlegen dieser Eigenschaft auf den aktuellen Wert hat keinen sichtbaren Effekt.
+Wenn diese Eigenschaft auf einen neuen zulässigen Wert festgelegt wird, wird der aktuelle Schlüssel verworfen, aber die Erstellung eines neuen Schlüssels wird so lange festgelegt, bis eine solche benötigt wird
+
+Da mit Schlüsselgrößen elliptische Kurven nicht eindeutig identifiziert werden, wird die Verwendung des Eigenschaften Setter nicht empfohlen. Um einen neuen Schlüssel für eine bestimmte Kurve zu generieren, verwenden Sie die <xref:System.Security.Cryptography.ECDsaCng.GenerateKey%2A>-Methode.
+
+]]></format>
+        </remarks> 
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="value" /> wird von <see cref="P:System.Security.Cryptography.ECDsaCng.LegalKeySizes" /> nicht zugelassen.</exception>
+        <altmember cref="M:System.Security.Cryptography.ECDsaCng.GenerateKey(System.Security.Cryptography.ECCurve)" />
       </Docs>
     </Member>
     <Member MemberName="LegalKeySizes">
@@ -726,9 +749,22 @@
         <ReturnType>System.Security.Cryptography.KeySizes[]</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Ruft die vom Setter der <see cref="P:System.Security.Cryptography.ECDsaCng.KeySize" />-Eigenschaft unterstützten Schlüsselgrößen in Bits ab.</summary>
+        <value>Ein Array, das die vom <see cref="P:System.Security.Cryptography.ECDsaCng.KeySize" /> Eigenschaften Setter unterstützten Schlüsselgrößen enthält.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+In der Kryptografie für elliptische Kurven (ECC) ist die Schlüsselgröße nicht die einzige Eingabe in den Schlüssel Generierungsprozess, sondern wird von den Kurven Parametern für eine bestimmte elliptische Kurve abgeleitet.
+Diese Eigenschaft meldet nur drei zulässige Schlüsselgrößen: 256, 384 und 521 Bits.
+Wenn die Schlüsselgröße allein als Grundlage für die Schlüsselgenerierung verwendet wird, werden die unterstützten Größen den benannten Kurven secp256r1 (Alias p-256), secp384r1 (auch NIST p-384) und secp521r1 (auch NIST p-521) zugeordnet.
+
+Wenn diese Klasse unter Windows 10 ausgeführt wird, unterstützt Sie viele zusätzliche benannte Kurven, dies wird jedoch in dieser Eigenschaft nicht widergespiegelt.
+
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Security.Cryptography.ECDsaCng.GenerateKey(System.Security.Cryptography.ECCurve)" />
       </Docs>
     </Member>
     <MemberGroup MemberName="SignData">
@@ -1058,13 +1094,12 @@
         <Parameter Name="bytesWritten" Type="System.Int32" RefType="out" Index="3" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0" />
       </Parameters>
       <Docs>
-        <param name="source">To be added.</param>
-        <param name="destination">To be added.</param>
-        <param name="hashAlgorithm">To be added.</param>
-        <param name="bytesWritten">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="source">Die Daten, für die der Hashwert berechnet werden soll.</param>
+        <param name="destination">Der Puffer zum Empfangen des Hashwerts.</param>
+        <param name="hashAlgorithm">Der Algorithmus, der zum Bestimmen des Hashwerts der Daten verwendet werden soll.</param>
+        <param name="bytesWritten">Nach Ausführung dieser Methode die Gesamtzahl der in <paramref name="destination" /> geschriebenen Bytes. Dieser Parameter wird nicht initialisiert behandelt.</param>
+        <summary>Versucht, den Hashwert der angegebenen schreibgeschützten Spanne von Bytes in das angegebene Ziel unter Verwendung des angegebenen Hashalgorithmus zu berechnen.</summary>
+        <returns><see langword="false" />, wenn <paramref name="destination" /> zum Empfangen des Hashwerts nicht lang genug ist.</returns>
       </Docs>
     </Member>
     <Member MemberName="TrySignHash">
@@ -1092,11 +1127,11 @@
         <Parameter Name="bytesWritten" Type="System.Int32" RefType="out" Index="2" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0" />
       </Parameters>
       <Docs>
-        <param name="source">To be added.</param>
-        <param name="destination">To be added.</param>
-        <param name="bytesWritten">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="source">Der Hashwert der signierten Daten.</param>
+        <param name="destination">Der Puffer zum Empfangen der Signatur.</param>
+        <param name="bytesWritten">Nach Ausführung dieser Methode die Gesamtzahl der in <paramref name="destination" /> geschriebenen Bytes. Dieser Parameter wird nicht initialisiert behandelt.</param>
+        <summary>Versucht, die digitale ECDSA-Signatur für die angegebene schreibgeschützte Spanne von Bytes zu berechnen, die einen Datenhash in das angegebene Ziel darstellen, indem der aktuelle Schlüssel verwendet wird.</summary>
+        <returns><see langword="false" />, wenn <paramref name="destination" /> zum Empfangen der Signatur nicht lang genug ist.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -1257,7 +1292,7 @@
         </remarks>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="offset" /> oder <paramref name="count" /> ist kleiner als 0 (null).  
   
-- oder - 
+- oder -  
  <paramref name="offset" /> oder <paramref name="count" /> verweist auf eine Position, die außerhalb der Länge des Bytearrays liegt, das im <paramref name="data" />-Parameter übergeben wurde.</exception>
         <exception cref="T:System.ArgumentNullException"><paramref name="data" /> oder <paramref name="signature" /> ist <see langword="null" />.</exception>
       </Docs>
@@ -1305,7 +1340,7 @@
       <Docs>
         <param name="hash">Der Hashwert der zu überprüfenden Daten.</param>
         <param name="signature">Die digitale Signatur der Daten, die mit dem Hashwert überprüft werden sollen.</param>
-        <summary>Überprüft die angegebene digitale Signatur mit einem angegebenen Hashwert.</summary>
+        <summary>Überprüft, ob eine digitale Signatur für den aktuellen Schlüssel und den bereitgestellten Datenhash geeignet ist.</summary>
         <returns><see langword="true" />, wenn die Signatur gültig ist, andernfalls <see langword="false" />.</returns>
         <remarks>To be added.</remarks>
         <exception cref="T:System.ArgumentNullException"><paramref name="hash" /> oder <paramref name="signature" /> ist <see langword="null" />.</exception>
@@ -1334,10 +1369,10 @@
         <Parameter Name="signature" Type="System.ReadOnlySpan&lt;System.Byte&gt;" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0" />
       </Parameters>
       <Docs>
-        <param name="hash">To be added.</param>
-        <param name="signature">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="hash">Der Hashwert der zu überprüfenden Daten.</param>
+        <param name="signature">Die digitale Signatur der Daten, die mit dem Hashwert überprüft werden sollen.</param>
+        <summary>Überprüft, ob eine digitale Signatur für den aktuellen Schlüssel und den bereitgestellten Datenhash geeignet ist.</summary>
+        <returns><see langword="true" />, wenn die Signatur gültig ist, andernfalls <see langword="false" />.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
