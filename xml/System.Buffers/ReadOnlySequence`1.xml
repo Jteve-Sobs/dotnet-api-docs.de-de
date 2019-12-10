@@ -1,5 +1,5 @@
 <Type Name="ReadOnlySequence&lt;T&gt;" FullName="System.Buffers.ReadOnlySequence&lt;T&gt;">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="950af3d1586452bc44a25cd976b48a9ee7e3b2ba" /><Meta Name="ms.sourcegitcommit" Value="c573d537afba2d4c1463538f1095f2f155025464" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="10/16/2019" /><Meta Name="ms.locfileid" Value="72404568" /></Metadata><TypeSignature Language="C#" Value="public struct ReadOnlySequence&lt;T&gt;" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="181fdb5c23969a42d7417eae16a42399138acf9c" /><Meta Name="ms.sourcegitcommit" Value="218a2e36017b9f4ffa6c10e1644404e6d7d6bd1e" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/05/2019" /><Meta Name="ms.locfileid" Value="74839365" /></Metadata><TypeSignature Language="C#" Value="public struct ReadOnlySequence&lt;T&gt;" />
   <TypeSignature Language="ILAsm" Value=".class public sequential ansi sealed beforefieldinit ReadOnlySequence`1&lt;T&gt; extends System.ValueType" />
   <TypeSignature Language="DocId" Value="T:System.Buffers.ReadOnlySequence`1" />
   <TypeSignature Language="VB.NET" Value="Public Structure ReadOnlySequence(Of T)" />
@@ -28,7 +28,7 @@
     </Attribute>
   </Attributes>
   <Docs>
-    <typeparam name="T">To be added.</typeparam>
+    <typeparam name="T">Der Typ der Elemente in der schreibgeschützten Sequenz.</typeparam>
     <summary>Stellt eine Sequenz dar, die eine sequenzielle Reihe von <typeparamref name="T" /> lesen kann.</summary>
     <remarks>To be added.</remarks>
   </Docs>
@@ -55,7 +55,7 @@
         <Parameter Name="memory" Type="System.ReadOnlyMemory&lt;T&gt;" />
       </Parameters>
       <Docs>
-        <param name="memory">To be added.</param>
+        <param name="memory">Ein schreibgeschützter Speicherblock mit Elementen des Typs <typeparamref name="T" />.</param>
         <summary>Erstellt eine Instanz von <see cref="T:System.Buffers.ReadOnlySequence`1" /> aus <see cref="T:System.ReadOnlyMemory`1" />.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
@@ -148,12 +148,22 @@ Der Consumer muss die Lebensdauer des Arbeitsspeichers verwalten, bis <see cref=
         <Parameter Name="endIndex" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="startSegment">To be added.</param>
-        <param name="startIndex">To be added.</param>
-        <param name="endSegment">To be added.</param>
-        <param name="endIndex">To be added.</param>
+        <param name="startSegment">Der anfängliche Knoten der verknüpften Speicherliste.</param>
+        <param name="startIndex">Die Position zum Anfang der Sequenz innerhalb von <paramref name="startSegment" />.</param>
+        <param name="endSegment">Der letzte Knoten der verknüpften Speicherliste.</param>
+        <param name="endIndex">Die Position zum Ende der Sequenz innerhalb von <paramref name="endSegment" />.</param>
         <summary>Erstellt eine Instanz einer <see cref="T:System.Buffers.ReadOnlySequence`1" /> aus einer verknüpften Speicherliste, die durch Start- und Endsegmente und die entsprechenden Indizes darin dargestellt wird.</summary>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="startSegment" /> oder <paramref name="endSegment" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">Der ausgeführte Index von <paramref name="startSegment" /> ist größer als der ausgeführte Index von <paramref name="endSegment" />, auch wenn <paramref name="startSegment" /> sich von <paramref name="endSegment" /> unterscheidet.
+
+- oder -
+
+<paramref name="startSegment" /> ist gleich <paramref name="endSegment" />, aber <paramref name="endIndex" /> ist kleiner als <paramref name="startIndex" />.
+
+- oder -
+
+<paramref name="startIndex" /> ist länger als der zugrunde liegende Speicherblock von <paramref name="startSegment" />.</exception>
       </Docs>
     </Member>
     <Member MemberName="Empty">
@@ -178,7 +188,7 @@ Der Consumer muss die Lebensdauer des Arbeitsspeichers verwalten, bis <see cref=
         <ReturnType>System.Buffers.ReadOnlySequence&lt;T&gt;</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gibt eine leere <see cref="T:System.Buffers.ReadOnlySequence`1" /> zurück.</summary>
+        <summary>Gibt ein leeres <see cref="T:System.Buffers.ReadOnlySequence`1" /> zurück.</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -314,9 +324,9 @@ Der Consumer muss die Lebensdauer des Arbeitsspeichers verwalten, bis <see cref=
         <Parameter Name="offset" Type="System.Int64" />
       </Parameters>
       <Docs>
-        <param name="offset">To be added.</param>
+        <param name="offset">Der Offset vom Anfang der Sequenz.</param>
         <summary>Gibt eine neue <see cref="T:System.SequencePosition" /> an einem <paramref name="offset" /> ab dem Anfang der Sequenz zurück.</summary>
-        <returns>To be added.</returns>
+        <returns>Ein Objekt, das die Sequenzposition darstellt, die am angegebenen <paramref name="offset" /> vom Anfang der Sequenz beginnt.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -346,10 +356,10 @@ Der Consumer muss die Lebensdauer des Arbeitsspeichers verwalten, bis <see cref=
         <Parameter Name="origin" Type="System.SequencePosition" />
       </Parameters>
       <Docs>
-        <param name="offset">To be added.</param>
-        <param name="origin">To be added.</param>
-        <summary>Gibt eine neue <see cref="T:System.SequencePosition" /> an einem <paramref name="offset" /> aus <paramref name="origin" /> zurück.</summary>
-        <returns>Ein neues Objekt, das an der <paramref name="offset" />-Position des ursprünglichen Objekts beginnt.</returns>
+        <param name="offset">Der Offset von der angegebenen Sequenzposition <paramref name="origin" />.</param>
+        <param name="origin">Eine Sequenzposition, die den Punkt darstellt, an dem der Offset initiiert werden soll.</param>
+        <summary>Gibt eine neue <see cref="T:System.SequencePosition" /> ab dem angegebenen Offset von der Position <paramref name="origin" /> zurück.</summary>
+        <returns>Ein Objekt, das die Sequenzposition darstellt, die an der Position <paramref name="offset" /> des angegebenen Positionsobjekts <paramref name="origin" /> beginnt.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -777,8 +787,8 @@ Der Consumer muss die Lebensdauer des Arbeitsspeichers verwalten, bis <see cref=
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <summary>Gibt eine Zeichenfolge zurück, die die aktuelle Sequenz darstellt.</summary>
+        <returns>Eine Zeichenfolge, die die aktuelle Sequenz darstellt.</returns>
         <remarks>To be added.</remarks>
         <inheritdoc />
       </Docs>
