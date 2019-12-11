@@ -1,5 +1,5 @@
 <Type Name="ECDiffieHellman" FullName="System.Security.Cryptography.ECDiffieHellman">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="299577c299fefd8c8c66e3ccb842aa5d2d9ad6b4" /><Meta Name="ms.sourcegitcommit" Value="2b0967e04b047f6709322418d97215dfcef6a938" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="11/20/2019" /><Meta Name="ms.locfileid" Value="74236354" /></Metadata><TypeSignature Language="C#" Value="public abstract class ECDiffieHellman : System.Security.Cryptography.AsymmetricAlgorithm" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="b4ed87e32d598047c7b33c8ec5b55e24f72e1bac" /><Meta Name="ms.sourcegitcommit" Value="fbe36a3465a31f574ebd41192d31a74126cf757c" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="11/26/2019" /><Meta Name="ms.locfileid" Value="74546162" /></Metadata><TypeSignature Language="C#" Value="public abstract class ECDiffieHellman : System.Security.Cryptography.AsymmetricAlgorithm" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit ECDiffieHellman extends System.Security.Cryptography.AsymmetricAlgorithm" />
   <TypeSignature Language="DocId" Value="T:System.Security.Cryptography.ECDiffieHellman" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class ECDiffieHellman&#xA;Inherits AsymmetricAlgorithm" />
@@ -260,7 +260,7 @@
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Docs>
-        <summary>Leitet Bytes ab, die als Schlüssel mit einer Hashfunktion verwendet werden können.</summary>
+        <summary>Führt die Schlüsselableitung mithilfe eines angegebenen Hashalgorithmus aus</summary>
       </Docs>
     </MemberGroup>
     <Member MemberName="DeriveKeyFromHash">
@@ -293,8 +293,8 @@
       <Docs>
         <param name="otherPartyPublicKey">Der öffentliche Schlüssel der anderen Partei.</param>
         <param name="hashAlgorithm">Der Hashalgorithmus, der zum Ableiten des Schlüsselmaterials verwendet werden soll.</param>
-        <summary>Leitet Bytes ab, die mithilfe einer Hashfunktion als Schlüssel verwendet werden können. Der öffentliche Schlüssel einer anderen Partei und der Name des Hashalgorithmus werden übergeben.</summary>
-        <returns>Das Schlüsselmaterial aus dem Schlüsselaustausch mit dem öffentlichen Schlüssel der anderen Partei.</returns>
+        <summary>Führt die Schlüsselableitung mithilfe eines angegebenen Hashalgorithmus aus</summary>
+        <returns>Der Hash des gemeinsamen geheimen Schlüssels.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -303,7 +303,17 @@
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> befindet sich über einer anderen Kurve als dieser Schlüssel.</exception>
+        <exception cref="T:System.ArgumentException">Die von <paramref name="otherPartyPublicKey" /> verwendete Kurve hat eine andere Größe als die Kurve aus diesem Schlüssel.
+
+- oder -
+
+Der <paramref name="hashAlgorithm" />-Parameter gibt keinen Hash an.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="otherPartyPublicKey" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">Die von <paramref name="otherPartyPublicKey" /> verwendete Kurve unterscheidet sich von der Kurve aus diesem Schlüssel.
+
+- oder -
+
+Diese Instanz stellt nur einen öffentlichen Schlüssel dar.</exception>
       </Docs>
     </Member>
     <Member MemberName="DeriveKeyFromHash">
@@ -340,11 +350,32 @@
         <param name="hashAlgorithm">Der Hashalgorithmus, der zum Ableiten des Schlüsselmaterials verwendet werden soll.</param>
         <param name="secretPrepend">Ein Wert, der dem abgeleiteten geheimen Schlüssel vor dem Hashverfahren vorangestellt wird.</param>
         <param name="secretAppend">Ein Wert, der dem abgeleiteten geheimen Schlüssel vor dem Hashverfahren angefügt wird.</param>
-        <summary>Leitet bei Implementierung in einer abgeleiteten Klasse Bytes ab, die mithilfe einer Hashfunktion als Schlüssel verwendet werden können. Der öffentliche Schlüssel einer anderen Partei, der Name des Hashalgorithmus, ein vorangestellter und ein angefügter Wert werden übergeben.</summary>
-        <returns>Das Schlüsselmaterial aus dem Schlüsselaustausch mit dem öffentlichen Schlüssel der anderen Partei.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Führt die Schlüsselableitung bei der Implementierung in einer abgeleitete Klasse mithilfe eines angegebenen Hashalgorithmus mit optionalen vorangestellten oder angefügten Daten aus</summary>
+        <returns>Der Hash des gemeinsamen geheimen Schlüssels nach dem Voranstellen oder Anfügen von Daten wie angefordert.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+Diese Methode führt intern die elliptische Kurve Diffie-Hellman-Schlüssel Übereinstimmung aus, um den gemeinsamen geheimen Schlüssel (`z`) zu erhalten.
+Der Rückgabewert dieser Methode ist das Ergebnis `HASH(secretPrepend || z || secretAppend)` unter Verwendung des angegebenen Hash Algorithmus, wobei `||` die Verkettung angibt.
+
+Wenn der Wert `secretPrepend` oder `secretAppend` `null`ist, werden Sie als leere Arrays behandelt.  
+
+ ]]></format>
+        </remarks>
         <exception cref="T:System.NotImplementedException">Eine abgeleitete Klasse muss diese Methode überschreiben.</exception>
-        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> befindet sich über einer anderen Kurve als dieser Schlüssel.</exception>
+        <exception cref="T:System.ArgumentException">Die von <paramref name="otherPartyPublicKey" /> verwendete Kurve hat eine andere Größe als die Kurve aus diesem Schlüssel.
+
+- oder -
+
+Der <paramref name="hashAlgorithm" />-Parameter gibt keinen Hash an.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="otherPartyPublicKey" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">Die von <paramref name="otherPartyPublicKey" /> verwendete Kurve unterscheidet sich von der Kurve aus diesem Schlüssel.
+
+- oder -
+
+Diese Instanz stellt nur einen öffentlichen Schlüssel dar.</exception>
       </Docs>
     </Member>
     <MemberGroup MemberName="DeriveKeyFromHmac">
@@ -353,7 +384,7 @@
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Docs>
-        <summary>Leitet Bytes ab, die als Schlüssel mit einem Hash-based Message Authentication Code (HMAC) verwendet werden können.</summary>
+        <summary>Führt die Schlüsselableitung mithilfe eines angegebenen HMAC-Algorithmus (Hash-based Message Authentication Code, Hash-Nachrichtenauthentifizierungscode) aus</summary>
       </Docs>
     </MemberGroup>
     <Member MemberName="DeriveKeyFromHmac">
@@ -388,8 +419,8 @@
         <param name="otherPartyPublicKey">Der öffentliche Schlüssel der anderen Partei.</param>
         <param name="hashAlgorithm">Der Hashalgorithmus, der zum Ableiten des Schlüsselmaterials verwendet werden soll.</param>
         <param name="hmacKey">Der Schlüssel für den HMAC.</param>
-        <summary>Leitet Bytes ab, die als Schlüssel mit einem Hash-based Message Authentication Code (HMAC) verwendet werden können.</summary>
-        <returns>Das Schlüsselmaterial aus dem Schlüsselaustausch mit dem öffentlichen Schlüssel der anderen Partei.</returns>
+        <summary>Führt die Schlüsselableitung mithilfe eines angegebenen HMAC-Algorithmus (Hash-based Message Authentication Code, Hash-Nachrichtenauthentifizierungscode) aus</summary>
+        <returns>Der HMAC des gemeinsamen geheimen Schlüssels.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -398,7 +429,17 @@
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> befindet sich über einer anderen Kurve als dieser Schlüssel.</exception>
+        <exception cref="T:System.ArgumentException">Die von <paramref name="otherPartyPublicKey" /> verwendete Kurve hat eine andere Größe als die Kurve aus diesem Schlüssel.
+
+- oder -
+
+Der <paramref name="hashAlgorithm" />-Parameter gibt keinen Hash an.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="otherPartyPublicKey" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">Die von <paramref name="otherPartyPublicKey" /> verwendete Kurve unterscheidet sich von der Kurve aus diesem Schlüssel.
+
+- oder -
+
+Diese Instanz stellt nur einen öffentlichen Schlüssel dar.</exception>
       </Docs>
     </Member>
     <Member MemberName="DeriveKeyFromHmac">
@@ -437,11 +478,33 @@
         <param name="hmacKey">Der Schlüssel für den HMAC.</param>
         <param name="secretPrepend">Ein Wert, der dem abgeleiteten geheimen Schlüssel vor dem Hashverfahren vorangestellt wird.</param>
         <param name="secretAppend">Ein Wert, der dem abgeleiteten geheimen Schlüssel vor dem Hashverfahren angefügt wird.</param>
-        <summary>Leitet bei Implementierung in eine abgeleitete Klasse Bytes ab, die mit einem Hash-based Message Authentication Code (HMAC) als Schlüssel verwendet werden können.</summary>
-        <returns>Das Schlüsselmaterial aus dem Schlüsselaustausch mit dem öffentlichen Schlüssel der anderen Partei.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Führt die Schlüsselableitung bei der Implementierung in einer abgeleitete Klasse mithilfe eines angegebenen HMAC-Algorithmus (Hash-based Message Authentication Code, Hash-Nachrichtenauthentifizierungscode) mit optionalen vorangestellten oder angefügten Daten aus.</summary>
+        <returns>Der HMAC des gemeinsamen geheimen Schlüssels nach dem Voranstellen oder Anfügen von Daten wie angefordert.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+Diese Methode führt intern die elliptische Kurve Diffie-Hellman-Schlüssel Übereinstimmung aus, um den gemeinsamen geheimen Schlüssel (`z`) zu erhalten.
+
+Wenn `hmacKey` `null`ist, ist der Rückgabewert dieser Methode das Ergebnis einer `HMAC-HASH(z, secretPrepend || z || secretAppend)` mit dem angegebenen HMAC-Algorithmus, wobei `||` die Verkettung angibt. Andernfalls ist der Rückgabewert dieser Methode das Ergebnis `HMAC-HASH(hmacKey, secretPrepend || z || secretAppend)`.
+
+Wenn der Wert `secretPrepend` oder `secretAppend` `null`ist, werden Sie als leere Arrays behandelt.  
+
+ ]]></format>
+        </remarks>
         <exception cref="T:System.NotImplementedException">Eine abgeleitete Klasse muss diese Methode überschreiben.</exception>
-        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> befindet sich über einer anderen Kurve als dieser Schlüssel.</exception>
+        <exception cref="T:System.ArgumentException">Die von <paramref name="otherPartyPublicKey" /> verwendete Kurve hat eine andere Größe als die Kurve aus diesem Schlüssel.
+
+- oder -
+
+Der <paramref name="hashAlgorithm" />-Parameter gibt keinen Hash an.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="otherPartyPublicKey" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">Die von <paramref name="otherPartyPublicKey" /> verwendete Kurve unterscheidet sich von der Kurve aus diesem Schlüssel.
+
+- oder -
+
+Diese Instanz stellt nur einen öffentlichen Schlüssel dar.</exception>
       </Docs>
     </Member>
     <Member MemberName="DeriveKeyMaterial">
@@ -477,16 +540,25 @@
       </Parameters>
       <Docs>
         <param name="otherPartyPublicKey">Der öffentliche Schlüssel der anderen Partei.</param>
-        <summary>Leitet aus dem öffentlichen Schlüssel eines anderen Benutzers Bytes ab, die als Schlüssel verwendet werden können.</summary>
-        <returns>Das Schlüsselmaterial aus dem Schlüsselaustausch mit dem öffentlichen Schlüssel der anderen Partei.</returns>
+        <summary>Führt bei der Implementierung in einer abgeleitete Klasse eine Schlüsselableitung für den gemeinsamen geheimen Schlüssel durch.</summary>
+        <returns>Das Ergebnis der Schlüsselableitungsfunktion, wobei der gemeinsame geheime Schlüssel als Eingabe verwendet wird.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
-## Remarks  
- Weitere Informationen zu öffentlichen Schlüsseln finden Sie in der <xref:System.Security.Cryptography.ECDiffieHellmanPublicKey>-Klasse.  
-  
+## Remarks
+
+Das Standardverhalten dieser Methode entspricht dem Aufrufen von <xref:System.Security.Cryptography.ECDiffieHellman.DeriveKeyFromHash%2A>, wobei SHA-256 als Hash Algorithmus ohne vorangestellte oder angefügende Werte angegeben wird.
+Einige Implementierungen ermöglichen es, das Verhalten dieser Methode zu ändern, und Aufrufer werden angewiesen, eine beliebige Methode aufzurufen, um explizit zu sagen, dass Sie die erforderliche Schlüssel Ableitung ausführt.
+
  ]]></format>
         </remarks>
+        <exception cref="T:System.ArgumentException">Die von <paramref name="otherPartyPublicKey" /> verwendete Kurve hat eine andere Größe als die Kurve aus diesem Schlüssel.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="otherPartyPublicKey" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">Die von <paramref name="otherPartyPublicKey" /> verwendete Kurve unterscheidet sich von der Kurve aus diesem Schlüssel.
+
+- oder -
+
+Diese Instanz stellt nur einen öffentlichen Schlüssel dar.</exception>
       </Docs>
     </Member>
     <Member MemberName="DeriveKeyTls">
@@ -521,13 +593,33 @@
         <param name="otherPartyPublicKey">Der öffentliche Schlüssel der anderen Partei.</param>
         <param name="prfLabel">Die ASCII-codierte PRF-Bezeichnung.</param>
         <param name="prfSeed">Der 64-Byte-PRF-Startwert.</param>
-        <summary>Leitet bei Implementierung in einer abgeleiteten Klasse Bytes ab, die mithilfe eines Transport Layer Security-Pseudo-Random Function-Ableitungsalgorithmus (TLS, PRF) als Schlüssel verwendet werden können.</summary>
-        <returns>Das Schlüsselmaterial aus dem Schlüsselaustausch mit dem öffentlichen Schlüssel der anderen Partei.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Führt eine Schlüsselableitung bei der Implementierung in einer abgeleitete Klasse mithilfe der Pseudozufallsfunktion von TLS 1.1 (Transport Layer Security) durch.</summary>
+        <returns>Die ersten 48 Bytes der Pseudozufallsfunktion von TLS 1.1, wobei der gemeinsame geheime Schlüssel als Schlüssel verwendet wird.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+Diese Methode führt intern die elliptische Kurve Diffie-Hellman-Schlüssel Übereinstimmung aus, um den gemeinsamen geheimen Schlüssel (`z`) zu erhalten.
+
+Der Rückgabewert dieser Methode ist eine 48-Byte-Ausgabe der TLS 1,1 PRF (Pseudo Zufallsfunktion), `PRF(z, prfLabel, prfSeed)`.
+
+Weitere Informationen finden Sie unter [IETF RFC 4346, Abschnitt 5](https://tools.ietf.org/html/rfc4346#section-5).
+
+]]></format>
+        </remarks>
         <exception cref="T:System.NotImplementedException">Eine abgeleitete Klasse muss diese Methode überschreiben.</exception>
-        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> befindet sich über einer anderen Kurve als dieser Schlüssel.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="prfLabel" /> oder <paramref name="prfSeed" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="prfSeed" /> ist nicht genau 64 Bytes lang.</exception>
+        <exception cref="T:System.ArgumentException">Die von <paramref name="otherPartyPublicKey" /> verwendete Kurve hat eine andere Größe als die Kurve aus diesem Schlüssel.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="otherPartyPublicKey" />, <paramref name="prfLabel" /> oder <paramref name="prfSeed" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="prfSeed" /> ist nicht genau 64 Bytes lang.
+
+- oder -
+
+Die von <paramref name="otherPartyPublicKey" /> verwendete Kurve unterscheidet sich von der Kurve aus diesem Schlüssel.
+
+- oder -
+
+Diese Instanz stellt nur einen öffentlichen Schlüssel dar.</exception>
       </Docs>
     </Member>
     <Member MemberName="ExportECPrivateKey">
@@ -745,8 +837,10 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Methode unterstützt nur die binäre Codierung (ber/CER/der) von ecprivatekey.
+
+Diese Methode unterstützt nur die binäre Codierung (ber/CER/der) von ecprivatekey.
 Wenn der Wert Base64-codiert ist oder im PEM-Textformat vorliegt, muss der Aufrufer den Inhalt vor dem Aufrufen dieser Methode Base64-decodieren.
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException">Der Inhalt von <paramref name="source" /> stellt keine ASN.1-BER-codierte PKCS#8-ECPrivateKey-Struktur dar.
@@ -790,11 +884,13 @@ Fehler beim Schlüsselimport.</exception>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
-## Remarks  
+## Remarks
+
  Die Kenn Wort Bytes werden direkt an die kdf (Key derivations Function) übergeben, die vom Algorithmus verwendet wird, der durch den verschlüsseltedprivatekeyinfo-Inhalt angegeben wird.
 Dadurch wird die Kompatibilität mit anderen Systemen ermöglicht, bei denen bei der Verarbeitung von Kenn Wörtern mit PBKDF2 eine andere Text Codierung als UTF-8 verwendet wird (Kenn Wort basierte Schlüssel abderivations Funktion 2).
 Diese Methode unterstützt nur die binäre Codierung (ber/CER/der) von "verschlüsseltedprivatekeyinfo".
 Wenn der Wert Base64-codiert ist oder im PEM-Textformat vorliegt, muss der Aufrufer den Inhalt vor dem Aufrufen dieser Methode Base64-decodieren.
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException">Das Kennwort ist falsch.
@@ -858,6 +954,7 @@ Fehler beim Importieren des algorithmusspezifischen Schlüssels.</exception>
  Wenn der Inhalt `source` einen Algorithmus angibt, der PBKDF1 (Kenn Wort basierte Schlüssel abderivations Funktion 1) oder PBKDF2 (Kenn Wort basierte Schlüssel abderivations Funktion 2) verwendet, wird das Kennwort über die UTF-8-Codierung in Bytes konvertiert.
 Diese Methode unterstützt nur die binäre Codierung (ber/CER/der) von "verschlüsseltedprivatekeyinfo".
 Wenn der Wert Base64-codiert ist oder im PEM-Textformat vorliegt, muss der Aufrufer den Inhalt vor dem Aufrufen dieser Methode Base64-decodieren.
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException">Das Kennwort ist falsch.
@@ -957,6 +1054,7 @@ Fehler beim Importieren des algorithmusspezifischen Schlüssels.</exception>
 ## Remarks  
  Diese Methode unterstützt nur die binäre Codierung (ber/CER/der) von privatekeyinfo.
 Wenn der Wert Base64-codiert ist oder im PEM-Textformat vorliegt, muss der Aufrufer den Inhalt vor dem Aufrufen dieser Methode Base64-decodieren.
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException">Der Inhalt von <paramref name="source" /> stellt keine ASN.1-BER-codierte PKCS#8-PrivateKeyInfo-Struktur dar.
@@ -1009,6 +1107,7 @@ Fehler beim Importieren des algorithmusspezifischen Schlüssels.</exception>
 ## Remarks  
  Diese Methode unterstützt nur die binäre Codierung (der) von "subjetpublickeyinfo".
 Wenn der Wert Base64-codiert ist oder im PEM-Textformat vorliegt, muss der Aufrufer den Inhalt vor dem Aufrufen dieser Methode Base64-decodieren.
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException">Der Inhalt von <paramref name="source" /> stellt keine ASN.1-DER-codierte X.509-SubjectPublicKeyInfo-Struktur dar.
@@ -1242,6 +1341,7 @@ Fehler beim Importieren des algorithmusspezifischen Schlüssels.</exception>
 ## Remarks  
  Die Kenn Wort Bytes werden direkt an die kdf (Key derivations Function) übergeben, die vom Algorithmus verwendet wird, der durch `pbeParameters`angegeben wird.
 Dadurch wird die Kompatibilität mit anderen Systemen ermöglicht, bei denen bei der Verarbeitung von Kenn Wörtern mit PBKDF2 eine andere Text Codierung als UTF-8 verwendet wird (Kenn Wort basierte Schlüssel abderivations Funktion 2).
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException">Der Schlüssel konnte nicht exportiert werden.
@@ -1290,6 +1390,7 @@ Dadurch wird die Kompatibilität mit anderen Systemen ermöglicht, bei denen bei
   
 ## Remarks  
  Wenn `pbeParameters` einen Algorithmus angibt, der PBKDF2 (Kenn Wort basierte Schlüssel abderivations Funktion 2) verwendet, wird das Kennwort über die UTF-8-Codierung in Bytes konvertiert.
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException">Der Schlüssel konnte nicht exportiert werden.</exception>
