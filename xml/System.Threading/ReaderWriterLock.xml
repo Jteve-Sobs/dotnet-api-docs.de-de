@@ -1,5 +1,5 @@
 <Type Name="ReaderWriterLock" FullName="System.Threading.ReaderWriterLock">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="f10a128477249d31477e80a941da759cf2a9c3a9" /><Meta Name="ms.sourcegitcommit" Value="a22d0855bbf24d893f43605f8b7e3a44bd9551a5" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70362859" /></Metadata><TypeSignature Language="C#" Value="public sealed class ReaderWriterLock : System.Runtime.ConstrainedExecution.CriticalFinalizerObject" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="bd429f03843f931a0285a89a893ee1aa7ced9ae2" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75116071" /></Metadata><TypeSignature Language="C#" Value="public sealed class ReaderWriterLock : System.Runtime.ConstrainedExecution.CriticalFinalizerObject" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit ReaderWriterLock extends System.Runtime.ConstrainedExecution.CriticalFinalizerObject" />
   <TypeSignature Language="DocId" Value="T:System.Threading.ReaderWriterLock" />
   <TypeSignature Language="VB.NET" Value="Public NotInheritable Class ReaderWriterLock&#xA;Inherits CriticalFinalizerObject" />
@@ -21,6 +21,7 @@
     <AssemblyName>System.Threading</AssemblyName>
     <AssemblyVersion>4.1.0.0</AssemblyVersion>
     <AssemblyVersion>4.1.1.0</AssemblyVersion>
+    <AssemblyVersion>4.1.2.0</AssemblyVersion>
   </AssemblyInfo>
   <Base>
     <BaseTypeName>System.Runtime.ConstrainedExecution.CriticalFinalizerObject</BaseTypeName>
@@ -42,9 +43,9 @@
 > [!IMPORTANT]
 >  [!INCLUDE[dnprdnshort](~/includes/dnprdnshort-md.md)] verfügt über zwei Lese-/Schreibsperren, <xref:System.Threading.ReaderWriterLockSlim> und <xref:System.Threading.ReaderWriterLock>. <xref:System.Threading.ReaderWriterLockSlim> wird für alle Neuentwicklungen empfohlen. <xref:System.Threading.ReaderWriterLockSlim> ähnelt <xref:System.Threading.ReaderWriterLock>, verfügt aber über vereinfachte Regeln für Rekursion sowie für Upgrade und Downgrade des Sperrstatus. <xref:System.Threading.ReaderWriterLockSlim> vermeidet viele potenzielle Deadlocks. Darüber hinaus ist die Leistung von <xref:System.Threading.ReaderWriterLockSlim> wesentlich besser als die von <xref:System.Threading.ReaderWriterLock>.  
   
- <xref:System.Threading.ReaderWriterLock>wird zum Synchronisieren des Zugriffs auf eine Ressource verwendet. Es ermöglicht zu einem beliebigen Zeitpunkt entweder gleichzeitigen Lesezugriff auf mehrere Threads oder Schreibzugriff für einen einzelnen Thread. In einer Situation, in der eine Ressource nur selten geändert wird `ReaderWriterLock` , bietet eine einen besseren Durchsatz als eine einfache einmalige Sperre, <xref:System.Threading.Monitor>z. b.  
+ <xref:System.Threading.ReaderWriterLock> wird zum Synchronisieren des Zugriffs auf eine Ressource verwendet. Es ermöglicht zu einem beliebigen Zeitpunkt entweder gleichzeitigen Lesezugriff auf mehrere Threads oder Schreibzugriff für einen einzelnen Thread. In einer Situation, in der eine Ressource nur selten geändert wird, bietet eine `ReaderWriterLock` einen besseren Durchsatz als eine einfache einmalige Sperre, z. b. <xref:System.Threading.Monitor>.  
   
- `ReaderWriterLock`funktioniert am besten, wenn die meisten Zugriffe Lesevorgänge sind, während Schreibvorgänge seltener und von kurzer Dauer ausgeführt werden. Mehrere Leser wechseln mit einzelnen Writern, sodass weder Leser noch Writer für lange Zeiträume blockiert werden.  
+ `ReaderWriterLock` funktioniert am besten, wenn die meisten Zugriffe Lesevorgänge sind, während Schreibvorgänge selten und kurze Zeit dauern. Mehrere Leser wechseln mit einzelnen Writern, sodass weder Leser noch Writer für lange Zeiträume blockiert werden.  
   
 > [!NOTE]
 >  Wenn Sie Lese-und Schreib Sperren für lange Zeiträume halten, werden andere Threads nicht mehr verwendet. Um eine optimale Leistung zu erzielen, sollten Sie eine Umstrukturierung ihrer Anwendung in Erwägung gezogen haben  
@@ -53,28 +54,28 @@
   
  Rekursive Sperr Anforderungen erhöhen die Sperrenanzahl für eine Sperre.  
   
- Reader und Writer werden separat in die Warteschlange eingereiht. Wenn ein Thread die Schreibsperre freigibt, erhalten alle Threads, die zu diesem Zeitpunkt in der Leser Warteschlange warten, Lese sperren. Wenn alle diese Leser Sperren freigegeben wurden, erhält der nächste Thread, der in der Writer-Warteschlange wartet, ggf. die Schreibsperre, usw. Anders ausgedrückt, `ReaderWriterLock` wechselt zwischen einer Auflistung von Lesern und einem Writer.  
+ Reader und Writer werden separat in die Warteschlange eingereiht. Wenn ein Thread die Schreibsperre freigibt, erhalten alle Threads, die zu diesem Zeitpunkt in der Leser Warteschlange warten, Lese sperren. Wenn alle diese Leser Sperren freigegeben wurden, erhält der nächste Thread, der in der Writer-Warteschlange wartet, ggf. die Schreibsperre, usw. Mit anderen Worten: `ReaderWriterLock` wechselt zwischen einer Auflistung von Lesern und einem Writer.  
   
  Während ein Thread in der Writer-Warteschlange darauf wartet, dass aktive Lese Sperren freigegeben werden, werden Threads, die neue Leser Sperren anfordern, in der Leser Warteschlange gesammelt. Ihre Anforderungen werden nicht erteilt, auch wenn Sie gleichzeitigen Zugriff auf vorhandene Reader-Lock-Inhaber haben können. Dies trägt dazu bei, Writer vor unbegrenzter Blockierung hin durch Leser zu schützen.  
   
- Die meisten Methoden zum Abrufen von Sperren `ReaderWriterLock` für eine Accept Timeout-Werte. Verwenden Sie Timeouts, um Deadlocks in der Anwendung zu vermeiden. Ein Thread kann z. b. die Schreibsperre für eine Ressource abrufen und dann eine Lesesperre für eine zweite Ressource anfordern. in der Zwischenzeit kann ein anderer Thread die Schreibsperre für die zweite Ressource abrufen und eine Lesesperre für die erste anfordern. Wenn Timeouts nicht verwendet werden, Deadlock der Threads.  
+ Die meisten Methoden zum Abrufen von Sperren für eine `ReaderWriterLock` die Timeout Werte akzeptieren. Verwenden Sie Timeouts, um Deadlocks in der Anwendung zu vermeiden. Ein Thread kann z. b. die Schreibsperre für eine Ressource abrufen und dann eine Lesesperre für eine zweite Ressource anfordern. in der Zwischenzeit kann ein anderer Thread die Schreibsperre für die zweite Ressource abrufen und eine Lesesperre für die erste anfordern. Wenn Timeouts nicht verwendet werden, Deadlock der Threads.  
   
- Wenn das Timeout Intervall abläuft und die Sperranforderung nicht erteilt wurde, gibt die Methode die Steuerung an den aufrufenden Thread zurück, indem ein <xref:System.ApplicationException>ausgelöst wird. Ein Thread kann diese Ausnahme abfangen und ermitteln, welche Aktion als nächstes ausgeführt werden soll.  
+ Wenn das Timeout Intervall abläuft und die Sperranforderung nicht erteilt wurde, gibt die Methode die Steuerung an den aufrufenden Thread zurück, indem eine <xref:System.ApplicationException>ausgelöst wird. Ein Thread kann diese Ausnahme abfangen und ermitteln, welche Aktion als nächstes ausgeführt werden soll.  
   
- Timeouts werden in Millisekunden angegeben. Wenn Sie einen <xref:System.TimeSpan?displayProperty=nameWithType> zum Angeben des Timeouts verwenden, ist der verwendete Wert die Gesamtzahl ganzer Millisekunden, die <xref:System.TimeSpan>durch dargestellt wird. In der folgenden Tabelle werden die gültigen Timeout Werte in Millisekunden angezeigt.  
+ Timeouts werden in Millisekunden angegeben. Wenn Sie ein <xref:System.TimeSpan?displayProperty=nameWithType> verwenden, um das Timeout anzugeben, entspricht der verwendete Wert der Gesamtzahl ganzer Millisekunden, die durch die <xref:System.TimeSpan>dargestellt wird. In der folgenden Tabelle werden die gültigen Timeout Werte in Millisekunden angezeigt.  
   
 |Wert|Beschreibung|  
 |-----------|-----------------|  
-|-1|Der Thread wartet, bis die Sperre abgerufen wird, unabhängig davon, wie lange es dauert. Bei Methoden, die ganzzahlige Timeouts angeben, <xref:System.Threading.Timeout.Infinite> kann die Konstante verwendet werden.|  
+|-1|Der Thread wartet, bis die Sperre abgerufen wird, unabhängig davon, wie lange es dauert. Bei Methoden, die ganzzahlige Timeouts angeben, kann die Konstante <xref:System.Threading.Timeout.Infinite> verwendet werden.|  
 |0|Der Thread wartet nicht darauf, die Sperre abzurufen. Wenn die Sperre nicht sofort abgerufen werden kann, gibt die Methode zurück.|  
 |>0|Die Anzahl der Millisekunden, die gewartet werden soll.|  
   
- Mit der Ausnahme-1 sind keine negativen Timeout Werte zulässig. Wenn Sie eine negative ganze Zahl ungleich-1 angeben, wird stattdessen ein Timeout Wert von 0 (null) verwendet. (Das heißt, die Methode gibt zurück, ohne zu warten, wenn die Sperre nicht sofort abgerufen werden kann.) Wenn Sie eine <xref:System.TimeSpan> angeben, die eine negative Anzahl von Millisekunden darstellt, die nicht- <xref:System.ArgumentOutOfRangeException> 1 ist, wird ausgelöst.  
+ Mit der Ausnahme-1 sind keine negativen Timeout Werte zulässig. Wenn Sie eine negative ganze Zahl ungleich-1 angeben, wird stattdessen ein Timeout Wert von 0 (null) verwendet. (Das heißt, die Methode gibt zurück, ohne zu warten, wenn die Sperre nicht sofort abgerufen werden kann.) Wenn Sie eine <xref:System.TimeSpan> angeben, die eine negative Anzahl von Millisekunden darstellt, die nicht-1 ist, wird <xref:System.ArgumentOutOfRangeException> ausgelöst.  
   
    
   
 ## Examples  
- Im folgenden Beispiel wird veranschaulicht, wie Sie <xref:System.Threading.ReaderWriterLock> eine freigegebene Ressource (einen ganzzahligen Wert `resource`mit dem Namen) verwenden, der gleichzeitig gelesen und exklusiv von mehreren Threads geschrieben wird. Beachten Sie, <xref:System.Threading.ReaderWriterLock> dass auf Klassenebene deklariert wird, sodass Sie für alle Threads sichtbar ist.  
+ Im folgenden Beispiel wird veranschaulicht, wie ein <xref:System.Threading.ReaderWriterLock> verwendet wird, um eine freigegebene Ressource, einen ganzzahligen Wert mit dem Namen `resource`zu schützen, der gleichzeitig gelesen und exklusiv von mehreren Threads geschrieben wird. Beachten Sie, dass die <xref:System.Threading.ReaderWriterLock> auf Klassenebene deklariert ist, sodass Sie für alle Threads sichtbar ist.  
   
  [!code-cpp[System.Threading.ReaderWriterLock#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CPP/source.cpp#1)]
  [!code-csharp[System.Threading.ReaderWriterLock#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CS/source.cs#1)]
@@ -110,6 +111,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
@@ -125,7 +127,7 @@
 ## Examples  
  Im folgenden Codebeispiel wird gezeigt, wie eine neue Instanz der <xref:System.Threading.ReaderWriterLock>-Klasse erstellt wird.  
   
- Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock> -Klasse bereitgestellt wird.  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock>-Klasse bereitgestellt wird.  
   
  [!code-cpp[System.Threading.ReaderWriterLock#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CPP/source.cpp#2)]
  [!code-csharp[System.Threading.ReaderWriterLock#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CS/source.cs#2)]
@@ -174,6 +176,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
@@ -193,23 +196,23 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Threading.ReaderWriterLock.AcquireReaderLock%2A>blockiert, wenn ein anderer Thread die Schreibsperre aufweist oder wenn mindestens ein Thread auf die Schreibsperre wartet.  
+ <xref:System.Threading.ReaderWriterLock.AcquireReaderLock%2A> Blöcke, wenn ein anderer Thread die Schreibsperre aufweist oder wenn mindestens ein Thread auf die Schreibsperre wartet.  
   
 > [!NOTE]
->  Wenn der aktuelle Thread bereits über die Schreibsperre verfügt, wird keine Lesesperre abgerufen. Stattdessen wird die Sperrenanzahl für die Schreibsperre inkrementiert. Dadurch wird verhindert, dass ein Thread seine eigene Schreibsperre blockiert. Das Ergebnis ist identisch mit dem Aufruf <xref:System.Threading.ReaderWriterLock.AcquireWriterLock%2A>von, und bei der Freigabe der Schreibsperre ist ein zusätzlicher Aufruf von <xref:System.Threading.ReaderWriterLock.ReleaseWriterLock%2A> erforderlich.  
+>  Wenn der aktuelle Thread bereits über die Schreibsperre verfügt, wird keine Lesesperre abgerufen. Stattdessen wird die Sperrenanzahl für die Schreibsperre inkrementiert. Dadurch wird verhindert, dass ein Thread seine eigene Schreibsperre blockiert. Das Ergebnis ist identisch mit dem Aufrufen von <xref:System.Threading.ReaderWriterLock.AcquireWriterLock%2A>, und ein zusätzlicher Aufruf an <xref:System.Threading.ReaderWriterLock.ReleaseWriterLock%2A> ist erforderlich, wenn die Schreibsperre freigegeben wird.  
   
- `AcquireReaderLock`unterstützt rekursive Reader-Lock-Anforderungen. Das heißt, ein Thread kann "acquirrereaderlock" mehrmals aufrufen, wodurch die Sperrenanzahl jedes Mal erhöht wird. Sie müssen <xref:System.Threading.ReaderWriterLock.ReleaseReaderLock%2A> für jedes Mal, wenn Sie aufzurufen `AcquireReaderLock`, einmal aufgerufen werden. Alternativ können Sie auch aufzurufen <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A> , um die Sperrenanzahl sofort auf NULL zu verringern.  
+ `AcquireReaderLock` unterstützt rekursive Reader-Lock-Anforderungen. Das heißt, ein Thread kann "acquirrereaderlock" mehrmals aufrufen, wodurch die Sperrenanzahl jedes Mal erhöht wird. Sie müssen <xref:System.Threading.ReaderWriterLock.ReleaseReaderLock%2A> einmal für jedes Mal aufgerufen werden, wenn Sie `AcquireReaderLock`aufgerufen haben. Alternativ können Sie <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A> aufzurufen, um die Sperrenanzahl sofort auf NULL zu verringern.  
   
  Rekursive Sperr Anforderungen werden immer sofort erteilt, ohne dass der anfordernde Thread in der Leser Warteschlange platziert wird. Verwenden Sie rekursive Sperren mit Vorsicht, um zu verhindern, dass Writer-Lock-Anforderungen lange Zeiträume blockiert werden.  
   
- Gültige Timeout Werte finden <xref:System.Threading.ReaderWriterLock>Sie unter.  
+ Gültige Timeout Werte finden Sie unter <xref:System.Threading.ReaderWriterLock>.  
   
    
   
 ## Examples  
  Im folgenden Codebeispiel wird veranschaulicht, wie eine Lesesperre abgerufen und freigegeben wird und wie die Ausnahme behandelt wird, die ausgelöst wird, wenn für eine Anforderung ein Timeout auftritt.  
   
- Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock> -Klasse bereitgestellt wird.  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock>-Klasse bereitgestellt wird.  
   
  [!code-cpp[System.Threading.ReaderWriterLock#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CPP/source.cpp#2)]
  [!code-csharp[System.Threading.ReaderWriterLock#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CS/source.cs#2)]
@@ -252,6 +255,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
@@ -265,22 +269,22 @@
         <Parameter Name="timeout" Type="System.TimeSpan" />
       </Parameters>
       <Docs>
-        <param name="timeout">Eine <see langword="TimeSpan" />, die den Timeout-Zeitraum angibt.</param>
+        <param name="timeout">Eine <see langword="TimeSpan" />, die den Timeoutzeitraum angibt.</param>
         <summary>Erhält eine Lesesperre unter Verwendung eines <see cref="T:System.TimeSpan" />-Werts für das Timeout.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Threading.ReaderWriterLock.AcquireReaderLock%2A>blockiert, wenn ein anderer Thread die Schreibsperre aufweist oder wenn mindestens ein Thread auf die Schreibsperre wartet.  
+ <xref:System.Threading.ReaderWriterLock.AcquireReaderLock%2A> Blöcke, wenn ein anderer Thread die Schreibsperre aufweist oder wenn mindestens ein Thread auf die Schreibsperre wartet.  
   
 > [!NOTE]
->  Wenn der aktuelle Thread bereits über die Schreibsperre verfügt, wird keine Lesesperre abgerufen. Stattdessen wird die Sperrenanzahl für die Schreibsperre inkrementiert. Dadurch wird verhindert, dass ein Thread seine eigene Schreibsperre blockiert. Das Ergebnis ist identisch mit dem Aufruf <xref:System.Threading.ReaderWriterLock.AcquireWriterLock%2A>von, und bei der Freigabe der Schreibsperre ist ein zusätzlicher Aufruf von <xref:System.Threading.ReaderWriterLock.ReleaseWriterLock%2A> erforderlich.  
+>  Wenn der aktuelle Thread bereits über die Schreibsperre verfügt, wird keine Lesesperre abgerufen. Stattdessen wird die Sperrenanzahl für die Schreibsperre inkrementiert. Dadurch wird verhindert, dass ein Thread seine eigene Schreibsperre blockiert. Das Ergebnis ist identisch mit dem Aufrufen von <xref:System.Threading.ReaderWriterLock.AcquireWriterLock%2A>, und ein zusätzlicher Aufruf an <xref:System.Threading.ReaderWriterLock.ReleaseWriterLock%2A> ist erforderlich, wenn die Schreibsperre freigegeben wird.  
   
- `AcquireReaderLock`unterstützt rekursive Reader-Lock-Anforderungen. Das heißt, ein Thread kann "acquirrereaderlock" mehrmals aufrufen, wodurch die Sperrenanzahl jedes Mal erhöht wird. Sie müssen <xref:System.Threading.ReaderWriterLock.ReleaseReaderLock%2A> für jedes Mal, wenn Sie aufzurufen `AcquireReaderLock`, einmal aufgerufen werden. Alternativ können Sie auch aufzurufen <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A> , um die Sperrenanzahl sofort auf NULL zu verringern.  
+ `AcquireReaderLock` unterstützt rekursive Reader-Lock-Anforderungen. Das heißt, ein Thread kann "acquirrereaderlock" mehrmals aufrufen, wodurch die Sperrenanzahl jedes Mal erhöht wird. Sie müssen <xref:System.Threading.ReaderWriterLock.ReleaseReaderLock%2A> einmal für jedes Mal aufgerufen werden, wenn Sie `AcquireReaderLock`aufgerufen haben. Alternativ können Sie <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A> aufzurufen, um die Sperrenanzahl sofort auf NULL zu verringern.  
   
  Rekursive Sperr Anforderungen werden immer sofort erteilt, ohne dass der anfordernde Thread in der Leser Warteschlange platziert wird. Verwenden Sie rekursive Sperren mit Vorsicht, um zu verhindern, dass Writer-Lock-Anforderungen lange Zeiträume blockiert werden.  
   
- Gültige Timeout Werte finden <xref:System.Threading.ReaderWriterLock>Sie unter.  
+ Gültige Timeout Werte finden Sie unter <xref:System.Threading.ReaderWriterLock>.  
   
  ]]></format>
         </remarks>
@@ -324,6 +328,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
@@ -343,25 +348,25 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Methode blockiert, wenn ein anderer Thread über eine Lesesperre oder eine Schreibsperre verfügt. Eine Beschreibung der Art und Weise, wie die Writer-Sperre mit mehreren gleichzeitigen readersperren <xref:System.Threading.ReaderWriterLock> wechselt, finden Sie unter der-Klasse.  
+ Diese Methode blockiert, wenn ein anderer Thread über eine Lesesperre oder eine Schreibsperre verfügt. Eine Beschreibung der Art und Weise, wie die Writer-Sperre mit mehreren gleichzeitigen readersperren wechselt, finden Sie in der <xref:System.Threading.ReaderWriterLock>-Klasse.  
   
- Ein Thread, der bereits über eine Lesesperre verfügt, kann die Schreibsperre auf zwei Arten abrufen: durch Freigeben der Lesesperre vor <xref:System.Threading.ReaderWriterLock.AcquireWriterLock%2A>dem Aufrufen von oder <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A>durch Aufrufen von.  
+ Ein Thread, der bereits über eine Lesesperre verfügt, kann die Schreibsperre auf zwei Arten abrufen: durch Freigeben der Lesesperre vor dem Aufrufen von <xref:System.Threading.ReaderWriterLock.AcquireWriterLock%2A>oder durch Aufrufen von <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A>.  
   
 > [!CAUTION]
->  Wenn ein Thread aufruft `AcquireWriterLock` , während er immer noch über eine Lesesperre verfügt, blockiert er seine eigene Readersperre. Wenn ein unendliches Timeout angegeben ist, wird der Thread in einen Deadlock geraten. Um solche Deadlocks zu vermeiden, <xref:System.Threading.ReaderWriterLock.IsReaderLockHeld%2A> verwenden Sie, um zu bestimmen, ob der aktuelle Thread bereits über eine Lesesperre verfügt.  
+>  Wenn ein Thread `AcquireWriterLock` aufruft, während er immer noch über eine Lesesperre verfügt, blockiert er seine eigene Readersperre. Wenn ein unendliches Timeout angegeben ist, wird der Thread in einen Deadlock geraten. Um solche Deadlocks zu vermeiden, verwenden Sie <xref:System.Threading.ReaderWriterLock.IsReaderLockHeld%2A>, um zu bestimmen, ob der aktuelle Thread bereits über eine Lesesperre verfügt.  
   
- `AcquireWriterLock`unterstützt rekursive Writer-Lock-Anforderungen. Das heißt, ein Thread kann mehrmals `AcquireWriterLock` aufgerufen werden, wodurch die Anzahl der Sperren jedes Mal erhöht wird. Sie müssen <xref:System.Threading.ReaderWriterLock.ReleaseWriterLock%2A> für jedes Mal, wenn Sie aufzurufen `AcquireWriterLock`, einmal aufgerufen werden. Alternativ können Sie auch aufzurufen <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A> , um die Sperrenanzahl sofort auf NULL zu verringern.  
+ `AcquireWriterLock` unterstützt rekursive Writer-Lock-Anforderungen. Das heißt, ein Thread kann `AcquireWriterLock` mehrmals aufzurufen, wodurch die Anzahl der Sperren jedes Mal erhöht wird. Sie müssen <xref:System.Threading.ReaderWriterLock.ReleaseWriterLock%2A> einmal für jedes Mal aufgerufen werden, wenn Sie `AcquireWriterLock`aufgerufen haben. Alternativ können Sie <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A> aufzurufen, um die Sperrenanzahl sofort auf NULL zu verringern.  
   
  Rekursive Sperr Anforderungen werden immer sofort erteilt, ohne dass der anfordernde Thread in der Writer-Warteschlange platziert wird.  
   
- Gültige Timeout Werte finden <xref:System.Threading.ReaderWriterLock>Sie unter.  
+ Gültige Timeout Werte finden Sie unter <xref:System.Threading.ReaderWriterLock>.  
   
    
   
 ## Examples  
  Im folgenden Codebeispiel wird veranschaulicht, wie eine Writer-Sperre abgerufen und freigegeben wird und wie die Ausnahme behandelt wird, die ausgelöst wird, wenn für eine Anforderung ein Timeout auftritt.  
   
- Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock> -Klasse bereitgestellt wird.  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock>-Klasse bereitgestellt wird.  
   
  [!code-cpp[System.Threading.ReaderWriterLock#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CPP/source.cpp#2)]
  [!code-csharp[System.Threading.ReaderWriterLock#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CS/source.cs#2)]
@@ -404,6 +409,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
@@ -417,24 +423,24 @@
         <Parameter Name="timeout" Type="System.TimeSpan" />
       </Parameters>
       <Docs>
-        <param name="timeout">Die <see langword="TimeSpan" />, die den Timeout-Zeitraum angibt.</param>
+        <param name="timeout">Die <see langword="TimeSpan" />, die den Timeoutzeitraum angibt.</param>
         <summary>Erhält die Schreibsperre unter Verwendung eines <see cref="T:System.TimeSpan" />-Werts für das Timeout.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Methode blockiert, wenn ein anderer Thread über eine Lesesperre oder eine Schreibsperre verfügt. Eine Beschreibung der Art und Weise, wie die Writer-Sperre mit mehreren gleichzeitigen readersperren <xref:System.Threading.ReaderWriterLock> wechselt, finden Sie unter der-Klasse.  
+ Diese Methode blockiert, wenn ein anderer Thread über eine Lesesperre oder eine Schreibsperre verfügt. Eine Beschreibung der Art und Weise, wie die Writer-Sperre mit mehreren gleichzeitigen readersperren wechselt, finden Sie in der <xref:System.Threading.ReaderWriterLock>-Klasse.  
   
- Ein Thread, der bereits über eine Lesesperre verfügt, kann die Schreibsperre auf zwei Arten abrufen: durch Freigeben der Lesesperre vor <xref:System.Threading.ReaderWriterLock.AcquireWriterLock%2A>dem Aufrufen von oder <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A>durch Aufrufen von.  
+ Ein Thread, der bereits über eine Lesesperre verfügt, kann die Schreibsperre auf zwei Arten abrufen: durch Freigeben der Lesesperre vor dem Aufrufen von <xref:System.Threading.ReaderWriterLock.AcquireWriterLock%2A>oder durch Aufrufen von <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A>.  
   
 > [!CAUTION]
->  Wenn ein Thread aufruft `AcquireWriterLock` , während er immer noch über eine Lesesperre verfügt, blockiert er seine eigene Readersperre. Wenn ein unendliches Timeout angegeben ist, wird der Thread in einen Deadlock geraten. Um solche Deadlocks zu vermeiden, <xref:System.Threading.ReaderWriterLock.IsReaderLockHeld%2A> verwenden Sie, um zu bestimmen, ob der aktuelle Thread bereits über eine Lesesperre verfügt.  
+>  Wenn ein Thread `AcquireWriterLock` aufruft, während er immer noch über eine Lesesperre verfügt, blockiert er seine eigene Readersperre. Wenn ein unendliches Timeout angegeben ist, wird der Thread in einen Deadlock geraten. Um solche Deadlocks zu vermeiden, verwenden Sie <xref:System.Threading.ReaderWriterLock.IsReaderLockHeld%2A>, um zu bestimmen, ob der aktuelle Thread bereits über eine Lesesperre verfügt.  
   
- `AcquireWriterLock`unterstützt rekursive Writer-Lock-Anforderungen. Das heißt, ein Thread kann mehrmals `AcquireWriterLock` aufgerufen werden, wodurch die Anzahl der Sperren jedes Mal erhöht wird. Sie müssen <xref:System.Threading.ReaderWriterLock.ReleaseWriterLock%2A> für jedes Mal, wenn Sie aufzurufen `AcquireWriterLock`, einmal aufgerufen werden. Alternativ können Sie auch aufzurufen <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A> , um die Sperrenanzahl sofort auf NULL zu verringern.  
+ `AcquireWriterLock` unterstützt rekursive Writer-Lock-Anforderungen. Das heißt, ein Thread kann `AcquireWriterLock` mehrmals aufzurufen, wodurch die Anzahl der Sperren jedes Mal erhöht wird. Sie müssen <xref:System.Threading.ReaderWriterLock.ReleaseWriterLock%2A> einmal für jedes Mal aufgerufen werden, wenn Sie `AcquireWriterLock`aufgerufen haben. Alternativ können Sie <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A> aufzurufen, um die Sperrenanzahl sofort auf NULL zu verringern.  
   
  Rekursive Sperr Anforderungen werden immer sofort erteilt, ohne dass der anfordernde Thread in der Writer-Warteschlange platziert wird.  
   
- Gültige Timeout Werte finden <xref:System.Threading.ReaderWriterLock>Sie unter.  
+ Gültige Timeout Werte finden Sie unter <xref:System.Threading.ReaderWriterLock>.  
   
  ]]></format>
         </remarks>
@@ -468,6 +474,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
@@ -488,16 +495,16 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Sie können und <xref:System.Threading.ReaderWriterLock.WriterSeqNum%2A> `AnyWritersSince` verwenden, um die Anwendungsleistung zu verbessern. Ein Thread kann z. b. die Informationen zwischenspeichern, die er beim Aufrechterhalten einer Lesesperre erhält. Nach dem Freigeben und späteren erneuten Abrufen der Sperre kann der Thread verwenden `AnyWritersSince` , um zu bestimmen, ob andere Threads in der Zwischenzeit in die Ressource geschrieben haben. andernfalls können die zwischengespeicherten Informationen verwendet werden. Diese Technik ist hilfreich, wenn das Lesen der durch die Sperre geschützten Informationen teuer ist. beispielsweise das Ausführen einer Datenbankabfrage.  
+ Sie können <xref:System.Threading.ReaderWriterLock.WriterSeqNum%2A> und `AnyWritersSince` verwenden, um die Anwendungsleistung zu verbessern. Ein Thread kann z. b. die Informationen zwischenspeichern, die er beim Aufrechterhalten einer Lesesperre erhält. Nach dem Freigeben und späteren erneuten Erwerb der Sperre kann der Thread mithilfe von `AnyWritersSince` ermitteln, ob andere Threads in der Zwischenzeit in die Ressource geschrieben wurden. Andernfalls können die zwischengespeicherten Informationen verwendet werden. Diese Technik ist hilfreich, wenn das Lesen der durch die Sperre geschützten Informationen teuer ist. beispielsweise das Ausführen einer Datenbankabfrage.  
   
  Der Aufrufer muss eine Lesesperre oder eine Writer-Sperre aufweisen, damit die Sequenznummer nützlich ist.  
   
    
   
 ## Examples  
- Im folgenden Codebeispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLock.AnyWritersSince%2A> -Methode und <xref:System.Threading.ReaderWriterLock.WriterSeqNum%2A> die-Eigenschaft verwendet werden, um zu bestimmen, ob ein anderer Thread die Schreibsperre für die geschützte Ressource abgerufen hat, da der aktuelle Thread zuletzt die Schreibsperre aufrechterhalten hat  
+ Im folgenden Codebeispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLock.AnyWritersSince%2A>-Methode und die <xref:System.Threading.ReaderWriterLock.WriterSeqNum%2A>-Eigenschaft verwendet werden, um zu bestimmen, ob ein anderer Thread die Schreibsperre für die geschützte Ressource abgerufen hat, da der aktuelle Thread zuletzt die Schreibsperre aufrechterhalten hat.  
   
- Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock> -Klasse bereitgestellt wird.  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock>-Klasse bereitgestellt wird.  
   
  [!code-cpp[System.Threading.ReaderWriterLock#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CPP/source.cpp#2)]
  [!code-csharp[System.Threading.ReaderWriterLock#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CS/source.cs#2)]
@@ -539,6 +546,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
@@ -552,16 +560,16 @@
         <Parameter Name="lockCookie" Type="System.Threading.LockCookie" RefType="ref" />
       </Parameters>
       <Docs>
-        <param name="lockCookie">Eine von <see cref="T:System.Threading.LockCookie" /> zurückgegebene <see cref="M:System.Threading.ReaderWriterLock.UpgradeToWriterLock(System.Int32)" />-Struktur.</param>
+        <param name="lockCookie">Ein von <see cref="T:System.Threading.LockCookie" /> zurückgegebenes <see cref="M:System.Threading.ReaderWriterLock.UpgradeToWriterLock(System.Int32)" />.</param>
         <summary>Stellt den Sperrstatus des Threads mit dem Status vor dem Aufruf von <see cref="M:System.Threading.ReaderWriterLock.UpgradeToWriterLock(System.Int32)" /> wieder her.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Threading.ReaderWriterLock.DowngradeFromWriterLock%2A>Gibt die Schreibsperre unabhängig von der rekursiven Sperr Anzahl frei und stellt die Lesesperre wieder her, die vom Thread vor dem Upgrade auf die Schreibsperre gehalten wurde. Die Sperrenanzahl für die Lesesperre wird wieder hergestellt.  
+ <xref:System.Threading.ReaderWriterLock.DowngradeFromWriterLock%2A> gibt die Schreibsperre unabhängig von der rekursiven Sperr Anzahl frei und stellt die Lesesperre wieder her, die vom Thread vor dem Upgrade auf die Writer-Sperre aufrechterhalten wurde. Die Sperrenanzahl für die Lesesperre wird wieder hergestellt.  
   
 > [!NOTE]
->  `DowngradeFromWriterLock`akzeptiert einen <xref:System.Threading.LockCookie> , der durch <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A>Aufrufen von abgerufen wird. Verwenden `LockCookie` Sie keine von <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A>zurückgegebene.  
+>  `DowngradeFromWriterLock` akzeptiert eine <xref:System.Threading.LockCookie>, die durch den Aufruf von <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A>abgerufen wird. Verwenden Sie keine von <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A>zurückgegebene `LockCookie`.  
   
  Ein Thread wird beim Downgrade von der Schreibsperre nicht blockiert, auch wenn andere Threads auf die Schreibsperre warten, weil alle Lese-/Sperranforderungen bei der Freigabe der Writer-Sperre erteilt werden.  
   
@@ -570,7 +578,7 @@
 ## Examples  
  Das folgende Codebeispiel zeigt, wie Sie eine Lesesperre anfordern, die Lesesperre auf eine Writer-Sperre aktualisieren und erneut auf eine Lesesperre herabstufen.  
   
- Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock> -Klasse bereitgestellt wird.  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock>-Klasse bereitgestellt wird.  
   
  [!code-cpp[System.Threading.ReaderWriterLock#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CPP/source.cpp#2)]
  [!code-csharp[System.Threading.ReaderWriterLock#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CS/source.cs#2)]
@@ -627,7 +635,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Der Garbage Collector der <xref:System.Threading.ReaderWriterLock.Finalize%2A> aufruft, wenn <xref:System.Threading.ReaderWriterLock> das aktuelle-Objekt für die Fertigstellung bereit ist.  
+ Der Garbage Collector ruft <xref:System.Threading.ReaderWriterLock.Finalize%2A> auf, wenn das aktuelle <xref:System.Threading.ReaderWriterLock> Objekt bereit für die Fertigstellung ist.  
   
  ]]></format>
         </remarks>
@@ -657,6 +665,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
@@ -712,6 +721,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
@@ -731,7 +741,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Examples  
- Im folgenden Codebeispiel wird veranschaulicht, dass beim Versuch, eine Lesesperre für einen Thread mit einer Writer-Sperre abzurufen, nicht `ReaderWriterLock` die Lesesperre erteilt, sondern stattdessen die Sperrenanzahl für die Schreibsperre erhöht wird.  
+ Im folgenden Codebeispiel wird veranschaulicht, dass beim Versuch, eine Readersperre für einen Thread mit einer Schreibsperre zu erhalten, `ReaderWriterLock` die Lesesperre nicht gewährt, sondern stattdessen die Sperrenanzahl für die Schreibsperre erhöht.  
   
  [!code-cpp[System.Threading.ReaderWriterLock.IsWriterLockHeld#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock.IsWriterLockHeld/CPP/source.cpp#1)]
  [!code-csharp[System.Threading.ReaderWriterLock.IsWriterLockHeld#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock.IsWriterLockHeld/CS/source.cs#1)]
@@ -767,6 +777,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
@@ -784,14 +795,14 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A>Gibt die Lese-oder Schreibsperre unabhängig von der rekursiven Sperr Anzahl frei. Um den Zustand der Sperre wiederherzustellen, einschließlich der Sperrenanzahl, übergeben <xref:System.Threading.LockCookie> Sie <xref:System.Threading.ReaderWriterLock.RestoreLock%2A>den an.  
+ <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A> gibt die Lese-oder Schreibsperre unabhängig von der rekursiven Sperr Anzahl frei. Um den Zustand der Sperre wiederherzustellen, einschließlich der Sperrenanzahl, übergeben Sie den <xref:System.Threading.LockCookie> an <xref:System.Threading.ReaderWriterLock.RestoreLock%2A>.  
   
    
   
 ## Examples  
- Im folgenden Codebeispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A> -Methode verwendet wird, um die Sperre freizugeben, unabhängig davon, wie oft Sie durch den Thread abgerufen wurde, und wie der Zustand der Sperre später wieder hergestellt wird.  
+ Im folgenden Codebeispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A>-Methode verwendet wird, um die Sperre freizugeben, unabhängig davon, wie oft Sie durch den Thread abgerufen wurde, und wie der Zustand der Sperre später wieder hergestellt wird.  
   
- Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock> -Klasse bereitgestellt wird.  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock>-Klasse bereitgestellt wird.  
   
  [!code-cpp[System.Threading.ReaderWriterLock#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CPP/source.cpp#2)]
  [!code-csharp[System.Threading.ReaderWriterLock#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CS/source.cs#2)]
@@ -833,6 +844,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
@@ -852,17 +864,17 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Threading.ReaderWriterLock.ReleaseReaderLock%2A>verringert die Sperrenanzahl. Wenn die Anzahl 0 (null) erreicht, wird die Sperre freigegeben.  
+ <xref:System.Threading.ReaderWriterLock.ReleaseReaderLock%2A> Dekrementen die Sperrenanzahl. Wenn die Anzahl 0 (null) erreicht, wird die Sperre freigegeben.  
   
 > [!NOTE]
->  Wenn ein Thread die Schreibsperre besitzt, hat `ReleaseReaderLock` der Aufruf von denselben Effekt wie <xref:System.Threading.ReaderWriterLock.ReleaseWriterLock%2A>das Aufrufen von. Wenn ein Thread keine Sperren hat, löst `ReleaseReaderLock` der Aufruf <xref:System.ApplicationException>von eine aus.  
+>  Wenn ein Thread die Schreibsperre besitzt, hat der Aufruf von `ReleaseReaderLock` denselben Effekt wie das Aufrufen von <xref:System.Threading.ReaderWriterLock.ReleaseWriterLock%2A>. Wenn ein Thread keine Sperren hat, löst der Aufruf von `ReleaseReaderLock` eine <xref:System.ApplicationException>aus.  
   
    
   
 ## Examples  
  Im folgenden Codebeispiel wird veranschaulicht, wie eine Lesesperre abgerufen und freigegeben wird und wie die Ausnahme behandelt wird, die ausgelöst wird, wenn für eine Anforderung ein Timeout auftritt.  
   
- Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock> -Klasse bereitgestellt wird.  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock>-Klasse bereitgestellt wird.  
   
  [!code-cpp[System.Threading.ReaderWriterLock#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CPP/source.cpp#2)]
  [!code-csharp[System.Threading.ReaderWriterLock#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CS/source.cs#2)]
@@ -905,6 +917,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
@@ -924,17 +937,17 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Threading.ReaderWriterLock.ReleaseWriterLock%2A>verringert die Anzahl der Schreib sperren. Wenn die Anzahl 0 (null) erreicht, wird die Writer-Sperre freigegeben.  
+ <xref:System.Threading.ReaderWriterLock.ReleaseWriterLock%2A> Dekrement the Writer Lock count. Wenn die Anzahl 0 (null) erreicht, wird die Writer-Sperre freigegeben.  
   
 > [!NOTE]
->  Wenn ein Thread eine Lesesperre oder keine Sperren hat, löst der `ReleaseWriterLock` Aufruf von <xref:System.ApplicationException>eine aus.  
+>  Wenn ein Thread über eine Lesesperre oder eine Sperre verfügt, wird beim Aufrufen von `ReleaseWriterLock` eine <xref:System.ApplicationException>ausgelöst.  
   
    
   
 ## Examples  
  Im folgenden Codebeispiel wird veranschaulicht, wie eine Writer-Sperre abgerufen und freigegeben wird und wie die Ausnahme behandelt wird, die ausgelöst wird, wenn für eine Anforderung ein Timeout auftritt.  
   
- Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock> -Klasse bereitgestellt wird.  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock>-Klasse bereitgestellt wird.  
   
  [!code-cpp[System.Threading.ReaderWriterLock#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CPP/source.cpp#2)]
  [!code-csharp[System.Threading.ReaderWriterLock#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CS/source.cs#2)]
@@ -977,6 +990,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
@@ -990,27 +1004,27 @@
         <Parameter Name="lockCookie" Type="System.Threading.LockCookie" RefType="ref" />
       </Parameters>
       <Docs>
-        <param name="lockCookie">Eine von <see cref="T:System.Threading.LockCookie" /> zurückgegebene <see cref="M:System.Threading.ReaderWriterLock.ReleaseLock" />-Struktur.</param>
+        <param name="lockCookie">Ein von <see cref="T:System.Threading.LockCookie" /> zurückgegebenes <see cref="M:System.Threading.ReaderWriterLock.ReleaseLock" />.</param>
         <summary>Stellt den Sperrstatus des Threads mit dem Status vor dem Aufruf von <see cref="M:System.Threading.ReaderWriterLock.ReleaseLock" /> wieder her.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Der durch `RestoreLock` wiederhergestellte Zustand schließt die rekursive Sperr Anzahl ein.  
+ Der von `RestoreLock` wiederhergestellte Zustand schließt die rekursive Sperr Anzahl ein.  
   
- Ein Thread wird blockiert, wenn versucht wird, eine Lesesperre wiederherzustellen, nachdem ein anderer Thread die Schreibsperre abgerufen hat, oder wenn versucht wird, die Schreibsperre wiederherzustellen, nachdem ein anderer Thread eine Lesesperre oder eine Schreibsperre abgerufen hat. Da `RestoreLock` kein Timeout akzeptiert, sollten Sie darauf achten, mögliche Deadlocks zu vermeiden.  
+ Ein Thread wird blockiert, wenn versucht wird, eine Lesesperre wiederherzustellen, nachdem ein anderer Thread die Schreibsperre abgerufen hat, oder wenn versucht wird, die Schreibsperre wiederherzustellen, nachdem ein anderer Thread eine Lesesperre oder eine Schreibsperre abgerufen hat. Da `RestoreLock` keinen Timeout akzeptiert, sollten Sie darauf achten, mögliche Deadlocks zu vermeiden.  
   
 > [!CAUTION]
->  Vergewissern Sie `RestoreLock`sich vor dem Aufrufen von, dass alle Sperren freigegeben wurden, <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A>die seit dem Aufruf von abgerufen wurden. Beispielsweise wird ein Thread Deadlocks, wenn er eine Lesesperre erhält und dann versucht, eine frühere Schreibsperre wiederherzustellen. Verwenden <xref:System.Threading.ReaderWriterLock.IsReaderLockHeld%2A> Sie <xref:System.Threading.ReaderWriterLock.IsWriterLockHeld%2A> und, um solche zusätzlichen Sperren zu erkennen.  
+>  Stellen Sie vor dem Aufrufen von `RestoreLock`sicher, dass alle Sperren freigegeben wurden, die seit dem Aufruf von <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A>abgerufen wurden. Beispielsweise wird ein Thread Deadlocks, wenn er eine Lesesperre erhält und dann versucht, eine frühere Schreibsperre wiederherzustellen. Verwenden Sie <xref:System.Threading.ReaderWriterLock.IsReaderLockHeld%2A> und <xref:System.Threading.ReaderWriterLock.IsWriterLockHeld%2A>, um solche zusätzlichen Sperren zu erkennen.  
   
- Verwenden <xref:System.Threading.LockCookie> Sie keine von <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A>zurückgegebene.  
+ Verwenden Sie keine <xref:System.Threading.LockCookie>, die von <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A>zurückgegeben werden.  
   
    
   
 ## Examples  
- Im folgenden Codebeispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A> -Methode verwendet wird, um die Sperre freizugeben, unabhängig davon, wie oft Sie durch den Thread abgerufen wurde, und wie der Zustand der Sperre später wieder hergestellt wird.  
+ Im folgenden Codebeispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLock.ReleaseLock%2A>-Methode verwendet wird, um die Sperre freizugeben, unabhängig davon, wie oft Sie durch den Thread abgerufen wurde, und wie der Zustand der Sperre später wieder hergestellt wird.  
   
- Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock> -Klasse bereitgestellt wird.  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock>-Klasse bereitgestellt wird.  
   
  [!code-cpp[System.Threading.ReaderWriterLock#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CPP/source.cpp#2)]
  [!code-csharp[System.Threading.ReaderWriterLock#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CS/source.cs#2)]
@@ -1063,6 +1077,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
@@ -1083,23 +1098,23 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Wenn ein Thread aufruft `UpgradeToWriterLock` , wird die Lesesperre unabhängig von der Sperrenanzahl freigegeben, und der Thread wechselt zum Ende der Warteschlange für die Schreibsperre. Daher könnten andere Threads in die Ressource schreiben, bevor dem Thread, der das Upgrade angefordert hat, die Schreibsperre erteilt wird.  
+ Wenn ein Thread aufruft `UpgradeToWriterLock` wird die Lesesperre unabhängig von der Anzahl der Sperren freigegeben, und der Thread wechselt zum Ende der Warteschlange für die Schreibsperre. Daher könnten andere Threads in die Ressource schreiben, bevor dem Thread, der das Upgrade angefordert hat, die Schreibsperre erteilt wird.  
   
 > [!IMPORTANT]
->  Die Timeout Ausnahme wird erst ausgelöst, wenn der Thread, der die <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A> -Methode aufgerufen hat, die Lesesperre erneut abrufen kann. Wenn keine anderen Threads auf die Schreibsperre warten, erfolgt dies sofort. Wenn jedoch ein anderer Thread für die Schreibsperre in die Warteschlange eingereiht wird, kann <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A> der Thread, der die-Methode aufgerufen hat, die Lesesperre erst wieder abrufen, wenn alle aktuellen Reader ihre Sperren freigegeben haben und ein Thread die Schreibsperre abgerufen und freigegeben hat. Dies gilt auch, wenn der andere Thread, der die Writer-Sperre angefordert hat, ihn nach dem aktuellen <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A> Thread angefordert hat, der die-Methode aufgerufen hat.  
+>  Die Timeout Ausnahme wird erst ausgelöst, wenn der Thread, der die <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A> Methode aufgerufen hat, die Lesesperre erneut abrufen kann. Wenn keine anderen Threads auf die Schreibsperre warten, erfolgt dies sofort. Wenn jedoch ein anderer Thread in die Warteschlange für die Schreibsperre eingereiht wird, kann der Thread, der die <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A>-Methode aufgerufen hat, die Lesesperre erst wieder abrufen, wenn alle aktuellen Reader ihre Sperren freigegeben haben und ein Thread die Schreibsperre abgerufen und freigegeben hat. Dies gilt auch, wenn der andere Thread, der die Writer-Sperre angefordert hat, ihn nach dem aktuellen Thread angefordert hat, der als <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A> Methode bezeichnet wird.  
   
- Zum Wiederherstellen des Sperr Zustands können <xref:System.Threading.ReaderWriterLock.DowngradeFromWriterLock%2A> Sie mit <xref:System.Threading.LockCookie> der von `UpgradeToWriterLock`zurückgegebenen abrufen. Verwenden Sie dies `LockCookie` nicht mit <xref:System.Threading.ReaderWriterLock.RestoreLock%2A>.  
+ Zum Wiederherstellen des Sperr Zustands wenden Sie <xref:System.Threading.ReaderWriterLock.DowngradeFromWriterLock%2A> mithilfe der von `UpgradeToWriterLock`zurückgegebenen <xref:System.Threading.LockCookie> an. Verwenden Sie diese `LockCookie` nicht mit <xref:System.Threading.ReaderWriterLock.RestoreLock%2A>.  
   
- Wenn ein Thread keine Lesesperre aufweist, verwenden `UpgradeToWriterLock`Sie nicht. Verwenden Sie stattdessen <xref:System.Threading.ReaderWriterLock.AcquireWriterLock%2A>.  
+ Wenn ein Thread keine Lesesperre aufweist, verwenden Sie `UpgradeToWriterLock`nicht. Verwenden Sie stattdessen <xref:System.Threading.ReaderWriterLock.AcquireWriterLock%2A>.  
   
- Gültige Timeout Werte finden <xref:System.Threading.ReaderWriterLock>Sie unter.  
+ Gültige Timeout Werte finden Sie unter <xref:System.Threading.ReaderWriterLock>.  
   
    
   
 ## Examples  
  Das folgende Codebeispiel zeigt, wie Sie eine Lesesperre anfordern, die Lesesperre auf eine Writer-Sperre aktualisieren und erneut auf eine Lesesperre herabstufen.  
   
- Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock> -Klasse bereitgestellt wird.  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock>-Klasse bereitgestellt wird.  
   
  [!code-cpp[System.Threading.ReaderWriterLock#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CPP/source.cpp#2)]
  [!code-csharp[System.Threading.ReaderWriterLock#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CS/source.cs#2)]
@@ -1142,6 +1157,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Threading.LockCookie</ReturnType>
@@ -1150,23 +1166,23 @@
         <Parameter Name="timeout" Type="System.TimeSpan" />
       </Parameters>
       <Docs>
-        <param name="timeout">Die <see langword="TimeSpan" />, die den Timeout-Zeitraum angibt.</param>
+        <param name="timeout">Die <see langword="TimeSpan" />, die den Timeoutzeitraum angibt.</param>
         <summary>Wandelt eine Lesesperre unter Verwendung eines <see langword="TimeSpan" />-Werts für das Timeout in eine Schreibsperre um.</summary>
         <returns>Ein <see cref="T:System.Threading.LockCookie" />-Wert.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Wenn ein Thread aufruft `UpgradeToWriterLock` , wird die Lesesperre unabhängig von der Sperrenanzahl freigegeben, und der Thread wechselt zum Ende der Warteschlange für die Schreibsperre. Daher könnten andere Threads in die Ressource schreiben, bevor dem Thread, der das Upgrade angefordert hat, die Schreibsperre erteilt wird.  
+ Wenn ein Thread aufruft `UpgradeToWriterLock` wird die Lesesperre unabhängig von der Anzahl der Sperren freigegeben, und der Thread wechselt zum Ende der Warteschlange für die Schreibsperre. Daher könnten andere Threads in die Ressource schreiben, bevor dem Thread, der das Upgrade angefordert hat, die Schreibsperre erteilt wird.  
   
 > [!IMPORTANT]
->  Die Timeout Ausnahme wird erst ausgelöst, wenn der Thread, der die <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A> -Methode aufgerufen hat, die Lesesperre erneut abrufen kann. Wenn keine anderen Threads auf die Schreibsperre warten, erfolgt dies sofort. Wenn jedoch ein anderer Thread für die Schreibsperre in die Warteschlange eingereiht wird, kann <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A> der Thread, der die-Methode aufgerufen hat, die Lesesperre erst wieder abrufen, wenn alle aktuellen Reader ihre Sperren freigegeben haben und ein Thread die Schreibsperre abgerufen und freigegeben hat. Dies gilt auch, wenn der andere Thread, der die Writer-Sperre angefordert hat, ihn nach dem aktuellen <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A> Thread angefordert hat, der die-Methode aufgerufen hat.  
+>  Die Timeout Ausnahme wird erst ausgelöst, wenn der Thread, der die <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A> Methode aufgerufen hat, die Lesesperre erneut abrufen kann. Wenn keine anderen Threads auf die Schreibsperre warten, erfolgt dies sofort. Wenn jedoch ein anderer Thread in die Warteschlange für die Schreibsperre eingereiht wird, kann der Thread, der die <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A>-Methode aufgerufen hat, die Lesesperre erst wieder abrufen, wenn alle aktuellen Reader ihre Sperren freigegeben haben und ein Thread die Schreibsperre abgerufen und freigegeben hat. Dies gilt auch, wenn der andere Thread, der die Writer-Sperre angefordert hat, ihn nach dem aktuellen Thread angefordert hat, der als <xref:System.Threading.ReaderWriterLock.UpgradeToWriterLock%2A> Methode bezeichnet wird.  
   
- Zum Wiederherstellen des Sperr Zustands können <xref:System.Threading.ReaderWriterLock.DowngradeFromWriterLock%2A> Sie mit <xref:System.Threading.LockCookie> der von `UpgradeToWriterLock`zurückgegebenen abrufen. Verwenden Sie dies `LockCookie` nicht mit <xref:System.Threading.ReaderWriterLock.RestoreLock%2A>.  
+ Zum Wiederherstellen des Sperr Zustands wenden Sie <xref:System.Threading.ReaderWriterLock.DowngradeFromWriterLock%2A> mithilfe der von `UpgradeToWriterLock`zurückgegebenen <xref:System.Threading.LockCookie> an. Verwenden Sie diese `LockCookie` nicht mit <xref:System.Threading.ReaderWriterLock.RestoreLock%2A>.  
   
- Wenn ein Thread keine Lesesperre aufweist, verwenden `UpgradeToWriterLock`Sie nicht. Verwenden Sie stattdessen <xref:System.Threading.ReaderWriterLock.AcquireWriterLock%2A>.  
+ Wenn ein Thread keine Lesesperre aufweist, verwenden Sie `UpgradeToWriterLock`nicht. Verwenden Sie stattdessen <xref:System.Threading.ReaderWriterLock.AcquireWriterLock%2A>.  
   
- Gültige Timeout Werte finden <xref:System.Threading.ReaderWriterLock>Sie unter.  
+ Gültige Timeout Werte finden Sie unter <xref:System.Threading.ReaderWriterLock>.  
   
  ]]></format>
         </remarks>
@@ -1200,6 +1216,7 @@
         <AssemblyName>System.Threading</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
@@ -1216,18 +1233,18 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die Sequenznummer erhöht sich, wenn ein Thread die Schreibsperre erhält. Sie können die Sequenznummer speichern und zu einem späteren <xref:System.Threading.ReaderWriterLock.AnyWritersSince%2A> Zeitpunkt an übergeben, wenn Sie feststellen möchten, ob andere Threads die Schreibsperre in der Zwischenzeit erhalten haben.  
+ Die Sequenznummer erhöht sich, wenn ein Thread die Schreibsperre erhält. Sie können die Sequenznummer speichern und Sie zu einem späteren Zeitpunkt an <xref:System.Threading.ReaderWriterLock.AnyWritersSince%2A> übergeben, wenn Sie bestimmen möchten, ob andere Threads die Schreibsperre in der Zwischenzeit erhalten haben.  
   
- Sie können verwenden `WriterSeqNum` , um die Anwendungsleistung zu verbessern. Ein Thread kann z. b. die Informationen zwischenspeichern, die er beim Aufrechterhalten einer Lesesperre erhält. Nach dem Freigeben und späteren erneuten Erwerb der Sperre kann der Thread ermitteln, ob andere Threads durch Aufrufen `AnyWritersSince`von in die Ressource geschrieben wurden. andernfalls können die zwischengespeicherten Informationen verwendet werden. Diese Technik ist hilfreich, wenn das Lesen der durch die Sperre geschützten Informationen teuer ist. beispielsweise das Ausführen einer Datenbankabfrage.  
+ Sie können `WriterSeqNum` verwenden, um die Anwendungsleistung zu verbessern. Ein Thread kann z. b. die Informationen zwischenspeichern, die er beim Aufrechterhalten einer Lesesperre erhält. Nach dem Freigeben und späteren erneuten Erwerb der Sperre kann der Thread ermitteln, ob andere Threads durch Aufrufen von `AnyWritersSince`in die Ressource geschrieben wurden. Andernfalls können die zwischengespeicherten Informationen verwendet werden. Diese Technik ist hilfreich, wenn das Lesen der durch die Sperre geschützten Informationen teuer ist. beispielsweise das Ausführen einer Datenbankabfrage.  
   
  Der Aufrufer muss eine Lesesperre oder eine Writer-Sperre aufweisen, damit die Sequenznummer nützlich ist.  
   
    
   
 ## Examples  
- Im folgenden Codebeispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLock.WriterSeqNum%2A> -Eigenschaft und <xref:System.Threading.ReaderWriterLock.AnyWritersSince%2A> die-Methode verwendet werden, um zu bestimmen, ob ein anderer Thread die Schreibsperre für die geschützte Ressource abgerufen hat, da der aktuelle Thread zuletzt die Schreibsperre aufrechterhalten hat  
+ Im folgenden Codebeispiel wird gezeigt, wie die <xref:System.Threading.ReaderWriterLock.WriterSeqNum%2A>-Eigenschaft und die <xref:System.Threading.ReaderWriterLock.AnyWritersSince%2A>-Methode verwendet werden, um zu bestimmen, ob ein anderer Thread die Schreibsperre für die geschützte Ressource abgerufen hat, da der aktuelle Thread zuletzt die Schreibsperre aufrechterhalten hat.  
   
- Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock> -Klasse bereitgestellt wird.  
+ Dieser Code ist Teil eines größeren Beispiels, das für die <xref:System.Threading.ReaderWriterLock>-Klasse bereitgestellt wird.  
   
  [!code-cpp[System.Threading.ReaderWriterLock#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CPP/source.cpp#2)]
  [!code-csharp[System.Threading.ReaderWriterLock#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.ReaderWriterLock/CS/source.cs#2)]
