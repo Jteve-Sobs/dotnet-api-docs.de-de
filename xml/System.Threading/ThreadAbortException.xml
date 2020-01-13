@@ -1,5 +1,5 @@
 <Type Name="ThreadAbortException" FullName="System.Threading.ThreadAbortException">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="223645db6d3f0a32779a09530c04ad6aaa0e4959" /><Meta Name="ms.sourcegitcommit" Value="24f564114ee2fa9c63dbac1b25b82826cc4e320f" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/25/2019" /><Meta Name="ms.locfileid" Value="68488070" /></Metadata><TypeSignature Language="C#" Value="public sealed class ThreadAbortException : SystemException" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="49637a5939ed2eae8a51099cf9e801166599037f" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75158581" /></Metadata><TypeSignature Language="C#" Value="public sealed class ThreadAbortException : SystemException" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi serializable sealed beforefieldinit ThreadAbortException extends System.SystemException" />
   <TypeSignature Language="DocId" Value="T:System.Threading.ThreadAbortException" />
   <TypeSignature Language="VB.NET" Value="Public NotInheritable Class ThreadAbortException&#xA;Inherits SystemException" />
@@ -21,6 +21,7 @@
     <AssemblyName>System.Threading.Thread</AssemblyName>
     <AssemblyVersion>4.1.0.0</AssemblyVersion>
     <AssemblyVersion>4.1.1.0</AssemblyVersion>
+    <AssemblyVersion>4.1.2.0</AssemblyVersion>
   </AssemblyInfo>
   <Base>
     <BaseTypeName>System.SystemException</BaseTypeName>
@@ -40,14 +41,14 @@
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Wenn eine- <xref:System.Threading.Thread.Abort%2A> Methode aufgerufen wird, um einen Thread zu zerstören, löst die Common Language Runtime eine <xref:System.Threading.ThreadAbortException>aus. <xref:System.Threading.ThreadAbortException>eine besondere Ausnahme, die abgefangen werden kann, wird jedoch automatisch am Ende des `catch` Blocks erneut ausgelöst. Wenn diese Ausnahme ausgelöst wird, führt die Laufzeit alle `finally` -Blöcke aus, bevor der Thread beendet wird. Da der Thread eine unbegrenzte Berechnung in den `finally` Blöcken ausführen <xref:System.Threading.Thread.ResetAbort%2A?displayProperty=nameWithType> und den Abbruch Abbrechen kann, gibt es keine Garantie dafür, dass der Thread beendet wird. Wenn Sie warten möchten, bis der abgebrochene Thread beendet wurde, können Sie die <xref:System.Threading.Thread.Join%2A?displayProperty=nameWithType> -Methode aufzurufen. <xref:System.Threading.Thread.Join%2A>ein blockierender-Befehl, der erst zurückgegeben wird, wenn die Ausführung des Threads tatsächlich beendet wird.  
+ Wenn die <xref:System.Threading.Thread.Abort%2A>-Methode aufgerufen wird, um einen Thread zu zerstören, löst die Common Language Runtime eine <xref:System.Threading.ThreadAbortException>aus. <xref:System.Threading.ThreadAbortException> ist eine besondere Ausnahme, die abgefangen werden kann, aber automatisch am Ende des `catch` Blocks ausgelöst wird. Wenn diese Ausnahme ausgelöst wird, führt die Laufzeit alle `finally` Blöcke aus, bevor der Thread beendet wird. Da der Thread eine unbegrenzte Berechnung in den `finally` Blöcken durchführen oder <xref:System.Threading.Thread.ResetAbort%2A?displayProperty=nameWithType> abrufen kann, um den Abbruch abzubrechen, gibt es keine Garantie dafür, dass der Thread beendet wird. Wenn Sie warten möchten, bis der abgebrochene Thread beendet wurde, können Sie die <xref:System.Threading.Thread.Join%2A?displayProperty=nameWithType>-Methode aufzurufen. <xref:System.Threading.Thread.Join%2A> ist ein blockierender-Befehl, der erst zurückgegeben wird, wenn der Thread die Ausführung beendet.  
   
-**Nur .NET Core:** Obwohl dieser Typ in .net Core vorhanden ist, da <xref:System.Threading.Thread.Abort%2A> nicht unterstützt wird, löst der Common Language Runtime <xref:System.Threading.ThreadAbortException>nie aus.
+**Nur .net Core:** Obwohl dieser Typ in .net Core vorhanden ist, wird der Common Language Runtime nicht jemals <xref:System.Threading.ThreadAbortException>auslösen, da <xref:System.Threading.Thread.Abort%2A> nicht unterstützt wird.
 
 > [!NOTE]
->  Wenn die Common Language Runtime (CLR) Hintergrundthreads beendet, nachdem alle Vordergrundthreads in einer verwalteten ausführbaren Datei beendet wurden <xref:System.Threading.Thread.Abort%2A?displayProperty=nameWithType>, wird Sie nicht verwendet. Daher können Sie nicht verwenden <xref:System.Threading.ThreadAbortException> , um zu ermitteln, wann Hintergrundthreads durch die CLR beendet werden.  
+>  Wenn die Common Language Runtime (CLR) Hintergrundthreads beendet, nachdem alle Vordergrundthreads in einer verwalteten ausführbaren Datei beendet wurden, wird <xref:System.Threading.Thread.Abort%2A?displayProperty=nameWithType>nicht verwendet. Daher können Sie <xref:System.Threading.ThreadAbortException> nicht verwenden, um zu erkennen, wann Hintergrundthreads durch die CLR beendet werden.  
   
- <xref:System.Threading.ThreadAbortException>verwendet das HRESULT-COR_E_THREADABORTED, das den Wert 0x80131530 aufweist.  
+ <xref:System.Threading.ThreadAbortException> verwendet die HRESULT-COR_E_THREADABORTED mit dem Wert 0x80131530.  
   
 > [!NOTE]
 >  Der Wert der geerbten <xref:System.Exception.Data%2A> Eigenschaft ist immer `null`.  
@@ -55,7 +56,7 @@
    
   
 ## Examples  
- Im folgenden Beispiel wird veranschaulicht, wie ein Thread abgebrochen wird. Der Thread, der den `ThreadAbortException` empfängt, <xref:System.Threading.Thread.ResetAbort%2A> verwendet die-Methode, um die Abbruch Anforderung abzubrechen und die Ausführung fortzusetzen.  
+ Im folgenden Beispiel wird veranschaulicht, wie ein Thread abgebrochen wird. Der Thread, der die `ThreadAbortException` empfängt, verwendet die <xref:System.Threading.Thread.ResetAbort%2A>-Methode, um die Abbruch Anforderung abzubrechen und die Ausführung fortzusetzen.  
   
  [!code-cpp[ThreadAbEx#1](~/samples/snippets/cpp/VS_Snippets_CLR/ThreadAbEx/CPP/threadabex.cpp#1)]
  [!code-csharp[ThreadAbEx#1](~/samples/snippets/csharp/VS_Snippets_CLR/ThreadAbEx/CS/threadabex.cs#1)]
@@ -104,6 +105,7 @@ Main ending.
         <AssemblyName>System.Threading.Thread</AssemblyName>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
+        <AssemblyVersion>4.1.2.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
@@ -120,7 +122,7 @@ Main ending.
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Das von dieser Eigenschaft zurückgegebene-Objekt wird durch `stateInfo` den-Parameter <xref:System.Threading.Thread.Abort%2A> der-Methode angegeben. Der exakte Inhalt und die Verwendung dieses Objekts sind Anwendungs definiert. Sie wird normalerweise verwendet, um Informationen zu vermitteln, die für den abgebrochenen Thread von Bedeutung sind.  
+ Das von dieser Eigenschaft zurückgegebene-Objekt wird durch den `stateInfo`-Parameter der <xref:System.Threading.Thread.Abort%2A>-Methode angegeben. Der exakte Inhalt und die Verwendung dieses Objekts sind Anwendungs definiert. Sie wird normalerweise verwendet, um Informationen zu vermitteln, die für den abgebrochenen Thread von Bedeutung sind.  
   
    
   
