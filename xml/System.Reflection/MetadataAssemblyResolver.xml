@@ -1,5 +1,5 @@
 <Type Name="MetadataAssemblyResolver" FullName="System.Reflection.MetadataAssemblyResolver">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="fafd31106ff69b2cc404819d43f9bbc3b3cb00cd" /><Meta Name="ms.sourcegitcommit" Value="055a4a82a0b08bfbdc21bd1347fb71f7fe2c099e" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/15/2019" /><Meta Name="ms.locfileid" Value="69276195" /></Metadata><TypeSignature Language="C#" Value="public abstract class MetadataAssemblyResolver" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="14ba347ba4a880965bed6d0c890fa4a6a87610d6" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75096181" /></Metadata><TypeSignature Language="C#" Value="public abstract class MetadataAssemblyResolver" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit MetadataAssemblyResolver extends System.Object" />
   <TypeSignature Language="DocId" Value="T:System.Reflection.MetadataAssemblyResolver" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class MetadataAssemblyResolver" />
@@ -8,6 +8,7 @@
   <AssemblyInfo>
     <AssemblyName>System.Reflection.MetadataLoadContext</AssemblyName>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.1.0</AssemblyVersion>
   </AssemblyInfo>
   <Base>
     <BaseTypeName>System.Object</BaseTypeName>
@@ -28,6 +29,7 @@
       <AssemblyInfo>
         <AssemblyName>System.Reflection.MetadataLoadContext</AssemblyName>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
       </AssemblyInfo>
       <Parameters />
       <Docs>
@@ -45,6 +47,7 @@
       <AssemblyInfo>
         <AssemblyName>System.Reflection.MetadataLoadContext</AssemblyName>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Reflection.Assembly</ReturnType>
@@ -63,17 +66,17 @@
 
 ## Remarks
 
-Das Binden eines Assemblynamens an eine <xref:System.Reflection.MetadataLoadContext.LoadFromAssemblyName%2A> Assembly tritt auf, wenn aufgerufen wird oder wenn ein Typ aus einer Assembly eine Abhängigkeit von einer anderen Assembly aufweist. Der Handler, den von `Resolve` der über <xref:System.Reflection.MetadataLoadContext.LoadFromStream%2A?displayProperty=nameWithType>Schreibung <xref:System.Reflection.MetadataLoadContext.LoadFromAssemblyPath%2A?displayProperty=nameWithType> verwendet <xref:System.Reflection.MetadataLoadContext.LoadFromByteArray%2A?displayProperty=nameWithType> werden soll, oder, um die angeforderte Assembly zu laden und zurückzugeben.
+Das Binden eines Assemblynamens an eine Assembly tritt auf, wenn <xref:System.Reflection.MetadataLoadContext.LoadFromAssemblyName%2A> aufgerufen wird oder wenn ein Typ aus einer Assembly eine Abhängigkeit von einer anderen Assembly aufweist. Der Handler, der `Resolve` überschreibt, sollte <xref:System.Reflection.MetadataLoadContext.LoadFromStream%2A?displayProperty=nameWithType>, <xref:System.Reflection.MetadataLoadContext.LoadFromAssemblyPath%2A?displayProperty=nameWithType> oder <xref:System.Reflection.MetadataLoadContext.LoadFromByteArray%2A?displayProperty=nameWithType> verwenden, um die angeforderte Assembly zu laden und zurückzugeben.
 
-Um anzugeben, dass eine Assembly nicht gefunden werden kann, sollte der `null` Handler zurückgeben, anstatt eine Ausnahme auszulösen. `null` Wenn Sie einen Commit für den Fehler ausführen, tritt bei zukünftigen versuchen, diesen Namen zu laden, ein Fehler auf, ohne den Handler erneut aufzurufen
+Um anzugeben, dass eine Assembly nicht gefunden werden kann, sollte der Handler `null` zurückgeben, anstatt eine Ausnahme auszulösen. Durch das Zurückgeben von `null` wird ein Commit für den Fehler ausgeführt, sodass bei zukünftigen versuchen, diesen Namen zu laden, ein Fehler auftritt, ohne dass
 
-Wenn der Handler eine Ausnahme auslöst, wird die Ausnahme an die Anwendung übermittelt, die den Vorgang aufgerufen hat, der die Bindung ausgelöst hat. Der <xref:System.Reflection.MetadataLoadContext> fängt ihn nicht ab, und es wird keine Bindung stattfinden.
+Wenn der Handler eine Ausnahme auslöst, wird die Ausnahme an die Anwendung übermittelt, die den Vorgang aufgerufen hat, der die Bindung ausgelöst hat. Der <xref:System.Reflection.MetadataLoadContext> fängt ihn nicht ab, und es erfolgt keine Bindung.
 
 Der Handler wird in der Regel nicht mehr als einmal für denselben Namen aufgerufen, es sei denn, zwei Threads laden dieselbe Assembly. Selbst in diesem Fall gewinnt ein Ergebnis und ist atomarisch an den Namen gebunden.
 
-Führt <xref:System.Reflection.MetadataLoadContext> absichtlich keinen Ref-DEF-Abgleich für die zurückgegebene Assembly aus, da eine Ref-DEF-Übereinstimmung eine Richtlinie darstellt. Es ist auch die Art der willkürlichen Einschränkung, <xref:System.Reflection.MetadataLoadContext> die zu vermeiden versucht.
+Der <xref:System.Reflection.MetadataLoadContext> führt absichtlich keinen Ref-DEF-Abgleich für die zurückgegebene Assembly aus, da eine Ref-DEF-Übereinstimmung eine Richtlinie darstellt. Es ist auch die Art der willkürlichen Einschränkung, die <xref:System.Reflection.MetadataLoadContext> zu vermeiden versucht.
 
-<xref:System.Reflection.MetadataLoadContext> Kann keine Assemblys aus anderen Metadaten-Lade Kontexten oder anderen typanbietern (z. b. dem eigenen Reflektionssystem der zugrunde liegenden Laufzeit) nutzen Wenn ein Handler eine solche Assembly zurückgibt, <xref:System.Reflection.MetadataLoadContext> löst eine <xref:System.IO.FileLoadException>aus.
+Der <xref:System.Reflection.MetadataLoadContext> kann keine Assemblys aus anderen Metadaten-Lade Kontexten oder anderen typanbietern (z. b. dem eigenen Reflektionssystem der zugrunde liegenden Laufzeit) Wenn ein Handler eine solche Assembly zurückgibt, löst die <xref:System.Reflection.MetadataLoadContext> eine <xref:System.IO.FileLoadException>aus.
 
           ]]></format>
         </remarks>
