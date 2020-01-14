@@ -1,5 +1,5 @@
 <Type Name="IArgumentProvider" FullName="System.Linq.Expressions.IArgumentProvider">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="978f18032b1aec687a3f90531a776cb2a47a2705" /><Meta Name="ms.sourcegitcommit" Value="bc24a3ba616ee1df8b858f9400cae4f058ea3a7e" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="06/19/2019" /><Meta Name="ms.locfileid" Value="67244481" /></Metadata><TypeSignature Language="C#" Value="public interface IArgumentProvider" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="4707d5b432079f7fbab7d53beca370220bc24978" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75131294" /></Metadata><TypeSignature Language="C#" Value="public interface IArgumentProvider" />
   <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract IArgumentProvider" />
   <TypeSignature Language="DocId" Value="T:System.Linq.Expressions.IArgumentProvider" />
   <TypeSignature Language="VB.NET" Value="Public Interface IArgumentProvider" />
@@ -11,6 +11,7 @@
     <AssemblyVersion>4.1.0.0</AssemblyVersion>
     <AssemblyVersion>4.2.0.0</AssemblyVersion>
     <AssemblyVersion>4.2.1.0</AssemblyVersion>
+    <AssemblyVersion>4.2.2.0</AssemblyVersion>
   </AssemblyInfo>
   <AssemblyInfo>
     <AssemblyName>System.Core</AssemblyName>
@@ -30,19 +31,19 @@
       
 ## Remarks
 
-Sie sollten diese API nicht verwenden.  Er ist nur aufgrund der assemblyumgestaltung öffentlich, und sie nur für interne leistungsoptimierungen vorhanden ist. Sie können zwei Optimierungen, die die Größe der Strukturen zu reduzieren:
+Sie sollten diese API nicht verwenden.  Er ist nur aufgrund der assemblyumgestaltung öffentlich und nur für interne Leistungsoptimierungen vorhanden. Sie ermöglicht zwei Optimierungen, die die Größe der Strukturen verringern:
   
-1. Dadurch werden die Knoten enthalten eine <xref:System.Collections.Generic.IList%601> statt einer <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>.  Dies spart die Kosten für die schreibgeschützte Auflistung für jeden Knoten zuordnen.
+1. Sie ermöglicht es, dass die Knoten anstelle eines <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>auf einem <xref:System.Collections.Generic.IList%601> abgelegt werden.  Dies spart die Kosten für das Zuordnen der schreibgeschützten Auflistung für jeden Knoten.
   
-2. Spezialisierte Unterklassen, halten für auf eine bestimmte Anzahl von Argumenten erstellt werden können (z. B. `Block2`, `Block2`, `Block4`).  Aus diesem Grund diese Knoten zu vermeiden, dass sowohl eine <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> und ein Array zum Speichern ihre Elemente, wodurch 32 Bytes pro Knoten gespart.  Diese Technik wird von verschiedenen Knoten, einschließlich verwendet <xref:System.Linq.Expressions.BlockExpression>, <xref:System.Linq.Expressions.InvocationExpression>, und <xref:System.Linq.Expressions.MethodCallExpression>.
+2. Sie ermöglicht die Erstellung spezieller Unterklassen, die eine bestimmte Anzahl von Argumenten (z. b. `Block2`, `Block2``Block4`) enthalten.  Daher vermeiden diese Knoten das Zuordnen eines <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> und eines Arrays zum Speichern Ihrer Elemente und somit die Speicherung von 32 Byte pro Knoten.  Diese Technik wird von verschiedenen Knoten verwendet, einschließlich <xref:System.Linq.Expressions.BlockExpression>, <xref:System.Linq.Expressions.InvocationExpression>und <xref:System.Linq.Expressions.MethodCallExpression>.
             
-Die Knoten der Ausdrucksbaumstruktur weiterhin die ursprünglichen LINQ-Eigenschaften des verfügbar zu machen <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> Objekte. Hierfür wird die Wiederverwendung von einem Feld zum Speichern von sowohl das Array oder ein Element aus, die normalerweise im Array gespeichert werden sollen.
+Die Ausdrucks Baumstruktur Knoten machen weiterhin die ursprünglichen LINQ-Eigenschaften von <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> Objekten verfügbar. Dazu wird ein Feld zum Speichern des Arrays oder eines Elements, das normalerweise im Array gespeichert wäre, wieder verwendet.
             
-Für den Fall des Arrays, die Auflistung den Typ zu <xref:System.Collections.Generic.IList%601> anstelle von <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>. Wenn der Knoten erstmalig erstellt wird, ist es ein Array.  Der Compiler oder Hilfsprogramme in dieser Bibliothek auf die Elemente über diese Schnittstelle zugreifen. Zugreifen auf Arrayelemente wird das Array, das eine <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>.
+Für den arrayfall wird die Auflistung in <xref:System.Collections.Generic.IList%601> statt <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>typisiert. Wenn der Knoten erstmalig erstellt wird, ist er ein Array.  Der Compiler oder die Hilfsprogramme in dieser Bibliothek greifen über diese Schnittstelle auf die Elemente zu. Beim Zugreifen auf Array Elemente wird das Array in eine <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>herauf gestuft.
             
-Für den Fall Objekt befindet sich das erste Argument in einem Feld <xref:System.Object>. Wenn der Knoten erstmalig erstellt wird, wird dieses Feld enthält den <xref:System.Linq.Expressions.Expression> des ersten Arguments.  Beim Zugriff auf die Argumente, die Compiler und die Dienstprogramme in dieser Bibliothek, sie erneut verwenden Sie diese Schnittstelle und der Accessor für das erste Argument der internen mithilfe `Expression.ReturnObject<T>(System.Object)` Hilfsmethode, um das Objekt zurück, der verarbeitet die <xref:System.Linq.Expressions.Expression> oder <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> Fall. Wenn der Benutzer greift auf die <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>, das Objekt-Feld wird aktualisiert, um direkt auf enthalten die <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>.
+Für den Objekt Fall wird das erste Argument in einem Feld gespeichert, das in <xref:System.Object>eingegeben wurde. Wenn der Knoten erstmalig erstellt wird, enthält dieses Feld den <xref:System.Linq.Expressions.Expression> des ersten Arguments.  Wenn der Compiler und die Hilfsprogramme in dieser Bibliothek auf die Argumente zugreifen, wird diese Schnittstelle wieder verwendet, und der-Accessor für das erste Argument verwendet die interne `Expression.ReturnObject<T>(System.Object)` Helper-Methode, um das Objekt zurückzugeben, das die <xref:System.Linq.Expressions.Expression> oder <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> Groß-/Kleinschreibung behandelt. Wenn der Benutzer auf die <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>zugreift, wird das Objektfeld so aktualisiert, dass es direkt auf dem <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>enthalten ist.
             
-Es ist wichtig, <xref:System.Linq.Expressions.Expression> Eigenschaften zurückgeben konsistent die gleichen <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>. Andernfalls wird der Rewriter-Struktur-Walker Ausdrücke ein, die unterbrochen. Es ist eine bedeutende Änderung von LINQ v1, dass andere Daten zurückgeben <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> aus der gleichen <xref:System.Linq.Expressions.Expression> Knoten. Derzeit können Benutzer verlassen sich auf die Objektidentität mitteilen, ob der Knoten geändert wurde.  Speichern der <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> in einem überladenen Feld beide verringert die speicherauslastung und erhält die Kompatibilität für die öffentliche API.
+Es ist wichtig, dass <xref:System.Linq.Expressions.Expression> Eigenschaften konstant denselben <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>zurückgeben. Andernfalls wird der von den Ausdrucks Besuchern verwendete ReWriter-Struktur Durchlauf abgebrochen. Es ist eine Breaking Change von LINQ v1, um andere <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> vom gleichen <xref:System.Linq.Expressions.Expression> Knoten zurückzugeben. Derzeit können sich Benutzer auf die Objekt Identität verlassen, um zu erkennen, ob sich der Knoten geändert hat.  Das Speichern der <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> in einem überladenen Feld reduziert die Speicherauslastung und behält die Kompatibilität für die öffentliche API bei.
 
       ]]></format>
     </remarks>
@@ -62,6 +63,7 @@ Es ist wichtig, <xref:System.Linq.Expressions.Expression> Eigenschaften zurückg
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
+        <AssemblyVersion>4.2.2.0</AssemblyVersion>
       </AssemblyInfo>
       <AssemblyInfo>
         <AssemblyName>System.Core</AssemblyName>
@@ -77,9 +79,9 @@ Es ist wichtig, <xref:System.Linq.Expressions.Expression> Eigenschaften zurückg
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gibt die Anzahl der Argumente an den Ausdrucksbaumstrukturknoten zurück. Diese API ist ausschließlich für die interne Verwendung vorgesehen.</summary>
-        <value>Die Anzahl der Argumente für den Ausdrucksbaumstrukturknoten als <see cref="T:System.Int32" />.</value>
-        <remarks>Sie sollten diese API nicht verwenden. Er ist nur aufgrund der assemblyumgestaltung öffentlich, und sie wird intern zur leistungsoptimierung verwendet.</remarks>
+        <summary>Gibt die Anzahl der Argumente für den Ausdrucksstrukturknoten zurück. Diese API ist ausschließlich für die interne Verwendung vorgesehen.</summary>
+        <value>Die Anzahl der Argumente für den Ausdrucksstrukturknoten als <see cref="T:System.Int32" />.</value>
+        <remarks>Sie sollten diese API nicht verwenden. Er ist nur aufgrund der assemblyumgestaltung öffentlich und wird intern zur Leistungsoptimierung verwendet.</remarks>
       </Docs>
     </Member>
     <Member MemberName="GetArgument">
@@ -96,6 +98,7 @@ Es ist wichtig, <xref:System.Linq.Expressions.Expression> Eigenschaften zurückg
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
+        <AssemblyVersion>4.2.2.0</AssemblyVersion>
       </AssemblyInfo>
       <AssemblyInfo>
         <AssemblyName>System.Core</AssemblyName>
