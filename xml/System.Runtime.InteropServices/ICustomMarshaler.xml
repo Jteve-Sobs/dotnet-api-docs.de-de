@@ -1,5 +1,5 @@
 <Type Name="ICustomMarshaler" FullName="System.Runtime.InteropServices.ICustomMarshaler">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="13c83388836e7692ce136d212905f87ecc88668b" /><Meta Name="ms.sourcegitcommit" Value="055a4a82a0b08bfbdc21bd1347fb71f7fe2c099e" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/15/2019" /><Meta Name="ms.locfileid" Value="69064112" /></Metadata><TypeSignature Language="C#" Value="public interface ICustomMarshaler" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="21b16a2b7befe34d2accde4463b6c730517cc167" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75086640" /></Metadata><TypeSignature Language="C#" Value="public interface ICustomMarshaler" />
   <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract ICustomMarshaler" />
   <TypeSignature Language="DocId" Value="T:System.Runtime.InteropServices.ICustomMarshaler" />
   <TypeSignature Language="VB.NET" Value="Public Interface ICustomMarshaler" />
@@ -21,6 +21,7 @@
     <AssemblyName>System.Runtime.InteropServices</AssemblyName>
     <AssemblyVersion>4.2.0.0</AssemblyVersion>
     <AssemblyVersion>4.2.1.0</AssemblyVersion>
+    <AssemblyVersion>4.2.2.0</AssemblyVersion>
   </AssemblyInfo>
   <Interfaces />
   <Attributes>
@@ -42,7 +43,7 @@
   
  Wenn Sie über eine Schnittstelle verfügen, die unterschiedliche Marshallingverhalten einführt oder die für die Component Object Model (com) verfügbar gemacht wird, können Sie einen benutzerdefinierten Mars Haller entwerfen, anstatt den Interop-Mars Haller zu verwenden. Mithilfe eines benutzerdefinierten Mars Haller können Sie den Unterschied zwischen neuen .NET Framework Komponenten und vorhandenen COM-Komponenten minimieren.  
   
- Angenommen, Sie entwickeln eine verwaltete Schnittstelle mit dem Namen `INew`. Wenn diese Schnittstelle für com über einen Standard COM Callable Wrapper (CCW) verfügbar gemacht wird, verfügt sie über dieselben Methoden wie die verwaltete Schnittstelle und verwendet die marshallingregeln, die in den Interop-Mars Haller integriert sind. Angenommen, eine bekannte com-Schnittstelle mit dem `IOld` Namen bietet bereits die gleiche Funktionalität wie `INew` die-Schnittstelle. Durch Entwerfen eines benutzerdefinierten Mars Haller können Sie eine nicht verwaltete Implementierung von `IOld` bereitstellen, die einfach die Aufrufe an die verwaltete Implementierung `INew` der-Schnittstelle delegiert. Der benutzerdefinierte Mars Haller fungiert daher als Brücke zwischen den verwalteten und nicht verwalteten Schnittstellen.  
+ Nehmen Sie beispielsweise an, Sie entwickeln eine verwaltete Schnittstelle mit dem Namen `INew`. Wenn diese Schnittstelle für com über einen Standard COM Callable Wrapper (CCW) verfügbar gemacht wird, verfügt sie über dieselben Methoden wie die verwaltete Schnittstelle und verwendet die marshallingregeln, die in den Interop-Mars Haller integriert sind. Nehmen wir nun an, dass eine bekannte com-Schnittstelle mit dem Namen `IOld` bereits die gleiche Funktionalität wie die `INew` Schnittstelle bereitstellt. Durch das Entwerfen eines benutzerdefinierten Mars Haller können Sie eine nicht verwaltete Implementierung von `IOld` bereitstellen, die einfach die Aufrufe an die verwaltete Implementierung der `INew` Schnittstelle delegiert. Der benutzerdefinierte Mars Haller fungiert daher als Brücke zwischen den verwalteten und nicht verwalteten Schnittstellen.  
   
 > [!NOTE]
 >  Benutzerdefinierte Mars Haller werden nicht aufgerufen, wenn von verwaltetem Code an nicht verwalteten Code auf einer reinen Dispatch-Schnittstelle aufgerufen wird.  
@@ -67,7 +68,7 @@ library OldLib {
 }  
 ```  
   
- Der mittlerer l-Compiler erzeugt mehrere Ausgabedateien. Wenn die Schnittstelle in Alter. idl definiert ist, definiert die Ausgabedatei Old_i. c `const` eine Variable mit dem Schnittstellen Bezeichner (Interface Identifier, IID) der Schnittstelle, wie im folgenden Beispiel veranschaulicht.  
+ Der mittlerer l-Compiler erzeugt mehrere Ausgabedateien. Wenn die Schnittstelle in Alter. idl definiert ist, definiert die Ausgabedatei Old_i. c eine `const` Variable mit dem Schnittstellen Bezeichner (Interface Identifier, IID) der Schnittstelle, wie im folgenden Beispiel veranschaulicht.  
   
 ```  
 const IID IID_IOld = {0x9B2BAADD,0x0705,0x11D3,{0xA0,0xCD,0x00,0xC0,0x4F,0xA3,0x58,0x26}};  
@@ -76,7 +77,7 @@ const IID IID_IOld = {0x9B2BAADD,0x0705,0x11D3,{0xA0,0xCD,0x00,0xC0,0x4F,0xA3,0x
  Die alte h-Datei wird auch von "Mittel l" erstellt. Sie enthält eine C++ Definition der-Schnittstelle, die in den C++ Quellcode aufgenommen werden kann.  
   
 ## <a name="implementing-the-icustommarshaler-interface"></a>Implementieren der ICustomMarshaler-Schnittstelle  
- Der benutzerdefinierte Mars Haller muss die <xref:System.Runtime.InteropServices.ICustomMarshaler> -Schnittstelle implementieren, um die entsprechenden Wrapper zur Laufzeit bereitzustellen.  
+ Der benutzerdefinierte Mars Haller muss die <xref:System.Runtime.InteropServices.ICustomMarshaler>-Schnittstelle implementieren, um die entsprechenden Wrapper zur Laufzeit bereitzustellen.  
   
  Im folgenden C# Code wird die Basisschnittstelle angezeigt, die von allen benutzerdefinierten Mars Haller implementiert werden muss.  
   
@@ -84,14 +85,14 @@ const IID IID_IOld = {0x9B2BAADD,0x0705,0x11D3,{0xA0,0xCD,0x00,0xC0,0x4F,0xA3,0x
  [!code-csharp[System.Runtime.InteropServices.ICustomMarshaler#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.runtime.interopservices.icustommarshaler/cs/source.cs#2)]
  [!code-vb[System.Runtime.InteropServices.ICustomMarshaler#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.runtime.interopservices.icustommarshaler/vb/source.vb#2)]  
   
- Die <xref:System.Runtime.InteropServices.ICustomMarshaler> -Schnittstelle enthält Methoden, die Konvertierungs Unterstützung, cleanupunterstützung und Informationen zu den zu marshallten Daten bereitstellen.  
+ Die <xref:System.Runtime.InteropServices.ICustomMarshaler>-Schnittstelle enthält Methoden, die Konvertierungs Unterstützung, cleanupunterstützung und Informationen zu den zu marshallten Daten bereitstellen.  
   
 |Typ des Vorgangs|ICustomMarshaler-Methode|Beschreibung|  
 |-----------------------|-----------------------------|-----------------|  
 |Konvertierung (von nativem in verwalteten Code)|<xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalNativeToManaged%2A>|Marshalls einen Zeiger auf systemeigene Daten in ein verwaltetes-Objekt. Diese Methode gibt eine benutzerdefinierte Runtime Callable Wrapper (RCW) zurück, die die nicht verwaltete Schnittstelle Mars Hallen kann, die als Argument übermittelt wird. Der Mars Haller sollte eine Instanz des benutzerdefinierten RCW für diesen Typ zurückgeben.|  
 |Konvertierung (von verwaltetem zu nativem Code)|<xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalManagedToNative%2A>|Marshalls ein verwaltetes Objekt in einen Zeiger auf systemeigene Daten. Diese Methode gibt eine benutzerdefinierte COM Callable Wrapper (CCW) zurück, die die als Argument übergebenen verwaltete Schnittstelle Mars Hallen kann. Der Mars Haller sollte eine Instanz des benutzerdefinierten CCW für diesen Typ zurückgeben.|  
-|Cleanup (von nativem Code)|<xref:System.Runtime.InteropServices.ICustomMarshaler.CleanUpNativeData%2A>|Ermöglicht dem Mars Haller das Bereinigen der systemeigenen Daten (der CCW), die von der <xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalManagedToNative%2A> -Methode zurückgegeben werden.|  
-|Cleanup (verwalteter Code)|<xref:System.Runtime.InteropServices.ICustomMarshaler.CleanUpManagedData%2A>|Ermöglicht dem Mars Haller das Bereinigen der verwalteten Daten (RCW), die von der <xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalNativeToManaged%2A> -Methode zurückgegeben werden.|  
+|Cleanup (von nativem Code)|<xref:System.Runtime.InteropServices.ICustomMarshaler.CleanUpNativeData%2A>|Ermöglicht dem Mars Haller das Bereinigen der systemeigenen Daten (das CCW), das von der <xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalManagedToNative%2A>-Methode zurückgegeben wird.|  
+|Cleanup (verwalteter Code)|<xref:System.Runtime.InteropServices.ICustomMarshaler.CleanUpManagedData%2A>|Ermöglicht dem Mars Haller das Bereinigen der verwalteten Daten (RCW), die von der <xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalNativeToManaged%2A>-Methode zurückgegeben werden.|  
 |Informationen (Informationen zu nativem Code)|<xref:System.Runtime.InteropServices.ICustomMarshaler.GetNativeDataSize%2A>|Gibt die Größe der nicht verwalteten Daten zurück, die gemarshallt werden sollen.|  
   
 ### <a name="conversion"></a>Umwandeln  
@@ -106,11 +107,11 @@ const IID IID_IOld = {0x9B2BAADD,0x0705,0x11D3,{0xA0,0xCD,0x00,0xC0,0x4F,0xA3,0x
 ### <a name="cleanup"></a>Bereinigung  
  <xref:System.Runtime.InteropServices.ICustomMarshaler.CleanUpNativeData%2A?displayProperty=nameWithType>  
   
- Ermöglicht dem Mars Haller das Bereinigen der systemeigenen Daten (der CCW), die von der <xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalManagedToNative%2A> -Methode zurückgegeben werden.  
+ Ermöglicht dem Mars Haller das Bereinigen der systemeigenen Daten (das CCW), das von der <xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalManagedToNative%2A>-Methode zurückgegeben wird.  
   
  <xref:System.Runtime.InteropServices.ICustomMarshaler.CleanUpManagedData%2A?displayProperty=nameWithType>  
   
- Ermöglicht dem Mars Haller das Bereinigen der verwalteten Daten (RCW), die von der <xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalNativeToManaged%2A> -Methode zurückgegeben werden.  
+ Ermöglicht dem Mars Haller das Bereinigen der verwalteten Daten (RCW), die von der <xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalNativeToManaged%2A>-Methode zurückgegeben werden.  
   
 ### <a name="size-information"></a>Größen Informationen  
  <xref:System.Runtime.InteropServices.ICustomMarshaler.GetNativeDataSize%2A?displayProperty=nameWithType>  
@@ -118,36 +119,36 @@ const IID IID_IOld = {0x9B2BAADD,0x0705,0x11D3,{0xA0,0xCD,0x00,0xC0,0x4F,0xA3,0x
  Gibt die Größe der nicht verwalteten Daten zurück, die gemarshallt werden sollen.  
   
 ## <a name="implementing-the-getinstance-method"></a>Implementieren der GetInstance-Methode  
- Neben der Implementierung der- <xref:System.Runtime.InteropServices.ICustomMarshaler> Schnittstelle müssen benutzerdefinierte Marshalling eine `static` Methode mit dem `GetInstance` Namen implementieren, <xref:System.String> die einen als Parameter akzeptiert und den Rückgabetyp <xref:System.Runtime.InteropServices.ICustomMarshaler>aufweist. Diese `static` Methode wird von der COM-Interop-Ebene des Common Language Runtime aufgerufen, um eine Instanz des benutzerdefinierten Mars Haller zu instanziieren. Die an `GetInstance` übergebene Zeichenfolge ist ein Cookie, das von der-Methode zum Anpassen des zurückgegebenen benutzerdefinierten Mars Haller verwendet werden kann.  
+ Zusätzlich zum Implementieren der <xref:System.Runtime.InteropServices.ICustomMarshaler>-Schnittstelle müssen benutzerdefinierte Marshalling eine `static` Methode namens `GetInstance` implementieren, die eine <xref:System.String> als Parameter akzeptiert und den Rückgabetyp <xref:System.Runtime.InteropServices.ICustomMarshaler>aufweist. Diese `static` Methode wird von der COM-Interop-Ebene des Common Language Runtime aufgerufen, um eine Instanz des benutzerdefinierten Mars Haller zu instanziieren. Die an `GetInstance` übergebene Zeichenfolge ist ein Cookie, das von der Methode zum Anpassen des zurückgegebenen benutzerdefinierten Mars Haller verwendet werden kann.  
   
 ```  
 static ICustomMarshaler *GetInstance(String *pstrCookie);  
 ```  
   
 ## <a name="applying-marshalasattribute"></a>Anwenden von MarshalAsAttribute  
- Wenn Sie einen benutzerdefinierten Mars Haller verwenden möchten, müssen Sie <xref:System.Runtime.InteropServices.MarshalAsAttribute> das-Attribut auf den Parameter oder das Feld anwenden, das gemarshallt wird.  
+ Wenn Sie einen benutzerdefinierten Mars Haller verwenden möchten, müssen Sie das <xref:System.Runtime.InteropServices.MarshalAsAttribute>-Attribut auf den Parameter oder das Feld anwenden, das gemarshallt wird.  
   
- Außerdem müssen Sie den <xref:System.Runtime.InteropServices.UnmanagedType.CustomMarshaler?displayProperty=nameWithType> -Enumerationswert an den <xref:System.Runtime.InteropServices.MarshalAsAttribute> -Konstruktor übergeben. Außerdem müssen Sie das <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalType> Feld mit einem der folgenden benannten Parameter angeben:  
+ Außerdem müssen Sie den <xref:System.Runtime.InteropServices.UnmanagedType.CustomMarshaler?displayProperty=nameWithType>-Enumerationswert an den <xref:System.Runtime.InteropServices.MarshalAsAttribute>-Konstruktor übergeben. Außerdem müssen Sie das <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalType>-Feld mit einem der folgenden benannten Parameter angeben:  
   
--   <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalType>(erforderlich): Der durch die Assembly qualifizierte Name des benutzerdefinierten Mars Haller. Der Name muss den Namespace und die Klasse des benutzerdefinierten Mars Haller enthalten. Wenn der benutzerdefinierte Mars Haller nicht in der Assembly definiert ist, in der er verwendet wird, müssen Sie den Namen der Assembly angeben, in der er definiert ist.  
+-   <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalType> (erforderlich): der durch die Assembly qualifizierte Name des benutzerdefinierten Mars Haller. Der Name muss den Namespace und die Klasse des benutzerdefinierten Mars Haller enthalten. Wenn der benutzerdefinierte Mars Haller nicht in der Assembly definiert ist, in der er verwendet wird, müssen Sie den Namen der Assembly angeben, in der er definiert ist.  
   
     > [!NOTE]
-    >  Sie können das <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalTypeRef> -Feld anstelle <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalType> des-Felds verwenden. <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalTypeRef>nimmt einen Typ an, der einfacher angegeben werden kann.  
+    >  Sie können das <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalTypeRef>-Feld anstelle des <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalType> Felds verwenden. <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalTypeRef> nimmt einen Typ an, der einfacher angegeben werden kann.  
   
--   <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalCookie>(optional): Ein Cookie, das an den benutzerdefinierten Mars Haller übergebenen wird. Sie können das Cookie verwenden, um dem Mars Haller zusätzliche Informationen bereitzustellen. Wenn z. b. derselbe Mars Haller verwendet wird, um eine Reihe von Wrappern bereitzustellen, identifiziert das Cookie einen bestimmten Wrapper. Das Cookie wird an die `GetInstance` -Methode des Mars Haller-Diensts übermittelt.  
+-   <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalCookie> (optional): ein Cookie, das an den benutzerdefinierten Mars Haller übermittelt wird. Sie können das Cookie verwenden, um dem Mars Haller zusätzliche Informationen bereitzustellen. Wenn z. b. derselbe Mars Haller verwendet wird, um eine Reihe von Wrappern bereitzustellen, identifiziert das Cookie einen bestimmten Wrapper. Das Cookie wird an die `GetInstance`-Methode des Mars Haller übergebenen.  
   
- Das <xref:System.Runtime.InteropServices.MarshalAsAttribute> -Attribut identifiziert den benutzerdefinierten Mars Haller, sodass er den passenden Wrapper aktivieren kann. Der Interop-Dienst des Common Language Runtime überprüft dann das Attribut und erstellt den benutzerdefinierten Mars Haller, wenn das Argument (Parameter oder Feld) zum ersten Mal gemarshallt werden muss.  
+ Das <xref:System.Runtime.InteropServices.MarshalAsAttribute>-Attribut identifiziert den benutzerdefinierten Mars Haller, sodass er den passenden Wrapper aktivieren kann. Der Interop-Dienst des Common Language Runtime überprüft dann das Attribut und erstellt den benutzerdefinierten Mars Haller, wenn das Argument (Parameter oder Feld) zum ersten Mal gemarshallt werden muss.  
   
- Die Runtime ruft dann die <xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalNativeToManaged%2A> - <xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalManagedToNative%2A> Methode und die-Methode für den benutzerdefinierten Mars Haller auf, um den korrekten Wrapper zur Behandlung des Aufrufs zu aktivieren.  
+ Die Common Language Runtime ruft dann die Methoden <xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalNativeToManaged%2A> und <xref:System.Runtime.InteropServices.ICustomMarshaler.MarshalManagedToNative%2A> für den benutzerdefinierten Mars Haller auf, um den korrekten Wrapper zur Handhabung des Aufrufs zu aktivieren.  
   
 ## <a name="using-a-custom-marshaler"></a>Verwenden eines benutzerdefinierten Mars Haller  
- Wenn der benutzerdefinierte Mars Haller vollständig ist, können Sie ihn als benutzerdefinierten Wrapper für einen bestimmten Typ verwenden. Das folgende Beispiel zeigt die Definition `IUserData` der verwalteten Schnittstelle:  
+ Wenn der benutzerdefinierte Mars Haller vollständig ist, können Sie ihn als benutzerdefinierten Wrapper für einen bestimmten Typ verwenden. Das folgende Beispiel zeigt die Definition der `IUserData` verwalteten Schnittstelle:  
   
  [!code-cpp[System.Runtime.InteropServices.ICustomMarshaler#3](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.runtime.interopservices.icustommarshaler/cpp/source.cpp#3)]
  [!code-csharp[System.Runtime.InteropServices.ICustomMarshaler#3](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.runtime.interopservices.icustommarshaler/cs/source.cs#3)]
  [!code-vb[System.Runtime.InteropServices.ICustomMarshaler#3](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.runtime.interopservices.icustommarshaler/vb/source.vb#3)]  
   
- Im folgenden Beispiel verwendet `IUserData` die-Schnittstelle den `NewOldMarshaler` benutzerdefinierten Mars Haller, um zu ermöglichen, dass nicht verwaltete Client Anwendungen eine `IOld` Schnitt `DoSomeStuff` Stelle an die-Methode übergeben. `DoSomeStuff` Die verwaltete Beschreibung der Methode übernimmt eine `INew` Schnittstelle, wie im vorherigen Beispiel gezeigt, wohingegen die nicht verwaltete Version von `DoSomeStuff` einen `IOld` Schnittstellen Zeiger annimmt, wie im folgenden Beispiel gezeigt.  
+ Im folgenden Beispiel verwendet die `IUserData`-Schnittstelle den `NewOldMarshaler` benutzerdefinierten Mars Haller, damit nicht verwaltete Client Anwendungen eine `IOld`-Schnittstelle an die `DoSomeStuff`-Methode übergeben können. Die verwaltete Beschreibung der `DoSomeStuff` Methode übernimmt eine `INew` Schnittstelle, wie im vorherigen Beispiel gezeigt, wohingegen die nicht verwaltete Version von `DoSomeStuff` einen `IOld` Schnittstellen Zeiger annimmt, wie im folgenden Beispiel gezeigt.  
   
 ```  
 [uuid(9B2BAADA-0705-11D3-A0CD-00C04FA35826)]  
@@ -158,7 +159,7 @@ library UserLib {
 }  
 ```  
   
- Die Typbibliothek, die durch Exportieren der verwalteten Definition von `IUserData` generiert wird, ergibt die nicht verwaltete Definition, die in diesem Beispiel anstelle der Standard Definition angezeigt wird. Das <xref:System.Runtime.InteropServices.MarshalAsAttribute> -Attribut, das `INew` auf das-Argument in `DoSomeStuff` der verwalteten Definition der-Methode angewendet wird, gibt an, dass das-Argument einen benutzerdefinierten Mars Haller verwendet, wie im folgenden Beispiel gezeigt.  
+ Die Typbibliothek, die generiert wird, indem die verwaltete Definition von `IUserData` exportiert wird, ergibt die nicht verwaltete Definition, die in diesem Beispiel anstelle der Standard Definition angezeigt wird. Das <xref:System.Runtime.InteropServices.MarshalAsAttribute>-Attribut, das auf das `INew`-Argument in der verwalteten Definition der `DoSomeStuff`-Methode angewendet wird, gibt an, dass das Argument einen benutzerdefinierten Mars Haller verwendet, wie im folgenden Beispiel gezeigt.  
   
  [!code-cpp[System.Runtime.InteropServices.ICustomMarshaler#4](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.runtime.interopservices.icustommarshaler/cpp/source.cpp#4)]
  [!code-csharp[System.Runtime.InteropServices.ICustomMarshaler#4](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.runtime.interopservices.icustommarshaler/cs/source.cs#4)]
@@ -168,9 +169,9 @@ library UserLib {
  [!code-csharp[System.Runtime.InteropServices.ICustomMarshaler#5](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.runtime.interopservices.icustommarshaler/cs/source.cs#5)]
  [!code-vb[System.Runtime.InteropServices.ICustomMarshaler#5](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.runtime.interopservices.icustommarshaler/vb/source.vb#5)]  
   
- In den vorherigen Beispielen ist der erste Parameter, der für <xref:System.Runtime.InteropServices.MarshalAsAttribute> das-Attribut <xref:System.Runtime.InteropServices.UnmanagedType.CustomMarshaler?displayProperty=nameWithType> bereitgestellt wird `UnmanagedType.CustomMarshaler`, der-Enumerationswert.  
+ In den vorherigen Beispielen ist der erste Parameter, der für das <xref:System.Runtime.InteropServices.MarshalAsAttribute>-Attribut bereitgestellt wird, der <xref:System.Runtime.InteropServices.UnmanagedType.CustomMarshaler?displayProperty=nameWithType> Enumerationswert `UnmanagedType.CustomMarshaler`.  
   
- Der zweite Parameter ist das <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalType> Feld, das den durch die Assembly qualifizierten Namen des benutzerdefinierten Mars Haller bereitstellt. Dieser Name besteht aus dem-Namespace und der-Klasse des benutzerdefinierten Mars`MarshalType="MyCompany.NewOldMarshaler"`Haller ().  
+ Der zweite Parameter ist das <xref:System.Runtime.InteropServices.MarshalAsAttribute.MarshalType> Feld, das den durch die Assembly qualifizierten Namen des benutzerdefinierten Mars Haller bereitstellt. Dieser Name besteht aus dem Namespace und der Klasse des benutzerdefinierten Mars Haller (`MarshalType="MyCompany.NewOldMarshaler"`).  
   
  ]]></format>
     </remarks>
@@ -200,6 +201,7 @@ library UserLib {
         <AssemblyName>System.Runtime.InteropServices</AssemblyName>
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
+        <AssemblyVersion>4.2.2.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
@@ -237,6 +239,7 @@ library UserLib {
         <AssemblyName>System.Runtime.InteropServices</AssemblyName>
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
+        <AssemblyVersion>4.2.2.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
@@ -274,6 +277,7 @@ library UserLib {
         <AssemblyName>System.Runtime.InteropServices</AssemblyName>
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
+        <AssemblyVersion>4.2.2.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -309,6 +313,7 @@ library UserLib {
         <AssemblyName>System.Runtime.InteropServices</AssemblyName>
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
+        <AssemblyVersion>4.2.2.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.IntPtr</ReturnType>
@@ -347,6 +352,7 @@ library UserLib {
         <AssemblyName>System.Runtime.InteropServices</AssemblyName>
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
+        <AssemblyVersion>4.2.2.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Object</ReturnType>
