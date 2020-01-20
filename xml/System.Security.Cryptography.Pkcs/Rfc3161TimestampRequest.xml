@@ -1,5 +1,5 @@
 <Type Name="Rfc3161TimestampRequest" FullName="System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="cafa3e2383c36efeb0b4448398786afcb4bc88e1" /><Meta Name="ms.sourcegitcommit" Value="a22d0855bbf24d893f43605f8b7e3a44bd9551a5" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70352383" /></Metadata><TypeSignature Language="C#" Value="public sealed class Rfc3161TimestampRequest" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="5e2a6d4be62221e54081ebf4e5873e3ab9893055" /><Meta Name="ms.sourcegitcommit" Value="19810b7f44c3fa6cc5f0af0391e435c59897b089" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="01/07/2020" /><Meta Name="ms.locfileid" Value="75707998" /></Metadata><TypeSignature Language="C#" Value="public sealed class Rfc3161TimestampRequest" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit Rfc3161TimestampRequest extends System.Object" />
   <TypeSignature Language="DocId" Value="T:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest" />
   <TypeSignature Language="VB.NET" Value="Public NotInheritable Class Rfc3161TimestampRequest" />
@@ -11,14 +11,22 @@
     <AssemblyVersion>4.0.3.1</AssemblyVersion>
     <AssemblyVersion>4.0.4.0</AssemblyVersion>
     <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.1.0</AssemblyVersion>
   </AssemblyInfo>
   <Base>
     <BaseTypeName>System.Object</BaseTypeName>
   </Base>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Stellt eine Zeitstempelanforderung aus IETF RFC 3161 dar.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+Diese Klasse ermöglicht die Erstellung und Überprüfung von `TimeStampReq` Werten gemäß der Definition durch IETF RFC 3161: Internet X. 509 Public Key Infrastructure Zeitstempel Protokoll (TSP).
+  
+ ]]></format>
+    </remarks>
   </Docs>
   <Members>
     <Member MemberName="CreateFromData">
@@ -34,6 +42,7 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest</ReturnType>
@@ -47,15 +56,32 @@
         <Parameter Name="extensions" Type="System.Security.Cryptography.X509Certificates.X509ExtensionCollection" />
       </Parameters>
       <Docs>
-        <param name="data">To be added.</param>
-        <param name="hashAlgorithm">To be added.</param>
-        <param name="requestedPolicyId">To be added.</param>
-        <param name="nonce">To be added.</param>
-        <param name="requestSignerCertificates">To be added.</param>
-        <param name="extensions">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="data">Die mit dem Zeitstempel zu versehenden Daten, für die von dieser Methode ein Hashwert berechnet wird.</param>
+        <param name="hashAlgorithm">Der mit dieser Zeitstempelanforderung zu verwendende Hashalgorithmus.</param>
+        <param name="requestedPolicyId">Der Objektbezeichner (OID) für eine Zeitstempelrichtlinie, die den Timestamp Authority (TSA) verwenden soll, oder <see langword="null" />, um keine Einstellung auszudrücken.</param>
+        <param name="nonce">Eine optionale Nonce (einmal verwendete Zahl) zur eindeutigen Identifizierung dieser Anforderung, um sie mit der Antwort zu koppeln. Der Wert wird als vorzeichenlose Big-Endian-Ganzzahl interpretiert und kann auf das Codierungsformat normiert werden.</param>
+        <param name="requestSignerCertificates"><see langword="true" />, um anzugeben, dass die Timestamp Authority (TSA) das Signaturzertifikat in das ausgestellte Zeitstempeltoken aufnehmen muss, ansonsten <see langword="false" />.</param>
+        <param name="extensions">Eine optionale Auflistung von Erweiterungen, die in die Anforderung aufgenommen werden sollen.</param>
+        <summary>Erstellt eine Zeitstempelanforderung, indem für die angegebenen Daten mit einem angegebenen Algorithmus ein Hashwert berechnet wird.</summary>
+        <returns>Eine <see cref="T:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest" />, die die ausgewählten Werte darstellt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+Kryptografietimestamps werden immer auf eine Kombination aus dem Hashwert der Daten und dem Algorithmusbezeichner für den Hash Algorithmus angewendet, der zum Hash der Daten verwendet wird.
+Diese Methode stellt eine bequeme Alternative zum <xref:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.CreateFromHash(System.ReadOnlyMemory{System.Byte},System.Security.Cryptography.HashAlgorithmName,System.Security.Cryptography.Oid,System.Nullable{System.ReadOnlyMemory{System.Byte}},System.Boolean,System.Security.Cryptography.X509Certificates.X509ExtensionCollection)> dar, wenn nicht bereits ein Hashwert für die Daten vorhanden ist.
+
+Der Nonce-Wert in dieser Methode wird als unsigned Big-Endian-Ganzzahl behandelt.
+Diese Methode normalisiert die Eingabe zu einer ber-Ganzzahl-Codierung, bevor der Nonce-Wert zugewiesen wird.
+Der normalisierte Wert wird von der <xref:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.GetNonce>-Methode zurückgegeben.
+
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="hashAlgorithm" />.<see cref="P:System.Security.Cryptography.HashAlgorithmName.Name" /> ist <see langword="null" /> oder <see cref="F:System.String.Empty" />.</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="hashAlgorithm" /> ist kein bekannter Hashalgorithmus.</exception>
+        <altmember cref="M:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.CreateFromHash(System.ReadOnlyMemory{System.Byte},System.Security.Cryptography.HashAlgorithmName,System.Security.Cryptography.Oid,System.Nullable{System.ReadOnlyMemory{System.Byte}},System.Boolean,System.Security.Cryptography.X509Certificates.X509ExtensionCollection)" />
+        <altmember cref="M:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.CreateFromSignerInfo(System.Security.Cryptography.Pkcs.SignerInfo,System.Security.Cryptography.HashAlgorithmName,System.Security.Cryptography.Oid,System.Nullable{System.ReadOnlyMemory{System.Byte}},System.Boolean,System.Security.Cryptography.X509Certificates.X509ExtensionCollection)" />
       </Docs>
     </Member>
     <Member MemberName="CreateFromHash">
@@ -71,6 +97,7 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest</ReturnType>
@@ -84,15 +111,31 @@
         <Parameter Name="extensions" Type="System.Security.Cryptography.X509Certificates.X509ExtensionCollection" />
       </Parameters>
       <Docs>
-        <param name="hash">To be added.</param>
-        <param name="hashAlgorithm">To be added.</param>
-        <param name="requestedPolicyId">To be added.</param>
-        <param name="nonce">To be added.</param>
-        <param name="requestSignerCertificates">To be added.</param>
-        <param name="extensions">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="hash">Der mit einem Zeitstempel zu versehene vorab berechnete Hashwert.</param>
+        <param name="hashAlgorithm">Der zum Erzeugen von <paramref name="hash" /> verwendete Hashalgorithmus.</param>
+        <param name="requestedPolicyId">Der Objektbezeichner (OID) für die Zeitstempelrichtlinie, die die Timestamp Authority (TSA) verwenden soll, oder <see langword="null" />, um keine Einstellung auszudrücken.</param>
+        <param name="nonce">Ein optionaler Wert, der verwendet wird, um eine Anforderung einer Antwort eindeutig zuzuordnen, oder <see langword="null" />, damit keine Nonce in die Anforderung aufgenommen wird.</param>
+        <param name="requestSignerCertificates"><see langword="true" />, um anzugeben, dass die Timestamp Authority (TSA) das Signaturzertifikat in das ausgestellte Zeitstempeltoken aufnehmen muss, ansonsten <see langword="false" />.</param>
+        <param name="extensions">Eine optionale Auflistung von Erweiterungen, die in die Anforderung aufgenommen werden sollen.</param>
+        <summary>Erstellen Sie eine Zeitstempelanforderung mit einem vorab berechneten Hashwert und dem Namen des Hashalgorithmus.</summary>
+        <returns>Eine <see cref="T:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest" />, die die ausgewählten Werte darstellt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+Diese Methode verwendet den `hashAlgorithm`-Parameter, um den Objekt Bezeichner (OID) zu bestimmen, der in die Zeitstempel-Anforderung aufgenommen werden soll.
+Wenn Sie eine Anforderung für einen Zeitstempel basierend auf einem Hash Algorithmus, der von dieser Methode nicht unterstützt wird, aufbauen, verwenden Sie die <xref:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.CreateFromHash(System.ReadOnlyMemory{System.Byte},System.Security.Cryptography.Oid,System.Security.Cryptography.Oid,System.Nullable{System.ReadOnlyMemory{System.Byte}},System.Boolean,System.Security.Cryptography.X509Certificates.X509ExtensionCollection)> Überladung.
+
+Der Nonce-Wert in dieser Methode wird als unsigned Big-Endian-Ganzzahl behandelt.
+Diese Methode normalisiert die Eingabe zu einer ber-Ganzzahl-Codierung, bevor der Nonce-Wert zugewiesen wird.
+Der normalisierte Wert wird von der <xref:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.GetNonce>-Methode zurückgegeben.
+
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="hashAlgorithm" /> ist kein bekannter Hashalgorithmus.</exception>
+        <altmember cref="M:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.CreateFromData(System.ReadOnlySpan{System.Byte},System.Security.Cryptography.HashAlgorithmName,System.Security.Cryptography.Oid,System.Nullable{System.ReadOnlyMemory{System.Byte}},System.Boolean,System.Security.Cryptography.X509Certificates.X509ExtensionCollection)" />
+        <altmember cref="M:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.CreateFromHash(System.ReadOnlyMemory{System.Byte},System.Security.Cryptography.Oid,System.Security.Cryptography.Oid,System.Nullable{System.ReadOnlyMemory{System.Byte}},System.Boolean,System.Security.Cryptography.X509Certificates.X509ExtensionCollection)" />
       </Docs>
     </Member>
     <Member MemberName="CreateFromHash">
@@ -108,6 +151,7 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest</ReturnType>
@@ -126,10 +170,22 @@
         <param name="requestedPolicyId">Der Objektbezeichner (OID) für eine Zeitstempelrichtlinie, die den Timestamp Authority (TSA) verwenden soll, oder <see langword="null" />, um keine Einstellung auszudrücken.</param>
         <param name="nonce">Eine optionale Nonce (einmal verwendete Zahl) zur eindeutigen Identifizierung dieser Anforderung, um sie mit der Antwort zu koppeln. Der Wert wird als vorzeichenlose Big-Endian-Ganzzahl interpretiert und kann auf das Codierungsformat normiert werden.</param>
         <param name="requestSignerCertificates"><see langword="true" />, um anzugeben, dass die Timestamp Authority (TSA) das Signaturzertifikat in das ausgestellte Zeitstempeltoken aufnehmen muss, ansonsten <see langword="false" />.</param>
-        <param name="extensions">Die mit der Anforderung anzugebende RFC3161-Erweiterungen.</param>
-        <summary>Erstellen Sie eine Zeitstempelanforderung mit einem vorab berechneten Hashwert.</summary>
+        <param name="extensions">Eine optionale Auflistung von Erweiterungen, die in die Anforderung aufgenommen werden sollen.</param>
+        <summary>Erstellen Sie eine Zeitstempelanforderung mit einem vorab berechneten Hashwert und dem Objektbezeichner für den Hashalgorithmus.</summary>
         <returns>Eine <see cref="T:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest" />, die die ausgewählten Werte darstellt.</returns>
-        <remarks>To be added.</remarks>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+Der Nonce-Wert in dieser Methode wird als unsigned Big-Endian-Ganzzahl behandelt.
+Diese Methode normalisiert die Eingabe zu einer ber-Ganzzahl-Codierung, bevor der Nonce-Wert zugewiesen wird.
+Der normalisierte Wert wird von der <xref:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.GetNonce>-Methode zurückgegeben.
+
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="hashAlgorithmId" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="hashAlgorithmId" />.<see cref="P:System.Security.Cryptography.Oid.Value" /> ist keine gültige OID.</exception>
       </Docs>
     </Member>
     <Member MemberName="CreateFromSignerInfo">
@@ -144,6 +200,7 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest</ReturnType>
@@ -157,15 +214,31 @@
         <Parameter Name="extensions" Type="System.Security.Cryptography.X509Certificates.X509ExtensionCollection" />
       </Parameters>
       <Docs>
-        <param name="signerInfo">To be added.</param>
-        <param name="hashAlgorithm">To be added.</param>
-        <param name="requestedPolicyId">To be added.</param>
-        <param name="nonce">To be added.</param>
-        <param name="requestSignerCertificates">To be added.</param>
-        <param name="extensions">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="signerInfo">Die Informationen des CMS-Signierers, für den eine Zeitstempelanforderung erstellt werden soll.</param>
+        <param name="hashAlgorithm">Der mit dieser Zeitstempelanforderung zu verwendende Hashalgorithmus.</param>
+        <param name="requestedPolicyId">Der Objektbezeichner (OID) für die Zeitstempelrichtlinie, die die Timestamp Authority (TSA) verwenden soll, oder <see langword="null" />, um keine Einstellung auszudrücken.</param>
+        <param name="nonce">Eine optionale Nonce (einmal verwendete Zahl) zur eindeutigen Identifizierung dieser Anforderung, um sie mit der Antwort zu koppeln. Der Wert wird als vorzeichenlose Big-Endian-Ganzzahl interpretiert und kann auf das Codierungsformat normiert werden.</param>
+        <param name="requestSignerCertificates"><see langword="true" />, um anzugeben, dass die Timestamp Authority (TSA) das Signaturzertifikat in das ausgestellte Zeitstempeltoken aufnehmen muss, ansonsten <see langword="false" />.</param>
+        <param name="extensions">Eine optionale Auflistung von Erweiterungen, die in die Anforderung aufgenommen werden sollen.</param>
+        <summary>Erstellt eine Zeitstempelanforderung, indem für die Signatur des angegebenen Signierers mit einem angegebenen Algorithmus ein Hashwert berechnet wird.</summary>
+        <returns>Eine <see cref="T:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest" />, die die ausgewählten Werte darstellt.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+Dieser Konstruktor erstellt einen Zeitstempel für den Signatur Wert eines <xref:System.Security.Cryptography.Pkcs.SignerInfo> Werts gemäß der Empfehlung von IETF RFC 3161 Anhang a (Signatur-Zeitstempel Attribut mithilfe von CMS).
+
+Der Nonce-Wert in dieser Methode wird als unsigned Big-Endian-Ganzzahl behandelt.
+Diese Methode normalisiert die Eingabe zu einer ber-Ganzzahl-Codierung, bevor der Nonce-Wert zugewiesen wird.
+Der normalisierte Wert wird von der <xref:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.GetNonce>-Methode zurückgegeben.
+
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="signerInfo" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="hashAlgorithm" />.<see cref="P:System.Security.Cryptography.HashAlgorithmName.Name" /> ist <see langword="null" /> oder <see cref="F:System.String.Empty" />.</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="hashAlgorithm" /> ist kein bekannter Hashalgorithmus.</exception>
+        <altmember cref="M:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.CreateFromData(System.ReadOnlySpan{System.Byte},System.Security.Cryptography.HashAlgorithmName,System.Security.Cryptography.Oid,System.Nullable{System.ReadOnlyMemory{System.Byte}},System.Boolean,System.Security.Cryptography.X509Certificates.X509ExtensionCollection)" />
       </Docs>
     </Member>
     <Member MemberName="Encode">
@@ -182,15 +255,18 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Byte[]</ReturnType>
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <summary>Codiert die Zeitstempelanforderung und gibt sie als Bytearray zurück.</summary>
+        <returns>Ein Bytearray, das die DER-codierte Zeitstempelanforderung enthält.</returns>
         <remarks>To be added.</remarks>
+        <altmember cref="M:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.TryDecode(System.ReadOnlyMemory{System.Byte},System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest@,System.Int32@)" />
+        <altmember cref="M:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.TryEncode(System.Span{System.Byte},System.Int32@)" />
       </Docs>
     </Member>
     <Member MemberName="GetExtensions">
@@ -207,15 +283,28 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Security.Cryptography.X509Certificates.X509ExtensionCollection</ReturnType>
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Ruft eine Auflistung mit einer Kopie der in dieser Anforderung vorhandenen Erweiterungen ab.</summary>
+        <returns>Eine Auflistung mit einer Kopie der in dieser Anforderung vorhandenen Erweiterungen.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+Die Auflistung, die von dieser Methode zurückgegeben wird, stellt eine Momentaufnahme der Daten dar.
+Keine Änderung der Auflistung oder einer Instanz innerhalb der Auflistung führt zu einer Änderung in dieser Instanz.
+
+Diese Methode gibt eine leere Auflistung zurück, wenn Sie über keine Erweiterungen verfügt.
+Um die Objekt Erstellung in diesem gängigen Szenario zu vermeiden, lesen Sie <xref:System.Security.Cryptography.Pkcs.Rfc3161TimestampRequest.HasExtensions>.
+
+ ]]></format>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="GetMessageHash">
@@ -232,14 +321,15 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.ReadOnlyMemory&lt;System.Byte&gt;</ReturnType>
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <summary>Ruft den Datenhash für diese Zeitstempelanforderung ab.</summary>
+        <returns>Der Datenhash für diese Zeitstempelanforderung als schreibgeschützter Arbeitsspeicherwert.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -257,14 +347,15 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Nullable&lt;System.ReadOnlyMemory&lt;System.Byte&gt;&gt;</ReturnType>
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <summary>Ruft die Nonce für diese Zeitstempelanforderung ab.</summary>
+        <returns>Die Nonce für diese Zeitstempelanforderung als schreibgeschützter Arbeitsspeicherwert, wenn eine vorhanden war. Andernfalls <see langword="null" />.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -282,13 +373,14 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Zeigt an, ob die Anforderung eine Erweiterung besitzt oder nicht.</summary>
+        <value><see langword="true" />, wenn die Anforderung über Erweiterungen verfügt. Andernfalls <see langword="false" />.</value>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -306,13 +398,14 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Security.Cryptography.Oid</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Ruft den Objektbezeichner (OID) für den der Anforderung zugeordneten Hashalgorithmus ab.</summary>
+        <value>Der Objekt Bezeichner (OID) für den Hash Algorithmus, der der Anforderung zugeordnet ist.</value>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -330,6 +423,7 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Security.Cryptography.Pkcs.Rfc3161TimestampToken</ReturnType>
@@ -339,11 +433,20 @@
         <Parameter Name="bytesConsumed" Type="System.Int32" RefType="out" />
       </Parameters>
       <Docs>
-        <param name="responseBytes">To be added.</param>
-        <param name="bytesConsumed">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="responseBytes">Die DER-codierte Zeitstempelantwort.</param>
+        <param name="bytesConsumed">Mit dieser Methode wird die Anzahl der Bytes zurückgegeben, die aus <paramref name="responseBytes" /> gelesen wurden. Dieser Parameter wird nicht initialisiert behandelt.</param>
+        <summary>Kombiniert eine codierte Zeitstempelantwort mit dieser Anforderung, um eine <see cref="T:System.Security.Cryptography.Pkcs.Rfc3161TimestampToken" /> zu erzeugen.</summary>
+        <returns>Das Zeitstempeltoken aus der Antwort, das dieser Anforderung entspricht.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+Diese Methode interpretiert den Anfang `responseBytes` als IETF RFC 3161-`TimeStampResp`.
+Wenn die Antwort nicht decodiert werden kann, lautet der Antwortstatus nicht `granted` oder `grantedWithMods`, das ausgegebene Zeitstempel Token kann nicht erfolgreich decodiert werden, oder das Zeitstempel-Token entspricht dieser Anforderung nicht gemäß den Akzeptanz Kriterien von IETF RFC 3161 (vor allem Abschnitte 2.4.1 und 2.4.2), dann wird ein <xref:System.Security.Cryptography.CryptographicException> ausgelöst.
+
+ ]]></format>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="RequestedPolicyId">
@@ -360,13 +463,14 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Security.Cryptography.Oid</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Ruft die Richtlinien-ID für die Anforderung ab oder <see langword="null" />, wenn keine Richtlinien-ID angefordert wurde.</summary>
+        <value>Die Richtlinien-ID für die Anforderung oder <see langword="null" />, wenn keine Richtlinien-ID angefordert wurde.</value>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -384,13 +488,14 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Ruft einen Wert ab, der anzeigt, ob die Anforderung angegeben hat, dass das Zeitstempel-Autoritätszertifikat in der Antwort vorhanden sein muss.</summary>
+        <value><see langword="true" />, wenn die Antwort das Zeitstempel Zertifizierungsstellen-Zertifikat enthalten muss. Andernfalls <see langword="false" />.</value>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -408,6 +513,7 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -418,11 +524,11 @@
         <Parameter Name="bytesConsumed" Type="System.Int32" RefType="out" />
       </Parameters>
       <Docs>
-        <param name="encodedBytes">To be added.</param>
-        <param name="request">To be added.</param>
-        <param name="bytesConsumed">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="encodedBytes">Der Puffer, der eine DER-codierte Zeitstempelanforderung enthält.</param>
+        <param name="request">Mit dieser Methode wird die erfolgreich decodierte Zeitstempelanforderung zurückgegeben, falls die Decodierung erfolgreich war, oder <see langword="null" />, wenn die Decodierung fehlgeschlagen ist. Dieser Parameter wird nicht initialisiert behandelt.</param>
+        <param name="bytesConsumed">Mit dieser Methode wird die Anzahl der Bytes zurückgegeben, die aus <paramref name="encodedBytes" /> gelesen wurden. Dieser Parameter wird nicht initialisiert behandelt.</param>
+        <summary>Versucht, den Inhalt von <paramref name="encodedBytes" /> als DER-codierten Zeitstempelanforderung zu interpretieren.</summary>
+        <returns><see langword="true" />, wenn <paramref name="encodedBytes" /> erfolgreich als Zeitstempelanforderung interpretiert wurde. Andernfalls <see langword="false" />.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -440,6 +546,7 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -449,10 +556,10 @@
         <Parameter Name="bytesWritten" Type="System.Int32" RefType="out" />
       </Parameters>
       <Docs>
-        <param name="destination">To be added.</param>
-        <param name="bytesWritten">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="destination">Der Puffer, der die codierte Anforderung empfangen soll.</param>
+        <param name="bytesWritten">Nach Ausführung dieser Methode die Gesamtzahl der in <paramref name="destination" /> geschriebenen Bytes. Dieser Parameter wird nicht initialisiert behandelt.</param>
+        <summary>Versucht, die Instanz als <c>TimeStampReq</c> aus IETF RFC 3161 zu codieren, wobei die Bytes in den bereitgestellten Puffer geschrieben werden.</summary>
+        <returns><see langword="true" />, wenn <paramref name="destination" /> zum Empfangen der codierten Anforderung lang genug ist. Andernfalls <see langword="false" />.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -470,13 +577,14 @@
         <AssemblyVersion>4.0.3.1</AssemblyVersion>
         <AssemblyVersion>4.0.4.0</AssemblyVersion>
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Ruft die Versionsnummer des Datenformats für diese Anforderung ab.</summary>
+        <value>Die Versionsnummer des Datenformats für diese Anforderung.</value>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
