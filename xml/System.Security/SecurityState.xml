@@ -1,5 +1,5 @@
 <Type Name="SecurityState" FullName="System.Security.SecurityState">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="6465db0d7857f55947962366d0c0de6705c84e4f" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75067217" /></Metadata><TypeSignature Language="C#" Value="public abstract class SecurityState" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="1cd58eaf38962c5f260695152fde03f9538181a7" /><Meta Name="ms.sourcegitcommit" Value="8b09499854b5b7b909802126edc1f1fca0054c10" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="02/01/2020" /><Meta Name="ms.locfileid" Value="76960131" /></Metadata><TypeSignature Language="C#" Value="public abstract class SecurityState" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit SecurityState extends System.Object" />
   <TypeSignature Language="DocId" Value="T:System.Security.SecurityState" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class SecurityState" />
@@ -37,13 +37,13 @@
   
  Wenn Sie z. b. in Ihrem Bibliotheks Code auf eine Webkamera zugreifen möchten, erstellen Sie ein `WebcamSecurityState` Objekt, und rufen Sie die <xref:System.Security.SecurityState.EnsureState%2A>-Methode auf, um zu bestimmen, ob der Host den Zugriff auf die Webkamera zulässt, wie im folgenden Beispiel gezeigt.  (Den Code für `WebcamSecurityState` finden Sie im Abschnitt "Beispiel".)  
   
-```  
-WebcamSecurityState securityState = new WebcamSecurityState("Safe access to Webcam", WebcamSecurityOptions.SafeAccess);  
+```csharp
+var securityState = new WebcamSecurityState("Safe access to Webcam", WebcamSecurityOptions.SafeAccess);  
 try  
 {  
-   securityState.EnsureState();  
-   // Allocate memory.  
-   }  
+    securityState.EnsureState();  
+    // Allocate memory.  
+}  
 catch (ApplicationException e)  
 {  
     // Handle any exception that is thrown.  
@@ -53,32 +53,31 @@ catch (ApplicationException e)
   
  Zum Verarbeiten des Aufrufes muss die <xref:System.AppDomainManager> durch eine Überschreibung der <xref:System.AppDomainManager.CheckSecuritySettings%2A?displayProperty=nameWithType>-Methode `WebcamSecurityState` werden, wie im folgenden Beispiel gezeigt.  
   
-```  
+```csharp
 [SecurityCritical]  
 public override bool CheckSecuritySettings(System.Security.SecurityState securityState)  
 {  
-   switch (securityState.ToString())  
-   {  
-      case "WebcamSecurityState":  
-      {  
-          if ((securityState as WebcamSecurityState).Options == WebcamSecurityOptions.SafeAccess)  
-              return PromptUser((securityState as WebcamSecurityState).Description);  
-           return false;  
-      }  
-   }  
-      return false;  
+    switch (securityState.ToString())  
+    {  
+        case "WebcamSecurityState":  
+        {  
+            if ((securityState as WebcamSecurityState).Options == WebcamSecurityOptions.SafeAccess)  
+                return PromptUser((securityState as WebcamSecurityState).Description);  
+            return false;  
+        }  
+    }  
+    return false;  
 }  
 private bool PromptUser(string text)  
 {  
-   // Replace the OpenFileDialog with a custom user prompt.  
-   OpenFileDialog o = new OpenFileDialog();  
-   o.Title = text;  
-   if (o.ShowDialog() == DialogResult.OK)  
-      return true;  
-   else  
-      return false;  
-}  
-  
+    // Replace the OpenFileDialog with a custom user prompt.  
+    OpenFileDialog o = new OpenFileDialog();  
+    o.Title = text;  
+    if (o.ShowDialog() == DialogResult.OK)  
+        return true;  
+    else  
+        return false;  
+}   
 ```  
   
    
@@ -86,13 +85,13 @@ private bool PromptUser(string text)
 ## Examples  
  Im folgenden Beispiel wird gezeigt, wie die <xref:System.Security.SecurityState>-Klasse überschrieben wird.  
   
-```  
+```csharp
 [SecurityCritical]  
-public enum WebcamSecurityOptions  
-    {  
-        SafeAccess,  
-        FullAccess  
-    }  
+public enum WebcamSecurityOptions
+{
+    SafeAccess,  
+    FullAccess  
+}  
 [SecurityCritical]  
 public class WebcamSecurityState : SecurityState  
 {  
@@ -105,11 +104,10 @@ public class WebcamSecurityState : SecurityState
     public string Description { get; set; }  
     public override void EnsureState()  
     {  
-       if (!IsStateAvailable())  
-           throw new ApplicationException("WebcamSecurityState not available");  
+        if (!IsStateAvailable())  
+            throw new ApplicationException("WebcamSecurityState not available");  
     }  
- }  
-  
+}    
 ```  
   
  ]]></format>
@@ -140,7 +138,7 @@ public class WebcamSecurityState : SecurityState
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Security.SecurityState" />-Klasse.</summary>
+        <summary>Initialisiert eine neue Instanz der Klasse <see cref="T:System.Security.SecurityState" />.</summary>
         <remarks>To be added.</remarks>
         <permission cref="T:System.Security.SecurityCriticalAttribute">Erfordert volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von teilweise vertrauenswürdigem oder transparentem Code verwendet werden.</permission>
       </Docs>
@@ -178,7 +176,7 @@ public class WebcamSecurityState : SecurityState
 ## Remarks  
  Die Implementierung dieser Methode sollte in etwa wie im folgenden Beispiel aussehen.  
   
-```  
+```csharp
 public override void EnsureState()  
 {  
     if (!IsStateAvailable())  
