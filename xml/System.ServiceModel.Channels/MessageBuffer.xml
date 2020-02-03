@@ -1,5 +1,5 @@
 <Type Name="MessageBuffer" FullName="System.ServiceModel.Channels.MessageBuffer">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="dbb0104efea62afa5a662b46f7f3370ca811c120" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75064812" /></Metadata><TypeSignature Language="C#" Value="public abstract class MessageBuffer : IDisposable" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="7a74464fe7222736935ec3de35594c49bbbabc88" /><Meta Name="ms.sourcegitcommit" Value="8b09499854b5b7b909802126edc1f1fca0054c10" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="02/01/2020" /><Meta Name="ms.locfileid" Value="76958650" /></Metadata><TypeSignature Language="C#" Value="public abstract class MessageBuffer : IDisposable" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit MessageBuffer extends System.Object implements class System.IDisposable" />
   <TypeSignature Language="DocId" Value="T:System.ServiceModel.Channels.MessageBuffer" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class MessageBuffer&#xA;Implements IDisposable" />
@@ -91,7 +91,7 @@
       </Attributes>
       <Parameters />
       <Docs>
-        <summary>Initialisiert eine neue Instanz der <see cref="T:System.ServiceModel.Channels.MessageBuffer" />-Klasse.</summary>
+        <summary>Initialisiert eine neue Instanz der Klasse <see cref="T:System.ServiceModel.Channels.MessageBuffer" />.</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -180,15 +180,15 @@
 ## Examples  
  Im folgenden Beispiel wird veranschaulicht, wie ein Nachrichtenpuffer ordnungsgemäß geschlossen wird.  
   
-```  
+```csharp
 public void AfterReceiveReply(ref Message reply, object correlationState)  
 {  
-    // Create the buffer  
+    // Create the buffer.
     MessageBuffer buffer = reply.CreateBufferedCopy(13000);  
-    // Inspect the response (for example, extract the body contents)  
-    Message thisReply = buffer.CreateMessage();  
-    XmlDictionaryReader reader = thisReply.GetReaderAtBodyContents();  
-    StringBuilder info = new StringBuilder();  
+    // Inspect the response (for example, extract the body contents).
+    Message thisReply = buffer.CreateMessage();
+    XmlDictionaryReader reader = thisReply.GetReaderAtBodyContents();
+    var info = new StringBuilder();
     XmlWriter writer = XmlWriter.Create(info);  
     writer.WriteNode(reader, true);  
     writer.Close();  
@@ -196,10 +196,9 @@ public void AfterReceiveReply(ref Message reply, object correlationState)
     // closing.  
     reply = buffer.CreateMessage();  
     // You can close the buffer after the message has been recreated.  
-    buffer.Close();  
+    buffer.Close();
+}
 ```  
-  
- }  
   
  ]]></format>
         </remarks>
@@ -496,7 +495,7 @@ public void AfterReceiveReply(ref Message reply, object correlationState)
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Veröffentlicht die durch den <see cref="T:System.ServiceModel.Channels.MessageBuffer" /> verwendeten nicht verwalteten Ressourcen und nimmt eine optionale Veröffentlichung der verwalteten Ressourcen vor. Diese Methode kann nicht vererbt werden.</summary>
+        <summary>Gibt die von <see cref="T:System.ServiceModel.Channels.MessageBuffer" /> verwendeten nicht verwalteten Ressourcen und optional die verwalteten Ressourcen frei. Diese Methode kann nicht vererbt werden.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -553,30 +552,30 @@ public void AfterReceiveReply(ref Message reply, object correlationState)
   
 ## Examples  
   
-```  
+```csharp
 private byte[] ConvertMessageToByteArray(ref Message message)   
 {  
-....//Memory stream that contains the message  
-....MemoryStream stream = new MemoryStream();  
-....//Create an XmlWriter to serialize the message into a byte array  
-....XmlWriterSettings settings = new XmlWriterSettings();  
-....settings.Encoding = System.Text.Encoding.UTF8;  
-....XmlWriter writer = XmlWriter.Create(stream, settings);  
-....//Copy the message into a buffer   
-....//Note: This call changes the original message's state  
-....MessageBuffer buffer = message.CreateBufferedCopy(int.MaxValue);  
-....//Create a copy of the message  
-....message = buffer.CreateMessage();  
-....//Serialize the message to the XmlWriter   
-....message.WriteMessage(writer);  
-....//Recreate the message   
-....message = buffer.CreateMessage();  
-....//Flush the contents of the writer so that the stream gets updated  
-....writer.Flush();  
-....stream.Flush();  
-....//Convert the stream to an array  
-....byte[] retval = stream.ToArray();  
-    return retval;  
+    // Memory stream that contains the message.
+    var stream = new MemoryStream();  
+    // Create an XmlWriter to serialize the message into a byte array.
+    var settings = new XmlWriterSettings();
+    settings.Encoding = System.Text.Encoding.UTF8;
+    XmlWriter writer = XmlWriter.Create(stream, settings);
+    // Copy the message into a buffer.
+    // Note: This call changes the original message's state.
+    MessageBuffer buffer = message.CreateBufferedCopy(int.MaxValue);  
+    // Create a copy of the message.
+    message = buffer.CreateMessage();  
+    // Serialize the message to the XmlWriter.
+    message.WriteMessage(writer);  
+    // Recreate the message.
+    message = buffer.CreateMessage();
+    // Flush the contents of the writer so that the stream gets updated.
+    writer.Flush();  
+    stream.Flush();  
+    // Convert the stream to an array.
+    byte[] retval = stream.ToArray();
+    return retval;
 }  
 ```  
   
