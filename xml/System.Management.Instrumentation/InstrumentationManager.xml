@@ -1,5 +1,5 @@
 <Type Name="InstrumentationManager" FullName="System.Management.Instrumentation.InstrumentationManager">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="8901bf4b697542735d9f416a4e9e23fc34741f7b" /><Meta Name="ms.sourcegitcommit" Value="a22d0855bbf24d893f43605f8b7e3a44bd9551a5" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70355942" /></Metadata><TypeSignature Language="C#" Value="public static class InstrumentationManager" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="57abe6c0a1c40391727af378b18227de23dd9702" /><Meta Name="ms.sourcegitcommit" Value="8b09499854b5b7b909802126edc1f1fca0054c10" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="02/01/2020" /><Meta Name="ms.locfileid" Value="76945829" /></Metadata><TypeSignature Language="C#" Value="public static class InstrumentationManager" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed InstrumentationManager extends System.Object" />
   <TypeSignature Language="DocId" Value="T:System.Management.Instrumentation.InstrumentationManager" />
   <TypeSignature Language="VB.NET" Value="Public Class InstrumentationManager" />
@@ -22,39 +22,39 @@ Hinweis: Die WMI .NET-Bibliotheken werden jetzt als abgeschlossen betrachtet, un
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Entkoppelte Anbieter werden von einer Anwendung gehostet. Zwei Methoden können von der Anwendung verwendet werden, um Instanzen von WMI-Klassen verfügbar zu machen: veröffentlichen/widerrufen oder Rückruf Methode. Die Rückruf Methode verwendet die <xref:System.Management.Instrumentation.InstrumentationManager.RegisterType%2A> - <xref:System.Management.Instrumentation.InstrumentationManager.UnregisterType%2A> Methode und die-Methode.  
+ Entkoppelte Anbieter werden von einer Anwendung gehostet. Zwei Methoden können von der Anwendung verwendet werden, um Instanzen von WMI-Klassen verfügbar zu machen: veröffentlichen/widerrufen oder Rückruf Methode. Die Rückruf Methode verwendet die Methoden <xref:System.Management.Instrumentation.InstrumentationManager.RegisterType%2A> und <xref:System.Management.Instrumentation.InstrumentationManager.UnregisterType%2A>.  
   
  Im Veröffentlichungs-/widerrufungsmodell stellt die WMI-Infrastruktur Standardverhalten für viele der Methoden bereit, die Sie selbst in der Rückruf Methode schreiben müssen. Hierzu gehören die Enumerationsmethoden und die Bind-Methode. In diesem Modell werden von der Anwendung Instanzen erstellt und veröffentlicht. Die Anwendung ist dafür verantwortlich, sicherzustellen, dass die Schlüsseleigenschaften der Klassen beachtet werden. Die Anwendung ist auch für das Löschen von-Instanzen verantwortlich.  
   
- Im Rückruf Modell erwartet die WMI-Infrastruktur Methoden, die die Enumeration, die Bindung und alle anderen Methoden, die zum Implementieren der Funktionalität des Anbieters erforderlich sind, verarbeiten. Sie ruft die Anwendung für diese Funktionalität auf und schlägt fehl, wenn Sie nicht vorhanden oder nicht ordnungsgemäß implementiert ist. Die Anwendung registriert den Typ der WMI-Klassen bei der-Infrastruktur, <xref:System.Management.Instrumentation.InstrumentationManager.RegisterType%2A> indem aufgerufen wird, und gibt an, dass die WMI-Klassen <xref:System.Management.Instrumentation.InstrumentationManager.UnregisterType%2A>nicht mehr durch Aufrufen von verfügbar gemacht werden sollen.  
+ Im Rückruf Modell erwartet die WMI-Infrastruktur Methoden, die die Enumeration, die Bindung und alle anderen Methoden, die zum Implementieren der Funktionalität des Anbieters erforderlich sind, verarbeiten. Sie ruft die Anwendung für diese Funktionalität auf und schlägt fehl, wenn Sie nicht vorhanden oder nicht ordnungsgemäß implementiert ist. Die Anwendung registriert den Typ der WMI-Klassen bei der-Infrastruktur durch Aufrufen von <xref:System.Management.Instrumentation.InstrumentationManager.RegisterType%2A> und gibt an, dass die WMI-Klassen nicht mehr durch Aufrufen von <xref:System.Management.Instrumentation.InstrumentationManager.UnregisterType%2A>verfügbar gemacht werden sollen.  
   
    
   
 ## Examples  
  Im folgenden Beispiel wird veranschaulicht, wie das Veröffentlichungs-/widerrufenmodell verwendet wird. Es werden zwei Instanzen der Routerklasse erstellt und veröffentlicht. Sie werden später widerrufen.  
   
-```  
+```csharp
 public class Sample_InstanceProvider  
 {  
-public int Main (string[] args)   
-{  
-Router r_one = new Router ();  
-r_one.Name = "one";  
-InstrumentationManager.Publish(r_one);  
-Router r_two = new Router ();  
-r_two.Name = "two";  
-InstrumentationManager.Publish(r_two);  
-// ....  
-InstrumentationManager.Revoke(r_one);  
-InstrumentationManager.Revoke(r_two);  
-return 0;  
-}  
+    public int Main (string[] args)   
+    {  
+        var r_one = new Router();
+        r_one.Name = "one";  
+        InstrumentationManager.Publish(r_one);  
+        var r_two = new Router ();  
+        r_two.Name = "two";  
+        InstrumentationManager.Publish(r_two);  
+        // ....  
+        InstrumentationManager.Revoke(r_one);  
+        InstrumentationManager.Revoke(r_two);  
+        return 0;  
+    }  
 }  
 ```  
   
  Im nächsten Beispiel wird die Rückruf Methode der Registrierung verwendet, um die routernew-Klasse verfügbar zu machen.  
   
-```  
+```csharp
 public int MainNew(string[] args)   
 {  
     InstrumentationManager.RegisterType(typeof(RouterNew));  
@@ -152,13 +152,13 @@ public int MainNew(string[] args)
   
 ## Examples  
   
-```  
-static int Main(string[] args)  
-{  
-   InstrumentationManager.RegisterType(typeof(MySampleProvider));  
-   return 0;  
-}  
-```  
+```csharp
+static int Main(string[] args)
+{
+   InstrumentationManager.RegisterType(typeof(MySampleProvider));
+   return 0;
+}
+```
   
  ]]></format>
         </remarks>
