@@ -1,5 +1,5 @@
 <Type Name="GC" FullName="System.GC">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="c8da855fcc4927b470eaf20796bc039b02fd4f6f" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75041855" /></Metadata><TypeSignature Language="C#" Value="public static class GC" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="d7859c6ae0c33e301a19f0cb0b8933052a27a328" /><Meta Name="ms.sourcegitcommit" Value="a8ff98b48bda124cfcb2605f5da9b21bc6dcd791" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="02/14/2020" /><Meta Name="ms.locfileid" Value="77221517" /></Metadata><TypeSignature Language="C#" Value="public static class GC" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit GC extends System.Object" />
   <TypeSignature Language="DocId" Value="T:System.GC" />
   <TypeSignature Language="VB.NET" Value="Public Class GC" />
@@ -49,7 +49,7 @@
   
 3.  Der Garbage Collector gibt Objekte frei, auf die nicht verwiesen wird, und gibt Ihren Arbeitsspeicher frei.  
   
- Dieses Thema enthält folgende Abschnitte:  
+ Dieses Thema enthält die folgenden Abschnitte:  
   
  [Die Garbage Collector und nicht verwalteten Ressourcen](#unmanaged)   
  [Objekt Alterung und Generations](#generations)   
@@ -93,7 +93,7 @@
  ]]></format>
     </remarks>
     <altmember cref="T:System.Runtime.GCSettings" />
-    <related type="Article" href="~/docs/standard/garbage-collection/index.md">Garbage Collection</related>
+    <related type="Article" href="~/docs/standard/garbage-collection/index.md">Automatische Speicherbereinigung</related>
     <related type="Article" href="~/docs/standard/garbage-collection/fundamentals.md">Grundlagen der Garbage Collection</related>
   </Docs>
   <Members>
@@ -157,10 +157,8 @@
         </remarks>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="bytesAllocated" /> ist kleiner oder gleich 0.  
   
-- oder - 
+Oder 
 Auf einem 32-Bit-Computer ist <paramref name="bytesAllocated" /> größer als <see cref="F:System.Int32.MaxValue" />.</exception>
-        <permission cref="T:System.Security.Permissions.SecurityPermission">, wenn nicht verwalteter Code aufgerufen werden soll, wenn die Garbage Collection-Priorität bearbeitet wird. Zugehörige Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
-        <permission cref="T:System.Security.SecurityCriticalAttribute">erfordert volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von teilweise vertrauenswürdigem oder transparentem Code verwendet werden.</permission>
       </Docs>
     </Member>
     <Member MemberName="CancelFullGCNotification">
@@ -217,8 +215,6 @@ Auf einem 32-Bit-Computer ist <paramref name="bytesAllocated" /> größer als <s
  ]]></format>
         </remarks>
         <exception cref="T:System.InvalidOperationException">Dieser Member ist nicht verfügbar, wenn die gleichzeitige Garbage Collection aktiviert ist. Weitere Informationen zum Deaktivieren der gleichzeitigen Garbage Collection finden Sie unter der [&lt;gcConcurrent&gt;](~/docs/framework/configure-apps/file-schema/runtime/gcconcurrent-element.md)-Laufzeiteinstellung.</exception>
-        <permission cref="F:System.Security.Permissions.SecurityAction.LinkDemand">für volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von Code verwendet werden, der nur teilweise vertrauenswürdig ist.</permission>
-        <permission cref="T:System.Security.SecurityCriticalAttribute">erfordert volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von teilweise vertrauenswürdigem oder transparentem Code verwendet werden.</permission>
         <related type="Article" href="~/docs/standard/garbage-collection/notifications.md">Garbage Collection-Benachrichtigungen</related>
       </Docs>
     </Member>
@@ -440,7 +436,7 @@ Auf einem 32-Bit-Computer ist <paramref name="bytesAllocated" /> größer als <s
         </remarks>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="generation" /> ist nicht gültig.  
   
-- oder - 
+Oder 
  <paramref name="mode" /> ist keiner der <see cref="T:System.GCCollectionMode" />-Werte.</exception>
         <related type="Article" href="~/docs/standard/garbage-collection/induced.md">Indizierte Auflistungen</related>
       </Docs>
@@ -497,7 +493,7 @@ Auf einem 32-Bit-Computer ist <paramref name="bytesAllocated" /> größer als <s
 ## Remarks  
  In der folgenden Tabelle wird die Interaktion der Parameter `mode` und `blocking` zusammengefasst:  
   
-|`mode`|`blocking` ist gleich `true`.|`blocking` ist gleich `false`.|  
+|`mode`|`blocking` ist `true`.|`blocking` ist `false`.|  
 |-|-|-|  
 |<xref:System.GCCollectionMode.Forced> oder <xref:System.GCCollectionMode.Default>|Eine blockierende Auflistung wird so schnell wie möglich ausgeführt. Wenn eine Hintergrund Auflistung ausgeführt wird und `generation` 0 oder 1 ist, löst die <xref:System.GC.Collect%28System.Int32%2CSystem.GCCollectionMode%2CSystem.Boolean%29>-Methode sofort eine blockierende Auflistung aus und gibt zurück, wenn die Auflistung abgeschlossen ist. Wenn eine Hintergrund Auflistung ausgeführt wird und `generation` 2 ist, wartet die Methode, bis die Hintergrund Auflistung abgeschlossen ist, löst eine blockierende Sammlung der Generation 2 aus und gibt dann zurück.|Eine Auflistung wird so schnell wie möglich ausgeführt. Die <xref:System.GC.Collect%28System.Int32%2CSystem.GCCollectionMode%2CSystem.Boolean%29>-Methode fordert eine Hintergrundauflistung, ist jedoch nicht garantiert. Je nach den Umständen wird eine blockierende Auflistung möglicherweise weiterhin ausgeführt. Wenn eine Hintergrundauflistung bereits ausgeführt wird, gibt die Methode sofort zurück.|  
 |<xref:System.GCCollectionMode.Optimized>|Eine blockierende Auflistung kann ausgeführt werden, je nach Zustand des Garbage Collectors und des `generation`-Parameters. Der Garbage Collector versucht, eine optimale Leistung bereitzustellen.|Eine Auflistung kann ausgeführt werden, je nach Zustand des Garbage Collectors. Die <xref:System.GC.Collect%28System.Int32%2CSystem.GCCollectionMode%2CSystem.Boolean%29>-Methode fordert eine Hintergrundauflistung, ist jedoch nicht garantiert. Je nach den Umständen wird eine blockierende Auflistung möglicherweise weiterhin ausgeführt. Der Garbage Collector versucht, eine optimale Leistung bereitzustellen. Wenn eine Hintergrundauflistung bereits ausgeführt wird, gibt die Methode sofort zurück.|  
@@ -508,7 +504,7 @@ Auf einem 32-Bit-Computer ist <paramref name="bytesAllocated" /> größer als <s
         </remarks>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="generation" /> ist nicht gültig.  
   
-- oder - 
+Oder 
  <paramref name="mode" /> ist keiner der <see cref="T:System.GCCollectionMode" />-Werte.</exception>
       </Docs>
     </Member>
@@ -689,10 +685,10 @@ Auf einem 32-Bit-Computer ist <paramref name="bytesAllocated" /> größer als <s
         </remarks>
         <exception cref="T:System.InvalidOperationException">Der Garbage Collector befindet sich nicht im Latenzmodus ohne GC-Region.  
   
-- oder - 
+Oder 
 Der Latenzmodus ohne GC-Region wurde zuvor beendet, da eine Garbage Collection ausgelöst wurde.  
   
-- oder - 
+Oder 
 Eine Speicherbelegung hat den im Aufruf der <see cref="M:System.GC.TryStartNoGCRegion(System.Int64)" />-Methode angegebenen Wert überschritten.</exception>
         <altmember cref="M:System.GC.TryStartNoGCRegion(System.Int64)" />
         <altmember cref="P:System.Runtime.GCSettings.LatencyMode" />
@@ -1220,8 +1216,6 @@ Diese Methode ist besonders nützlich bei Überwachungs Szenarien, um den Unters
  ]]></format>
         </remarks>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="maxGenerationThreshold" />oder <paramref name="largeObjectHeapThreshold" /> liegt nicht zwischen 1 und 99.</exception>
-        <permission cref="F:System.Security.Permissions.SecurityAction.LinkDemand">für volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von Code verwendet werden, der nur teilweise vertrauenswürdig ist.</permission>
-        <permission cref="T:System.Security.SecurityCriticalAttribute">erfordert volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von teilweise vertrauenswürdigem oder transparentem Code verwendet werden.</permission>
         <related type="Article" href="~/docs/standard/garbage-collection/notifications.md">Garbage Collection-Benachrichtigungen</related>
         <exception cref="T:System.InvalidOperationException">Dieser Member ist nicht verfügbar, wenn die gleichzeitige Garbage Collection aktiviert ist. Informationen zum Deaktivieren von gleichzeitig ausgeführten Garbage Collection-Vorgängen finden Sie im Artikel zur &lt;gcConcurrent&gt;-Laufzeiteinstellung.</exception>
       </Docs>
@@ -1286,10 +1280,8 @@ Diese Methode ist besonders nützlich bei Überwachungs Szenarien, um den Unters
         </remarks>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="bytesAllocated" /> ist kleiner oder gleich 0.  
   
-- oder - 
+Oder 
 Auf einem 32-Bit-Computer ist <paramref name="bytesAllocated" /> größer als <see cref="F:System.Int32.MaxValue" />.</exception>
-        <permission cref="T:System.Security.Permissions.SecurityPermission">, wenn nicht verwalteter Code aufgerufen werden soll, wenn die Garbage Collection-Priorität bearbeitet wird. Zugehörige Enumeration: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
-        <permission cref="T:System.Security.SecurityCriticalAttribute">erfordert volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von teilweise vertrauenswürdigem oder transparentem Code verwendet werden.</permission>
       </Docs>
     </Member>
     <Member MemberName="ReRegisterForFinalize">
@@ -1359,7 +1351,7 @@ Auf einem 32-Bit-Computer ist <paramref name="bytesAllocated" /> größer als <s
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="obj" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="obj" /> ist <see langword="null" /></exception>
         <altmember cref="M:System.GC.SuppressFinalize(System.Object)" />
       </Docs>
     </Member>
@@ -1432,7 +1424,7 @@ Diese Methode legt ein Bit im Objekt Header von `obj`fest, das von der Laufzeit 
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="obj" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="obj" /> ist <see langword="null" /></exception>
         <altmember cref="M:System.GC.ReRegisterForFinalize(System.Object)" />
         <altmember cref="M:System.Object.Finalize" />
         <related type="Article" href="~/docs/standard/garbage-collection/implementing-dispose.md">Dispose-Muster</related>
@@ -1785,8 +1777,6 @@ Diese Methode legt ein Bit im Objekt Header von `obj`fest, das von der Laufzeit 
   
  ]]></format>
         </remarks>
-        <permission cref="F:System.Security.Permissions.SecurityAction.LinkDemand">für volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von Code verwendet werden, der nur teilweise vertrauenswürdig ist.</permission>
-        <permission cref="T:System.Security.SecurityCriticalAttribute">erfordert volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von teilweise vertrauenswürdigem oder transparentem Code verwendet werden.</permission>
         <related type="Article" href="~/docs/standard/garbage-collection/notifications.md">Garbage Collection-Benachrichtigungen</related>
       </Docs>
     </Member>
@@ -1847,8 +1837,6 @@ Diese Methode legt ein Bit im Objekt Header von `obj`fest, das von der Laufzeit 
  ]]></format>
         </remarks>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="millisecondsTimeout" /> muss entweder nicht negativ bzw. kleiner oder gleich <see cref="F:System.Int32.MaxValue" /> oder -1 sein.</exception>
-        <permission cref="F:System.Security.Permissions.SecurityAction.LinkDemand">für volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von Code verwendet werden, der nur teilweise vertrauenswürdig ist.</permission>
-        <permission cref="T:System.Security.SecurityCriticalAttribute">erfordert volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von teilweise vertrauenswürdigem oder transparentem Code verwendet werden.</permission>
         <related type="Article" href="~/docs/standard/garbage-collection/notifications.md">Garbage Collection-Benachrichtigungen</related>
       </Docs>
     </Member>
@@ -1922,8 +1910,6 @@ Diese Methode legt ein Bit im Objekt Header von `obj`fest, das von der Laufzeit 
   
  ]]></format>
         </remarks>
-        <permission cref="F:System.Security.Permissions.SecurityAction.LinkDemand">für volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von Code verwendet werden, der nur teilweise vertrauenswürdig ist.</permission>
-        <permission cref="T:System.Security.SecurityCriticalAttribute">erfordert volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von teilweise vertrauenswürdigem oder transparentem Code verwendet werden.</permission>
         <related type="Article" href="~/docs/standard/garbage-collection/notifications.md">Garbage Collection-Benachrichtigungen</related>
       </Docs>
     </Member>
@@ -1984,8 +1970,6 @@ Diese Methode legt ein Bit im Objekt Header von `obj`fest, das von der Laufzeit 
  ]]></format>
         </remarks>
         <exception cref="T:System.InvalidOperationException"><paramref name="millisecondsTimeout" /> muss entweder nicht negativ bzw. kleiner oder gleich <see cref="F:System.Int32.MaxValue" /> oder -1 sein.</exception>
-        <permission cref="F:System.Security.Permissions.SecurityAction.LinkDemand">für volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von Code verwendet werden, der nur teilweise vertrauenswürdig ist.</permission>
-        <permission cref="T:System.Security.SecurityCriticalAttribute">erfordert volle Vertrauenswürdigkeit für den unmittelbaren Aufrufer. Dieser Member kann nicht von teilweise vertrauenswürdigem oder transparentem Code verwendet werden.</permission>
         <related type="Article" href="~/docs/standard/garbage-collection/notifications.md">Garbage Collection-Benachrichtigungen</related>
       </Docs>
     </Member>
