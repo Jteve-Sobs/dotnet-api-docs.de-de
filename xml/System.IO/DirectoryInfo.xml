@@ -1,5 +1,5 @@
 <Type Name="DirectoryInfo" FullName="System.IO.DirectoryInfo">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="15a07f7c16903a6da1e60ecc54b8b6f99a04ce05" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75132490" /></Metadata><TypeSignature Language="C#" Value="public sealed class DirectoryInfo : System.IO.FileSystemInfo" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="abb71d42226a6807d21f231a68e7c7c93f4130db" /><Meta Name="ms.sourcegitcommit" Value="a8ff98b48bda124cfcb2605f5da9b21bc6dcd791" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="02/14/2020" /><Meta Name="ms.locfileid" Value="77225286" /></Metadata><TypeSignature Language="C#" Value="public sealed class DirectoryInfo : System.IO.FileSystemInfo" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi serializable sealed beforefieldinit DirectoryInfo extends System.IO.FileSystemInfo" />
   <TypeSignature Language="DocId" Value="T:System.IO.DirectoryInfo" />
   <TypeSignature Language="VB.NET" Value="Public NotInheritable Class DirectoryInfo&#xA;Inherits FileSystemInfo" />
@@ -128,8 +128,8 @@
         <Parameter Name="path" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="path">Eine Zeichenfolge, die den Pfad angibt, auf dem die <see langword="DirectoryInfo" /> erstellt werden sollen.</param>
-        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IO.DirectoryInfo" />-Klasse im angegebenen Pfad.</summary>
+        <param name="path">Eine Zeichenfolge, die den Pfad angibt, auf dem die <see langword="DirectoryInfo" />erstellt werden sollen.</param>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.IO.DirectoryInfo" /> -Klasse im angegebenen Pfad.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -154,11 +154,10 @@
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="path" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="path" /> ist <see langword="null" /></exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
         <exception cref="T:System.ArgumentException"><paramref name="path" /> enthält ungültige Zeichen, z.B. ", &lt;, &gt; oder |.</exception>
-        <exception cref="T:System.IO.PathTooLongException">Der angegebene Pfad und/oder Dateiname überschreiten die vom System definierte maximale Länge.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Lesen aus Dateien und Verzeichnissen. Zugehörige Enumeration: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /></permission>
+        <exception cref="T:System.IO.PathTooLongException">Der angegebene Pfad und/oder der Dateiname überschreiten die vom System vorgegebene Höchstlänge.</exception>
         <altmember cref="T:System.IO.DriveInfo" />
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
@@ -229,7 +228,6 @@
  ]]></format>
         </remarks>
         <exception cref="T:System.IO.IOException">Das Verzeichnis kann nicht erstellt werden.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Schreiben von Dateien. Zugehörige Enumeration: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Write" /></permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -262,7 +260,7 @@
       </Parameters>
       <Docs>
         <param name="directorySecurity">Die Zugriffssteuerung, die auf das Verzeichnis angewendet werden soll.</param>
-        <summary>Erstellt mithilfe eines <see cref="T:System.Security.AccessControl.DirectorySecurity" />-Objekts ein Verzeichnis.</summary>
+        <summary>Erstellt mithilfe eines <see cref="T:System.Security.AccessControl.DirectorySecurity" /> -Objekts ein Verzeichnis.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -273,16 +271,44 @@
   
  Eine Liste der allgemeinen e/a-Aufgaben finden Sie unter [Allgemeine e/](~/docs/standard/io/common-i-o-tasks.md)a-Aufgaben.  
   
+> [!IMPORTANT]
+> Diese Methode wurde in .net Core 3,1 als Erweiterungsmethode der `FileSystemAclExtensions`-Klasse als Teil der `System.Security.AccessControl` Assembly: <xref:System.IO.FileSystemAclExtensions.Create(System.IO.DirectoryInfo,System.Security.AccessControl.DirectorySecurity)>portiert.
+
+## Examples
+
+Im folgenden Codebeispiel wird ein neues Verzeichnis im temporären Ordner des Benutzers mit den angegebenen Verzeichnis Sicherheits Attributen erstellt:
+
+```csharp
+using System.IO;
+using System.Security.AccessControl;
+using System.Security.Principal;
+namespace ConsoleApp
+{
+    class Program
+    {
+        static void Main()
+        {
+            DirectorySecurity security = new DirectorySecurity();
+            SecurityIdentifier identity = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null);
+            FileSystemAccessRule accessRule = new FileSystemAccessRule(identity, FileSystemRights.FullControl, AccessControlType.Allow);
+            security.AddAccessRule(accessRule);
+            string path = Path.Combine(Path.GetTempPath(), "directoryToCreate");
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            dirInfo.Create(security);
+        }
+    }
+}
+```
+
  ]]></format>
         </remarks>
         <exception cref="T:System.IO.IOException">Das von <paramref name="path" /> angegebene Verzeichnis ist schreibgeschützt oder nicht leer.</exception>
         <exception cref="T:System.UnauthorizedAccessException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
-        <exception cref="T:System.ArgumentException"><paramref name="path" /> ist eine leere Zeichenfolge, enthält nur Leerzeichen oder mindestens ein ungültiges Zeichen gemäß der Definition von <see cref="F:System.IO.Path.InvalidPathChars" />.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="path" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.IO.PathTooLongException">Der angegebene Pfad und/oder Dateiname überschreiten die vom System definierte maximale Länge.</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="path" /> ist eine leere Zeichenfolge, enthält nur Leerzeichen oder enthält mindestens ein ungültiges Zeichen gemäß der Definition von <see cref="F:System.IO.Path.InvalidPathChars" />.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="path" /> ist <see langword="null" /></exception>
+        <exception cref="T:System.IO.PathTooLongException">Der angegebene Pfad und/oder der Dateiname überschreiten die vom System vorgegebene Höchstlänge.</exception>
         <exception cref="T:System.IO.DirectoryNotFoundException">Der angegebene Pfad ist ungültig, z. B. befindet er sich auf einem nicht zugeordneten Laufwerk.</exception>
         <exception cref="T:System.NotSupportedException">Es wurde versucht, ein Verzeichnis ausschließlich mit dem Doppelpunkt (:) zu erstellen.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">für die Berechtigung zum Erstellen eines Verzeichnisses. Sicherheitsmaßnahme: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumeration: <see cref="F:System.Security.Permissions.EnvironmentPermissionAccess.Read" /></permission>
       </Docs>
     </Member>
     <MemberGroup MemberName="CreateSubdirectory">
@@ -292,7 +318,7 @@
         <AssemblyVersion>4.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Docs>
-        <summary>Erstellt ein oder mehrere Unterverzeichnisse im angegebenen Pfad. Der angegebene Pfad kann zu dieser Instanz der <see cref="T:System.IO.DirectoryInfo" />-Klasse relativ sein.</summary>
+        <summary>Erstellt ein oder mehrere Unterverzeichnisse im angegebenen Pfad. Der angegebene Pfad kann zu dieser Instanz der <see cref="T:System.IO.DirectoryInfo" /> -Klasse relativ sein.</summary>
       </Docs>
     </MemberGroup>
     <Member MemberName="CreateSubdirectory">
@@ -336,7 +362,7 @@
       </Parameters>
       <Docs>
         <param name="path">Der angegebene Pfad. Dieser kann nicht ein anderer Datenträgervolumename oder ein anderer UNC-Name (Universal Naming Convention) sein.</param>
-        <summary>Erstellt ein oder mehrere Unterverzeichnisse im angegebenen Pfad. Der angegebene Pfad kann zu dieser Instanz der <see cref="T:System.IO.DirectoryInfo" />-Klasse relativ sein.</summary>
+        <summary>Erstellt ein oder mehrere Unterverzeichnisse im angegebenen Pfad. Der angegebene Pfad kann zu dieser Instanz der <see cref="T:System.IO.DirectoryInfo" /> -Klasse relativ sein.</summary>
         <returns>Das letzte im <paramref name="path" /> angegebene Verzeichnis.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
@@ -357,20 +383,19 @@
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="path" /> gibt keinen gültigen Dateipfad an oder enthält ungültige <see langword="DirectoryInfo" />-Zeichen.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="path" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="path" /> gibt keinen gültigen Dateipfad an oder enthält ungültige <see langword="DirectoryInfo" /> -Zeichen.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="path" /> ist <see langword="null" /></exception>
         <exception cref="T:System.IO.DirectoryNotFoundException">Der angegebene Pfad ist ungültig, z. B. befindet er sich auf einem nicht zugeordneten Laufwerk.</exception>
         <exception cref="T:System.IO.IOException">Das Unterverzeichnis kann nicht erstellt werden.  
   
-- oder - 
+Oder 
 Eine Datei oder ein Verzeichnis weist bereits den durch <paramref name="path" /> angegebenen Namen auf.</exception>
-        <exception cref="T:System.IO.PathTooLongException">Der angegebene Pfad und/oder Dateiname überschreiten die vom System definierte maximale Länge.</exception>
+        <exception cref="T:System.IO.PathTooLongException">Der angegebene Pfad und/oder der Dateiname überschreiten die vom System vorgegebene Höchstlänge.</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die Codezugriffsberechtigung zum Erstellen des Verzeichnisses.  
   
-- oder - 
-Der Aufrufer verfügt nicht über die Codezugriffsberechtigung zum Lesen des Verzeichnisses, das vom zurückgegebenen <see cref="T:System.IO.DirectoryInfo" />-Objekt beschrieben wird.  Dies kann der Fall sein, wenn der <paramref name="path" />-Parameter ein vorhandenes Verzeichnis beschreibt.</exception>
+Oder 
+Der Aufrufer verfügt nicht über die Codezugriffsberechtigung zum Lesen des Verzeichnisses, das vom zurückgegebenen <see cref="T:System.IO.DirectoryInfo" /> -Objekt beschrieben wird.  Dies kann der Fall sein, wenn der <paramref name="path" />-Parameter ein vorhandenes Verzeichnis beschreibt.</exception>
         <exception cref="T:System.NotSupportedException"><paramref name="path" /> enthält einen Doppelpunkt (:), der nicht Teil einer Laufwerksbezeichnung ist („C:\\“).</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Lesen und Schreiben von Dateien. Zugehörige Enumerationen: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /><see cref="F:System.Security.Permissions.FileIOPermissionAccess.Write" /></permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -410,7 +435,7 @@ Der Aufrufer verfügt nicht über die Codezugriffsberechtigung zum Lesen des Ver
       <Docs>
         <param name="path">Der angegebene Pfad. Dieser kann nicht ein anderer Datenträgervolumename oder ein anderer UNC-Name (Universal Naming Convention) sein.</param>
         <param name="directorySecurity">Die anzuwendende Sicherheit.</param>
-        <summary>Erstellt ein oder mehrere Unterverzeichnisse im angegebenen Pfad mit der angegebenen Sicherheit. Der angegebene Pfad kann zu dieser Instanz der <see cref="T:System.IO.DirectoryInfo" />-Klasse relativ sein.</summary>
+        <summary>Erstellt ein oder mehrere Unterverzeichnisse im angegebenen Pfad mit der angegebenen Sicherheit. Der angegebene Pfad kann zu dieser Instanz der <see cref="T:System.IO.DirectoryInfo" /> -Klasse relativ sein.</summary>
         <returns>Das letzte im <paramref name="path" /> angegebene Verzeichnis.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
@@ -422,20 +447,19 @@ Der Aufrufer verfügt nicht über die Codezugriffsberechtigung zum Lesen des Ver
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="path" /> gibt keinen gültigen Dateipfad an oder enthält ungültige <see langword="DirectoryInfo" />-Zeichen.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="path" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="path" /> gibt keinen gültigen Dateipfad an oder enthält ungültige <see langword="DirectoryInfo" /> -Zeichen.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="path" /> ist <see langword="null" /></exception>
         <exception cref="T:System.IO.DirectoryNotFoundException">Der angegebene Pfad ist ungültig, z. B. befindet er sich auf einem nicht zugeordneten Laufwerk.</exception>
         <exception cref="T:System.IO.IOException">Das Unterverzeichnis kann nicht erstellt werden.  
   
-- oder - 
+Oder 
 Eine Datei oder ein Verzeichnis weist bereits den durch <paramref name="path" /> angegebenen Namen auf.</exception>
-        <exception cref="T:System.IO.PathTooLongException">Der angegebene Pfad und/oder Dateiname überschreiten die vom System definierte maximale Länge.</exception>
+        <exception cref="T:System.IO.PathTooLongException">Der angegebene Pfad und/oder der Dateiname überschreiten die vom System vorgegebene Höchstlänge.</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die Codezugriffsberechtigung zum Erstellen des Verzeichnisses.  
   
-- oder - 
-Der Aufrufer verfügt nicht über die Codezugriffsberechtigung zum Lesen des Verzeichnisses, das vom zurückgegebenen <see cref="T:System.IO.DirectoryInfo" />-Objekt beschrieben wird.  Dies kann der Fall sein, wenn der <paramref name="path" />-Parameter ein vorhandenes Verzeichnis beschreibt.</exception>
+Oder 
+Der Aufrufer verfügt nicht über die Codezugriffsberechtigung zum Lesen des Verzeichnisses, das vom zurückgegebenen <see cref="T:System.IO.DirectoryInfo" /> -Objekt beschrieben wird.  Dies kann der Fall sein, wenn der <paramref name="path" />-Parameter ein vorhandenes Verzeichnis beschreibt.</exception>
         <exception cref="T:System.NotSupportedException"><paramref name="path" /> enthält einen Doppelpunkt (:), der nicht Teil einer Laufwerksbezeichnung ist („C:\\“).</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Lesen und Schreiben von Dateien. Zugehörige Enumerationen: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /><see cref="F:System.Security.Permissions.FileIOPermissionAccess.Write" /></permission>
       </Docs>
     </Member>
     <MemberGroup MemberName="Delete">
@@ -486,7 +510,7 @@ Der Aufrufer verfügt nicht über die Codezugriffsberechtigung zum Lesen des Ver
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Löscht diese <see cref="T:System.IO.DirectoryInfo" />, wenn diese leer sind.</summary>
+        <summary>Löscht diese <see cref="T:System.IO.DirectoryInfo" /> , wenn diese leer sind.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -505,16 +529,15 @@ Der Aufrufer verfügt nicht über die Codezugriffsberechtigung zum Lesen des Ver
  ]]></format>
         </remarks>
         <exception cref="T:System.UnauthorizedAccessException">Das Verzeichnis enthält eine schreibgeschützte Datei.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Das von diesem <see cref="T:System.IO.DirectoryInfo" />-Objekt beschriebene Verzeichnis ist nicht vorhanden oder konnte nicht gefunden werden.</exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Das von diesem <see cref="T:System.IO.DirectoryInfo" /> -Objekt beschriebene Verzeichnis ist nicht vorhanden oder konnte nicht gefunden werden.</exception>
         <exception cref="T:System.IO.IOException">Das Verzeichnis ist nicht leer.  
   
-- oder - 
+Oder 
 Das Verzeichnis ist das aktuelle Arbeitsverzeichnis der Anwendung.  
   
-- oder - 
+Oder 
 Es liegt ein geöffnetes Handle für das Verzeichnis vor und das Betriebssystem ist Windows XP oder früher. Dieses geöffnete Handle kann vom Auflisten von Verzeichnissen stammen. Weitere Informationen finden Sie unter [Auflisten von Verzeichnissen und Dateien](~/docs/standard/io/how-to-enumerate-directories-and-files.md).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Schreiben von Verzeichnissen. Zugehörige Enumeration: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Write" /></permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -561,7 +584,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis vor und das Betriebssystem 
       </Parameters>
       <Docs>
         <param name="recursive"><see langword="true" />, um dieses Verzeichnis, seine Unterverzeichnisse und alle Dateien zu löschen, andernfalls <see langword="false" />.</param>
-        <summary>Löscht diese Instanz von <see cref="T:System.IO.DirectoryInfo" /> und gibt an, ob Unterverzeichnisse und Dateien gelöscht werden sollen.</summary>
+        <summary>Löscht diese Instanz von <see cref="T:System.IO.DirectoryInfo" />und gibt an, ob Unterverzeichnisse und Dateien gelöscht werden sollen.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -582,19 +605,18 @@ Es liegt ein geöffnetes Handle für das Verzeichnis vor und das Betriebssystem 
  ]]></format>
         </remarks>
         <exception cref="T:System.UnauthorizedAccessException">Das Verzeichnis enthält eine schreibgeschützte Datei.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Das von diesem <see cref="T:System.IO.DirectoryInfo" />-Objekt beschriebene Verzeichnis ist nicht vorhanden oder konnte nicht gefunden werden.</exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Das von diesem <see cref="T:System.IO.DirectoryInfo" /> -Objekt beschriebene Verzeichnis ist nicht vorhanden oder konnte nicht gefunden werden.</exception>
         <exception cref="T:System.IO.IOException">Das Verzeichnis ist schreibgeschützt.  
   
-- oder - 
+Oder 
 Das Verzeichnis enthält mindestens eine Datei oder ein Unterverzeichnis, und <paramref name="recursive" /> ist <see langword="false" />.  
   
-- oder - 
+Oder 
 Das Verzeichnis ist das aktuelle Arbeitsverzeichnis der Anwendung.  
   
-- oder - 
+Oder 
 Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien vor, und das Betriebssystem ist Windows XP oder früher. Dieses geöffnete Handle kann vom Auflisten von Verzeichnissen und Dateien stammen. Weitere Informationen finden Sie unter [Auflisten von Verzeichnissen und Dateien](~/docs/standard/io/how-to-enumerate-directories-and-files.md).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermissionAccess">Das Schreib Flag ist für die Schreib Berechtigung für die <see langword="DirectoryInfo" /> und Unterverzeichnisse erforderlich, die gelöscht werden sollen.</permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -690,7 +712,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
       </Docs>
     </Member>
@@ -741,7 +763,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -776,8 +798,8 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
       </Docs>
     </Member>
@@ -818,7 +840,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -853,8 +875,8 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
       </Docs>
     </Member>
@@ -897,7 +919,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
       </Parameters>
       <Docs>
         <param name="searchPattern">Die Suchzeichenfolge für die Überprüfung der Namen von Verzeichnissen auf Übereinstimmungen.  Dieser Parameter kann eine Kombination aus gültigen Literalpfad- und Platzhalterzeichen (* und ?) enthalten, unterstützt jedoch keine regulären Ausdrücke.</param>
-        <param name="searchOption">Einer der Enumerationswerte, der angibt, ob nur das aktuelle Verzeichnis oder auch alle Unterverzeichnisse durchsucht werden sollen. Der Standardwert ist <see cref="F:System.IO.SearchOption.TopDirectoryOnly" />.</param>
+        <param name="searchOption">Einer der Enumerationswerte, der angibt, ob nur das aktuelle Verzeichnis oder auch alle Unterverzeichnisse durchsucht werden sollen. Standardwert: <see cref="F:System.IO.SearchOption.TopDirectoryOnly" />.</param>
         <summary>Gibt eine aufzählbare Auflistung von Verzeichnisinformationen zurück, die einem angegebenen Suchmuster und einer angegebenen Option zum Durchsuchen von Unterverzeichnissen entspricht.</summary>
         <returns>Eine aufzählbare Auflistung von Verzeichnissen, die <paramref name="searchPattern" /> und <paramref name="searchOption" /> entspricht.</returns>
         <remarks>
@@ -906,7 +928,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -949,9 +971,9 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="searchOption" /> ist kein gültiger <see cref="T:System.IO.SearchOption" />-Wert.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
       </Docs>
     </Member>
@@ -1052,7 +1074,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
       </Docs>
     </Member>
@@ -1103,7 +1125,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -1148,8 +1170,8 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
       </Docs>
     </Member>
@@ -1190,7 +1212,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -1227,8 +1249,8 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
 
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
       </Docs>
     </Member>
@@ -1271,7 +1293,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
       </Parameters>
       <Docs>
         <param name="searchPattern">Die Suchzeichenfolge für die Überprüfung der Namen von Dateien auf Übereinstimmungen.  Dieser Parameter kann eine Kombination aus gültigen Literalpfad- und Platzhalterzeichen (* und ?) enthalten, unterstützt jedoch keine regulären Ausdrücke.</param>
-        <param name="searchOption">Einer der Enumerationswerte, der angibt, ob nur das aktuelle Verzeichnis oder auch alle Unterverzeichnisse durchsucht werden sollen. Der Standardwert ist <see cref="F:System.IO.SearchOption.TopDirectoryOnly" />.</param>
+        <param name="searchOption">Einer der Enumerationswerte, der angibt, ob nur das aktuelle Verzeichnis oder auch alle Unterverzeichnisse durchsucht werden sollen. Standardwert: <see cref="F:System.IO.SearchOption.TopDirectoryOnly" />.</param>
         <summary>Gibt eine aufzählbare Auflistung von Dateiinformationen zurück, die einem angegebenen Suchmuster und einer angegebenen Option zum Durchsuchen von Unterverzeichnissen entspricht.</summary>
         <returns>Eine aufzählbare Auflistung von Dateien, die <paramref name="searchPattern" /> und <paramref name="searchOption" /> entspricht.</returns>
         <remarks>
@@ -1280,7 +1302,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -1325,9 +1347,9 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="searchOption" /> ist kein gültiger <see cref="T:System.IO.SearchOption" />-Wert.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
       </Docs>
     </Member>
@@ -1411,7 +1433,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
         <altmember cref="T:System.IO.FileSystemWatcher" />
       </Docs>
@@ -1463,7 +1485,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -1498,8 +1520,8 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
         <altmember cref="T:System.IO.FileSystemWatcher" />
       </Docs>
@@ -1541,7 +1563,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -1576,8 +1598,8 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
       </Docs>
     </Member>
@@ -1620,7 +1642,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
       </Parameters>
       <Docs>
         <param name="searchPattern">Die Suchzeichenfolge für die Überprüfung der Namen von Verzeichnissen auf Übereinstimmungen.  Dieser Parameter kann eine Kombination aus gültigen Literalpfad- und Platzhalterzeichen (* und ?) enthalten, unterstützt jedoch keine regulären Ausdrücke.</param>
-        <param name="searchOption">Einer der Enumerationswerte, der angibt, ob nur das aktuelle Verzeichnis oder auch alle Unterverzeichnisse durchsucht werden sollen. Der Standardwert ist <see cref="F:System.IO.SearchOption.TopDirectoryOnly" />.</param>
+        <param name="searchOption">Einer der Enumerationswerte, der angibt, ob nur das aktuelle Verzeichnis oder auch alle Unterverzeichnisse durchsucht werden sollen. Standardwert: <see cref="F:System.IO.SearchOption.TopDirectoryOnly" />.</param>
         <summary>Gibt eine aufzählbare Auflistung von Dateisysteminformationen zurück, die einem angegebenen Suchmuster und einer angegebenen Option zum Durchsuchen von Unterverzeichnissen entspricht.</summary>
         <returns>Eine aufzählbare Auflistung von Objekten mit Dateisysteminformationen, die <paramref name="searchPattern" /> und <paramref name="searchOption" /> entspricht.</returns>
         <remarks>
@@ -1629,7 +1651,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -1664,9 +1686,9 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="searchOption" /> ist kein gültiger <see cref="T:System.IO.SearchOption" />-Wert.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
         <altmember cref="T:System.IO.FileSystemWatcher" />
       </Docs>
@@ -1709,7 +1731,7 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
       </ReturnValue>
       <Docs>
         <summary>Ruft einen Wert ab, der angibt, ob das Verzeichnis vorhanden ist.</summary>
-        <value><see langword="true" />, wenn das Verzeichnis vorhanden ist, andernfalls <see langword="false" />.</value>
+        <value><see langword="true" /> , wenn das Verzeichnis vorhanden ist, andernfalls <see langword="false" />.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -1809,8 +1831,8 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Ruft ein <see cref="T:System.Security.AccessControl.DirectorySecurity" />-Objekt ab, das die Einträge in der Zugriffssteuerungsliste für das Verzeichnis kapselt, das vom aktuellen <see cref="T:System.IO.DirectoryInfo" />-Objekt beschrieben wird.</summary>
-        <returns>Ein <see cref="T:System.Security.AccessControl.DirectorySecurity" />-Objekt, das die Zugriffssteuerungsregeln für das Verzeichnis kapselt.</returns>
+        <summary>Ruft ein <see cref="T:System.Security.AccessControl.DirectorySecurity" /> -Objekt ab, das die Einträge in der Zugriffssteuerungsliste für das Verzeichnis kapselt, das vom aktuellen <see cref="T:System.IO.DirectoryInfo" /> -Objekt beschrieben wird.</summary>
+        <returns>Ein <see cref="T:System.Security.AccessControl.DirectorySecurity" /> -Objekt, das die Zugriffssteuerungsregeln für das Verzeichnis kapselt.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -1835,16 +1857,14 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
         <exception cref="T:System.SystemException">Das Verzeichnis wurde nicht gefunden und konnte nicht geändert werden.</exception>
         <exception cref="T:System.UnauthorizedAccessException">Das Verzeichnis ist schreibgeschützt.  
   
- - oder -  
+ Oder  
   
  Dieser Vorgang wird von der aktuellen Plattform nicht unterstützt.  
   
- - oder -  
+ Oder  
   
  Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
         <exception cref="T:System.IO.IOException">E/A-Fehler beim Öffnen des Verzeichnisses.</exception>
-        <exception cref="T:System.PlatformNotSupportedException">Das aktuelle Betriebssystem ist nicht Microsoft Windows 2000 oder höher.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">für die Berechtigung zum Auflisten einer Zugriffs Steuerungs Liste (Access Control List, ACL) für ein Verzeichnis. Sicherheitsmaßnahme: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumerationen: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.NoAccess" /><see cref="F:System.Security.AccessControl.AccessControlActions.View" /></permission>
       </Docs>
     </Member>
     <Member MemberName="GetAccessControl">
@@ -1874,8 +1894,8 @@ Es liegt ein geöffnetes Handle für das Verzeichnis oder eines seiner Dateien v
         <Parameter Name="includeSections" Type="System.Security.AccessControl.AccessControlSections" Index="0" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
       </Parameters>
       <Docs>
-        <param name="includeSections">Einer der <see cref="T:System.Security.AccessControl.AccessControlSections" />-Werte, der den Typ der zu empfangenden ACL-Informationen angibt.</param>
-        <summary>Ruft ein <see cref="T:System.Security.AccessControl.DirectorySecurity" />-Objekt ab, das den angegebenen Typ der Einträge in der Zugriffssteuerungsliste für das Verzeichnis kapselt, das vom aktuellen <see cref="T:System.IO.DirectoryInfo" />-Objekt beschrieben wird.</summary>
+        <param name="includeSections">Einer der <see cref="T:System.Security.AccessControl.AccessControlSections" /> -Werte, der den Typ der zu empfangenden ACL-Informationen angibt.</param>
+        <summary>Ruft ein <see cref="T:System.Security.AccessControl.DirectorySecurity" /> -Objekt ab, das den angegebenen Typ der Einträge in der Zugriffssteuerungsliste für das Verzeichnis kapselt, das vom aktuellen <see cref="T:System.IO.DirectoryInfo" /> -Objekt beschrieben wird.</summary>
         <returns>Ein <see cref="T:System.Security.AccessControl.DirectorySecurity" />-Objekt, das die Zugriffssteuerungsregeln für die vom <paramref name="path" />-Parameter beschriebene Datei kapselt.  
   
 Ausnahmen 
@@ -1887,14 +1907,12 @@ Ausnahmen
   
  </description></item><item><term><see cref="T:System.IO.IOException" /></term><description> E/A-Fehler beim Öffnen des Verzeichnisses.  
   
- </description></item><item><term><see cref="T:System.PlatformNotSupportedException" /></term><description> Das aktuelle Betriebssystem ist nicht Microsoft Windows 2000 oder höher.  
-  
  </description></item><item><term><see cref="T:System.UnauthorizedAccessException" /></term><description> Das Verzeichnis ist schreibgeschützt.  
   
-- oder - 
+Oder 
 Dieser Vorgang wird von der aktuellen Plattform nicht unterstützt.  
   
-- oder - 
+Oder 
 Der Aufrufer verfügt nicht über die erforderliche Berechtigung.  
   
  </description></item></list></returns>
@@ -1908,7 +1926,6 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
   
  ]]></format>
         </remarks>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">für die Berechtigung zum Auflisten einer Zugriffs Steuerungs Liste (Access Control List, ACL) für ein Verzeichnis. Sicherheitsmaßnahme: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumerationen: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.NoAccess" /><see cref="F:System.Security.AccessControl.AccessControlActions.View" /></permission>
       </Docs>
     </Member>
     <MemberGroup MemberName="GetDirectories">
@@ -1994,10 +2011,9 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig, da er sich z. B. auf einem nicht zugeordneten Laufwerk befindet.</exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see cref="T:System.IO.DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig. Dies ist z. B. der Fall, wenn das Laufwerk des Pfads nicht zugeordnet ist.</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
         <exception cref="T:System.UnauthorizedAccessException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Lesen von Verzeichnissen. Zugehörige Enumeration: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /></permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -2052,7 +2068,7 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -2086,11 +2102,10 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" />-Methode.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see langword="DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" /> -Methode.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see langword="DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.UnauthorizedAccessException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Lesen aus Dateien und Verzeichnissen und für den Zugriff auf den Pfad. Zugehörige Enumerationen: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /><see cref="F:System.Security.Permissions.FileIOPermissionAccess.PathDiscovery" /></permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -2133,7 +2148,7 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -2158,9 +2173,9 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
 
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" />-Methode.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see langword="DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" /> -Methode.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see langword="DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.UnauthorizedAccessException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
       </Docs>
     </Member>
@@ -2213,7 +2228,7 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -2249,12 +2264,11 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" />-Methode.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" /> -Methode.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="searchOption" /> ist kein gültiger <see cref="T:System.IO.SearchOption" />-Wert.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see langword="DirectoryInfo" />-Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der im <see langword="DirectoryInfo" /> -Objekt gekapselte Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.UnauthorizedAccessException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Lesen aus Dateien und Verzeichnissen und für den Zugriff auf den Pfad. Zugehörige Enumerationen: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /><see cref="F:System.Security.Permissions.FileIOPermissionAccess.PathDiscovery" /></permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -2309,7 +2323,7 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
       <Parameters />
       <Docs>
         <summary>Gibt eine Dateiliste des aktuellen Verzeichnisses zurück.</summary>
-        <returns>Ein Array vom Typ <see cref="T:System.IO.FileInfo" />.</returns>
+        <returns>Ein Array des Typs <see cref="T:System.IO.FileInfo" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -2355,7 +2369,6 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
  ]]></format>
         </remarks>
         <exception cref="T:System.IO.DirectoryNotFoundException">Der Pfad ist ungültig, weil er sich beispielsweise auf einem nicht zugeordneten Laufwerk befindet.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Lesen von Verzeichnissen. Zugehörige Enumeration: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /></permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -2403,14 +2416,14 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
       <Docs>
         <param name="searchPattern">Die Suchzeichenfolge für die Überprüfung der Namen von Dateien auf Übereinstimmungen.  Dieser Parameter kann eine Kombination aus gültigen Literalpfad- und Platzhalterzeichen (* und ?) enthalten, unterstützt jedoch keine regulären Ausdrücke.</param>
         <summary>Gibt eine Dateiliste des aktuellen Verzeichnisses zurück, das dem angegebenen Suchmuster entspricht.</summary>
-        <returns>Ein Array vom Typ <see cref="T:System.IO.FileInfo" />.</returns>
+        <returns>Ein Array des Typs <see cref="T:System.IO.FileInfo" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -2429,7 +2442,7 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
   
  Die folgenden Platzhalter Spezifizierer sind im `searchPattern`-Parameter zulässig.  
   
-|Platzhalter Zeichen|Beschreibung|  
+|Platzhalter|BESCHREIBUNG|  
 |------------------------|-----------------|  
 |*|NULL oder mehr Zeichen.|  
 |?|Genau null oder ein Zeichen.|  
@@ -2472,11 +2485,10 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" />-Methode.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" /> -Methode.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
         <exception cref="T:System.IO.DirectoryNotFoundException">Der Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">für den Zugriff auf den Pfad und zum Lesen aus Dateien und Verzeichnissen. Zugehörige Enumerationen: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /><see cref="F:System.Security.Permissions.FileIOPermissionAccess.PathDiscovery" /></permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -2519,7 +2531,7 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -2538,7 +2550,7 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
   
  Die folgenden Platzhalter Spezifizierer sind im `searchPattern`-Parameter zulässig.  
   
-|Platzhalter Zeichen|Beschreibung|  
+|Platzhalter|BESCHREIBUNG|  
 |------------------------|-----------------|  
 |*|NULL oder mehr Zeichen.|  
 |?|Genau null oder ein Zeichen.|  
@@ -2573,8 +2585,8 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
 
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" />-Methode.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" /> -Methode.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
         <exception cref="T:System.IO.DirectoryNotFoundException">Der Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
       </Docs>
@@ -2621,7 +2633,7 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
         <param name="searchPattern">Die Suchzeichenfolge für die Überprüfung der Namen von Dateien auf Übereinstimmungen.  Dieser Parameter kann eine Kombination aus gültigen Literalpfad- und Platzhalterzeichen (* und ?) enthalten, unterstützt jedoch keine regulären Ausdrücke.</param>
         <param name="searchOption">Einer der Enumerationswerte, der angibt, ob nur das aktuelle Verzeichnis oder auch alle Unterverzeichnisse durchsucht werden sollen.</param>
         <summary>Gibt eine Dateiliste des aktuellen Verzeichnisses zurück, das dem angegebenen Suchmuster entspricht. Anhand eines Werts wird bestimmt, ob in Unterverzeichnissen gesucht wird.</summary>
-        <returns>Ein Array vom Typ <see cref="T:System.IO.FileInfo" />.</returns>
+        <returns>Ein Array des Typs <see cref="T:System.IO.FileInfo" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -2638,7 +2650,7 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
   
  Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Zeichen|Beschreibung|  
+|Platzhalter|BESCHREIBUNG|  
 |------------------------|-----------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen.|  
 |? (Fragezeichen)|Genau null oder ein Zeichen.|  
@@ -2691,12 +2703,11 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" />-Methode.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" /> -Methode.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="searchOption" /> ist kein gültiger <see cref="T:System.IO.SearchOption" />-Wert.</exception>
         <exception cref="T:System.IO.DirectoryNotFoundException">Der Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">für den Zugriff auf den Pfad und zum Lesen aus Dateien und Verzeichnissen. Zugehörige Enumerationen: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /><see cref="F:System.Security.Permissions.FileIOPermissionAccess.PathDiscovery" /></permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -2750,8 +2761,8 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Gibt ein Array von stark typisierten <see cref="T:System.IO.FileSystemInfo" />-Einträgen zurück, das alle Dateien und Unterverzeichnisse in einem Verzeichnis darstellt.</summary>
-        <returns>Ein Array von stark typisierten <see cref="T:System.IO.FileSystemInfo" />-Einträgen.</returns>
+        <summary>Gibt ein Array von stark typisierten <see cref="T:System.IO.FileSystemInfo" /> -Einträgen zurück, das alle Dateien und Unterverzeichnisse in einem Verzeichnis darstellt.</summary>
+        <returns>Ein Array von stark typisierten <see cref="T:System.IO.FileSystemInfo" /> -Einträgen.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -2835,15 +2846,15 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
       </Parameters>
       <Docs>
         <param name="searchPattern">Die Suchzeichenfolge für die Überprüfung der Namen von Verzeichnissen und Dateien auf Übereinstimmungen.  Dieser Parameter kann eine Kombination aus gültigen Literalpfad- und Platzhalterzeichen (* und ?) enthalten, unterstützt jedoch keine regulären Ausdrücke.</param>
-        <summary>Ruft ein Array von stark typisierten <see cref="T:System.IO.FileSystemInfo" />-Objekten ab, das die Dateien und Unterverzeichnisse darstellt, die den angegebenen Suchkriterien entsprechen.</summary>
-        <returns>Ein Array von stark typisierten <see langword="FileSystemInfo" />-Objekten, die den Suchkriterien entsprechen.</returns>
+        <summary>Ruft ein Array von stark typisierten <see cref="T:System.IO.FileSystemInfo" /> -Objekten ab, das die Dateien und Unterverzeichnisse darstellt, die den angegebenen Suchkriterien entsprechen.</summary>
+        <returns>Ein Array von stark typisierten <see langword="FileSystemInfo" /> -Objekten, die den Suchkriterien entsprechen.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -2884,11 +2895,10 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" />-Methode.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der angegebene Pfad ist ungültig (er befindet sich z. B. auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" /> -Methode.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der angegebene Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Lesen aus Dateien und Verzeichnissen und für den Zugriff auf den Pfad. Zugehörige Enumerationen: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /><see cref="F:System.Security.Permissions.FileIOPermissionAccess.PathDiscovery" /></permission>
         <altmember cref="T:System.IO.FileSystemInfo" />
         <altmember cref="T:System.IO.FileSystemWatcher" />
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
@@ -2933,7 +2943,7 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -2966,9 +2976,9 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
 
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" />-Methode.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der angegebene Pfad ist ungültig (er befindet sich z. B. auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" /> -Methode.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der angegebene Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
       </Docs>
     </Member>
@@ -3011,8 +3021,8 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
       </Parameters>
       <Docs>
         <param name="searchPattern">Die Suchzeichenfolge für die Überprüfung der Namen von Verzeichnissen und Dateien auf Übereinstimmungen.  Dieser Parameter kann eine Kombination aus gültigen Literalpfad- und Platzhalterzeichen (* und ?) enthalten, unterstützt jedoch keine regulären Ausdrücke.</param>
-        <param name="searchOption">Einer der Enumerationswerte, der angibt, ob nur das aktuelle Verzeichnis oder auch alle Unterverzeichnisse durchsucht werden sollen. Der Standardwert ist <see cref="F:System.IO.SearchOption.TopDirectoryOnly" />.</param>
-        <summary>Ruft ein Array von <see cref="T:System.IO.FileSystemInfo" />-Objekten ab, die die Dateien und Unterverzeichnisse darstellen, die den angegebenen Suchkriterien entsprechen.</summary>
+        <param name="searchOption">Einer der Enumerationswerte, der angibt, ob nur das aktuelle Verzeichnis oder auch alle Unterverzeichnisse durchsucht werden sollen. Standardwert: <see cref="F:System.IO.SearchOption.TopDirectoryOnly" />.</param>
+        <summary>Ruft ein Array von <see cref="T:System.IO.FileSystemInfo" /> -Objekten ab, die die Dateien und Unterverzeichnisse darstellen, die den angegebenen Suchkriterien entsprechen.</summary>
         <returns>Ein Array von Dateisystemeinträgen, die den Suchkriterien entsprechen.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
@@ -3020,7 +3030,7 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
 ## Remarks  
  `searchPattern` kann eine Kombination von Literal-und Platzhalterzeichen, jedoch werden reguläre Ausdrücke nicht unterstützt. Die folgenden Platzhalter spezifiatoren sind in `searchPattern`zulässig.  
   
-|Platzhalter Bezeichner|Übereinstimmungen|  
+|Platzhalter Bezeichner|Stimmt überein|  
 |------------------------|-------------|  
 |\* (Sternchen)|NULL oder mehr Zeichen an dieser Position.|  
 |? (Fragezeichen)|NULL oder ein Zeichen an dieser Position.|  
@@ -3047,10 +3057,10 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" />-Methode.</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="searchPattern" /> enthält mindestens ein ungültiges Zeichen gemäß der Definition der <see cref="M:System.IO.Path.GetInvalidPathChars" /> -Methode.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="searchPattern" /> ist <see langword="null" /></exception>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="searchOption" /> ist kein gültiger <see cref="T:System.IO.SearchOption" />-Wert.</exception>
-        <exception cref="T:System.IO.DirectoryNotFoundException">Der angegebene Pfad ist ungültig (er befindet sich z. B. auf einem nicht zugeordneten Laufwerk).</exception>
+        <exception cref="T:System.IO.DirectoryNotFoundException">Der angegebene Pfad ist ungültig (z. B. befindet er sich auf einem nicht zugeordneten Laufwerk).</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
         <altmember cref="T:System.IO.FileSystemWatcher" />
       </Docs>
@@ -3096,7 +3106,7 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
       </Parameters>
       <Docs>
         <param name="destDirName">Der Name und Pfad des Verzeichnisses, in das das Verzeichnis verschoben werden soll. Das Ziel darf kein anderes Datenträgervolume und kein Verzeichnis mit dem gleichen Namen sein. Es kann ein vorhandenes Verzeichnis sein, dem dieses Verzeichnis als Unterverzeichnis hinzugefügt werden soll.</param>
-        <summary>Verschiebt eine <see cref="T:System.IO.DirectoryInfo" />-Instanz und deren Inhalt in einen neuen Pfad.</summary>
+        <summary>Verschiebt eine <see cref="T:System.IO.DirectoryInfo" /> -Instanz und deren Inhalt in einen neuen Pfad.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -3118,21 +3128,20 @@ Der Aufrufer verfügt nicht über die erforderliche Berechtigung.
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="destDirName" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="destDirName" /> ist <see langword="null" /></exception>
         <exception cref="T:System.ArgumentException"><paramref name="destDirName" /> ist eine leere Zeichenfolge ("").</exception>
         <exception cref="T:System.IO.IOException">Es wurde versucht, ein Verzeichnis auf ein anderes Volume zu verschieben.  
   
-- oder - 
+Oder 
  <paramref name="destDirName" /> ist bereits vorhanden.  
   
-- oder - 
+Oder 
 Sie sind nicht autorisiert, auf diesen Pfad zuzugreifen.  
   
-- oder - 
+Oder 
 Das verschobene Verzeichnis und das Zielverzeichnis haben denselben Namen.</exception>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
         <exception cref="T:System.IO.DirectoryNotFoundException">Das Zielverzeichnis kann nicht gefunden werden.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Lesen und Schreiben von Dateien und Verzeichnissen und für den Zugriff auf das Zielverzeichnis. Sicherheitsmaßnahme: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumerationen: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /><see cref="F:System.Security.Permissions.FileIOPermissionAccess.Write" /></permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -3170,8 +3179,8 @@ Das verschobene Verzeichnis und das Zielverzeichnis haben denselben Namen.</exce
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft den Namen dieser <see cref="T:System.IO.DirectoryInfo" />-Instanz ab.</summary>
-        <value>Der Name des Verzeichnisses.</value>
+        <summary>Ruft den Namen dieser <see cref="T:System.IO.DirectoryInfo" /> -Instanz ab.</summary>
+        <value>Der Verzeichnisname.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -3266,7 +3275,6 @@ Im folgenden Beispiel wird auf das übergeordnete Verzeichnis eines angegebenen 
           ]]></format>
         </remarks>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Lesen aus Dateien und Verzeichnissen und für den Zugriff auf den Pfad. Zugehörige Enumerationen: <see cref="T:System.Security.Permissions.FileIOPermissionAccess" /><see cref="T:System.Security.Permissions.FileIOPermissionAccess" /></permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -3323,7 +3331,6 @@ Im folgenden Beispiel wird auf das übergeordnete Verzeichnis eines angegebenen 
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.SecurityException">Der Aufrufer verfügt nicht über die erforderliche Berechtigung.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">zum Lesen aus Dateien und Verzeichnissen und für den Zugriff auf den Pfad. Zugehörige Enumerationen: <see cref="T:System.Security.Permissions.FileIOPermissionAccess" /><see cref="T:System.Security.Permissions.FileIOPermissionAccess" /></permission>
         <related type="Article" href="~/docs/standard/io/index.md">Datei- und Stream-E/A</related>
         <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">Gewusst wie: Lesen aus einer Textdatei</related>
         <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">Gewusst wie: Schreiben von Text in eine Datei</related>
@@ -3361,7 +3368,7 @@ Im folgenden Beispiel wird auf das übergeordnete Verzeichnis eines angegebenen 
       </Parameters>
       <Docs>
         <param name="directorySecurity">Ein Objekt, das einen Eintrag in einer Zugriffssteuerungsliste beschreibt, der auf das vom <paramref name="path" />-Parameter beschriebene Verzeichnis angewendet werden soll.</param>
-        <summary>Wendet von einem <see cref="T:System.Security.AccessControl.DirectorySecurity" />-Objekt beschriebene Einträge in Zugriffssteuerungslisten auf die Datei an, die vom aktuellen <see cref="T:System.IO.DirectoryInfo" />-Objekt beschrieben wird.</summary>
+        <summary>Wendet von einem <see cref="T:System.Security.AccessControl.DirectorySecurity" /> -Objekt beschriebene Einträge in Zugriffssteuerungslisten auf die Datei an, die vom aktuellen <see cref="T:System.IO.DirectoryInfo" /> -Objekt beschrieben wird.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -3401,8 +3408,6 @@ Im folgenden Beispiel wird auf das übergeordnete Verzeichnis eines angegebenen 
         <exception cref="T:System.ArgumentNullException">Der Parameter <paramref name="directorySecurity" /> ist <see langword="null" />.</exception>
         <exception cref="T:System.SystemException">Die Datei konnte nicht gefunden oder geändert werden.</exception>
         <exception cref="T:System.UnauthorizedAccessException">Der aktuelle Prozess hat keinen Zugriff zum Öffnen der Datei.</exception>
-        <exception cref="T:System.PlatformNotSupportedException">Das aktuelle Betriebssystem ist nicht Microsoft Windows 2000 oder höher.</exception>
-        <permission cref="T:System.Security.Permissions.FileIOPermission">, um die Zugriffs Steuerungs Liste (ACL) für ein Verzeichnis aufzuzählen. Sicherheitsmaßnahme: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />. Zugehörige Enumerationen: <see cref="F:System.Security.Permissions.FileIOPermissionAccess.NoAccess" /><see cref="F:System.Security.AccessControl.AccessControlActions.View" /></permission>
       </Docs>
     </Member>
     <Member MemberName="ToString">
