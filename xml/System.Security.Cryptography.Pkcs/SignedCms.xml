@@ -1,5 +1,5 @@
 <Type Name="SignedCms" FullName="System.Security.Cryptography.Pkcs.SignedCms">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="d98700fc7a40d918ff6a08bb078001562c36bf09" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75079372" /></Metadata><TypeSignature Language="C#" Value="public sealed class SignedCms" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="96c7e50bc79768548141f1799ddebce4e3426efd" /><Meta Name="ms.sourcegitcommit" Value="a8ff98b48bda124cfcb2605f5da9b21bc6dcd791" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="02/14/2020" /><Meta Name="ms.locfileid" Value="77243640" /></Metadata><TypeSignature Language="C#" Value="public sealed class SignedCms" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit SignedCms extends System.Object" />
   <TypeSignature Language="DocId" Value="T:System.Security.Cryptography.Pkcs.SignedCms" />
   <TypeSignature Language="VB.NET" Value="Public NotInheritable Class SignedCms" />
@@ -30,7 +30,7 @@
 ## Remarks  
  In der kryptografienachrichtensyntax RFC werden die folgenden MIME-Typen und Dateinamen Erweiterungen für CMS/PKCS #7-Nachrichten mit diesen Inhaltstypen angegeben.  
   
-|Art des Inhalts|MIME-Typ|Erweiterung|  
+|Inhaltstyp|MIME-Typ (MIME type)|Erweiterung|  
 |------------------|---------------|---------------|  
 |EnvelopedData|Application/PKCS7-MIME|. p7m|  
 |SignedData|Anwendung/PKCS7-Signatur|.p7s.p7c|  
@@ -612,7 +612,7 @@ Wenn <paramref name="verifySignatureOnly" /><see langword="true" /> ist, werden 
 
 Diese Methode ist erfolgreich, wenn <xref:System.Security.Cryptography.Pkcs.SubjectIdentifierType.NoSignature?displayProperty=nameWithType> als `signerIdentifierType`-Argument einer der <xref:System.Security.Cryptography.Pkcs.SignedCms> Konstruktorüberladungen bereitgestellt wurde. Andernfalls wird eine Ausnahme ausgelöst.
 
-## <a name="net-framework-security"></a>.NET Framework-Sicherheit  
+## <a name="net-framework-security"></a>.NET Framework-Sicherheit  
  
 Für den Zugriff auf den Signatur Schlüssel sind folgende Berechtigungen erforderlich:  
   
@@ -623,7 +623,7 @@ Für den Zugriff auf den Signatur Schlüssel sind folgende Berechtigungen erford
  ]]></format>
         </remarks>
         <exception cref="T:System.InvalidOperationException">.NET Framework (alle Versionen) und .NET Core 3.0 und höher: Das Empfängerzertifikat ist nicht angegeben.</exception>
-        <exception cref="T:System.PlatformNotSupportedException">.NET Core-Version 2.2 und früher: Ein Signaturzertifikat wurde nicht angegeben.</exception>
+        <exception cref="T:System.PlatformNotSupportedException">.NET Core Version 2.2 und früher: Es wurde kein Signaturzertifikat angegeben.</exception>
       </Docs>
     </Member>
     <Member MemberName="ComputeSignature">
@@ -655,13 +655,13 @@ Für den Zugriff auf den Signatur Schlüssel sind folgende Berechtigungen erford
       </Parameters>
       <Docs>
         <param name="signer">Ein <see cref="T:System.Security.Cryptography.Pkcs.CmsSigner" />-Objekt, das den Signaturgeber darstellt.</param>
-        <summary>Die <see cref="M:System.Security.Cryptography.Pkcs.SignedCms.ComputeSignature(System.Security.Cryptography.Pkcs.CmsSigner)" />-Methode erstellt mithilfe des angegebenen Signaturgebers eine Signatur und fügt der CMS/PKCS #7-Meldung die Signatur hinzu.</summary>
+        <summary>Erstellt mithilfe des angegebenen Signaturgebers eine Signatur und fügt der CMS/PKCS #7-Meldung die Signatur hinzu.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
   
-## <a name="net-framework-security"></a>.NET Framework-Sicherheit  
+## <a name="net-framework-security"></a>.NET Framework-Sicherheit  
  Für den Zugriff auf den Signatur Schlüssel sind folgende Berechtigungen erforderlich:  
   
 -   <xref:System.Security.Permissions.KeyContainerPermissionFlags.Open?displayProperty=nameWithType>  
@@ -720,14 +720,16 @@ Für den Zugriff auf den Signatur Schlüssel sind folgende Berechtigungen erford
       </Parameters>
       <Docs>
         <param name="signer">Ein <see cref="T:System.Security.Cryptography.Pkcs.CmsSigner" />-Objekt, das den Signaturgeber darstellt.</param>
-        <param name="silent">Dieser Parameter wird nicht verwendet.</param>
+        <param name="silent">Nur .NET Core: <see langword="true" />, um das Öffnen von Schlüsseln mit deaktivierten PIN-Aufforderungen anzufordern (sofern unterstützt); anderenfalls <see langword="false" />. In .NET Framework wird dieser Parameter nicht verwendet, bei Bedarf wird immer eine PIN-Aufforderung angezeigt.</param>
         <summary>Erstellt mithilfe des angegebenen Signaturgebers eine Signatur und fügt der CMS/PKCS #7-Meldung die Signatur hinzu.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
-## Remarks  
+## Remarks
+
+Nur .net Core: der `silent`-Parameter hat keine Auswirkung, wenn der <xref:System.Security.Cryptography.Pkcs.CmsSigner.PrivateKey?displayProperty=nameWithType> Wert nicht NULL ist. Mit dem bereitgestellten Wert wird gesteuert, ob beim Berechnen der Signatur eine PIN-Eingabeaufforderung angezeigt wird. Auch wenn die <xref:System.Security.Cryptography.Pkcs.CmsSigner.PrivateKey>-Eigenschaft den Wert NULL hat und der Parameter `silent` auf `true`festgelegt ist, können einige Kombinationen von Betriebssystem-und Signatur Geber Optionen weiterhin zu einer PIN-Eingabeaufforderung führen.
   
-## <a name="net-framework-security"></a>.NET Framework-Sicherheit  
+## <a name="net-framework-security"></a>.NET Framework-Sicherheit  
  Die folgenden Berechtigungen sind erforderlich, um die Benutzeroberfläche anzuzeigen:  
   
 -   <xref:System.Security.Permissions.UIPermissionWindow.SafeTopLevelWindows?displayProperty=nameWithType>  
@@ -992,11 +994,11 @@ Für den Zugriff auf den Signatur Schlüssel sind folgende Berechtigungen erford
         <exception cref="T:System.InvalidOperationException">Eine CMS/PKCS #7-Meldung wird nicht signiert, und <paramref name="index" /> ist ungültig.</exception>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> ist kleiner als Null.  
   
-- oder - 
+- oder - 
  <paramref name="index" /> ist größer als die Signaturanzahl minus 1.</exception>
         <exception cref="T:System.Security.Cryptography.CryptographicException">Die Signatur konnte nicht entfernt werden.  
   
- - oder -  
+ - oder -  
   
  Ein interner kryptografischer Fehler trat auf.</exception>
       </Docs>
