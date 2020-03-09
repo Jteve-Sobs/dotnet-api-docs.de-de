@@ -1,10 +1,11 @@
 <Type Name="WorkflowInstance" FullName="System.Activities.Hosting.WorkflowInstance">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="7515c1e78c10083fc9644beb8219dc6cacc08083" /><Meta Name="ms.sourcegitcommit" Value="a22d0855bbf24d893f43605f8b7e3a44bd9551a5" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70339378" /></Metadata><TypeSignature Language="C#" Value="public abstract class WorkflowInstance" />
-  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract WorkflowInstance extends System.Object" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="0e317c42be11656ed6af959d3ea3724621229930" /><Meta Name="ms.sourcegitcommit" Value="1b924db57b3a1cf768d98c21f9b988d6966a0f2b" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="03/06/2020" /><Meta Name="ms.locfileid" Value="78803721" /></Metadata><TypeSignature Language="C#" Value="public abstract class WorkflowInstance" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit WorkflowInstance extends System.Object" FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1" />
   <TypeSignature Language="DocId" Value="T:System.Activities.Hosting.WorkflowInstance" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class WorkflowInstance" />
   <TypeSignature Language="C++ CLI" Value="public ref class WorkflowInstance abstract" />
   <TypeSignature Language="F#" Value="type WorkflowInstance = class" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract WorkflowInstance extends System.Object" FrameworkAlternate="netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
   <AssemblyInfo>
     <AssemblyName>System.Activities</AssemblyName>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
@@ -19,23 +20,23 @@
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die <xref:System.Activities.Hosting.WorkflowInstance> ist eine Singlethread-Instanz und nimmt an, dass der Host jeden Zugriff darauf synchronisiert. Ein Versuch, mehrere APIs gleichzeitig aufzurufen, führt dazu, dass eine <xref:System.InvalidOperationException> ausgegeben wird.  
+ <xref:System.Activities.Hosting.WorkflowInstance> ist Single Thread und geht davon aus, dass der Host den gesamten Zugriff darauf synchronisiert. Ein Versuch, mehrere APIs gleichzeitig aufzurufen, führt dazu, dass eine <xref:System.InvalidOperationException> ausgegeben wird.  
   
- Intern hat eine <xref:System.Activities.Hosting.WorkflowInstance> zwei Zustände: Wird ausgeführt und angehalten. Die einzige Möglichkeit, die Laufzeit zu einem Wechsel vom angehaltenen Zustand in den Zustand der Ausführung zu bringen, besteht darin, <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.Run%2A> aufzurufen. Alle Aktionen (außer PAUSE) können nur ausgeführt werden, während sich die Laufzeit im angehaltenen Zustand befindet. Die Laufzeit wird in den folgenden Situationen spontan angehalten:  
+ Intern hat eine <xref:System.Activities.Hosting.WorkflowInstance> zwei Zustände: den Zustand der Ausführung und den angehaltenen Zustand. Die einzige Möglichkeit, die Laufzeit zu einem Wechsel vom angehaltenen Zustand in den Zustand der Ausführung zu bringen, besteht darin, <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.Run%2A> aufzurufen. Alle Aktionen (außer PAUSE) können nur ausgeführt werden, während sich die Laufzeit im angehaltenen Zustand befindet. Die Laufzeit wird in den folgenden Situationen spontan angehalten:  
   
 -   Ein schwerwiegender Laufzeitfehler ist aufgetreten. Der Host wird durch <xref:System.Activities.Hosting.WorkflowInstance.OnRequestAbort%2A> signalisiert (hierbei wird kein Übergang zum angehaltenen Zustand signalisiert) und wird dann durch <xref:System.Activities.Hosting.WorkflowInstance.OnNotifyPaused%2A> benachrichtigt.  
   
 -   Eine Ausnahme im Workflow wurde nicht abgefangen und hat den Stamm verlassen. Der Host wird durch die <xref:System.Activities.Hosting.WorkflowInstance.OnNotifyUnhandledException%2A>-Methode benachrichtigt.  
   
--   Dem Planer sind Arbeitsaufgaben ausgegangen. Er befindet sich jetzt im Zustand <xref:System.Activities.Hosting.WorkflowInstanceState.Idle>. Der Host wird durch die <xref:System.Activities.Hosting.WorkflowInstance.OnNotifyPaused%2A>-Methode benachrichtigt. Beachten Sie, dass dem Planer Arbeitsaufgaben ausgegangen sein könnten, da sich die Instanz im Leerlauf befindet oder abgeschlossen ist. Mithilfe des <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.State%2A>-Werts der <xref:System.Activities.Hosting.WorkflowInstance.Controller%2A>-Eigenschaft kann zwischen den beiden Werten unterschieden werden.  
+-   Dem Planer sind Arbeitselemente ausgegangen. Er befindet sich jetzt im Zustand <xref:System.Activities.Hosting.WorkflowInstanceState.Idle>. Der Host wird durch die <xref:System.Activities.Hosting.WorkflowInstance.OnNotifyPaused%2A>-Methode benachrichtigt. Beachten Sie, dass dem Planer Arbeitsaufgaben ausgegangen sein könnten, da sich die Instanz im Leerlauf befindet oder abgeschlossen ist. Mithilfe des <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.State%2A>-Werts der <xref:System.Activities.Hosting.WorkflowInstance.Controller%2A>-Eigenschaft kann zwischen den beiden Werten unterschieden werden.  
   
- Der Host kann einen Wechsel vom Zustand der Ausführung in den angehaltenen Zustand anfordern, indem er die <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.RequestPause%2A>-Methode oder <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.PauseWhenPersistable%2A>-Methode der <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl>-Instanz aufruft, die von der <xref:System.Activities.Hosting.WorkflowInstance.Controller%2A>-Eigenschaft zurückgegeben wurde. Diese Anforderung liefert keine bestimmte Antwort. Das bedeutet, dass der Host nicht versuchen sollte, einen OnNotify* oder <xref:System.Activities.Hosting.WorkflowInstance.OnRequestAbort%2A> mit einer bestimmten Anforderung zum Anhalten zu korrelieren. Als Reaktion auf eine Pausenanforderung kann die Laufzeit in den angehaltenen Status wechseln und <xref:System.Activities.Hosting.WorkflowInstance.OnNotifyPaused%2A> aufrufen, während der Planer immer noch ausstehende Arbeitselemente zu bewältigen hat. Der <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.State%2A>-Wert der <xref:System.Activities.Hosting.WorkflowInstance.Controller%2A>-Eigenschaft kann verwendet werden, um zu bestimmen, ob der Planer keine weitere Arbeit aufweist oder von einer Pausenanforderung unterbrochen wurde.  
+ Der Host kann einen Wechsel vom Zustand der Ausführung in den angehaltenen Zustand anfordern, indem er die <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.RequestPause%2A>-Methode oder <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.PauseWhenPersistable%2A>-Methode der <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl>-Instanz aufruft, die von der <xref:System.Activities.Hosting.WorkflowInstance.Controller%2A>-Eigenschaft zurückgegeben wurde. Diese Anforderung liefert keine bestimmte Antwort. Das bedeutet, dass der Host nicht versuchen sollte, einen OnNotify* oder <xref:System.Activities.Hosting.WorkflowInstance.OnRequestAbort%2A> mit einer bestimmten Anforderung zum Anhalten zu korrelieren. Als Reaktion auf eine Pausenanforderung kann die Laufzeit in den angehaltenen Status wechseln und <xref:System.Activities.Hosting.WorkflowInstance.OnNotifyPaused%2A> aufrufen, während der Planer immer noch ausstehende Arbeitsaufgaben zu bewältigen hat. Der <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.State%2A>-Wert der <xref:System.Activities.Hosting.WorkflowInstance.Controller%2A>-Eigenschaft kann verwendet werden, um zu bestimmen, ob der Planer keine weitere Arbeit aufweist oder von einer Pausenanforderung unterbrochen wurde.  
   
  Die <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.RequestPause%2A>-Methode der <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl>-Instanz, die von der <xref:System.Activities.Hosting.WorkflowInstance.Controller%2A>-Eigenschaft zurückgegeben wurde, ist die einzige Methode, die aufgerufen werden kann, während sich die <xref:System.Activities.Hosting.WorkflowInstance> im Status der Ausführung befindet. Alle anderen Methoden lösen eine <xref:System.InvalidOperationException> aus, wenn sie aufgerufen werden. Aufgrund der Regeln für den Wechsel der <xref:System.Activities.Hosting.WorkflowInstance> von einem Zustand in einen anderen kann das allgemeine Konzept für den Zustand der Ausführung und den angehaltenen Zustand wie folgt definiert werden:  
   
--   Wird ausgeführt: der Zustand zwischen einem <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.Run%2A> -Befehl und der nächsten WorkflowInstance. OnNotify *.  
+-   Wird ausgeführt: der Status zwischen einem <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.Run%2A>-und der nächsten WorkflowInstance. OnNotify *.  
   
--   Angehalten: der Zustand zwischen der letzten WorkflowInstance. OnNotify * und dem nächsten <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.Run%2A>-Befehl.  
+-   Angehalten: der Zustand zwischen der letzten WorkflowInstance. OnNotify * und dem nächsten <xref:System.Activities.Hosting.WorkflowInstance.WorkflowInstanceControl.Run%2A>.  
   
  ]]></format>
     </remarks>
@@ -47,7 +48,7 @@
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Docs>
-        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Activities.Hosting.WorkflowInstance" />-Klasse.</summary>
+        <summary>Initialisiert eine neue Instanz der Klasse <see cref="T:System.Activities.Hosting.WorkflowInstance" />.</summary>
       </Docs>
     </MemberGroup>
     <Member MemberName=".ctor">
@@ -348,7 +349,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Wenn diese Eigenschaft festgelegt wird, nachdem die Workflow Instanz initialisiert <xref:System.Activities.Hosting.WorkflowInstance.IsReadOnly%2A> wurde `true`und zurück <xref:System.InvalidOperationException> gibt, wird eine ausgelöst.  
+ Wenn diese Eigenschaft festgelegt wird, nachdem die Workflow Instanz initialisiert wurde, und <xref:System.Activities.Hosting.WorkflowInstance.IsReadOnly%2A> `true`zurückgibt, wird eine <xref:System.InvalidOperationException> ausgelöst.  
   
  ]]></format>
         </remarks>
@@ -573,6 +574,7 @@
       <MemberSignature Language="C#" Value="protected internal abstract IAsyncResult OnBeginResumeBookmark (System.Activities.Bookmark bookmark, object value, TimeSpan timeout, AsyncCallback callback, object state);" />
       <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance class System.IAsyncResult OnBeginResumeBookmark(class System.Activities.Bookmark bookmark, object value, valuetype System.TimeSpan timeout, class System.AsyncCallback callback, object state) cil managed" />
       <MemberSignature Language="DocId" Value="M:System.Activities.Hosting.WorkflowInstance.OnBeginResumeBookmark(System.Activities.Bookmark,System.Object,System.TimeSpan,System.AsyncCallback,System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend MustOverride Function OnBeginResumeBookmark (bookmark As Bookmark, value As Object, timeout As TimeSpan, callback As AsyncCallback, state As Object) As IAsyncResult" />
       <MemberSignature Language="C++ CLI" Value="protected public:&#xA; abstract IAsyncResult ^ OnBeginResumeBookmark(System::Activities::Bookmark ^ bookmark, System::Object ^ value, TimeSpan timeout, AsyncCallback ^ callback, System::Object ^ state);" />
       <MemberSignature Language="F#" Value="abstract member OnBeginResumeBookmark : System.Activities.Bookmark * obj * TimeSpan * AsyncCallback * obj -&gt; IAsyncResult" Usage="workflowInstance.OnBeginResumeBookmark (bookmark, value, timeout, callback, state)" />
       <MemberType>Method</MemberType>
@@ -747,6 +749,7 @@
       <MemberSignature Language="C#" Value="protected abstract void OnNotifyUnhandledException (Exception exception, System.Activities.Activity source, string sourceInstanceId);" />
       <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnNotifyUnhandledException(class System.Exception exception, class System.Activities.Activity source, string sourceInstanceId) cil managed" />
       <MemberSignature Language="DocId" Value="M:System.Activities.Hosting.WorkflowInstance.OnNotifyUnhandledException(System.Exception,System.Activities.Activity,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Protected MustOverride Sub OnNotifyUnhandledException (exception As Exception, source As Activity, sourceInstanceId As String)" />
       <MemberSignature Language="C++ CLI" Value="protected:&#xA; abstract void OnNotifyUnhandledException(Exception ^ exception, System::Activities::Activity ^ source, System::String ^ sourceInstanceId);" />
       <MemberSignature Language="F#" Value="abstract member OnNotifyUnhandledException : Exception * System.Activities.Activity * string -&gt; unit" Usage="workflowInstance.OnNotifyUnhandledException (exception, source, sourceInstanceId)" />
       <MemberType>Method</MemberType>
@@ -880,7 +883,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Wenn diese Eigenschaft festgelegt wird, nachdem die Workflow Instanz initialisiert <xref:System.Activities.Hosting.WorkflowInstance.IsReadOnly%2A> wurde `true`und zurück <xref:System.InvalidOperationException> gibt, wird eine ausgelöst.  
+ Wenn diese Eigenschaft festgelegt wird, nachdem die Workflow Instanz initialisiert wurde, und <xref:System.Activities.Hosting.WorkflowInstance.IsReadOnly%2A> `true`zurückgibt, wird eine <xref:System.InvalidOperationException> ausgelöst.  
   
  ]]></format>
         </remarks>
@@ -908,7 +911,7 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Wenn <xref:System.Activities.Hosting.WorkflowInstance.IsReadOnly%2A> zurück `true`gibt, wird <xref:System.InvalidOperationException> eine ausgelöst.  
+ Wenn <xref:System.Activities.Hosting.WorkflowInstance.IsReadOnly%2A> `true`zurückgibt, wird eine <xref:System.InvalidOperationException> ausgelöst.  
   
  ]]></format>
         </remarks>
