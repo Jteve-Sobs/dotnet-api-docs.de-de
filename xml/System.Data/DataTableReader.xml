@@ -1,5 +1,5 @@
 <Type Name="DataTableReader" FullName="System.Data.DataTableReader">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="fa131b45a383de3b642a0c4312d3f215d311c514" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75140576" /></Metadata><TypeSignature Language="C#" Value="public sealed class DataTableReader : System.Data.Common.DbDataReader" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="30b5e5a3271a0718ebdff25ae6e806b521ce8840" /><Meta Name="ms.sourcegitcommit" Value="1b924db57b3a1cf768d98c21f9b988d6966a0f2b" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="03/06/2020" /><Meta Name="ms.locfileid" Value="78821830" /></Metadata><TypeSignature Language="C#" Value="public sealed class DataTableReader : System.Data.Common.DbDataReader" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit DataTableReader extends System.Data.Common.DbDataReader" />
   <TypeSignature Language="DocId" Value="T:System.Data.DataTableReader" />
   <TypeSignature Language="VB.NET" Value="Public NotInheritable Class DataTableReader&#xA;Inherits DbDataReader" />
@@ -58,6 +58,7 @@
       <MemberSignature Language="C#" Value="public DataTableReader (System.Data.DataTable dataTable);" />
       <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Data.DataTable dataTable) cil managed" />
       <MemberSignature Language="DocId" Value="M:System.Data.DataTableReader.#ctor(System.Data.DataTable)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (dataTable As DataTable)" />
       <MemberSignature Language="C++ CLI" Value="public:&#xA; DataTableReader(System::Data::DataTable ^ dataTable);" />
       <MemberSignature Language="F#" Value="new System.Data.DataTableReader : System.Data.DataTable -&gt; System.Data.DataTableReader" Usage="new System.Data.DataTableReader dataTable" />
       <MemberType>Constructor</MemberType>
@@ -422,7 +423,7 @@
       <Docs>
         <param name="ordinal">Die nullbasierte Ordnungszahl der Spalte.</param>
         <param name="dataIndex">Der Index in dem Feld, in dem der Lesevorgang beginnen soll.</param>
-        <param name="buffer">Der Puffer, in den der Bytedatenstrom gelesen werden soll.</param>
+        <param name="buffer">Der Puffer, in den der Bytestream gelesen werden soll.</param>
         <param name="bufferIndex">Der Index innerhalb des Puffers, an dem mit dem Platzieren der Daten begonnen werden soll.</param>
         <param name="length">Die maximale Länge, die in den Puffer kopiert werden soll.</param>
         <summary>Liest beginnend am jeweiligen Pufferoffset einen Stream von Bytes aus dem angegebenen Spaltenoffset als Array in den Puffer.</summary>
@@ -550,7 +551,7 @@
       </Parameters>
       <Docs>
         <param name="ordinal">Die nullbasierte Ordnungszahl der Spalte.</param>
-        <param name="dataIndex">Der Index in dem Feld, in dem der Lesevorgang beginnen soll.</param>
+        <param name="dataIndex">Der Index im Feld, an dem der Lesevorgang beginnen soll.</param>
         <param name="buffer">Der Puffer, in den der Zeichenstream gelesen werden soll.</param>
         <param name="bufferIndex">Der Index innerhalb des Puffers, an dem mit dem Platzieren der Daten begonnen werden soll.</param>
         <param name="length">Die maximale Länge, die in den Puffer kopiert werden soll.</param>
@@ -1333,9 +1334,9 @@ Russ
   
  `GetOrdinal` führt zuerst eine Suche mit Berücksichtigung der Groß-und Kleinschreibung durch. Bei einem Fehler wird eine zweite Suche ohne Beachtung der Groß-/Kleinschreibung durchgeführt. Wenn die Spaltennummer nicht gefunden wird, wird ein `IndexOutOfRangeException` ausgelöst.  
   
- `GetOrdinal` ist eine nicht-Breite von Kana.  
+ `GetOrdinal` berücksichtigt die Laufweite von Kana nicht.  
   
- Da ordinalbasierte Suchvorgänge effizienter als benannte suchen sind, ist es ineffizient, `GetOrdinal` innerhalb einer Schleife aufzurufen. Sparen Sie Zeit, indem Sie `GetOrdinal` einmal aufrufen und die Ergebnisse einer ganzzahligen Variablen zur Verwendung innerhalb der Schleife zuweisen.  
+ Da Nachschlagevorgänge auf der Basis von Ordinalzahlen effizienter sind als Nachschlagevorgänge nach Namen, ist der Aufruf von `GetOrdinal` innerhalb einer Schleife ineffizient. Sparen Sie Zeit, indem Sie `GetOrdinal` einmal aufrufen und die Ergebnisse einer ganzzahligen Variablen zur Verwendung innerhalb der Schleife zuweisen.  
   
    
   
@@ -1541,23 +1542,23 @@ Russ
 |ColumnSize|-1, wenn die <xref:System.Data.Common.SchemaTableColumn.ColumnSize> (oder <xref:System.Data.DataColumn.MaxLength%2A>)-Eigenschaft des <xref:System.Data.DataColumn> nicht bestimmt werden kann oder nicht relevant ist. andernfalls 0 oder eine positive ganze Zahl, die den `MaxLength` Wert enthält.|  
 |NumericPrecision|Wenn es sich bei dem Spaltentyp um einen numerischen Typ handelt, ist dies die maximale Genauigkeit der Spalte. Wenn der Spaltentyp kein numerischer Datentyp ist, ist dies ein NULL-Wert.|  
 |NumericScale|Wenn der Spaltendatentyp eine Skalierungs Komponente aufweist, wird die Anzahl der Ziffern rechts vom Dezimaltrennzeichen zurückgegeben. Andernfalls wird ein NULL-Wert zurückgegeben.|  
-|Datentyp|Der zugrunde liegende Typ der Spalte.|  
+|DataType|Der zugrunde liegende Typ der Spalte.|  
 |ProviderType|Der Zähler des Datentyps der Spalte. Wenn sich der Datentyp der Spalte von Zeile zu Zeile unterscheidet, wird dieser Wert <xref:System.Object>. Diese Spalte kann keinen NULL-Wert enthalten.|  
-|IsLong|`true`, wenn der Datentyp der Spalte <xref:System.String> ist und dessen <xref:System.Data.DataColumn.MaxLength%2A>-Eigenschaft-1 ist. Andernfalls ist der Wert `false`.|  
+|IsLong|`true`, wenn der Datentyp der Spalte <xref:System.String> ist und dessen <xref:System.Data.DataColumn.MaxLength%2A>-Eigenschaft-1 ist. Andernfalls `false`.|  
 |AllowDBNull|`true`, wenn die AllowDBNull-Einschränkung für die Spalte auf true festgelegt ist. Andernfalls `false`.|  
 |IsReadOnly|`true`, wenn die Spalte nicht geändert werden kann. Andernfalls `false`.|  
 |IsRowVersion|`false`für jede Spalte.|  
-|IsUnique|`true`: in dieser Spalte können keine zwei Zeilen in der <xref:System.Data.DataTable> denselben Wert aufweisen. `IsUnique` ist garantiert true, wenn die Spalte einen Schlüssel allein darstellt, oder wenn eine Einschränkung vom Typ UNIQUE vorliegt, die nur für diese Spalte gilt. `false`: die Spalte kann doppelte Werte in der `DataTable`enthalten. Der Standardwert dieser Spalte ist `false`.|  
+|IsUnique|`true`: in dieser Spalte können keine zwei Zeilen in der <xref:System.Data.DataTable> denselben Wert aufweisen. `IsUnique` ist garantiert true, wenn die Spalte einen Schlüssel allein darstellt, oder wenn eine Einschränkung vom Typ UNIQUE vorliegt, die nur für diese Spalte gilt. `false`: die Spalte kann doppelte Werte in der `DataTable`enthalten. Der Standardwert für diese Spalte ist `false`.|  
 |IsKey|`true`: bei der Spalte handelt es sich um eine Gruppe von Spalten, die die Zeile in der <xref:System.Data.DataTable>eindeutig identifizieren. Der Satz von Spalten, bei dem `IsKey` auf `true` festgelegt ist, muss eine Zeile im `DataTable`eindeutig identifizieren. Es ist nicht erforderlich, dass es sich bei dieser Menge Spalten um eine minimale Spaltenmenge handelt. Dieser Spalten Satz kann aus einem `DataTable` Primärschlüssel, einer UNIQUE-Einschränkung oder einem eindeutigen Index generiert werden. `false`: die Spalte ist nicht erforderlich, um die Zeile eindeutig zu identifizieren. Dieser Wert ist `true`, wenn die Spalte an einem einzelnen oder zusammengesetzten Primärschlüssel beteiligt ist. Andernfalls ist der Wert `false`.|  
-|IsAutoIncrement|`true`: die Spalte weist neuen Zeilen in fester Inkrementen Werte zu. `false`: die Spalte weist neuen Zeilen in fester Inkrementen keine Werte zu. Der Standardwert dieser Spalte ist `false`.|  
+|IsAutoIncrement|`true`: die Spalte weist neuen Zeilen in fester Inkrementen Werte zu. `false`: die Spalte weist neuen Zeilen in fester Inkrementen keine Werte zu. Der Standardwert für diese Spalte ist `false`.|  
 |BaseCatalogName|Der Name des Katalogs im Datenspeicher, der die Spalte enthält. `Null`, wenn der Name des Basis Katalogs nicht bestimmt werden kann. Der Standardwert für diese Spalte ist ein `null` Wert.|  
 |BaseSchemaName|Dieser Wert ist immer `Null`.|  
-|BaseTableName|Der Name des <xref:System.Data.DataTable>-Objekts.|  
+|BaseTableName|Der Name des <xref:System.Data.DataTable>.|  
 |BaseColumnName|Der Name der Spalte in der <xref:System.Data.DataTable>.|  
 |AutoIncrementSeed|Der Wert der <xref:System.Data.DataColumn.AutoIncrementSeed%2A> Eigenschaft des <xref:System.Data.DataTable>.|  
 |AutoIncrementStep|Der Wert der <xref:System.Data.DataColumn.AutoIncrementStep%2A> Eigenschaft des <xref:System.Data.DataTable>.|  
 |DefaultValue|Der Wert der <xref:System.Data.DataColumn.DefaultValue%2A> Eigenschaft des <xref:System.Data.DataColumn>.|  
-|Ausdruck|Die Ausdrucks Zeichenfolge, wenn die aktuelle Spalte eine Ausdrucks Spalte ist und alle Spalten, die im Ausdruck verwendet werden, zu demselben `T:System.Data.DataTable` gehören, der die Ausdrucks Spalte enthält. Andernfalls `null`.|  
+|expression|Die Ausdrucks Zeichenfolge, wenn die aktuelle Spalte eine Ausdrucks Spalte ist und alle Spalten, die im Ausdruck verwendet werden, zu demselben `T:System.Data.DataTable` gehören, der die Ausdrucks Spalte enthält. Andernfalls `null`.|  
 |ColumnMapping|Der <xref:System.Data.MappingType> Wert, der der <xref:System.Data.DataColumn>zugeordnet ist. Der Typ kann "`Attribute`", "`Element`", "`Hidden`" oder "`SimpleContent`" sein. Der Standardwert ist `Element`.|  
 |BaseTableNamespace|Der Wert der <xref:System.Data.DataTable.Namespace%2A> Eigenschaft des <xref:System.Data.DataTable>.|  
 |BaseColumnNamespace|Der Wert der <xref:System.Data.DataColumn.Namespace%2A> Eigenschaft des <xref:System.Data.DataColumn>.|  
@@ -1607,7 +1608,7 @@ Russ
         <Parameter Name="ordinal" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="ordinal">Die nullbasierte Ordnungszahl der Spalte.</param>
+        <param name="ordinal">Die nullbasierte Ordnungszahl der Spalte</param>
         <summary>Ruft den Wert der angegebenen Spalte als eine Zeichenfolge ab.</summary>
         <returns>Der Wert der angegebenen Spalte.</returns>
         <remarks>
