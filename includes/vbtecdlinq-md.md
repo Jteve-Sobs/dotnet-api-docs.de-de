@@ -1,9 +1,9 @@
 ---
 ms.openlocfilehash: 2315bc46bc81f9637d7a8482f0f08970632ae575
-ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.sourcegitcommit: 5ef0d02cb57c7153fd9d5417cdcad45665af832e
 ms.translationtype: HT
 ms.contentlocale: de-DE
-ms.lasthandoff: 06/15/2019
-ms.locfileid: "63867769"
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "71138089"
 ---
-<span data-ttu-id="ea31c-101">LINQ to SQL</span><span class="sxs-lookup"><span data-stu-id="ea31c-101">LINQ to SQL</span></span>
+<span data-ttu-id="b01d0-101">LINQ to SQL</span><span class="sxs-lookup"><span data-stu-id="b01d0-101">LINQ to SQL</span></span>
