@@ -1,5 +1,5 @@
 <Type Name="WindowsIdentity" FullName="System.Security.Principal.WindowsIdentity">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="efb81cca121fd42dad63f6d43d263c861088b9ab" /><Meta Name="ms.sourcegitcommit" Value="1b924db57b3a1cf768d98c21f9b988d6966a0f2b" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="03/06/2020" /><Meta Name="ms.locfileid" Value="78753838" /></Metadata><TypeSignature Language="C#" Value="public class WindowsIdentity : System.Security.Claims.ClaimsIdentity, IDisposable, System.Runtime.Serialization.IDeserializationCallback, System.Runtime.Serialization.ISerializable" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;dotnet-plat-ext-3.1;netcore-3.0;netcore-3.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="860eeff0f860781f895acf9679aa48e2ce39642a" /><Meta Name="ms.sourcegitcommit" Value="2b887f321b7927795128f58bb327e63b089cbe3d" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="03/19/2020" /><Meta Name="ms.locfileid" Value="79547693" /></Metadata><TypeSignature Language="C#" Value="public class WindowsIdentity : System.Security.Claims.ClaimsIdentity, IDisposable, System.Runtime.Serialization.IDeserializationCallback, System.Runtime.Serialization.ISerializable" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;dotnet-plat-ext-3.1;netcore-3.0;netcore-3.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit WindowsIdentity extends System.Security.Claims.ClaimsIdentity implements class System.IDisposable, class System.Runtime.Serialization.IDeserializationCallback, class System.Runtime.Serialization.ISerializable" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;dotnet-plat-ext-3.1;netcore-3.0;netcore-3.1" />
   <TypeSignature Language="DocId" Value="T:System.Security.Principal.WindowsIdentity" />
   <TypeSignature Language="VB.NET" Value="Public Class WindowsIdentity&#xA;Inherits ClaimsIdentity&#xA;Implements IDeserializationCallback, IDisposable, ISerializable" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;dotnet-plat-ext-3.1;netcore-3.0;netcore-3.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
@@ -1228,6 +1228,9 @@ Der Anwendungscode ruft diese Methode nicht auf. Sie wird automatisch während G
 ## Remarks  
  Auf Windows NT-Plattformen muss der aktuelle Benutzer über ausreichende Rechte verfügen, um den Identitätswechsel zuzulassen.  
   
+> [!WARNING]
+>  Vermeiden Sie die Verwendung dieser Methode mit dem Muster "Async/erwartungsgemäß". In einigen Fällen kann dies zu Zuverlässigkeits Problemen führen, weil der Identitätswechsel nicht rückgängig gemacht wird, auch wenn die resultierende `WindowsImpersonationContext` verworfen wird. Verwenden Sie stattdessen `RunImpersonated`.  
+  
    
   
 ## Examples  
@@ -1288,6 +1291,9 @@ Der Anwendungscode ruft diese Methode nicht auf. Sie wird automatisch während G
 >  Wenn Sie die <xref:System.Security.Principal.WindowsIdentity.Impersonate%28System.IntPtr%29>-Methode mit einem `userToken` Wert von <xref:System.IntPtr.Zero> aufrufen, entspricht dies dem Aufrufen der Win32-`RevertToSelf` Funktion. Wenn ein anderer Benutzer gerade einen Identitätswechsel ausführt, wird das Steuerelement auf den ursprünglichen Benutzer zurückgesetzt.  
   
  Weitere Informationen zu Aufrufen von nicht verwaltetem Code finden Sie unter verwenden [nicht verwalteter DLL-Funktionen](~/docs/framework/interop/consuming-unmanaged-dll-functions.md).  
+  
+> [!WARNING]
+>  Vermeiden Sie die Verwendung dieser Methode mit dem Muster "Async/erwartungsgemäß". In einigen Fällen kann dies zu Zuverlässigkeits Problemen führen, weil der Identitätswechsel nicht rückgängig gemacht wird, auch wenn die resultierende `WindowsImpersonationContext` verworfen wird. Verwenden Sie stattdessen `RunImpersonated`.  
   
    
   
@@ -1684,6 +1690,13 @@ Der Anwendungscode ruft diese Methode nicht auf. Sie wird automatisch während G
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
+## Remarks  
+  
+> [!NOTE]
+>  Diese Methode kann im Gegensatz zu `Impersonate`zuverlässig mit dem Async/Erwartung-Muster verwendet werden. In einer Async-Methode kann die generische Überladung dieser Methode mit einem Async-delegatenargument verwendet werden, damit die resultierende Aufgabe möglicherweise erwartet wird.  
+  
+   
+  
 ## Examples  
  Im folgenden Beispiel wird veranschaulicht, wie die <xref:System.Security.Principal.WindowsIdentity>-Klasse verwendet wird, um die Identität eines Benutzers anzunehmen.  
   
@@ -1808,6 +1821,13 @@ public class ImpersonationDemo
         <returns>Das Ergebnis der Funktion.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!NOTE]
+>  Diese Methode kann im Gegensatz zu `Impersonate`zuverlässig mit dem Async/Erwartung-Muster verwendet werden. In einer Async-Methode kann diese Methode mit einem Async-delegatenargument verwendet werden, damit die resultierende Aufgabe möglicherweise erwartet wird.  
+  
+   
   
 ## Examples  
  Im folgenden Beispiel wird veranschaulicht, wie die <xref:System.Security.Principal.WindowsIdentity>-Klasse verwendet wird, um die Identität eines Benutzers anzunehmen.  

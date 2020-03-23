@@ -1,5 +1,5 @@
 <Type Name="HttpClient" FullName="System.Net.Http.HttpClient">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="ac1a5b1f82adb84ffbe61196c7d370a349b55830" /><Meta Name="ms.sourcegitcommit" Value="1b924db57b3a1cf768d98c21f9b988d6966a0f2b" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="03/06/2020" /><Meta Name="ms.locfileid" Value="78820413" /></Metadata><TypeSignature Language="C#" Value="public class HttpClient : System.Net.Http.HttpMessageInvoker" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="97ad446c509477db4234b141181b251e534b49c0" /><Meta Name="ms.sourcegitcommit" Value="46b6829001d7a117b555e2b8cd81170b68efff08" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="03/18/2020" /><Meta Name="ms.locfileid" Value="79506454" /></Metadata><TypeSignature Language="C#" Value="public class HttpClient : System.Net.Http.HttpMessageInvoker" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit HttpClient extends System.Net.Http.HttpMessageInvoker" />
   <TypeSignature Language="DocId" Value="T:System.Net.Http.HttpClient" />
   <TypeSignature Language="VB.NET" Value="Public Class HttpClient&#xA;Inherits HttpMessageInvoker" />
@@ -36,7 +36,10 @@
  In .NET Framework und Mono werden <xref:System.Net.HttpWebRequest> standardmäßig verwendet, um Anforderungen an den Server zu senden. Dieses Verhalten kann geändert werden, indem in einer der Konstruktorüberladungen, die eine <xref:System.Net.Http.HttpMessageHandler> Instanz als Parameter nehmen, ein anderer Kanal angegeben wird. Wenn Features wie Authentifizierung oder Zwischenspeicherung erforderlich sind, können <xref:System.Net.Http.WebRequestHandler> zum Konfigurieren von Einstellungen verwendet werden, und die Instanz kann an den-Konstruktor übergeben werden. Der zurückgegebene Handler kann an eine der Konstruktorüberladungen übergeben werden, die einen <xref:System.Net.Http.HttpMessageHandler>-Parameter übernehmen.  
   
  Wenn eine APP, die <xref:System.Net.Http.HttpClient> und verwandte Klassen im <xref:System.Net.Http>-Namespace verwendet, große Datenmengen herunterladen soll (50 Megabyte oder mehr), sollte die APP diese Downloads streamen und nicht die Standard Pufferung verwenden. Wenn die Standard Pufferung verwendet wird, wird die Speicherauslastung des Clients sehr groß, was möglicherweise zu einer erheblich geringeren Leistung führt.  
-  
+
+ Eigenschaften <xref:System.Net.Http.HttpClient> sollten nicht geändert werden, solange ausstehende Anforderungen vorliegen, da Sie nicht Thread sicher ist.
+
+   
  Die folgenden Methoden sind Thread sicher:  
   
 1.  <xref:System.Net.Http.HttpClient.CancelPendingRequests%2A>  
@@ -160,7 +163,7 @@ Wenn diese Änderung nicht erwünscht ist, können Sie die Anwendung so konfigur
         <AssemblyVersion>4.1.1.0</AssemblyVersion>
       </AssemblyInfo>
       <Docs>
-        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Net.Http.HttpClient" />-Klasse.</summary>
+        <summary>Initialisiert eine neue Instanz der Klasse <see cref="T:System.Net.Http.HttpClient" />.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -263,7 +266,7 @@ Die Verwendung dieses Konstruktors entspricht dem Aufrufen des [`HttpClient(hand
 Der angegebene `handler` wird durch den Aufruf von [HttpClient.](xref:System.Net.Http.HttpMessageInvoker.Dispose)verwerfen verworfen.  
 ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="handler" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="handler" />) lautet <see langword="null" />.</exception>
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -297,7 +300,7 @@ Der angegebene `handler` wird durch den Aufruf von [HttpClient.](xref:System.Net
         <param name="disposeHandler"><see langword="true" />, wenn der innere Handler durch [HttpClient.Dispose](xref:System.Net.Http.HttpMessageInvoker.Dispose) freigegeben werden soll; <see langword="false" />, wenn Sie beabsichtigen, den inneren Handler wiederzuverwenden.</param>
         <summary>Initialisiert eine neue Instanz der <see cref="T:System.Net.Http.HttpClient" />-Klasse mit dem bereitgestellten Handler und gibt an, ob dieser Handler freigegeben werden soll, wenn diese Instanz freigegeben wird.</summary>
         <remarks>To be added.</remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="handler" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="handler" />) lautet <see langword="null" />.</exception>
       </Docs>
     </Member>
     <Member MemberName="BaseAddress">
@@ -454,7 +457,7 @@ Die Umgebungsvariablen, die für die `DefaultProxy` Initialisierung auf Windows-
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Header, die für diese Eigenschaft festgelegt wurden, müssen nicht erneut für Anforderungs Nachrichten festgelegt werden.  
+ Header, die für diese Eigenschaft festgelegt wurden, müssen nicht erneut für Anforderungs Nachrichten festgelegt werden. `DefaultRequestHeaders` sollten nicht geändert werden, solange ausstehende Anforderungen vorhanden sind, da es nicht Thread sicher ist.
   
  ]]></format>
         </remarks>
@@ -486,7 +489,7 @@ Die Umgebungsvariablen, die für die `DefaultProxy` Initialisierung auf Windows-
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
-`DefaultRequestVersion` ist <xref:System.Net.HttpVersion.Version11?displayProperty=nameWithType> standardmäßig.
+`DefaultRequestVersion` ist standardmäßig <xref:System.Net.HttpVersion.Version11?displayProperty=nameWithType>.
 
 Die `DefaultRequestVersion`-Eigenschaft gibt die Standard-HTTP-Version an, die für Anforderungen verwendet wird, die mit dieser <xref:System.Net.Http.HttpClient> Instanz gesendet werden, wenn die zu sendenden <xref:System.Net.Http.HttpRequestMessage> erstellt werden, insbesondere bei Aufrufen von Methoden wie <xref:System.Net.Http.HttpClient.DeleteAsync%2A>, <xref:System.Net.Http.HttpClient.GetAsync%2A>, <xref:System.Net.Http.HttpClient.GetByteArrayAsync%2A>, <xref:System.Net.Http.HttpClient.GetStreamAsync%2A>, <xref:System.Net.Http.HttpClient.GetStringAsync%2A>, <xref:System.Net.Http.HttpClient.PatchAsync%2A>, <xref:System.Net.Http.HttpClient.PostAsync%2A>und <xref:System.Net.Http.HttpClient.PutAsync%2A>.
 
@@ -552,9 +555,9 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
         <exception cref="T:System.InvalidOperationException">Die Anforderungsnachricht wurde bereits von der <see cref="T:System.Net.Http.HttpClient" />-Instanz gesendet.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="DeleteAsync">
@@ -597,9 +600,9 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
         <exception cref="T:System.InvalidOperationException">Die Anforderungsnachricht wurde bereits von der <see cref="T:System.Net.Http.HttpClient" />-Instanz gesendet.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="DeleteAsync">
@@ -644,9 +647,9 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
         <exception cref="T:System.InvalidOperationException">Die Anforderungsnachricht wurde bereits von der <see cref="T:System.Net.Http.HttpClient" />-Instanz gesendet.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="DeleteAsync">
@@ -691,9 +694,9 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
         <exception cref="T:System.InvalidOperationException">Die Anforderungsnachricht wurde bereits von der <see cref="T:System.Net.Http.HttpClient" />-Instanz gesendet.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="Dispose">
@@ -733,7 +736,7 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
 ## Remarks  
  Diese Methode wird von der öffentlichen `Dispose()`-Methode und der <xref:System.Object.Finalize%2A>-Methode aufgerufen. `Dispose()` Ruft die geschützte `Dispose(Boolean)` Methode auf, wobei der `disposing`-Parameter auf `true`festgelegt ist. <xref:System.Object.Finalize%2A> ruft `Dispose` auf, bei dem `disposing` auf `false`festgelegt ist.  
   
- Wenn der `disposing`-Parameter `true` ist, gibt diese Methode sämtliche Ressourcen frei, die für verwaltete Objekte reserviert sind, auf die dieser <xref:System.Net.Http.HttpClient> verweist. Diese Methode ruft die `Dispose()`-Methode aller Objekte auf, auf die verwiesen wird.  
+ Wenn der `disposing`-Parameter `true` ist, gibt diese Methode sämtliche Ressourcen frei, die für verwaltete Objekte reserviert sind, auf die dieser <xref:System.Net.Http.HttpClient> verweist. Diese Methode ruft die `Dispose()`-Methode jedes referenzierten Objekts auf.  
   
  Wenn diese Methode aufgerufen wird, wird die <xref:System.Net.Http.HttpClient.CancelPendingRequests%2A>-Methode aufgerufen, um alle ausstehenden Anforderungen abzubrechen.  
   
@@ -800,8 +803,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="GetAsync">
@@ -844,8 +847,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="GetAsync">
@@ -890,8 +893,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="GetAsync">
@@ -936,8 +939,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="GetAsync">
@@ -982,8 +985,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="GetAsync">
@@ -1028,8 +1031,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="GetAsync">
@@ -1076,8 +1079,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="GetAsync">
@@ -1124,8 +1127,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <MemberGroup MemberName="GetByteArrayAsync">
@@ -1192,8 +1195,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="GetByteArrayAsync">
@@ -1241,8 +1244,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <MemberGroup MemberName="GetStreamAsync">
@@ -1309,8 +1312,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="GetStreamAsync">
@@ -1358,8 +1361,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <MemberGroup MemberName="GetStringAsync">
@@ -1426,8 +1429,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="GetStringAsync">
@@ -1475,8 +1478,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="MaxResponseContentBufferSize">
@@ -1741,8 +1744,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="PostAsync">
@@ -1787,8 +1790,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="PostAsync">
@@ -1835,8 +1838,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="PostAsync">
@@ -1883,8 +1886,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <MemberGroup MemberName="PutAsync">
@@ -1948,8 +1951,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="PutAsync">
@@ -1994,8 +1997,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="PutAsync">
@@ -2042,8 +2045,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="PutAsync">
@@ -2090,8 +2093,8 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="requestUri" /> ist <see langword="null" />.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="requestUri" />) lautet <see langword="null" />.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <MemberGroup MemberName="SendAsync">
@@ -2153,9 +2156,9 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="request" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="request" />) lautet <see langword="null" />.</exception>
         <exception cref="T:System.InvalidOperationException">Die Anforderungsnachricht wurde bereits von der <see cref="T:System.Net.Http.HttpClient" />-Instanz gesendet.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="SendAsync">
@@ -2200,9 +2203,9 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="request" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="request" />) lautet <see langword="null" />.</exception>
         <exception cref="T:System.InvalidOperationException">Die Anforderungsnachricht wurde bereits von der <see cref="T:System.Net.Http.HttpClient" />-Instanz gesendet.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="SendAsync">
@@ -2247,9 +2250,9 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="request" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="request" />) lautet <see langword="null" />.</exception>
         <exception cref="T:System.InvalidOperationException">Die Anforderungsnachricht wurde bereits von der <see cref="T:System.Net.Http.HttpClient" />-Instanz gesendet.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="SendAsync">
@@ -2296,9 +2299,9 @@ Die `DefaultRequestVersion`-Eigenschaft kann geändert werden, solange die <xref
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="request" /> ist <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentNullException">Der Jointyp (<paramref name="request" />) lautet <see langword="null" />.</exception>
         <exception cref="T:System.InvalidOperationException">Die Anforderungsnachricht wurde bereits von der <see cref="T:System.Net.Http.HttpClient" />-Instanz gesendet.</exception>
-        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung konnte wg. eines zugrunde liegenden Problems wie Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats oder Timeout nicht durchgeführt werden.</exception>
+        <exception cref="T:System.Net.Http.HttpRequestException">Die Anforderung war aufgrund eines Problems (Netzwerkkonnektivität, DNS-Fehler, Überprüfung des Serverzertifikats, Timeout oder Ähnliches) nicht erfolgreich.</exception>
       </Docs>
     </Member>
     <Member MemberName="Timeout">
