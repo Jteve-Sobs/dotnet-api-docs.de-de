@@ -1,5 +1,5 @@
 <Type Name="Rune" FullName="System.Text.Rune">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="ccd800c394b1cec987d6e6d9159e72f5b0385984" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75118658" /></Metadata><TypeSignature Language="C#" Value="public struct Rune : IComparable&lt;System.Text.Rune&gt;, IEquatable&lt;System.Text.Rune&gt;" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="ff9c267452a86e0b4821e842a90dedf5d05b6760" /><Meta Name="ms.sourcegitcommit" Value="b0947fed0227b6b2e292d7efb43705b488b130aa" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="04/29/2020" /><Meta Name="ms.locfileid" Value="82303970" /></Metadata><TypeSignature Language="C#" Value="public struct Rune : IComparable&lt;System.Text.Rune&gt;, IEquatable&lt;System.Text.Rune&gt;" />
   <TypeSignature Language="ILAsm" Value=".class public sequential ansi sealed beforefieldinit Rune extends System.ValueType implements class System.IComparable`1&lt;valuetype System.Text.Rune&gt;, class System.IEquatable`1&lt;valuetype System.Text.Rune&gt;" />
   <TypeSignature Language="DocId" Value="T:System.Text.Rune" />
   <TypeSignature Language="VB.NET" Value="Public Structure Rune&#xA;Implements IComparable(Of Rune), IEquatable(Of Rune)" />
@@ -9,6 +9,7 @@
     <AssemblyName>System.Runtime</AssemblyName>
     <AssemblyVersion>4.2.1.0</AssemblyVersion>
     <AssemblyVersion>4.2.2.0</AssemblyVersion>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
   </AssemblyInfo>
   <Base>
     <BaseTypeName>System.ValueType</BaseTypeName>
@@ -33,7 +34,200 @@
 
 ## Remarks
 
-Die Konstruktoren und Konvertierungs Operatoren dieses Typs überprüfen die Eingabe, sodass Consumer die APIs abrufen können, vorausgesetzt, dass die zugrunde liegende <xref:System.Text.Rune> Instanz wohl geformt ist.
+Eine <xref:System.Text.Rune>-Instanz stellt einen Unicode-Skalarwert dar. Dies bedeutet einen beliebigen Codepunkt, der den Ersatzbereich ausschließt (U + D800 und. U + DFFF). Die Konstruktoren und Konvertierungs Operatoren des Typs überprüfen die Eingabe, sodass Consumer die APIs abrufen können, vorausgesetzt, dass die zugrunde liegende <xref:System.Text.Rune> Instanz wohl geformt ist.
+
+Wenn Sie mit den Begriffen Unicode-Skalarwert, Codepunkt, Ersatz Zeichenbereich und wohl geformt nicht vertraut sind, finden Sie unter Einführung in die [Zeichencodierung in .net](/dotnet/standard/base-types/character-encoding-introduction)Weitere Informationen.
+
+In den folgenden Abschnitten wird Folgendes erläutert:
+
+* [Verwendung des Rune-Typs](#when-to-use-the-rune-type)
+* [Wann nicht der Rune-Typ verwendet werden soll](#when-not-to-use-rune)
+* [Instanziieren einer Rune](#how-to-instantiate-a-rune)
+* [Abfragen von Eigenschaften einer Rune-Instanz](#query-properties-of-a-rune)
+* [Konvertieren einer `Rune` in UTF-8 oder UTF-16](#convert-a-rune-to-utf-8-or-utf-16)
+* [Rune in .net im Vergleich zu anderen Sprachen](#rune-in-net-vs-other-languages)
+
+### <a name="when-to-use-the-rune-type"></a>Verwendung des Rune-Typs
+
+Verwenden Sie ggf. den `Rune` Typ, wenn Ihr Code Folgendes:
+
+* Ruft APIs auf, die Unicode-skalare Werte erfordern.
+* Behandelt Ersatzpaare explizit.
+
+#### <a name="apis-that-require-unicode-scalar-values"></a>APIs, die Unicode-skalare Werte erfordern
+
+Wenn Ihr Code die `char` Instanzen in einer `string` oder einer `ReadOnlySpan<char>`durchläuft, funktionieren einige der `char` Methoden nicht ordnungsgemäß auf `char` Instanzen, die sich im Ersatzbereich befinden. Beispielsweise benötigen die folgenden APIs einen Skalarwert `char`, um ordnungsgemäß zu funktionieren:
+
+* <xref:System.Char.GetNumericValue%2A?displayProperty=nameWithType>
+* <xref:System.Char.GetUnicodeCategory%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsDigit%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsLetter%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsLetterOrDigit%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsLower%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsNumber%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsPunctuation%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsSymbol%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsUpper%2A?displayProperty=nameWithType>
+
+Das folgende Beispiel zeigt Code, der nicht ordnungsgemäß funktioniert, wenn eine der `char` Instanzen Ersatz Code Punkte ist:
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/CountLettersInString.cs" id="SnippetBadExample":::
+
+Dies ist der entsprechende Code, der mit einem `ReadOnlySpan<char>`funktioniert:
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/CountLettersInSpan.cs" id="SnippetBadExample":::
+
+Der vorangehende Code funktioniert ordnungsgemäß mit einigen Sprachen, wie z. b. Englisch:
+
+```csharp
+CountLettersInString("Hello")
+// Returns 5
+```
+
+Dies funktioniert jedoch nicht ordnungsgemäß für Sprachen außerhalb der grundlegenden mehrsprachigen Ebene, wie z. b. Osage:
+
+```csharp
+CountLettersInString("𐓏𐓘𐓻𐓘𐓻𐓟 𐒻𐓟")
+// Returns 0
+```
+
+Der Grund, warum diese Methode falsche Ergebnisse für den Osage-Text zurückgibt, ist, dass die `char` Instanzen für Osage-Buchstaben Ersatz Code Punkte sind. Kein einzelner Ersatz Code Punkt verfügt über genügend Informationen, um zu bestimmen, ob es sich um einen Buchstaben handelt.
+
+Wenn Sie diesen Code für die Verwendung von `Rune` anstelle `char`ändern, funktioniert die Methode ordnungsgemäß mit Code Punkten außerhalb der grundlegenden mehrsprachigen Ebene:
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/CountLettersInString.cs" id="SnippetGoodExample":::
+
+Dies ist der entsprechende Code, der mit einem `ReadOnlySpan<char>`funktioniert:
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/CountLettersInSpan.cs" id="SnippetGoodExample":::
+
+Im vorangehenden Code werden Osage-Buchstaben ordnungsgemäß gezählt:
+
+```csharp
+CountLettersInString("𐓏𐓘𐓻𐓘𐓻𐓟 𐒻𐓟")
+// Returns 8
+```
+
+#### <a name="code-that-explicitly-handles-surrogate-pairs"></a>Code, der Ersatzpaare explizit behandelt
+
+Verwenden Sie ggf. den `Rune`-Typ, wenn der Code APIs aufruft, die explizit auf Ersatz Code Punkten angewendet werden, z. b. die folgenden Methoden:
+
+* <xref:System.Char.IsSurrogate%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsSurrogatePair%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsHighSurrogate%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsLowSurrogate%2A?displayProperty=nameWithType>
+* <xref:System.Char.ConvertFromUtf32%2A?displayProperty=nameWithType>
+* <xref:System.Char.ConvertToUtf32%2A?displayProperty=nameWithType>
+
+Beispielsweise verfügt die folgende Methode über eine spezielle Logik, um Ersatz `char` Paare zu behandeln:
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/WorkWithSurrogates.cs" id="SnippetUseChar":::
+
+Dieser Code ist einfacher, wenn er `Rune`verwendet, wie im folgenden Beispiel gezeigt:
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/WorkWithSurrogates.cs" id="SnippetUseRune":::
+
+### <a name="when-not-to-use-rune"></a>Verwendung `Rune`
+
+Sie müssen den `Rune`-Typ nicht verwenden, wenn Ihr Code Folgendes:
+
+* Sucht nach exakten `char` Übereinstimmungen
+* Unterteilt eine Zeichenfolge mit einem bekannten Char-Wert.
+
+Die Verwendung des `Rune` Typs gibt möglicherweise falsche Ergebnisse zurück, wenn Ihr Code Folgendes:
+
+* Zählt die Anzahl der Anzeige Zeichen in einem `string`
+
+#### <a name="look-for-exact-char-matches"></a>Genaue `char` Übereinstimmungen suchen
+
+Der folgende Code durchläuft eine `string`, die nach bestimmten Zeichen sucht, und gibt den Index der ersten Übereinstimmung zurück. Es ist nicht erforderlich, diesen Code so zu ändern, dass er `Rune`verwendet, da der Code nach Zeichen sucht, die durch einen einzelnen `char`dargestellt werden.
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/FindFirstLetter.cs" id="SnippetExample":::
+
+#### <a name="split-a-string-on-a-known-char"></a>Teilen einer Zeichenfolge in einem bekannten `char`
+
+Es ist üblich, `string.Split` aufzurufen und Trennzeichen wie z. b. `' '` (Leerzeichen) oder `','` (Komma) zu verwenden, wie im folgenden Beispiel gezeigt:
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/SplitStringOnChar.cs" id="SnippetExample":::
+
+Es ist nicht erforderlich, `Rune` hier zu verwenden, da der Code nach Zeichen sucht, die durch einen einzelnen `char`dargestellt werden.
+
+#### <a name="count-the-number-of-display-characters-in-a-string"></a>Zählen der Anzahl der Anzeige Zeichen in einer `string`
+
+Die Anzahl der `Rune` Instanzen in einer Zeichenfolge stimmt möglicherweise nicht mit der Anzahl der Benutzer ab, die beim Anzeigen der Zeichenfolge angezeigt werden.
+
+Da `Rune` Instanzen Unicode-Skalarwerte darstellen, können Komponenten, die den [Unicode-Text Segmentierungs Richtlinien](https://www.unicode.org/reports/tr29/) folgen, `Rune` als Baustein zum zählen von Anzeige Zeichen verwenden.
+
+Der <xref:System.Globalization.StringInfo>-Typ kann zum zählen von Anzeige Zeichen verwendet werden, aber in anderen .net-Implementierungen als .net 5 wird er nicht in allen Szenarien ordnungsgemäß gezählt.
+
+Weitere Informationen finden Sie unter [Grapheme-Cluster](/dotnet/standard/base-types/character-encoding-introduction#grapheme-clusters).
+
+### <a name="how-to-instantiate-a-rune"></a>Vorgehensweise beim Instanziieren einer `Rune`
+
+Es gibt mehrere Möglichkeiten, eine `Rune`-Instanz zu erhalten. Sie können einen-Konstruktor verwenden, um eine `Rune` direkt aus zu erstellen:
+
+* Ein Codepunkt.
+
+  :::code language="csharp" source="~/snippets/System.Text/Rune/csharp/InstantiateRunes.cs" id="SnippetCodePoint":::
+
+* Eine einzelne `char`.
+
+  :::code language="csharp" source="~/snippets/System.Text/Rune/csharp/InstantiateRunes.cs" id="SnippetChar":::
+
+* Ein Ersatz `char` Paar.
+
+  :::code language="csharp" source="~/snippets/System.Text/Rune/csharp/InstantiateRunes.cs" id="SnippetSurrogate":::
+
+Alle Konstruktoren lösen eine `ArgumentException` aus, wenn die Eingabe keinen gültigen Unicode-Skalarwert darstellt.
+
+Für Aufrufer stehen <xref:System.Text.Rune.TryCreate%2A?displayProperty=nameWithType> Methoden zur Verfügung, die keine Ausnahmen bei einem Fehler auslösen möchten.
+
+`Rune` Instanzen können auch aus vorhandenen Eingabe Sequenzen gelesen werden. Bei einer `ReadOnlySpan<char>`, die UTF-16-Daten darstellt, gibt die <xref:System.Text.Rune.DecodeFromUtf16%2A?displayProperty=nameWithType>-Methode beispielsweise die erste `Rune` Instanz am Anfang der Eingabe Spanne zurück. Die <xref:System.Text.Rune.DecodeFromUtf8%2A?displayProperty=nameWithType>-Methode verhält sich ähnlich und akzeptiert einen `ReadOnlySpan<byte>` Parameter, der UTF-8-Daten darstellt. Es gibt äquivalente Methoden zum Lesen vom Ende der Spanne anstelle des Anfangs der Spanne.
+
+### <a name="query-properties-of-a-rune"></a>Abfrage Eigenschaften eines `Rune`
+
+Um den ganzzahligen Code Punkt Wert einer `Rune`-Instanz zu erhalten, verwenden Sie die <xref:System.Text.Rune.Value?displayProperty=nameWithType>-Eigenschaft.
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/InstantiateRunes.cs" id="SnippetValue":::
+
+Viele der statischen APIs, die für den `char`-Typ verfügbar sind, sind auch für den `Rune`-Typ verfügbar. Beispielsweise sind <xref:System.Text.Rune.IsWhiteSpace%2A?displayProperty=nameWithType> und <xref:System.Text.Rune.GetUnicodeCategory%2A?displayProperty=nameWithType> Entsprechungen für <xref:System.Char.IsWhiteSpace%2A?displayProperty=nameWithType>-und <xref:System.Char.GetUnicodeCategory%2A?displayProperty=nameWithType>-Methoden. Die `Rune` Methoden behandeln Ersatzpaare ordnungsgemäß.
+
+Im folgenden Beispielcode wird eine `ReadOnlySpan<char>` als Eingabe und als Ausgangspunkt für alle `Rune`, bei denen es sich nicht um einen Buchstaben oder eine Ziffer handelt.
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/TrimNonLettersAndNonDigits.cs" id="SnippetExample":::
+
+Es gibt einige API-Unterschiede zwischen `char` und `Rune`. Zum Beispiel:
+
+* Es gibt keine `Rune` Äquivalent zu <xref:System.Char.IsSurrogate(System.Char)?displayProperty=nameWithType>, da `Rune` Instanzen definitionsgemäß nie Ersatz Code Punkte sein können.
+* Der <xref:System.Text.Rune.GetUnicodeCategory%2A?displayProperty=nameWithType> gibt nicht immer dasselbe Ergebnis wie <xref:System.Char.GetUnicodeCategory%2A?displayProperty=nameWithType>zurück. Er gibt denselben Wert zurück wie <xref:System.Globalization.CharUnicodeInfo.GetUnicodeCategory%2A?displayProperty=nameWithType>. Weitere Informationen finden **Sie in den** hinweisen zu <xref:System.Char.GetUnicodeCategory%2A?displayProperty=nameWithType>.
+
+### <a name="convert-a-rune-to-utf-8-or-utf-16"></a>Konvertieren einer `Rune` in UTF-8 oder UTF-16
+
+Da eine `Rune` ein Unicode-Skalarwert ist, kann Sie in UTF-8-, UTF-16-oder UTF-32-Codierung konvertiert werden. Der `Rune` Typ verfügt über integrierte Unterstützung für die Konvertierung in UTF-8 und UTF-16.
+
+Der <xref:System.Text.Rune.EncodeToUtf16%2A?displayProperty=nameWithType> konvertiert eine `Rune` Instanz in `char`-Instanzen. Um die Anzahl der `char` Instanzen abzufragen, die sich aus der Umstellung einer `Rune` Instanz in UTF-16 ergeben würden, verwenden Sie die <xref:System.Text.Rune.Utf16SequenceLength?displayProperty=nameWithType>-Eigenschaft. Ähnliche Methoden sind für die UTF-8-Konvertierung vorhanden.
+
+Im folgenden Beispiel wird eine `Rune` Instanz in ein `char` Array konvertiert. Im Code wird davon ausgegangen, dass Sie über eine `Rune` Instanz in der `rune`-Variablen verfügen:
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/EncodeRune.cs" id="SnippetUtf16CharArray":::
+
+Da eine `string` eine Sequenz von UTF-16-Zeichen ist, wird im folgenden Beispiel auch eine `Rune` Instanz in UTF-16 konvertiert:
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/EncodeRune.cs" id="SnippetUtf16String":::
+
+Im folgenden Beispiel wird eine `Rune` Instanz in ein `UTF-8` Bytearray konvertiert:
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/EncodeRune.cs" id="SnippetUtf8ByteArray":::
+
+Die Methoden <xref:System.Text.Rune.EncodeToUtf16%2A?displayProperty=nameWithType> und <xref:System.Text.Rune.EncodeToUtf8%2A?displayProperty=nameWithType> geben die tatsächliche Anzahl der geschriebenen Elemente zurück. Sie lösen eine Ausnahme aus, wenn der Ziel Puffer zu kurz ist, um das Ergebnis zu enthalten. Es gibt auch für Aufrufer, die Ausnahmen vermeiden möchten, <xref:System.Text.Rune.TryEncodeToUtf8%2A>-und <xref:System.Text.Rune.EncodeToUtf16%2A> Methoden nicht auszulösen.
+
+### <a name="rune-in-net-vs-other-languages"></a>Rune in .net im Vergleich zu anderen Sprachen
+
+Der Begriff "Rune" ist im Unicode-Standard nicht definiert. Der Begriff ist zurück auf [die Erstellung von UTF-8](https://www.cl.cam.ac.uk/~mgk25/ucs/utf-8-history.txt). Rob Pike und Ken Thompson suchten nach einem Begriff, der beschreibt, was schließlich als Codepunkt bezeichnet wird. [Sie sind auf den Begriff "Rune" festgelegt](https://twitter.com/rob_pike/status/732353233474064384), und der spätere Einfluss von Rob Pike auf die go-Programmiersprache half dabei, den Begriff zu popularisieren.
+
+Der .net `Rune`-Typ ist jedoch nicht mit dem go-`rune` Type identisch. In Go ist der `rune` Typ ein [Alias für `int32`](https://blog.golang.org/strings). Eine Go-Rune ist für die Darstellung eines Unicode-Code Punkts gedacht, kann jedoch ein beliebiger 32-Bit-Wert sein, einschließlich Ersatz Code Punkten und Werten, die keine zulässigen Unicode-Code Punkte sind.
+
+Informationen zu ähnlichen Typen in anderen Programmiersprachen finden Sie unter " [Rust es primitive `char` Type](https://doc.rust-lang.org/std/primitive.char.html) " oder " [SWIFT `Unicode.Scalar` Type](https://developer.apple.com/documentation/swift/unicode/scalar)", die beide Unicode-Skalarwerte darstellen. Sie bieten ähnliche Funktionen wie. Der Netzwerktyp `Rune`, und Sie lassen die Instanziierung von Werten, die keine zulässigen Unicode-Skalarwerte sind, nicht zu.
 
           ]]></format>
     </remarks>
@@ -51,6 +245,7 @@ Die Konstruktoren und Konvertierungs Operatoren dieses Typs überprüfen die Ein
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Parameters>
         <Parameter Name="ch" Type="System.Char" />
@@ -74,6 +269,7 @@ Die Konstruktoren und Konvertierungs Operatoren dieses Typs überprüfen die Ein
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Parameters>
         <Parameter Name="value" Type="System.Int32" />
@@ -97,6 +293,7 @@ Die Konstruktoren und Konvertierungs Operatoren dieses Typs überprüfen die Ein
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute>
@@ -125,6 +322,7 @@ Die Konstruktoren und Konvertierungs Operatoren dieses Typs überprüfen die Ein
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Parameters>
         <Parameter Name="highSurrogate" Type="System.Char" />
@@ -157,6 +355,7 @@ Die Konstruktoren und Konvertierungs Operatoren dieses Typs überprüfen die Ein
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -185,6 +384,7 @@ Die Konstruktoren und Konvertierungs Operatoren dieses Typs überprüfen die Ein
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Buffers.OperationStatus</ReturnType>
@@ -228,6 +428,7 @@ Die allgemeine Konvention besteht darin, diese Methode in einer Schleife aufzuru
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Buffers.OperationStatus</ReturnType>
@@ -271,6 +472,7 @@ Die allgemeine Konvention besteht darin, diese Methode in einer Schleife aufzuru
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Buffers.OperationStatus</ReturnType>
@@ -314,6 +516,7 @@ Diese Methode ähnelt <xref:System.Text.Rune.DecodeFromUtf16(System.ReadOnlySpan
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Buffers.OperationStatus</ReturnType>
@@ -357,6 +560,7 @@ Diese Methode ähnelt <xref:System.Text.Rune.DecodeFromUtf8(System.ReadOnlySpan{
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -384,6 +588,7 @@ Diese Methode ähnelt <xref:System.Text.Rune.DecodeFromUtf8(System.ReadOnlySpan{
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -411,6 +616,7 @@ Diese Methode ähnelt <xref:System.Text.Rune.DecodeFromUtf8(System.ReadOnlySpan{
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -440,6 +646,7 @@ Diese Methode ähnelt <xref:System.Text.Rune.DecodeFromUtf8(System.ReadOnlySpan{
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -466,6 +673,7 @@ Diese Methode ähnelt <xref:System.Text.Rune.DecodeFromUtf8(System.ReadOnlySpan{
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -489,6 +697,7 @@ Diese Methode ähnelt <xref:System.Text.Rune.DecodeFromUtf8(System.ReadOnlySpan{
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Double</ReturnType>
@@ -523,6 +732,7 @@ Diese Methode hat ein Verhalten, das <xref:System.Globalization.CharUnicodeInfo.
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -554,6 +764,7 @@ Diese Methode hat ein Verhalten, das <xref:System.Globalization.CharUnicodeInfo.
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Globalization.UnicodeCategory</ReturnType>
@@ -588,6 +799,7 @@ Diese Methode hat ein Verhalten, das <xref:System.Globalization.CharUnicodeInfo.
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -610,6 +822,7 @@ Diese Methode hat ein Verhalten, das <xref:System.Globalization.CharUnicodeInfo.
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -632,6 +845,7 @@ Diese Methode hat ein Verhalten, das <xref:System.Globalization.CharUnicodeInfo.
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -670,6 +884,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsControl%2A?displayPro
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -706,6 +921,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsDigit%2A?displayPrope
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -742,6 +958,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsLetter%2A?displayProp
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -778,6 +995,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsLetterOrDigit%2A?disp
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -814,6 +1032,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsLower%2A?displayPrope
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -850,6 +1069,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsNumber%2A?displayProp
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -886,6 +1106,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsPunctuation%2A?displa
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -922,6 +1143,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsSeparator%2A?displayP
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -958,6 +1180,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsSymbol%2A?displayProp
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -994,6 +1217,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsUpper%2A?displayPrope
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1020,6 +1244,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsUpper%2A?displayPrope
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute>
@@ -1051,6 +1276,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsUpper%2A?displayPrope
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1087,6 +1313,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1115,6 +1342,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1142,6 +1370,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1169,6 +1398,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute>
@@ -1201,6 +1431,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1229,6 +1460,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1257,6 +1489,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1285,6 +1518,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1313,6 +1547,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1341,6 +1576,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -1363,6 +1599,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1385,6 +1622,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1413,6 +1651,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1439,6 +1678,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.String</ReturnType>
@@ -1462,6 +1702,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1490,6 +1731,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1516,6 +1758,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1544,6 +1787,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1572,6 +1816,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute>
@@ -1605,6 +1850,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1635,6 +1881,7 @@ Weitere Informationen finden Sie unter <xref:System.Char.IsWhiteSpace%2A?display
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1671,6 +1918,7 @@ Die <xref:System.Text.Rune.Utf16SequenceLength>-Eigenschaft kann im Voraus abgef
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1707,6 +1955,7 @@ Die <xref:System.Text.Rune.Utf8SequenceLength>-Eigenschaft kann im Voraus abgefr
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1739,6 +1988,7 @@ Die <xref:System.Text.Rune.Utf8SequenceLength>-Eigenschaft kann im Voraus abgefr
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -1769,6 +2019,7 @@ Der Rückgabewert ist "1" oder "2".
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -1799,6 +2050,7 @@ Der Rückgabewert ist 1 bis 4 (einschließlich).
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
