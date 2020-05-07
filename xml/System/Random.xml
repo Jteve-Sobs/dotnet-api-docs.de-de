@@ -1,6 +1,6 @@
 <Type Name="Random" FullName="System.Random">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="e57ee7a5127df07b7d489d04aa9ba75b27233161" /><Meta Name="ms.sourcegitcommit" Value="46b6829001d7a117b555e2b8cd81170b68efff08" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="03/18/2020" /><Meta Name="ms.locfileid" Value="79506455" /></Metadata><TypeSignature Language="C#" Value="public class Random" />
-  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit Random extends System.Object" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netcore-3.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="e160616f34cde0ad5d56e9c76d40772ff7f8e9ca" /><Meta Name="ms.sourcegitcommit" Value="b0947fed0227b6b2e292d7efb43705b488b130aa" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="04/29/2020" /><Meta Name="ms.locfileid" Value="82502961" /></Metadata><TypeSignature Language="C#" Value="public class Random" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit Random extends System.Object" FrameworkAlternate="dotnet-uwp-10.0;net-5.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netcore-3.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1" />
   <TypeSignature Language="DocId" Value="T:System.Random" />
   <TypeSignature Language="VB.NET" Value="Public Class Random" />
   <TypeSignature Language="C++ CLI" Value="public ref class Random" />
@@ -27,8 +27,13 @@
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <AssemblyVersion>2.1.0.0</AssemblyVersion>
   </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Runtime</AssemblyName>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
   <TypeForwardingChain>
     <TypeForwarding From="mscorlib" FromVersion="4.0.0.0" To="System.Runtime.Extensions" ToVersion="0.0.0.0" FrameworkAlternate="dotnet-uwp-10.0" />
+    <TypeForwarding From="System.Runtime.Extensions" FromVersion="5.0.0.0" To="System.Runtime" ToVersion="5.0.0.0" FrameworkAlternate="net-5.0" />
   </TypeForwardingChain>
   <Base>
     <BaseTypeName>System.Object</BaseTypeName>
@@ -52,7 +57,7 @@
   
  Um eine kryptografisch sichere Zufallszahl zu generieren, z. b. eine, die zum Erstellen eines zufälligen Kennworts geeignet ist, verwenden Sie die <xref:System.Security.Cryptography.RNGCryptoServiceProvider>-Klasse, oder leiten Sie eine Klasse von <xref:System.Security.Cryptography.RandomNumberGenerator?displayProperty=nameWithType>ab.  
   
- Inhalte dieses Themas:  
+ In diesem Thema:  
   
  [Instanziieren des Zufallszahlen-Generators](#Instantiate)   
  [Vermeiden mehrerer Instanziierungen](#Multiple)   
@@ -77,7 +82,9 @@
   
 -   Der <xref:System.Random.%23ctor%28System.Int32%29>-Konstruktor verwendet einen expliziten Ausgangswert, den Sie angeben.  
   
--   Der <xref:System.Random.%23ctor>-Konstruktor verwendet die Systemuhr, um einen Ausgangswert bereitzustellen. Dies ist die gängigste Methode zum Instanziieren des Zufallszahlen-Generators.  
+-   Der <xref:System.Random.%23ctor>-Konstruktor verwendet den standardseed-Wert. Dies ist die gängigste Methode zum Instanziieren des Zufallszahlen-Generators.  
+  
+ In .NET Framework ist der Standardstartwert Zeit abhängig. In .net Core wird der Standardstartwert durch den Thread statischen, Pseudozufallszahlen-Generator erzeugt.
   
  Wenn derselbe Ausgangswert für separate <xref:System.Random> Objekte verwendet wird, generieren Sie dieselbe Reihe von Zufallszahlen. Dies kann nützlich sein, um eine Test Sammlung zu erstellen, die zufällige Werte verarbeitet, oder um Spiele wiedergeben, die Ihre Daten von Zufallszahlen ableiten. Beachten Sie jedoch, dass <xref:System.Random> Objekte in Prozessen, die unter verschiedenen Versionen der .NET Framework ausgeführt werden, möglicherweise andere Serien von Zufallszahlen zurückgeben, selbst wenn Sie mit identischen Ausgangswerten instanziiert werden.  
   
@@ -184,11 +191,11 @@ Um dieses Problem zu vermeiden, erstellen Sie ein einzelnes <xref:System.Random>
 <a name="Unique"></a>   
 ### <a name="retrieve-unique-sequences-of-random-numbers"></a>Abrufen von eindeutigen Sequenzen von Zufallszahlen  
  Die Angabe unterschiedlicher Ausgangswerte für Instanzen der <xref:System.Random> Klasse bewirkt, dass jeder Zufallszahlengenerator eine andere Sequenz von Werten erzeugt. Sie können einen Ausgangswert entweder explizit angeben, indem Sie den <xref:System.Random.%23ctor%28System.Int32%29>-Konstruktor aufrufen oder den <xref:System.Random.%23ctor>-Konstruktor implizit aufrufen. Die meisten Entwickler wenden den Parameter losen Konstruktor an, der die Systemuhr verwendet. Im folgenden Beispiel wird dieser Ansatz verwendet, um zwei <xref:System.Random> Instanzen zu instanziieren. Jede Instanz zeigt eine Reihe von 10 zufälligen Ganzzahlen an.  
-  
- [!code-cpp[System.Random#13](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Random/cpp/unique.cpp#13)]
- [!code-csharp[System.Random#13](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Random/cs/unique.cs#13)]
- [!code-vb[System.Random#13](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Random/vb/unique.vb#13)]  
-  
+
+ :::code language="cpp" source="~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Random/cpp/unique.cpp" id="Snippet13":::
+ :::code language="csharp" source="~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Random/cs/unique.cs" interactive="try-dotnet" id="Snippet13":::
+ :::code language="vb" source="~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Random/vb/unique.vb" id="Snippet13":::
+
  Aufgrund der begrenzten Auflösung erkennt die Systemuhr jedoch keine Zeitunterschiede, die weniger als ungefähr 15 Millisekunden betragen. Wenn Ihr Code die <xref:System.Random.%23ctor> Überladung auf dem .NET Framework aufruft, um zwei <xref:System.Random> Objekte nacheinander zu instanziieren, können Sie daher versehentlich die Objekte mit identischen Ausgangswerten bereitstellen. (Für die <xref:System.Random>-Klasse in .net Core gibt es diese Einschränkung nicht.) Um dies im vorherigen Beispiel zu sehen, kommentieren Sie den <xref:System.Threading.Thread.Sleep%2A?displayProperty=nameWithType>-Methodenaufrufe aus, und kompilieren Sie das Beispiel, und führen Sie es erneut aus.  
   
  Um dies zu verhindern, empfiehlt es sich, ein einzelnes <xref:System.Random> Objekt anstelle mehrerer Objekte zu instanziieren. Da <xref:System.Random> jedoch nicht Thread sicher ist, müssen Sie ein Synchronisierungs Gerät verwenden, wenn Sie von mehreren Threads aus auf eine <xref:System.Random> Instanz zugreifen. Weitere Informationen finden Sie [unter Random class and Thread Safety](#ThreadSafety) weiter oben in diesem Thema. Alternativ können Sie einen Verzögerungs Mechanismus verwenden, wie z. b. die <xref:System.Threading.Thread.Sleep%2A>-Methode, die im vorherigen Beispiel verwendet wurde, um sicherzustellen, dass die Instanziierungen mehr als 15 Millisekunden voneinander getrennt vorkommen.  
@@ -240,10 +247,10 @@ Random.NextDouble() * (maxValue - minValue) + minValue
 <a name="Boolean"></a>   
 ### <a name="generate-random-boolean-values"></a>Generieren von zufälligen booleschen Werten  
  Die <xref:System.Random>-Klasse stellt keine Methoden bereit, die <xref:System.Boolean> Werte generieren. Hierfür können Sie jedoch auch eine eigene Klasse oder Methode definieren. Im folgenden Beispiel wird eine-Klasse, `BooleanGenerator`mit einer einzelnen Methode definiert, `NextBoolean`. Die `BooleanGenerator`-Klasse speichert ein <xref:System.Random>-Objekt als private Variable. Die `NextBoolean`-Methode ruft die <xref:System.Random.Next%28System.Int32%2CSystem.Int32%29?displayProperty=nameWithType>-Methode auf und übergibt das Ergebnis an die <xref:System.Convert.ToBoolean%28System.Int32%29?displayProperty=nameWithType>-Methode. Beachten Sie, dass 2 als Argument verwendet wird, um die obere Grenze der Zufallszahl anzugeben. Da dies ein exklusiver Wert ist, gibt der Methodenaufrufe entweder 0 oder 1 zurück.  
-  
- [!code-cpp[System.Random#8](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Random/cpp/booleans1.cpp#8)]
- [!code-csharp[System.Random#8](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Random/cs/booleans1.cs#8)]
- [!code-vb[System.Random#8](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Random/vb/booleans1.vb#8)]  
+
+ :::code language="cpp" source="~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Random/cpp/booleans1.cpp" id="Snippet8":::
+ :::code language="csharp" source="~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Random/cs/booleans1.cs" interactive="try-dotnet" id="Snippet8":::
+ :::code language="vb" source="~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Random/vb/booleans1.vb" id="Snippet8":::
   
  Anstatt eine separate Klasse zum Generieren von zufälligen <xref:System.Boolean> Werten zu erstellen, könnte das Beispiel einfach nur eine einzige Methode definieren. In diesem Fall sollte das <xref:System.Random> Objekt jedoch als Variable auf Klassenebene definiert worden sein, um zu vermeiden, dass in jedem Methoden aufrufeine neue <xref:System.Random> Instanz instanziiert wird. In Visual Basic kann die zufällige Instanz als [statische](~/docs/visual-basic/language-reference/modifiers/static.md) Variable in der `NextBoolean`-Methode definiert werden.  Im folgenden Beispiel wird eine-Implementierung bereitstellt.  
   
@@ -275,10 +282,10 @@ Random.NextDouble() * (maxValue - minValue) + minValue
 ### <a name="retrieve-bytes-in-a-specified-range"></a>Abrufen von Bytes in einem angegebenen Bereich  
  Die über Ladungen der <xref:System.Random.Next%2A>-Methode ermöglichen es Ihnen, den Bereich von Zufallszahlen anzugeben, die <xref:System.Random.NextBytes%2A>-Methode jedoch nicht. Im folgenden Beispiel wird eine `NextBytes`-Methode implementiert, mit der Sie den Bereich der zurückgegebenen Bytes angeben können. Es definiert eine `Random2` Klasse, die von <xref:System.Random> abgeleitet ist und die `NextBytes`-Methode überlädt.  
   
- [!code-cpp[System.Random#9](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Random/cpp/bytes1.cpp#9)]
- [!code-csharp[System.Random#9](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Random/cs/bytes1.cs#9)]
- [!code-vb[System.Random#9](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Random/vb/bytes1.vb#9)]  
-  
+ :::code language="cpp" source="~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Random/cpp/bytes1.cpp" id="Snippet9":::
+ :::code language="csharp" source="~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Random/cs/bytes1.cs" interactive="try-dotnet" id="Snippet9":::
+ :::code language="vb" source="~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Random/vb/bytes1.vb" id="Snippet9":::
+
  Die `NextBytes(Byte[], Byte, Byte)`-Methode umschließt einen aufzurufenden <xref:System.Random.Next%28System.Int32%2CSystem.Int32%29> Methode und gibt den Minimalwert und einen größer als den maximalen Wert (in diesem Fall 0 und 101) an, der im Bytearray zurückgegeben werden soll. Da wir sicher sind, dass die von der <xref:System.Random.Next%2A>-Methode zurückgegebenen ganzzahligen Werte innerhalb des Bereichs des <xref:System.Byte> Datentyps liegen, können C#wir Sie problemlos umwandeln (in) oder von ganzen Zahlen in Bytes konvertieren (in Visual Basic).  
   
 <a name="Array"></a>   
@@ -298,12 +305,10 @@ Random.NextDouble() * (maxValue - minValue) + minValue
  Wenn Sie z. b. ein Solitaire-Spiel entwickeln, sollten Sie sicherstellen, dass jede Karte nur einmal verwendet wird. Anstatt Zufallszahlen zum Abrufen einer Karte und nachverfolgen, ob diese Karte bereits behandelt wurde, zu erzeugen, können Sie ein paralleles Array von Zufallszahlen erstellen, das zum Sortieren des Stapels verwendet werden kann. Sobald der Stapel sortiert ist, kann Ihre APP einen Zeiger behalten, um den Index der nächsten Karte auf dem Stapel anzugeben.  
   
  Dieser Ansatz wird anhand des folgenden Beispiels veranschaulicht. Es definiert eine `Card` Klasse, die eine Wiedergabe Karte und eine `Dealer` Klasse darstellt, die einen Stapel von gemischten Karten behandelt. Der `Dealer`-Klassenkonstruktor füllt zwei Arrays auf: ein `deck` Array mit Klassen Bereich, das alle Karten im Stapel darstellt. und ein lokales `order` Array, das über die gleiche Anzahl von Elementen wie das `deck` Array verfügt und mit zufällig generierten <xref:System.Double> Werten aufgefüllt wird.  Die <xref:System.Array.Sort%28System.Array%2CSystem.Array%29?displayProperty=nameWithType>-Methode wird dann aufgerufen, um das `deck` Array basierend auf den Werten im `order` Array zu sortieren.  
-  
- [!code-cpp[System.Random#11](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Random/cpp/uniquearray1.cpp#11)]
- [!code-csharp[System.Random#11](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Random/cs/uniquearray1.cs#11)]
- [!code-vb[System.Random#11](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Random/vb/uniquearray1.vb#11)]  
-  
-   
+
+ :::code language="cpp" source="~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Random/cpp/uniquearray1.cpp" id="Snippet11":::
+ :::code language="csharp" source="~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Random/cs/uniquearray1.cs" interactive="try-dotnet" id="Snippet11":::
+ :::code language="vb" source="~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Random/vb/uniquearray1.vb" id="Snippet11":::
   
 ## Examples  
 
@@ -336,7 +341,7 @@ In der .NET Framework 2,0 und höher wurde das Verhalten der Methoden <see cref=
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Docs>
-        <summary>Initialisiert eine neue Instanz der Klasse <see cref="T:System.Random" />.</summary>
+        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Random" />-Klasse.</summary>
       </Docs>
     </MemberGroup>
     <Member MemberName=".ctor">
@@ -367,15 +372,20 @@ In der .NET Framework 2,0 und höher wurde das Verhalten der Methoden <see cref=
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>2.1.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary>Initialisiert eine neue Instanz der <see cref="T:System.Random" />-Klasse unter Verwendung eines zeitabhängigen Standardstartwerts.</summary>
+        <summary>Hiermit wird unter Verwendung eines Standardstartwerts eine neue Instanz der <see cref="T:System.Random" />-Klasse initialisiert.</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks
+In .NET Framework wird der Standardstartwert von der Systemuhr abgeleitet, die über eine begrenzte Auflösung verfügt. Demzufolge haben unterschiedliche <xref:System.Random> Objekte, die durch einen-Parameter mit dem Parameter losen Konstruktor in der Regel erstellt werden, identische standardseed-Werte und erstellen daher identische Sätze von Zufallszahlen. Sie können dieses Problem vermeiden, indem Sie ein einzelnes <xref:System.Random> Objekt verwenden, um alle Zufallszahlen zu generieren. Sie können das Problem auch umgehen, indem Sie einen eigenen zufälligen Ausgangswert erstellen und an den <xref:System.Random.%23ctor%28System.Int32%29>-Konstruktor übergeben. Weitere Informationen finden Sie im <xref:System.Random.%23ctor%28System.Int32%29>-Konstruktor. 
 
-Der standardseed-Wert wird von der Systemuhr abgeleitet, die eine begrenzte Auflösung aufweist. Demzufolge verfügen unterschiedliche <xref:System.Random> Objekte, die durch einen-Parameter, der den Parameter losen Konstruktor mit einem-Parameter erstellt, mit identischen Standard Ausgangswerten und können daher identische Sätze von Zufallszahlen erstellen. .NET Framework Dieses Problem kann vermieden werden, indem ein einzelnes <xref:System.Random> Objekt verwendet wird, um alle Zufallszahlen zu generieren. Sie können das Problem auch umgehen, indem Sie einen eigenen zufälligen Ausgangswert erstellen und an den <xref:System.Random.%23ctor%28System.Int32%29>-Konstruktor übergeben. Weitere Informationen finden Sie im <xref:System.Random.%23ctor%28System.Int32%29>-Konstruktor. Beachten Sie, dass diese Einschränkung nicht auf .net Core anwendbar ist.  
+In .net Core wird der Standardstartwert durch den Thread statischen, Pseudozufallszahlen-Generator erzeugt, sodass die zuvor beschriebene Einschränkung nicht zutrifft. Unterschiedliche <xref:System.Random> Objekte, die in einer Schluss Folge erstellt werden, erstellen unterschiedliche Sätze von Zufallszahlen in .net Core.
   
  Rufen Sie diesen Konstruktor auf, wenn Sie möchten, dass der Zufallszahlengenerator eine zufällige Sequenz von Zahlen generiert. Um eine festgelegte Sequenz von Zufallszahlen zu generieren, die für unterschiedliche Zufallszahlengeneratoren identisch sein werden, rufen Sie den <xref:System.Random.%23ctor%28System.Int32%29>-Konstruktor mit einem fixierten Ausgangswert auf. Diese <xref:System.Random>-Konstruktorüberladung wird häufig beim Testen von apps verwendet, die Zufallszahlen verwenden.  
   
@@ -422,6 +432,10 @@ Im folgenden Beispiel wird der Parameter lose Konstruktor zum Instanziieren von 
         <AssemblyName>netstandard</AssemblyName>
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Parameters>
         <Parameter Name="Seed" Type="System.Int32" />
@@ -497,6 +511,10 @@ Im folgenden Beispiel wird der Parameter lose Konstruktor zum Instanziieren von 
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>2.1.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2">
           <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
@@ -565,6 +583,10 @@ Im folgenden Beispiel wird der Parameter lose Konstruktor zum Instanziieren von 
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>2.1.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
@@ -631,6 +653,10 @@ Im folgenden Beispiel wird der Parameter lose Konstruktor zum Instanziieren von 
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>2.1.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
@@ -641,7 +667,7 @@ Im folgenden Beispiel wird der Parameter lose Konstruktor zum Instanziieren von 
       <Docs>
         <param name="minValue">Die inklusive untere Grenze der zurückgegebenen Zufallszahl.</param>
         <param name="maxValue">Die exklusive obere Grenze der zurückgegebenen Zufallszahl. <paramref name="maxValue" /> muss größer oder gleich <paramref name="minValue" /> sein.</param>
-        <summary>Gibt eine Zufallsganzzahl zurück, die in einem angegebenen Bereich liegt.</summary>
+        <summary>Gibt eine zufällige ganze Zahl zurück, die in einem angegebenen Bereich liegt.</summary>
         <returns>Eine 32-Bit-Ganzzahl mit Vorzeichen, die größer oder gleich <paramref name="minValue" /> und kleiner als <paramref name="maxValue" /> ist, d. h., der Bereich der Rückgabewerte umfasst <paramref name="minValue" />, aber nicht <paramref name="maxValue" />. Wenn <paramref name="minValue" /> gleich <paramref name="maxValue" /> ist, wird <paramref name="minValue" /> zurückgegeben.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
@@ -702,6 +728,10 @@ Im folgenden Beispiel wird der Parameter lose Konstruktor zum Instanziieren von 
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>2.1.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
       </ReturnValue>
@@ -731,7 +761,7 @@ Im folgenden Beispiel wird der Parameter lose Konstruktor zum Instanziieren von 
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="buffer" /> ist <see langword="null" /></exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="buffer" /> ist <see langword="null" />.</exception>
         <block subset="none" type="overrides"><para>Beginnend mit der .NET Framework Version 2,0, wenn Sie eine Klasse von <see cref="T:System.Random" /> ableiten und die <see cref="M:System.Random.Sample" />-Methode überschreiben, wird die Distribution, die von der Implementierung der abgeleiteten Klasse der <see cref="M:System.Random.Sample" />-Methode bereitgestellt wird, nicht in Aufrufen der Basisklassen Implementierung der <see cref="M:System.Random.NextBytes(System.Byte[])" />-Methode verwendet. Stattdessen wird die von der Basis <see cref="T:System.Random" />-Klasse zurückgegebene einheitliche Verteilung verwendet. Dieses Verhalten verbessert die Gesamtleistung der <see cref="T:System.Random" />-Klasse. Wenn Sie dieses Verhalten ändern möchten, um die <see cref="M:System.Random.Sample" />-Methode in der abgeleiteten Klasse aufzurufen, müssen Sie auch die <see cref="M:System.Random.NextBytes(System.Byte[])" />-Methode überschreiben.</para></block>
         <altmember cref="T:System.Byte" />
       </Docs>
@@ -756,11 +786,15 @@ Im folgenden Beispiel wird der Parameter lose Konstruktor zum Instanziieren von 
         <AssemblyName>netstandard</AssemblyName>
         <AssemblyVersion>2.1.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="buffer" Type="System.Span&lt;System.Byte&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1;netcore-3.1" />
+        <Parameter Name="buffer" Type="System.Span&lt;System.Byte&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1;netcore-3.1;net-5.0" />
       </Parameters>
       <Docs>
         <param name="buffer">Das Array, das mit zufälligen Zahlen aufgefüllt wird.</param>
@@ -804,6 +838,10 @@ Jedes Element der Byte Spanne wird auf eine Zufallszahl festgelegt, die größer
         <AssemblyName>netstandard</AssemblyName>
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2">
@@ -874,6 +912,10 @@ Jedes Element der Byte Spanne wird auf eine Zufallszahl festgelegt, die größer
         <AssemblyName>netstandard</AssemblyName>
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2">
