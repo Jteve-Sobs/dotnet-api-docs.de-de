@@ -1,9 +1,9 @@
 ---
 ms.openlocfilehash: 7dc44c44b7a030798f3e511dc741ab9400f590ae
-ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.sourcegitcommit: 5ef0d02cb57c7153fd9d5417cdcad45665af832e
 ms.translationtype: HT
 ms.contentlocale: de-DE
-ms.lasthandoff: 06/15/2019
-ms.locfileid: "63875811"
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "71137629"
 ---
-<span data-ttu-id="b65af-101">Windows Vista</span><span class="sxs-lookup"><span data-stu-id="b65af-101">Windows Vista</span></span>
+<span data-ttu-id="f0ee8-101">Windows Vista</span><span class="sxs-lookup"><span data-stu-id="f0ee8-101">Windows Vista</span></span>

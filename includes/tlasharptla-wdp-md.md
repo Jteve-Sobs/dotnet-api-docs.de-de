@@ -1,9 +1,9 @@
 ---
 ms.openlocfilehash: 4ba1bd0d0f1df2cf13d21ce3c8185b0dbe96b52b
-ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.sourcegitcommit: 5ef0d02cb57c7153fd9d5417cdcad45665af832e
 ms.translationtype: HT
 ms.contentlocale: de-DE
-ms.lasthandoff: 06/15/2019
-ms.locfileid: "63877985"
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "71138459"
 ---
-<span data-ttu-id="4f663-101">Microsoft Windows Media Photo</span><span class="sxs-lookup"><span data-stu-id="4f663-101">Microsoft Windows Media Photo</span></span>
+<span data-ttu-id="84392-101">Microsoft Windows Media Photo</span><span class="sxs-lookup"><span data-stu-id="84392-101">Microsoft Windows Media Photo</span></span>

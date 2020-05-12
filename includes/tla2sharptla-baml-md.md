@@ -1,9 +1,9 @@
 ---
 ms.openlocfilehash: b6a9d1e0f3af927e38baffb128e563c1ede7a021
-ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.sourcegitcommit: 5ef0d02cb57c7153fd9d5417cdcad45665af832e
 ms.translationtype: HT
 ms.contentlocale: de-DE
-ms.lasthandoff: 06/15/2019
-ms.locfileid: "63870309"
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "71139609"
 ---
-<span data-ttu-id="d6fce-101">BAML</span><span class="sxs-lookup"><span data-stu-id="d6fce-101">BAML</span></span>
+<span data-ttu-id="835f8-101">BAML</span><span class="sxs-lookup"><span data-stu-id="835f8-101">BAML</span></span>
