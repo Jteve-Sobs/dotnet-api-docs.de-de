@@ -1,5 +1,5 @@
 <Type Name="Uri" FullName="System.Uri">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="d183fa8f0e433b79fea8517dace8dd25199b6ff7" /><Meta Name="ms.sourcegitcommit" Value="b0947fed0227b6b2e292d7efb43705b488b130aa" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="04/29/2020" /><Meta Name="ms.locfileid" Value="82482889" /></Metadata><TypeSignature Language="C#" Value="public class Uri" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="e6e9d7ac553f17d52bee3fb9adcca6f425b6862b" /><Meta Name="ms.sourcegitcommit" Value="b6b9d5f3f9c7eb43f14a8a1a68d044603cb8ed73" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="05/18/2020" /><Meta Name="ms.locfileid" Value="83446050" /></Metadata><TypeSignature Language="C#" Value="public class Uri" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit Uri extends System.Object" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
   <TypeSignature Language="DocId" Value="T:System.Uri" />
   <TypeSignature Language="VB.NET" Value="Public Class Uri" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
@@ -41,6 +41,7 @@
   </AssemblyInfo>
   <TypeForwardingChain>
     <TypeForwarding From="System" FromVersion="4.0.0.0" To="System.Runtime" ToVersion="0.0.0.0" FrameworkAlternate="dotnet-uwp-10.0" />
+    <TypeForwarding From="netstandard" FromVersion="2.1.0.0" To="System.Runtime" ToVersion="5.0.0.0" FrameworkAlternate="net-5.0" />
   </TypeForwardingChain>
   <Base>
     <BaseTypeName>System.Object</BaseTypeName>
@@ -187,6 +188,36 @@ Uri uri1 = new Uri("C:/test/path/file.txt") // Implicit file path.
 Uri uri2 = new Uri("file:///C:/test/path/file.txt") // Explicit file path.
 ```
  Diese impliziten Dateipfade sind nicht mit der URI-Spezifikation kompatibel und sollten daher nach Möglichkeit vermieden werden. Wenn Sie .net Core auf UNIX-basierten Systemen verwenden, können implizite Dateipfade besonders problematisch sein, da ein absoluter, impliziter Dateipfad nicht von einem relativen Pfad unter *schieden* werden kann. Wenn diese Mehrdeutigkeit vorhanden ist, <xref:System.Uri> standardmäßig den Pfad als absoluten URI interpretieren.
+
+## <a name="security-considerations"></a>Sicherheitsüberlegungen
+
+Aufgrund von Sicherheitsbedenken sollte Ihre Anwendung Vorsicht walten lassen, wenn <xref:System.Uri> Instanzen von nicht vertrauenswürdigen Quellen akzeptiert werden und `dontEscape` im [Konstruktor](xref:System.Uri.%23ctor(System.String,System.Boolean))auf `true` festgelegt ist. Sie können eine URI-Zeichenfolge auf Gültigkeit überprüfen, indem Sie die <xref:System.Uri.IsWellFormedOriginalString%2A>-Methode aufrufen.
+
+Bestätigen Sie beim Umgang mit nicht vertrauenswürdigen Benutzereingaben die Annahmen über die neu erstellte `Uri` Instanz, bevor Sie Ihren Eigenschaften Vertrauen.
+Dies kann auf folgende Weise erfolgen:
+
+```csharp
+string userInput = ...;
+
+Uri baseUri = new Uri("https://myWebsite/files/");
+
+if (!Uri.TryCreate(baseUri, userInput, out Uri newUri))
+{
+    // Fail: invalid input.
+}
+
+if (!baseUri.IsBaseOf(newUri))
+{
+    // Fail: the Uri base has been modified - the created Uri is not rooted in the original directory.
+}
+```
+
+Diese Überprüfung kann in anderen Fällen verwendet werden, z. b. beim Umgang mit UNC-Pfaden, indem einfach die `baseUri`geändert werden:
+
+```csharp
+Uri baseUri = new Uri(@"\\host\share\some\directory\name\");
+```
+
   
 ## <a name="performance-considerations"></a>Überlegungen zur Leistung  
  Wenn Sie eine * Web. config *-Datei verwenden, die URIs zum Initialisieren der Anwendung enthält, ist zusätzliche Zeit erforderlich, um die URIs zu verarbeiten, wenn deren Schema Bezeichner nicht standardmäßig sind. Initialisieren Sie in diesem Fall die betroffenen Teile der Anwendung, wenn die URIs benötigt werden, nicht zur Startzeit.  
@@ -202,7 +233,6 @@ Uri uri2 = new Uri("file:///C:/test/path/file.txt") // Explicit file path.
   
  ]]></format>
     </remarks>
-    <block subset="none" type="usage"><para>Aufgrund von Sicherheitsbedenken sollte Ihre Anwendung Vorsicht walten lassen, wenn <see cref="T:System.Uri" /> Instanzen von nicht vertrauenswürdigen Quellen akzeptiert und <paramref name="dontEscape" /> auf <see langword="true" />festgelegt ist. Sie können eine URI-Zeichenfolge auf Gültigkeit überprüfen, indem Sie die <see cref="M:System.Uri.IsWellFormedOriginalString" />-Methode aufrufen.</para></block>
     <altmember cref="T:System.Configuration.IdnElement" />
     <altmember cref="T:System.Configuration.IriParsingElement" />
     <altmember cref="T:System.Configuration.UriSection" />
