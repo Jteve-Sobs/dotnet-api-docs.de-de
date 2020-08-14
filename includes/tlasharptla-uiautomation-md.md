@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138539"
 ---
-<span data-ttu-id="b5119-101">Microsoft-UI-Automatisierung</span><span class="sxs-lookup"><span data-stu-id="b5119-101">Microsoft UI Automation</span></span>
+<span data-ttu-id="53d0a-101">Microsoft-UI-Automatisierung</span><span class="sxs-lookup"><span data-stu-id="53d0a-101">Microsoft UI Automation</span></span>

@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 08/29/2019
 ms.locfileid: "71137849"
 ---
-<span data-ttu-id="28084-101">Windows Workflow Designer</span><span class="sxs-lookup"><span data-stu-id="28084-101">Windows Workflow Designer</span></span>
+<span data-ttu-id="880cd-101">Windows Workflow Designer</span><span class="sxs-lookup"><span data-stu-id="880cd-101">Windows Workflow Designer</span></span>
