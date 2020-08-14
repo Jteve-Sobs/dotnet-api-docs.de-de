@@ -1,5 +1,5 @@
 <Type Name="IBuildEngine" FullName="Microsoft.Build.Framework.IBuildEngine">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="38b1663b64d546c283136d6dcf4183668d3cfbe5" /><Meta Name="ms.sourcegitcommit" Value="055a4a82a0b08bfbdc21bd1347fb71f7fe2c099e" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/15/2019" /><Meta Name="ms.locfileid" Value="69287969" /></Metadata><TypeSignature Language="C#" Value="public interface IBuildEngine" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="02d96a7ace72c4eac7725dfac98201a3910d346b" /><Meta Name="ms.sourcegitcommit" Value="397961a0164281b579f68064c3bb66c071f374d9" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/14/2020" /><Meta Name="ms.locfileid" Value="86329682" /></Metadata><TypeSignature Language="C#" Value="public interface IBuildEngine" />
   <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract IBuildEngine" />
   <TypeSignature Language="DocId" Value="T:Microsoft.Build.Framework.IBuildEngine" />
   <TypeSignature Language="VB.NET" Value="Public Interface IBuildEngine" />
@@ -10,10 +10,11 @@
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <AssemblyVersion>3.5.0.0</AssemblyVersion>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>15.1.0.0</AssemblyVersion>
   </AssemblyInfo>
   <Interfaces />
   <Docs>
-    <summary>Bietet Aufgabenautoren eine Möglichkeit, einen Teil der Funktionen der MSBuild-Engine zu verwenden</summary>
+    <summary>Diese Schnittstelle macht Funktionen für die Build-Engine verfügbar, die für die Aufgaben Erstellung erforderlich sind.</summary>
     <remarks>To be added.</remarks>
   </Docs>
   <Members>
@@ -30,6 +31,7 @@
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -41,24 +43,13 @@
         <Parameter Name="targetOutputs" Type="System.Collections.IDictionary" />
       </Parameters>
       <Docs>
-        <param name="projectFileName">Der Name der zu erstellenden Projektdatei.</param>
-        <param name="targetNames">Die Namen des zu erstellenden Zieles im Projekt. Mehrere Ziele müssen mit einem Semikolon (;) getrennt werden.</param>
-        <param name="globalProperties">Ein <see cref="T:System.Collections.IDictionary" /> zusätzlicher globaler Eigenschaften, die auf das Projekt angewendet werden sollen. Der Schlüssel und der Wert müssen vom Datentyp <see langword="String" /> sein.</param>
-        <param name="targetOutputs">Die Ausgaben der einzelnen angegebenen Ziele.</param>
-        <summary>Initiiert die Builderstellung einer Projektdatei. Wenn der Build erfolgreich erstellt wurde, werden die Ausgaben, sofern vorhanden, von den angegebenen Zielen zurückgegeben.</summary>
-        <returns><see langword="true" />, wenn die Builderstellung erfolgreich war, andernfalls <see langword="false" />.</returns>
-        <remarks>
-          <format type="text/markdown"><![CDATA[  
-  
-## Remarks  
- Die `targetNames`Parameter `globalProperties`, und `targetOutputs` können sein `null`.  
-  
- Wenn keine Ziele angegeben werden, [!INCLUDE[vstecmsbuild](~/includes/vstecmsbuild-md.md)] erstellt die Standard Ziele des Projekts.  
-  
- Ziel Ausgaben werden als <xref:Microsoft.Build.Framework.ITaskItem> Arrays zurückgegeben, die durch den Zielnamen indiziert werden.  
-  
- ]]></format>
-        </remarks>
+        <param name="projectFileName">Das zu erstellende Projekt.</param>
+        <param name="targetNames">Die Ziele im zu erstellenden Projekt (können NULL sein).</param>
+        <param name="globalProperties">Eine Hash Tabelle mit zusätzlichen globalen Eigenschaften, die auf das untergeordnete Projekt angewendet werden sollen (kann NULL sein).  Der Schlüssel und der Wert müssen Zeichen folgen sein.</param>
+        <param name="targetOutputs">Die Ausgaben der einzelnen angegebenen Ziele (können NULL sein).</param>
+        <summary>Diese Methode ermöglicht es Tasks, einen Build für eine bestimmte Projektdatei zu initiieren. Wenn der Build erfolgreich ist, werden die Ausgaben (sofern vorhanden) der angegebenen Ziele zurückgegeben.</summary>
+        <returns>true, wenn der Build erfolgreich war.</returns>
+        <remarks>1) Es ist zulässig, NULL sowohl für " <c>targetNames</c> " als auch für " <c>TargetOutputs</c> 2" zu übergeben. wenn keine Ziele angegeben werden, werden die Standard Ziele erstellt 3) die Ziel Ausgaben werden als <c>ITaskItem</c> -Arrays zurückgegeben, die nach Zielname indiziert sind</remarks>
       </Docs>
     </Member>
     <Member MemberName="ColumnNumberOfTaskNode">
@@ -74,12 +65,13 @@
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft die Zeilennummer des Aufgabenknotens in der aufrufenden Projektdatei ab.</summary>
+        <summary>Ruft die Zeilennummer des Aufgaben Knotens in der Projektdatei ab, die Sie aufgerufen hat.</summary>
         <value>Die Zeilennummer des Aufgabenknotens in der aufrufenden Projektdatei.</value>
         <remarks>To be added.</remarks>
       </Docs>
@@ -97,12 +89,13 @@
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gibt <see langword="true" /> zurück, wenn das ContinueOnError-Flag für diese Aufgabe in der Projektdatei auf <see langword="true" /> festgelegt wurde.</summary>
+        <summary>Gibt true zurück, wenn das ContinueOnError-Flag für diese bestimmte Aufgabe in der Projektdatei auf true festgelegt wurde.</summary>
         <value><see langword="true" />, wenn das ContinueOnError-Flag für diese Aufgabe in der Projektdatei auf <see langword="true" /> festgelegt wurde.</value>
         <remarks>To be added.</remarks>
       </Docs>
@@ -120,12 +113,13 @@
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft die Zeilennummer des Aufgabenknotens in der aufrufenden Projektdatei ab.</summary>
+        <summary>Ruft die Zeilennummer des Aufgaben Knotens in der Projektdatei ab, die Sie aufgerufen hat.</summary>
         <value>Die Zeilennummer des Aufgabenknotens in der aufrufenden Projektdatei.</value>
         <remarks>To be added.</remarks>
       </Docs>
@@ -143,6 +137,7 @@
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
@@ -151,8 +146,9 @@
         <Parameter Name="e" Type="Microsoft.Build.Framework.CustomBuildEventArgs" />
       </Parameters>
       <Docs>
-        <param name="e">Die Ereignisdaten.</param>
-        <summary>Löst für alle registrierten Protokollierungsmodule ein benutzerdefiniertes Ereignis aus.</summary>
+        <param name="e">Details des aufzurufenden Ereignisses.</param>
+        <summary>Ermöglicht es Tasks, benutzerdefinierte Ereignisse für alle registrierten Protokollierungen aufzurichten.
+Die Build-Engine kann vor der Verteilung einige Filter-oder Vorverarbeitungs Vorgänge für die Ereignisse durchführen.</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -169,6 +165,7 @@
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
@@ -177,8 +174,9 @@
         <Parameter Name="e" Type="Microsoft.Build.Framework.BuildErrorEventArgs" />
       </Parameters>
       <Docs>
-        <param name="e">Die Ereignisdaten.</param>
-        <summary>Löst für alle registrierten Protokollierungsmodule ein Fehlerereignis aus.</summary>
+        <param name="e">Details des aufzurufenden Ereignisses.</param>
+        <summary>Ermöglicht Tasks das Ausführen von Fehlerereignissen für alle registrierten Protokollierungen.
+Die Build-Engine kann vor der Verteilung einige Filter-oder Vorverarbeitungs Vorgänge für die Ereignisse durchführen.</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -195,6 +193,7 @@
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
@@ -203,8 +202,9 @@
         <Parameter Name="e" Type="Microsoft.Build.Framework.BuildMessageEventArgs" />
       </Parameters>
       <Docs>
-        <param name="e">Die Ereignisdaten.</param>
-        <summary>Löst für alle registrierten Protokollierungsmodule ein Meldungsereignis aus.</summary>
+        <param name="e">Details des aufzurufenden Ereignisses.</param>
+        <summary>Ermöglicht es Tasks, Nachrichten Ereignisse an alle registrierten Protokollierungen zu senden.
+Die Build-Engine kann vor der Verteilung einige Filter-oder Vorverarbeitungs Vorgänge für die Ereignisse durchführen.</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -221,6 +221,7 @@
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
@@ -229,8 +230,9 @@
         <Parameter Name="e" Type="Microsoft.Build.Framework.BuildWarningEventArgs" />
       </Parameters>
       <Docs>
-        <param name="e">Die Ereignisdaten.</param>
-        <summary>Löst für alle registrierten Protokollierungsmodule ein Warnungsereignis aus.</summary>
+        <param name="e">Details des aufzurufenden Ereignisses.</param>
+        <summary>Ermöglicht Tasks das Aufkommen von Warn Ereignissen für alle registrierten Protokollierungen.
+Die Build-Engine kann vor der Verteilung einige Filter-oder Vorverarbeitungs Vorgänge für die Ereignisse durchführen.</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -247,12 +249,13 @@
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft den vollständigen Pfad zur Projektdatei ab, die den Aufruf dieser Aufgabe enthält.</summary>
+        <summary>Gibt den vollständigen Pfad zur Projektdatei zurück, die den aufrufsvorgang für diese Aufgabe enthielt.</summary>
         <value>Der vollständige Pfad zur Projektdatei, die den Aufruf dieser Aufgabe enthält.</value>
         <remarks>To be added.</remarks>
       </Docs>
