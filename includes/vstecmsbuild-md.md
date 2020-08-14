@@ -1,9 +1,9 @@
 ---
 ms.openlocfilehash: a6b0fb8ef6778ed02a7ae1ae513bbf8d954f0a94
-ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
-ms.translationtype: HT
+ms.sourcegitcommit: 5ef0d02cb57c7153fd9d5417cdcad45665af832e
+ms.translationtype: MT
 ms.contentlocale: de-DE
-ms.lasthandoff: 06/15/2019
-ms.locfileid: "63876495"
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "71137909"
 ---
-<span data-ttu-id="8be9f-101">MSBuild</span><span class="sxs-lookup"><span data-stu-id="8be9f-101">MSBuild</span></span>
+<span data-ttu-id="2089b-101">MSBuild</span><span class="sxs-lookup"><span data-stu-id="2089b-101">MSBuild</span></span>

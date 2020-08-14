@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71139469"
 ---
-<span data-ttu-id="4e6d4-101">MIME</span><span class="sxs-lookup"><span data-stu-id="4e6d4-101">MIME</span></span>
+<span data-ttu-id="f4f1c-101">MIME</span><span class="sxs-lookup"><span data-stu-id="f4f1c-101">MIME</span></span>

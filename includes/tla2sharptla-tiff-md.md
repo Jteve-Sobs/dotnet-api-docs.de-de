@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71139389"
 ---
-<span data-ttu-id="fbde5-101">TIFF</span><span class="sxs-lookup"><span data-stu-id="fbde5-101">TIFF</span></span>
+<span data-ttu-id="c6b99-101">TIFF</span><span class="sxs-lookup"><span data-stu-id="c6b99-101">TIFF</span></span>
