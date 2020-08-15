@@ -1,5 +1,5 @@
 <Type Name="MetadataAssemblyResolver" FullName="System.Reflection.MetadataAssemblyResolver">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="f8641bb8b54bedcb3a2e42350fbf8f1ff915f9ce" /><Meta Name="ms.sourcegitcommit" Value="b0947fed0227b6b2e292d7efb43705b488b130aa" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="04/29/2020" /><Meta Name="ms.locfileid" Value="82301136" /></Metadata><TypeSignature Language="C#" Value="public abstract class MetadataAssemblyResolver" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="35bb0362331365d098d34336352940f622b432df" /><Meta Name="ms.sourcegitcommit" Value="b53d35b4a410c949742abd4c6a989d1af5357bca" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/21/2020" /><Meta Name="ms.locfileid" Value="86788496" /></Metadata><TypeSignature Language="C#" Value="public abstract class MetadataAssemblyResolver" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit MetadataAssemblyResolver extends System.Object" />
   <TypeSignature Language="DocId" Value="T:System.Reflection.MetadataAssemblyResolver" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class MetadataAssemblyResolver" />
@@ -40,12 +40,13 @@
       </Docs>
     </Member>
     <Member MemberName="Resolve">
-      <MemberSignature Language="C#" Value="public abstract System.Reflection.Assembly Resolve (System.Reflection.MetadataLoadContext context, System.Reflection.AssemblyName assemblyName);" />
+      <MemberSignature Language="C#" Value="public abstract System.Reflection.Assembly Resolve (System.Reflection.MetadataLoadContext context, System.Reflection.AssemblyName assemblyName);" FrameworkAlternate="dotnet-plat-ext-3.0;dotnet-plat-ext-3.1" />
       <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Reflection.Assembly Resolve(class System.Reflection.MetadataLoadContext context, class System.Reflection.AssemblyName assemblyName) cil managed" />
       <MemberSignature Language="DocId" Value="M:System.Reflection.MetadataAssemblyResolver.Resolve(System.Reflection.MetadataLoadContext,System.Reflection.AssemblyName)" />
       <MemberSignature Language="VB.NET" Value="Public MustOverride Function Resolve (context As MetadataLoadContext, assemblyName As AssemblyName) As Assembly" />
       <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract System::Reflection::Assembly ^ Resolve(System::Reflection::MetadataLoadContext ^ context, System::Reflection::AssemblyName ^ assemblyName);" />
       <MemberSignature Language="F#" Value="abstract member Resolve : System.Reflection.MetadataLoadContext * System.Reflection.AssemblyName -&gt; System.Reflection.Assembly" Usage="metadataAssemblyResolver.Resolve (context, assemblyName)" />
+      <MemberSignature Language="C#" Value="public abstract System.Reflection.Assembly? Resolve (System.Reflection.MetadataLoadContext context, System.Reflection.AssemblyName assemblyName);" FrameworkAlternate="dotnet-plat-ext-5.0" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>System.Reflection.MetadataLoadContext</AssemblyName>
@@ -61,26 +62,26 @@
         <Parameter Name="assemblyName" Type="System.Reflection.AssemblyName" />
       </Parameters>
       <Docs>
-        <param name="context">Das Kontextobjekt zum Laden von Metadaten, das die isolierte Umgebung mit <see cref="T:System.Type" />-Objekten darstellt, die nur zu Untersuchungszwecken geladen werden.</param>
+        <param name="context">Das Kontextobjekt zum Laden von Metadaten, das die isolierte Umgebung mit <see cref="T:System.Type" />-Objekten darstellt, die nur zu Untersuchungszwecken geladen werden</param>
         <param name="assemblyName">Der Name der Assembly.</param>
         <summary>Gibt eine Assembly aus einem angegebenen Assemblynamen zurück.</summary>
-        <returns>Die Assembly für den angegebenen <paramref name="assemblyName" />.</returns>
+        <returns>Die Assembly für den angegebenen <paramref name="assemblyName" /></returns>
         <remarks>
           <format type="text/markdown"><![CDATA[
 
 ## Remarks
 
-Das Binden eines Assemblynamens an eine Assembly tritt auf, wenn <xref:System.Reflection.MetadataLoadContext.LoadFromAssemblyName%2A> aufgerufen wird oder wenn ein Typ aus einer Assembly eine Abhängigkeit von einer anderen Assembly aufweist. Der Handler, der `Resolve` überschreibt, sollte <xref:System.Reflection.MetadataLoadContext.LoadFromStream%2A?displayProperty=nameWithType>, <xref:System.Reflection.MetadataLoadContext.LoadFromAssemblyPath%2A?displayProperty=nameWithType> oder <xref:System.Reflection.MetadataLoadContext.LoadFromByteArray%2A?displayProperty=nameWithType> verwenden, um die angeforderte Assembly zu laden und zurückzugeben.
+Das Binden eines Assemblynamens an eine Assembly tritt auf, wenn <xref:System.Reflection.MetadataLoadContext.LoadFromAssemblyName%2A> aufgerufen wird oder wenn ein Typ aus einer Assembly eine Abhängigkeit von einer anderen Assembly aufweist. Der Handler, den von der Überschreibung `Resolve` verwendet <xref:System.Reflection.MetadataLoadContext.LoadFromStream%2A?displayProperty=nameWithType> werden soll, <xref:System.Reflection.MetadataLoadContext.LoadFromAssemblyPath%2A?displayProperty=nameWithType> oder, <xref:System.Reflection.MetadataLoadContext.LoadFromByteArray%2A?displayProperty=nameWithType> um die angeforderte Assembly zu laden und zurückzugeben.
 
-Um anzugeben, dass eine Assembly nicht gefunden werden kann, sollte der Handler `null` zurückgeben, anstatt eine Ausnahme auszulösen. Durch das Zurückgeben von `null` wird ein Commit für den Fehler ausgeführt, sodass bei zukünftigen versuchen, diesen Namen zu laden, ein Fehler auftritt, ohne dass
+Um anzugeben, dass eine Assembly nicht gefunden werden kann, sollte der Handler zurückgeben, `null` anstatt eine Ausnahme auszulösen. `null`Wenn Sie einen Commit für den Fehler ausführen, tritt bei zukünftigen versuchen, diesen Namen zu laden, ein Fehler auf, ohne den Handler erneut aufzurufen
 
-Wenn der Handler eine Ausnahme auslöst, wird die Ausnahme an die Anwendung übermittelt, die den Vorgang aufgerufen hat, der die Bindung ausgelöst hat. Der <xref:System.Reflection.MetadataLoadContext> fängt ihn nicht ab, und es erfolgt keine Bindung.
+Wenn der Handler eine Ausnahme auslöst, wird die Ausnahme an die Anwendung übermittelt, die den Vorgang aufgerufen hat, der die Bindung ausgelöst hat. Der <xref:System.Reflection.MetadataLoadContext> fängt ihn nicht ab, und es wird keine Bindung stattfinden.
 
 Der Handler wird in der Regel nicht mehr als einmal für denselben Namen aufgerufen, es sei denn, zwei Threads laden dieselbe Assembly. Selbst in diesem Fall gewinnt ein Ergebnis und ist atomarisch an den Namen gebunden.
 
-Der <xref:System.Reflection.MetadataLoadContext> führt absichtlich keinen Ref-DEF-Abgleich für die zurückgegebene Assembly aus, da eine Ref-DEF-Übereinstimmung eine Richtlinie darstellt. Es ist auch die Art der willkürlichen Einschränkung, die <xref:System.Reflection.MetadataLoadContext> zu vermeiden versucht.
+<xref:System.Reflection.MetadataLoadContext>Führt absichtlich keinen Ref-DEF-Abgleich für die zurückgegebene Assembly aus, da eine Ref-DEF-Übereinstimmung eine Richtlinie darstellt. Es ist auch die Art der willkürlichen Einschränkung, die <xref:System.Reflection.MetadataLoadContext> zu vermeiden versucht.
 
-Der <xref:System.Reflection.MetadataLoadContext> kann keine Assemblys aus anderen Metadaten-Lade Kontexten oder anderen typanbietern (z. b. dem eigenen Reflektionssystem der zugrunde liegenden Laufzeit) Wenn ein Handler eine solche Assembly zurückgibt, löst die <xref:System.Reflection.MetadataLoadContext> eine <xref:System.IO.FileLoadException>aus.
+Kann keine Assemblys <xref:System.Reflection.MetadataLoadContext> aus anderen Metadaten-Lade Kontexten oder anderen typanbietern (z. b. dem eigenen Reflektionssystem der zugrunde liegenden Laufzeit) nutzen Wenn ein Handler eine solche Assembly zurückgibt, löst <xref:System.Reflection.MetadataLoadContext> eine aus <xref:System.IO.FileLoadException> .
 
           ]]></format>
         </remarks>
