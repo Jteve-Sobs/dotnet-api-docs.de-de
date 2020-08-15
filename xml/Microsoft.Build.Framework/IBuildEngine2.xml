@@ -1,5 +1,5 @@
 <Type Name="IBuildEngine2" FullName="Microsoft.Build.Framework.IBuildEngine2">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="0dd498f163fdd461a44e8410438ace8a18be833d" /><Meta Name="ms.sourcegitcommit" Value="055a4a82a0b08bfbdc21bd1347fb71f7fe2c099e" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/15/2019" /><Meta Name="ms.locfileid" Value="69290338" /></Metadata><TypeSignature Language="C#" Value="public interface IBuildEngine2 : Microsoft.Build.Framework.IBuildEngine" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="e869e5cd9ef68469aa3a34aafa3cf44e76bfe609" /><Meta Name="ms.sourcegitcommit" Value="397961a0164281b579f68064c3bb66c071f374d9" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/14/2020" /><Meta Name="ms.locfileid" Value="86350404" /></Metadata><TypeSignature Language="C#" Value="public interface IBuildEngine2 : Microsoft.Build.Framework.IBuildEngine" />
   <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract IBuildEngine2 implements class Microsoft.Build.Framework.IBuildEngine" />
   <TypeSignature Language="DocId" Value="T:Microsoft.Build.Framework.IBuildEngine2" />
   <TypeSignature Language="VB.NET" Value="Public Interface IBuildEngine2&#xA;Implements IBuildEngine" />
@@ -9,6 +9,7 @@
     <AssemblyName>Microsoft.Build.Framework</AssemblyName>
     <AssemblyVersion>3.5.0.0</AssemblyVersion>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>15.1.0.0</AssemblyVersion>
   </AssemblyInfo>
   <Interfaces>
     <Interface>
@@ -16,12 +17,12 @@
     </Interface>
   </Interfaces>
   <Docs>
-    <summary>Bietet Aufgabenautoren eine Möglichkeit, einen Teil der Funktionen der MSBuild-Engine zu verwenden</summary>
+    <summary>Diese Schnittstelle erweitert IBuildEngine, um eine Methode bereitzustellen, die das parallele Erstellen von Projektdateien ermöglicht.</summary>
     <remarks>
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:Microsoft.Build.Framework.IBuildEngine2>erweitert <xref:Microsoft.Build.Framework.IBuildEngine>und ermöglicht das parallele Erstellen mehrerer Projektdateien auf Systemen, die mehrere Prozessoren oder Prozessoren mit mehreren Kernen enthalten.  
+ <xref:Microsoft.Build.Framework.IBuildEngine2> erweitert <xref:Microsoft.Build.Framework.IBuildEngine> und ermöglicht das parallele Erstellen mehrerer Projektdateien auf Systemen, die mehrere Prozessoren oder Prozessoren mit mehreren Kernen enthalten.  
   
  ]]></format>
     </remarks>
@@ -39,6 +40,7 @@
         <AssemblyName>Microsoft.Build.Framework</AssemblyName>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -51,23 +53,14 @@
         <Parameter Name="toolsVersion" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="projectFileName">Der Name der zu erstellenden Projektdatei.</param>
-        <param name="targetNames">Die Namen des zu erstellenden Zieles im Projekt. Mehrere Ziele müssen mit einem Semikolon (;) getrennt werden. <see langword="Null" />-Werte werden akzeptiert.</param>
-        <param name="globalProperties">Ein <see cref="T:System.Collections.IDictionary" /> zusätzlicher globaler Eigenschaften, die auf das Projekt angewendet werden sollen. Der Schlüssel und der Wert müssen vom Datentyp <see langword="String" /> sein.</param>
-        <param name="targetOutputs">Die Ausgaben der einzelnen angegebenen Ziele. <see langword="Null" />-Werte werden akzeptiert.</param>
-        <param name="toolsVersion">Standardwert = "3.5." Gibt die Toolsetversion für den zu verwendenden Build an. <see langword="Null" />-Werte werden akzeptiert.</param>
-        <summary>Initiiert die Builderstellung einer Projektdatei. Wenn der Build erfolgreich erstellt wurde, werden die Ausgaben der angegebenen Ziele zurückgegeben, sofern vorhanden.</summary>
-        <returns><see langword="true" />, wenn die Builderstellung erfolgreich war, andernfalls <see langword="false" />.</returns>
-        <remarks>
-          <format type="text/markdown"><![CDATA[  
-  
-## Remarks  
- Wenn keine Ziele angegeben werden, [!INCLUDE[vstecmsbuild](~/includes/vstecmsbuild-md.md)] erstellt die Standard Ziele des Projekts.  
-  
- Ziel Ausgaben werden als <xref:Microsoft.Build.Framework.ITaskItem> Arrays zurückgegeben, die durch den Zielnamen indiziert werden.  
-  
- ]]></format>
-        </remarks>
+        <param name="projectFileName">Das zu erstellende Projekt.</param>
+        <param name="targetNames">Die Ziele im zu erstellenden Projekt (können NULL sein).</param>
+        <param name="globalProperties">Eine Hash Tabelle mit zusätzlichen globalen Eigenschaften, die auf das untergeordnete Projekt angewendet werden sollen (kann NULL sein).  Der Schlüssel und der Wert müssen Zeichen folgen sein.</param>
+        <param name="targetOutputs">Die Ausgaben der einzelnen angegebenen Ziele (können NULL sein).</param>
+        <param name="toolsVersion">Eine von der Engine erkannte Toolsversion, die während dieses Builds verwendet wird (kann NULL sein).</param>
+        <summary>Diese Methode ermöglicht es Tasks, einen Build für eine bestimmte Projektdatei zu initiieren. Wenn der Build erfolgreich ist, werden die Ausgaben (sofern vorhanden) der angegebenen Ziele zurückgegeben.</summary>
+        <returns>true, wenn der Build erfolgreich war.</returns>
+        <remarks>1) Es ist zulässig, NULL sowohl für " <c>targetNames</c> " als auch für " <c>TargetOutputs</c> 2" zu übergeben. wenn keine Ziele angegeben werden, werden die Standard Ziele erstellt 3) die Ziel Ausgaben werden als <c>ITaskItem</c> -Arrays zurückgegeben, die nach Zielname indiziert sind</remarks>
       </Docs>
     </Member>
     <Member MemberName="BuildProjectFilesInParallel">
@@ -82,6 +75,7 @@
         <AssemblyName>Microsoft.Build.Framework</AssemblyName>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -96,23 +90,16 @@
         <Parameter Name="unloadProjectsOnCompletion" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="projectFileNames">Die Namen der zu erstellenden Projektdateien.</param>
-        <param name="targetNames">Die Namen der zu erstellenden Ziele im Projekt. Mehrere Ziele müssen mit einem Semikolon (;) getrennt werden. <see langword="Null" />-Werte werden akzeptiert.</param>
-        <param name="globalProperties">Ein <see cref="T:System.Collections.IDictionary" /> zusätzlicher globaler Eigenschaften, die auf das Projekt angewendet werden sollen. Der Schlüssel und der Wert müssen vom Datentyp <see langword="String" /> sein. Arrayeinträge können <see langword="null" /> sein.</param>
-        <param name="targetOutputsPerProject">Die Ausgaben der einzelnen angegebenen Ziele. <see langword="Null" />-Werte werden akzeptiert.</param>
-        <param name="toolsVersion">Standardwert = "3.5." Gibt die Toolsetversion für den zu verwendenden Build an. <see langword="Null" />-Werte werden akzeptiert.</param>
-        <param name="useResultsCache">Bei <see langword="true" /> wird die Operation nur ausgeführt, wenn der Cache nicht bereits das Ergebnis enthält. Nach der Operation wird das Ergebnis im Cache gespeichert.</param>
-        <param name="unloadProjectsOnCompletion">Bei <see langword="true" /> wird das Projekt entladen, sobald die Operation abgeschlossen wurde.</param>
-        <summary>Ermöglicht es Aufgaben, in Systemen mit mehreren Prozessoren oder mit Mehrkernprozessoren parallele Builds für die angegebenen Projektdateien zu initiieren. Wenn die Builds erfolgreich erstellt wurden, werden die Ausgaben der angegebenen Ziele zurückgegeben, sofern vorhanden.</summary>
-        <returns><see langword="true" />, wenn der Build erfolgreich erstellt wurde, andernfalls <see langword="false" />.</returns>
-        <remarks>
-          <format type="text/markdown"><![CDATA[  
-  
-## Remarks  
- Sowohl `targetNames` als `targetOutputs` auch akzeptieren`null` Werte. Wenn keine Ziele angegeben sind, werden die Standard Ziele erstellt. Ziel Ausgaben werden als <xref:Microsoft.Build.Framework.ITaskItem> Arrays zurückgegeben, die durch den Zielnamen indiziert werden.  
-  
- ]]></format>
-        </remarks>
+        <param name="projectFileNames">Das zu erstellende Projekt.</param>
+        <param name="targetNames">Die Ziele im zu erstellenden Projekt (können NULL sein).</param>
+        <param name="globalProperties">Ein Array von Hash Tabellen zusätzlicher globaler Eigenschaften, die auf das untergeordnete Projekt angewendet werden sollen (Array Einträge können NULL sein). Der Schlüssel und der Wert in der Hash Tabelle sollten beide Zeichen folgen sein.</param>
+        <param name="targetOutputsPerProject">Die Ausgaben der einzelnen angegebenen Ziele (können NULL sein).</param>
+        <param name="toolsVersion">Eine von der Engine erkannte Toolsversion, die während dieses Builds verwendet wird (kann NULL sein).</param>
+        <param name="useResultsCache">True gibt an, dass der Vorgang nur ausgeführt wird, wenn der Cache das Ergebnis nicht bereits enthält. Nach dem Vorgang wird das Ergebnis im Cache gespeichert.</param>
+        <param name="unloadProjectsOnCompletion">True gibt an, dass das Projekt entladen wird, sobald der Vorgang abgeschlossen ist.</param>
+        <summary>Diese Methode ermöglicht es Tasks, einen Build für eine bestimmte Projektdatei zu initiieren. Wenn der Build erfolgreich ist, werden die Ausgaben (sofern vorhanden) der angegebenen Ziele zurückgegeben.</summary>
+        <returns>true, wenn der Build erfolgreich war.</returns>
+        <remarks>1) Es ist zulässig, NULL sowohl für " <c>targetNames</c> " als auch für " <c>TargetOutputs</c> 2" zu übergeben. wenn keine Ziele angegeben werden, werden die Standard Ziele erstellt 3) die Ziel Ausgaben werden als <c>ITaskItem</c> -Arrays zurückgegeben, die nach Zielname indiziert sind</remarks>
       </Docs>
     </Member>
     <Member MemberName="IsRunningMultipleNodes">
@@ -127,18 +114,21 @@
         <AssemblyName>Microsoft.Build.Framework</AssemblyName>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gibt zurück, ob das System im Einzelprozessormodus oder im Multiprozessormodus ausgeführt wird.</summary>
+        <summary>Diese Eigenschaft ermöglicht es einer Aufgabe, abzufragen, ob das System im Einzel Prozess Modus oder im multiprozessmodus ausgeführt wird.
+Der Einzel Prozess Modus (isrunningmultiplenodes = false) ist der Ort, an dem die Engine mit der Anzahl der CPUs = 1 initialisiert wird und es sich bei der Engine nicht um ein untergeordnetes Modul handelt.
+Die Engine befindet sich im multiprozessmodus (isrunningmultiplenodes = true), wenn die Engine mit einer Reihe von CPUs 1 initialisiert wird &gt; oder wenn es sich um ein untergeordnetes Modul handelt.</summary>
         <value><see langword="true" />, wenn das System im Multiprozessormodus ausgeführt wird, andernfalls <see langword="false" />.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die Build-Engine befindet sich im Einzel Prozessor Modus`IsRunningMultipleNodes`( = `false`), wenn Sie mit der Anzahl der CPUs, die gleich 1 ist, initialisiert wird und es sich bei der Build-Engine nicht um ein untergeordnetes Modul handelt. Die Build-Engine befindet sich im multiprozessormodus (`IsRunningMultipleNodes` = `true`), wenn Sie mit einer Anzahl von CPUs größer als 1 initialisiert wird oder wenn es sich bei der Build-Engine um ein untergeordnetes Modul handelt.  
+ Die Build-Engine befindet sich im Einzel Prozessor Modus ( `IsRunningMultipleNodes`  =  `false` ), wenn Sie mit der Anzahl der CPUs, die gleich 1 ist, initialisiert wird und es sich bei der Build-Engine nicht um ein untergeordnetes Modul handelt. Die Build-Engine befindet sich im multiprozessormodus ( `IsRunningMultipleNodes`  =  `true` ), wenn Sie mit einer Anzahl von CPUs größer als 1 initialisiert wird oder wenn es sich bei der Build-Engine um ein untergeordnetes Modul handelt.  
   
  ]]></format>
         </remarks>
