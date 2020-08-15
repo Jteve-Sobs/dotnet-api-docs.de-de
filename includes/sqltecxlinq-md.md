@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71139779"
 ---
-<span data-ttu-id="3911a-101">LINQ to XML</span><span class="sxs-lookup"><span data-stu-id="3911a-101">LINQ to XML</span></span>
+<span data-ttu-id="adaba-101">LINQ to XML</span><span class="sxs-lookup"><span data-stu-id="adaba-101">LINQ to XML</span></span>

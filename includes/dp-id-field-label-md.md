@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71140259"
 ---
-<span data-ttu-id="43488-101">Bezeichnerfeld für die Abhängigkeitseigenschaft:</span><span class="sxs-lookup"><span data-stu-id="43488-101">Dependency property identifier field:</span></span>
+<span data-ttu-id="e8dd3-101">Bezeichnerfeld für die Abhängigkeitseigenschaft:</span><span class="sxs-lookup"><span data-stu-id="e8dd3-101">Dependency property identifier field:</span></span>

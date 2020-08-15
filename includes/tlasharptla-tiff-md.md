@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138599"
 ---
-<span data-ttu-id="7ca23-101">TIFF (Tagged Image File Format)</span><span class="sxs-lookup"><span data-stu-id="7ca23-101">Tagged Image File Format (TIFF)</span></span>
+<span data-ttu-id="ed465-101">TIFF (Tagged Image File Format)</span><span class="sxs-lookup"><span data-stu-id="ed465-101">Tagged Image File Format (TIFF)</span></span>

@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71139269"
 ---
-<span data-ttu-id="d0af3-101">Windows Vista</span><span class="sxs-lookup"><span data-stu-id="d0af3-101">Windows Vista</span></span>
+<span data-ttu-id="dddcb-101">Windows Vista</span><span class="sxs-lookup"><span data-stu-id="dddcb-101">Windows Vista</span></span>

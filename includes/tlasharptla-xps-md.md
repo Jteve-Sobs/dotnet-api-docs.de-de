@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138229"
 ---
-<span data-ttu-id="5b011-101">XML Paper Specification (XPS)</span><span class="sxs-lookup"><span data-stu-id="5b011-101">XML Paper Specification (XPS)</span></span>
+<span data-ttu-id="8549e-101">XML Paper Specification (XPS)</span><span class="sxs-lookup"><span data-stu-id="8549e-101">XML Paper Specification (XPS)</span></span>

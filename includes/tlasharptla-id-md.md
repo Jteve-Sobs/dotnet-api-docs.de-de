@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138889"
 ---
-<span data-ttu-id="d1805-101">Bezeichner (identifier; ID)</span><span class="sxs-lookup"><span data-stu-id="d1805-101">identifier (ID)</span></span>
+<span data-ttu-id="76c80-101">Bezeichner (identifier; ID)</span><span class="sxs-lookup"><span data-stu-id="76c80-101">identifier (ID)</span></span>

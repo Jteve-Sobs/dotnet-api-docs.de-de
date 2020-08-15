@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71137959"
 ---
-<span data-ttu-id="e0856-101">Microsoft Visual Studio 2005</span><span class="sxs-lookup"><span data-stu-id="e0856-101">Microsoft Visual Studio 2005</span></span>
+<span data-ttu-id="b5529-101">Microsoft Visual Studio 2005</span><span class="sxs-lookup"><span data-stu-id="b5529-101">Microsoft Visual Studio 2005</span></span>
