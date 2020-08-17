@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138839"
 ---
-<span data-ttu-id="c2c16-101">Windows Internet Explorer 7</span><span class="sxs-lookup"><span data-stu-id="c2c16-101">Windows Internet Explorer 7</span></span>
+<span data-ttu-id="e5b80-101">Windows Internet Explorer 7</span><span class="sxs-lookup"><span data-stu-id="e5b80-101">Windows Internet Explorer 7</span></span>

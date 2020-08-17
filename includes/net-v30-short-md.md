@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71140039"
 ---
-<span data-ttu-id="da2da-101">.NET Framework 3.0</span><span class="sxs-lookup"><span data-stu-id="da2da-101">.NET Framework 3.0</span></span>
+<span data-ttu-id="e8434-101">.NET Framework 3.0</span><span class="sxs-lookup"><span data-stu-id="e8434-101">.NET Framework 3.0</span></span>

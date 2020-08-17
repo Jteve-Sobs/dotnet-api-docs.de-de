@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 08/29/2019
 ms.locfileid: "71137919"
 ---
-<span data-ttu-id="32c27-101">ASP.NET 2.0</span><span class="sxs-lookup"><span data-stu-id="32c27-101">ASP.NET 2.0</span></span>
+<span data-ttu-id="11904-101">ASP.NET 2.0</span><span class="sxs-lookup"><span data-stu-id="11904-101">ASP.NET 2.0</span></span>

@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138909"
 ---
-<span data-ttu-id="e4ca5-101">International Color Consortium (ICC)</span><span class="sxs-lookup"><span data-stu-id="e4ca5-101">International Color Consortium (ICC)</span></span>
+<span data-ttu-id="7b203-101">International Color Consortium (ICC)</span><span class="sxs-lookup"><span data-stu-id="7b203-101">International Color Consortium (ICC)</span></span>

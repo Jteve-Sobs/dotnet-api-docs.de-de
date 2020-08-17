@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138459"
 ---
-<span data-ttu-id="2afff-101">Microsoft Windows Media Photo</span><span class="sxs-lookup"><span data-stu-id="2afff-101">Microsoft Windows Media Photo</span></span>
+<span data-ttu-id="a30f3-101">Microsoft Windows Media Photo</span><span class="sxs-lookup"><span data-stu-id="a30f3-101">Microsoft Windows Media Photo</span></span>

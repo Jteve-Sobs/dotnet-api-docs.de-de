@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138689"
 ---
-<span data-ttu-id="78bae-101">.NET Framework-Attribut</span><span class="sxs-lookup"><span data-stu-id="78bae-101">.NET Framework attribute</span></span>
+<span data-ttu-id="9dbac-101">.NET Framework-Attribut</span><span class="sxs-lookup"><span data-stu-id="9dbac-101">.NET Framework attribute</span></span>

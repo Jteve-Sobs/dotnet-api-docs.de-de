@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71137769"
 ---
-<span data-ttu-id="f31cb-101">Windows 8.x Store</span><span class="sxs-lookup"><span data-stu-id="f31cb-101">Windows 8.x Store</span></span>
+<span data-ttu-id="dbf24-101">Windows 8.x Store</span><span class="sxs-lookup"><span data-stu-id="dbf24-101">Windows 8.x Store</span></span>

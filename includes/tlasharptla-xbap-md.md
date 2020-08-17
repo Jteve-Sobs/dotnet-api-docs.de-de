@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 08/29/2019
 ms.locfileid: "71138299"
 ---
-<span data-ttu-id="85d83-101">XAML-Browseranwendung (XBAP)</span><span class="sxs-lookup"><span data-stu-id="85d83-101">XAML browser application (XBAP)</span></span>
+<span data-ttu-id="a411c-101">XAML-Browseranwendung (XBAP)</span><span class="sxs-lookup"><span data-stu-id="a411c-101">XAML browser application (XBAP)</span></span>

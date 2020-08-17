@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138899"
 ---
-<span data-ttu-id="8f61e-101">Farbverwaltung (Image Color Management; ICM)</span><span class="sxs-lookup"><span data-stu-id="8f61e-101">Image Color Management (ICM)</span></span>
+<span data-ttu-id="ba271-101">Farbverwaltung (Image Color Management; ICM)</span><span class="sxs-lookup"><span data-stu-id="ba271-101">Image Color Management (ICM)</span></span>

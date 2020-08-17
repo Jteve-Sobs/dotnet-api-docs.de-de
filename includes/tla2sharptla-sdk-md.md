@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71139399"
 ---
-<span data-ttu-id="8315d-101">SDK</span><span class="sxs-lookup"><span data-stu-id="8315d-101">SDK</span></span>
+<span data-ttu-id="43306-101">SDK</span><span class="sxs-lookup"><span data-stu-id="43306-101">SDK</span></span>

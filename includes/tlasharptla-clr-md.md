@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71139039"
 ---
-<span data-ttu-id="d159b-101">Common Language Runtime (CLR)</span><span class="sxs-lookup"><span data-stu-id="d159b-101">common language runtime (CLR)</span></span>
+<span data-ttu-id="b3df0-101">Common Language Runtime (CLR)</span><span class="sxs-lookup"><span data-stu-id="b3df0-101">common language runtime (CLR)</span></span>

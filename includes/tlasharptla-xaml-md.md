@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138309"
 ---
-<span data-ttu-id="13c17-101">Extensible Application Markup Language (XAML)</span><span class="sxs-lookup"><span data-stu-id="13c17-101">Extensible Application Markup Language (XAML)</span></span>
+<span data-ttu-id="6b58d-101">Extensible Application Markup Language (XAML)</span><span class="sxs-lookup"><span data-stu-id="6b58d-101">Extensible Application Markup Language (XAML)</span></span>

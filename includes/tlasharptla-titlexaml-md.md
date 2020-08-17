@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138579"
 ---
-<span data-ttu-id="d6004-101">XAML</span><span class="sxs-lookup"><span data-stu-id="d6004-101">XAML</span></span>
+<span data-ttu-id="0d33b-101">XAML</span><span class="sxs-lookup"><span data-stu-id="0d33b-101">XAML</span></span>

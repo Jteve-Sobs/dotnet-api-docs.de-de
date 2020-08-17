@@ -1,9 +1,9 @@
 ---
 ms.openlocfilehash: 01f5dfe65e3b3c4b20e46d997653b845fa54fa49
 ms.sourcegitcommit: 5ef0d02cb57c7153fd9d5417cdcad45665af832e
-ms.translationtype: HT
+ms.translationtype: MT
 ms.contentlocale: de-DE
 ms.lasthandoff: 08/29/2019
 ms.locfileid: "71139549"
 ---
-<span data-ttu-id="2360b-101">DirectX</span><span class="sxs-lookup"><span data-stu-id="2360b-101">DirectX</span></span>
+<span data-ttu-id="df69c-101">DirectX</span><span class="sxs-lookup"><span data-stu-id="df69c-101">DirectX</span></span>

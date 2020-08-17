@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138699"
 ---
-<span data-ttu-id="2858e-101">Microsoft .NET</span><span class="sxs-lookup"><span data-stu-id="2858e-101">Microsoft .NET</span></span>
+<span data-ttu-id="3b6fc-101">Microsoft .NET</span><span class="sxs-lookup"><span data-stu-id="3b6fc-101">Microsoft .NET</span></span>
