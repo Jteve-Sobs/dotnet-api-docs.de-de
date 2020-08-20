@@ -1,9 +1,9 @@
 ---
 ms.openlocfilehash: 5c7e34745f9613d46a415df6e3bbdd35346f7d60
-ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
-ms.translationtype: HT
+ms.sourcegitcommit: 5ef0d02cb57c7153fd9d5417cdcad45665af832e
+ms.translationtype: MT
 ms.contentlocale: de-DE
-ms.lasthandoff: 06/15/2019
-ms.locfileid: "63870985"
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "71139899"
 ---
-<span data-ttu-id="c97a3-101">.NET für Windows 8.x Store-Apps</span><span class="sxs-lookup"><span data-stu-id="c97a3-101">.NET for Windows 8.x Store apps</span></span>
+<span data-ttu-id="789fd-101">.NET für Windows 8.x Store-Apps</span><span class="sxs-lookup"><span data-stu-id="789fd-101">.NET for Windows 8.x Store apps</span></span>
