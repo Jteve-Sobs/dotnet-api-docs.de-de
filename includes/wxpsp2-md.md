@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 08/29/2019
 ms.locfileid: "71137639"
 ---
-<span data-ttu-id="4a341-101">Windows XP SP2</span><span class="sxs-lookup"><span data-stu-id="4a341-101">Windows XP SP2</span></span>
+<span data-ttu-id="0b482-101">Windows XP SP2</span><span class="sxs-lookup"><span data-stu-id="0b482-101">Windows XP SP2</span></span>

@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71139419"
 ---
-<span data-ttu-id="5fd3a-101">PNG</span><span class="sxs-lookup"><span data-stu-id="5fd3a-101">PNG</span></span>
+<span data-ttu-id="dffc8-101">PNG</span><span class="sxs-lookup"><span data-stu-id="dffc8-101">PNG</span></span>
