@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 08/29/2019
 ms.locfileid: "71138979"
 ---
-<span data-ttu-id="7313a-101">Punkte pro Zoll (dots per inch, dpi)</span><span class="sxs-lookup"><span data-stu-id="7313a-101">dots per inch (dpi)</span></span>
+<span data-ttu-id="ae4e1-101">Punkte pro Zoll (dots per inch, dpi)</span><span class="sxs-lookup"><span data-stu-id="ae4e1-101">dots per inch (dpi)</span></span>

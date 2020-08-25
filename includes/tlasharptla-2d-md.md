@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71139189"
 ---
-<span data-ttu-id="3316b-101">2D</span><span class="sxs-lookup"><span data-stu-id="3316b-101">2-D</span></span>
+<span data-ttu-id="87dd6-101">2D</span><span class="sxs-lookup"><span data-stu-id="87dd6-101">2-D</span></span>

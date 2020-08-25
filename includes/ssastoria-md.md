@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 08/29/2019
 ms.locfileid: "71139729"
 ---
-<span data-ttu-id="667ee-101">WCF Data Services</span><span class="sxs-lookup"><span data-stu-id="667ee-101">WCF Data Services</span></span>
+<span data-ttu-id="96882-101">WCF Data Services</span><span class="sxs-lookup"><span data-stu-id="96882-101">WCF Data Services</span></span>

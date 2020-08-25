@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138929"
 ---
-<span data-ttu-id="0af5a-101">Graphische Benutzeroberfläche (Graphical User Interface, GUI)</span><span class="sxs-lookup"><span data-stu-id="0af5a-101">graphical user interface (GUI)</span></span>
+<span data-ttu-id="e320a-101">Graphische Benutzeroberfläche (Graphical User Interface, GUI)</span><span class="sxs-lookup"><span data-stu-id="e320a-101">graphical user interface (GUI)</span></span>
