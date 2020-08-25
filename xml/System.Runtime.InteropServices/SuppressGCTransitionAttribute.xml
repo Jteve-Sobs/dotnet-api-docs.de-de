@@ -1,0 +1,73 @@
+<Type Name="SuppressGCTransitionAttribute" FullName="System.Runtime.InteropServices.SuppressGCTransitionAttribute">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="4f1ee401625ff08c65ddd9314d102ba7a6f5fadc" /><Meta Name="ms.sourcegitcommit" Value="ff93f301301180af9a0213650c5b4edb28570fd0" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/18/2020" /><Meta Name="ms.locfileid" Value="88557082" /></Metadata><TypeSignature Language="C#" Value="public sealed class SuppressGCTransitionAttribute : Attribute" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit SuppressGCTransitionAttribute extends System.Attribute" />
+  <TypeSignature Language="DocId" Value="T:System.Runtime.InteropServices.SuppressGCTransitionAttribute" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class SuppressGCTransitionAttribute&#xA;Inherits Attribute" />
+  <TypeSignature Language="C++ CLI" Value="public ref class SuppressGCTransitionAttribute sealed : Attribute" />
+  <TypeSignature Language="F#" Value="type SuppressGCTransitionAttribute = class&#xA;    inherit Attribute" />
+  <AssemblyInfo>
+    <AssemblyName>System.Runtime</AssemblyName>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Attribute</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes>
+    <Attribute>
+      <AttributeName Language="C#">[System.AttributeUsage(System.AttributeTargets.Method, Inherited=false)]</AttributeName>
+      <AttributeName Language="F#">[&lt;System.AttributeUsage(System.AttributeTargets.Method, Inherited=false)&gt;]</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary><span data-ttu-id="e8f60-101">Gibt an, dass ein Garbage-Collection-Übergang übersprungen werden soll, wenn ein nicht verwalteter Funktionsaufruf erfolgt.</span><span class="sxs-lookup"><span data-stu-id="e8f60-101">Indicates that a garbage collection transition should be skipped when an unmanaged function call is made.</span></span></summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+<span data-ttu-id="e8f60-102">Dieses Attribut wird ignoriert, wenn es ohne das auf eine Methode angewendet wird <xref:System.Runtime.InteropServices.DllImportAttribute> .</span><span class="sxs-lookup"><span data-stu-id="e8f60-102">This attribute is ignored if applied to a method without the <xref:System.Runtime.InteropServices.DllImportAttribute>.</span></span>
+ 
+ <span data-ttu-id="e8f60-103">Diese Umstellung kann zu Vorteilen führen, wenn die Kosten des Übergangs die Ausführungszeit der nicht verwalteten Funktion überschreiten.</span><span class="sxs-lookup"><span data-stu-id="e8f60-103">Forgoing this transition can yield benefits when the cost of the transition is more than the execution time of the unmanaged function.</span></span> <span data-ttu-id="e8f60-104">Das vermeiden dieses Übergangs entfernt jedoch einige der Garantien, die die Laufzeit durch einen normalen P/Aufruf bereitstellt.</span><span class="sxs-lookup"><span data-stu-id="e8f60-104">However, avoiding this transition removes some of the guarantees the runtime provides through a normal P/Invoke.</span></span> <span data-ttu-id="e8f60-105">Beim Beenden der verwalteten Laufzeit für die Eingabe einer nicht verwalteten Funktion muss der GC vom kooperativen Modus in den präemptiven Modus übergehen.</span><span class="sxs-lookup"><span data-stu-id="e8f60-105">When exiting the managed runtime to enter an unmanaged function, the GC must transition from Cooperative mode into Preemptive mode.</span></span> <span data-ttu-id="e8f60-106">Ausführliche Informationen zu diesen Modi finden Sie unter https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/clr-code-guide.md#2.1.8 .</span><span class="sxs-lookup"><span data-stu-id="e8f60-106">Full details on these modes can be found at https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/clr-code-guide.md#2.1.8.</span></span>
+<span data-ttu-id="e8f60-107">Das Unterdrücken des GC-Übergangs ist ein erweitertes Szenario und sollte nicht ohne vollständiges Verständnis potenzieller Konsequenzen erreicht werden.</span><span class="sxs-lookup"><span data-stu-id="e8f60-107">Suppressing the GC transition is an advanced scenario and should not be done without fully understanding potential consequences.</span></span>
+ 
+ <span data-ttu-id="e8f60-108">Eine dieser Konsequenzen wirkt sich auf das [Debuggen im gemischten Modus](https://docs.microsoft.com/visualstudio/debugger/how-to-debug-in-mixed-mode)aus.</span><span class="sxs-lookup"><span data-stu-id="e8f60-108">One of these consequences is an impact to [Mixed-mode debugging](https://docs.microsoft.com/visualstudio/debugger/how-to-debug-in-mixed-mode).</span></span>
+<span data-ttu-id="e8f60-109">Während des Debuggens im gemischten Modus ist es nicht möglich, in einem P/-Aufruf, der mit diesem Attribut markiert wurde, einen Einzelschritt durchzuführen oder Haltepunkte festzulegen.</span><span class="sxs-lookup"><span data-stu-id="e8f60-109">During Mixed-mode debugging, it is not possible to step into or set breakpoints in a P/Invoke that has been marked with this attribute.</span></span> <span data-ttu-id="e8f60-110">Eine Problem Umgehung besteht darin, zu nativem Debugging zu wechseln und in der systemeigenen Funktion einen Haltepunkt festzulegen.</span><span class="sxs-lookup"><span data-stu-id="e8f60-110">A workaround is to switch to native debugging and set a breakpoint in the native function.</span></span>
+<span data-ttu-id="e8f60-111">Im Allgemeinen ist die Verwendung dieses Attributs nicht empfehlenswert, wenn das Debuggen des P/Aufrufs wichtig ist, z. b. durchlaufen des systemeigenen Codes oder diagnostizieren einer Ausnahme, die vom systemeigenen Code ausgelöst wird.</span><span class="sxs-lookup"><span data-stu-id="e8f60-111">In general, usage of this attribute is not recommended if debugging the P/Invoke is important, for example, stepping through the native code or diagnosing an exception thrown from the native code.</span></span>
+ 
+ <span data-ttu-id="e8f60-112">Die P/Aufruf-Methode, auf die dieses Attribut angewendet wird, muss über die folgenden Eigenschaften verfügen:</span><span class="sxs-lookup"><span data-stu-id="e8f60-112">The P/Invoke method that this attribute is applied to must have all of the following properties:</span></span>
+ * <span data-ttu-id="e8f60-113">Die native Funktion wird immer für einen trivialen Zeitraum (weniger als eine Mikrosekunde) ausgeführt.</span><span class="sxs-lookup"><span data-stu-id="e8f60-113">Native function always executes for a trivial amount of time (less than 1 microsecond).</span></span>
+ * <span data-ttu-id="e8f60-114">Die native Funktion führt keine blockierende syscall-Funktion aus (z. b. beliebige e/a-Typen).</span><span class="sxs-lookup"><span data-stu-id="e8f60-114">Native function does not perform a blocking syscall (for example, any type of I/O).</span></span>
+ * <span data-ttu-id="e8f60-115">Die native Funktion ruft keinen Rückruf für die Laufzeit auf (z. b. Reverse-P/aufrufen).</span><span class="sxs-lookup"><span data-stu-id="e8f60-115">Native function does not call back into the runtime (for example, Reverse P/Invoke).</span></span>
+ * <span data-ttu-id="e8f60-116">Die native Funktion löst keine Ausnahmen aus.</span><span class="sxs-lookup"><span data-stu-id="e8f60-116">Native function does not throw exceptions.</span></span>
+ * <span data-ttu-id="e8f60-117">Die native Funktion bearbeitet keine Sperren oder anderen Parallelitäts primitiven.</span><span class="sxs-lookup"><span data-stu-id="e8f60-117">Native function does not manipulate locks or other concurrency primitives.</span></span>
+ 
+ <span data-ttu-id="e8f60-118">Zu den Folgen der ungültigen Verwendung dieses Attributs gehören:</span><span class="sxs-lookup"><span data-stu-id="e8f60-118">Consequences of invalid uses of this attribute include:</span></span>
+ 
+ * <span data-ttu-id="e8f60-119">GC-Hunger.</span><span class="sxs-lookup"><span data-stu-id="e8f60-119">GC starvation.</span></span>
+ * <span data-ttu-id="e8f60-120">Sofortiges Beenden der Laufzeit.</span><span class="sxs-lookup"><span data-stu-id="e8f60-120">Immediate runtime termination.</span></span>
+ * <span data-ttu-id="e8f60-121">Beschädigung von Daten.</span><span class="sxs-lookup"><span data-stu-id="e8f60-121">Data corruption.</span></span>
+
+          ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SuppressGCTransitionAttribute ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.InteropServices.SuppressGCTransitionAttribute.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SuppressGCTransitionAttribute();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
