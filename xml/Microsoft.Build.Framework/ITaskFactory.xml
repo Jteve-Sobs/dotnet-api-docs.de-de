@@ -1,5 +1,5 @@
 <Type Name="ITaskFactory" FullName="Microsoft.Build.Framework.ITaskFactory">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="66d07dfd8e8fff25e961d4c994c6fb663c1ea368" /><Meta Name="ms.sourcegitcommit" Value="055a4a82a0b08bfbdc21bd1347fb71f7fe2c099e" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/15/2019" /><Meta Name="ms.locfileid" Value="69290225" /></Metadata><TypeSignature Language="C#" Value="public interface ITaskFactory" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="dc1585997bdcf8cfb81a9e2e705aac13e8f835f2" /><Meta Name="ms.sourcegitcommit" Value="397961a0164281b579f68064c3bb66c071f374d9" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/14/2020" /><Meta Name="ms.locfileid" Value="86368370" /></Metadata><TypeSignature Language="C#" Value="public interface ITaskFactory" />
   <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract ITaskFactory" />
   <TypeSignature Language="DocId" Value="T:Microsoft.Build.Framework.ITaskFactory" />
   <TypeSignature Language="VB.NET" Value="Public Interface ITaskFactory" />
@@ -8,10 +8,11 @@
   <AssemblyInfo>
     <AssemblyName>Microsoft.Build.Framework</AssemblyName>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>15.1.0.0</AssemblyVersion>
   </AssemblyInfo>
   <Interfaces />
   <Docs>
-    <summary>Schnittstelle, die eine Aufgabenfactoryinstanz implementieren soll.</summary>
+    <summary>Schnittstelle, die eine TaskFactory-Instanz implementieren soll</summary>
     <remarks>To be added.</remarks>
   </Docs>
   <Members>
@@ -26,6 +27,7 @@
       <AssemblyInfo>
         <AssemblyName>Microsoft.Build.Framework</AssemblyName>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
@@ -36,7 +38,7 @@
       <Docs>
         <param name="task">Die zu bereinigende Aufgabe.</param>
         <summary>Bereinigt jeden Kontext oder Zustand, der für eine bestimmte Aufgabe erstellt wurde.</summary>
-        <remarks>To be added.</remarks>
+        <remarks>Bei vielen Factorys ist diese Methode kein op.  Einige Factorys haben jedoch möglicherweise eine AppDomain als Teil einer einzelnen Aufgaben Instanz erstellt, und Sie haben die Möglichkeit, die AppDomain herunterzufahren.</remarks>
       </Docs>
     </Member>
     <Member MemberName="CreateTask">
@@ -50,6 +52,7 @@
       <AssemblyInfo>
         <AssemblyName>Microsoft.Build.Framework</AssemblyName>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>Microsoft.Build.Framework.ITask</ReturnType>
@@ -58,9 +61,9 @@
         <Parameter Name="taskFactoryLoggingHost" Type="Microsoft.Build.Framework.IBuildEngine" />
       </Parameters>
       <Docs>
-        <param name="taskFactoryLoggingHost">Der Protokollierungshost für die Aufgabenfactory.</param>
-        <summary>Erstellt eine Instanz der Aufgabe, die in einem Batch verwendet werden soll. Der Aufgabenfactory-Protokollierungshost protokolliert Meldungen im Kontext der Aufgabe.</summary>
-        <returns>Eine Instanz der Aufgabe, die in einem Batch verwendet werden soll.</returns>
+        <param name="taskFactoryLoggingHost">Der Aufgabenfactory-Protokollierungshost protokolliert Meldungen im Kontext der Aufgabe.</param>
+        <summary>Erstellen Sie eine Instanz der zu verwendenden Aufgabe.</summary>
+        <returns>Die generierte Aufgabe oder <c>NULL</c>, wenn die Aufgabe nicht erstellt werden konnte.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -75,6 +78,7 @@
       <AssemblyInfo>
         <AssemblyName>Microsoft.Build.Framework</AssemblyName>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.String</ReturnType>
@@ -96,13 +100,14 @@
       <AssemblyInfo>
         <AssemblyName>Microsoft.Build.Framework</AssemblyName>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>Microsoft.Build.Framework.TaskPropertyInfo[]</ReturnType>
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Ruft die Beschreibungen für sämtliche Parameter der Aufgabe ab.</summary>
+        <summary>Hier finden Sie die Beschreibungen für alle Parameter der Aufgabe.</summary>
         <returns>Ein Array von Eigenschaftenbeschreibungen, das ungleich NULL ist.</returns>
         <remarks>To be added.</remarks>
       </Docs>
@@ -118,6 +123,7 @@
       <AssemblyInfo>
         <AssemblyName>Microsoft.Build.Framework</AssemblyName>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -135,16 +141,10 @@
         <param name="taskFactoryLoggingHost">Der Protokollierungshost für die Aufgabenfactory.</param>
         <summary>Initialisiert diese Factory zum Instanziieren von Aufgaben mit einem bestimmten Inlineaufgabenblock.</summary>
         <returns>Ein Wert, der angibt, ob die Initialisierung erfolgreich war.</returns>
-        <remarks>
-          <format type="text/markdown"><![CDATA[  
-  
-## Remarks  
- Die MSBuild-Engine ruft diese Methode auf, um die Factory zu initialisieren. Nach der Initialisierung kann die Factory gefragt werden, ob Aufgaben Namen von der Factory erstellt werden können oder nicht.  
-  
- `taskFactoryLoggingHost` Protokolliert Nachrichten im Kontext des Ziels, in dem die Aufgabe zum ersten Mal verwendet wird.  
-  
- ]]></format>
-        </remarks>
+        <remarks><para>Die MSBuild-Engine ruft dies auf, um die Factory zu initialisieren. Hierdurch wird die Factory so weit initialisiert, dass die sie gefragt werden kann, ob Aufgabennamen von der Factory erstellt werden können.</para>
+          <para>
+Taskfactor ylogginghost protokolliert Nachrichten im Kontext des Ziels, in dem die Aufgabe zum ersten Mal verwendet wird.
+            </para></remarks>
       </Docs>
     </Member>
     <Member MemberName="TaskType">
@@ -158,12 +158,13 @@
       <AssemblyInfo>
         <AssemblyName>Microsoft.Build.Framework</AssemblyName>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Type</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft den Typ der Aufgabe ab, die von dieser Factory instanziiert wird.</summary>
+        <summary>Ruft den Typ der Aufgabe ab, die von dieser Factory instanziiert wird.  Implementierungen müssen einen Wert für diese Eigenschaft zurückgeben.</summary>
         <value>Der Typ der Aufgabe.</value>
         <remarks>To be added.</remarks>
       </Docs>
