@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138639"
 ---
-<span data-ttu-id="d4748-101">PNG (Portable Network Graphics)</span><span class="sxs-lookup"><span data-stu-id="d4748-101">Portable Network Graphics (PNG)</span></span>
+<span data-ttu-id="033ed-101">PNG (Portable Network Graphics)</span><span class="sxs-lookup"><span data-stu-id="033ed-101">Portable Network Graphics (PNG)</span></span>
