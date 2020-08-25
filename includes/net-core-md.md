@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71140129"
 ---
-<span data-ttu-id="9098f-101">.NET Core</span><span class="sxs-lookup"><span data-stu-id="9098f-101">.NET Core</span></span>
+<span data-ttu-id="0dac5-101">.NET Core</span><span class="sxs-lookup"><span data-stu-id="0dac5-101">.NET Core</span></span>

@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71140189"
 ---
-<span data-ttu-id="f4fa7-101">LINQ to DataSet</span><span class="sxs-lookup"><span data-stu-id="f4fa7-101">LINQ to DataSet</span></span>
+<span data-ttu-id="16ae5-101">LINQ to DataSet</span><span class="sxs-lookup"><span data-stu-id="16ae5-101">LINQ to DataSet</span></span>

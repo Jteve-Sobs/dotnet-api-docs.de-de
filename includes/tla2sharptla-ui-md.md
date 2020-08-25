@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71139359"
 ---
-<span data-ttu-id="b38a0-101">UI</span><span class="sxs-lookup"><span data-stu-id="b38a0-101">UI</span></span>
+<span data-ttu-id="18bf7-101">UI</span><span class="sxs-lookup"><span data-stu-id="18bf7-101">UI</span></span>

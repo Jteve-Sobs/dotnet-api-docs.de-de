@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 08/29/2019
 ms.locfileid: "71140219"
 ---
-<span data-ttu-id="aba29-101">IIS 7.0</span><span class="sxs-lookup"><span data-stu-id="aba29-101">IIS 7.0</span></span>
+<span data-ttu-id="fbff4-101">IIS 7.0</span><span class="sxs-lookup"><span data-stu-id="fbff4-101">IIS 7.0</span></span>
