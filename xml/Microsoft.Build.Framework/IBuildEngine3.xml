@@ -1,5 +1,5 @@
 <Type Name="IBuildEngine3" FullName="Microsoft.Build.Framework.IBuildEngine3">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="72535430a472c28762db6558c8a118071c92bbc9" /><Meta Name="ms.sourcegitcommit" Value="c573d537afba2d4c1463538f1095f2f155025464" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="10/16/2019" /><Meta Name="ms.locfileid" Value="72405463" /></Metadata><TypeSignature Language="C#" Value="public interface IBuildEngine3 : Microsoft.Build.Framework.IBuildEngine2" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="14de4de2514a91c80985480719293e0777662d3b" /><Meta Name="ms.sourcegitcommit" Value="397961a0164281b579f68064c3bb66c071f374d9" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/14/2020" /><Meta Name="ms.locfileid" Value="86355903" /></Metadata><TypeSignature Language="C#" Value="public interface IBuildEngine3 : Microsoft.Build.Framework.IBuildEngine2" />
   <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract IBuildEngine3 implements class Microsoft.Build.Framework.IBuildEngine, class Microsoft.Build.Framework.IBuildEngine2" />
   <TypeSignature Language="DocId" Value="T:Microsoft.Build.Framework.IBuildEngine3" />
   <TypeSignature Language="VB.NET" Value="Public Interface IBuildEngine3&#xA;Implements IBuildEngine2" />
@@ -8,6 +8,7 @@
   <AssemblyInfo>
     <AssemblyName>Microsoft.Build.Framework</AssemblyName>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>15.1.0.0</AssemblyVersion>
   </AssemblyInfo>
   <Interfaces>
     <Interface>
@@ -33,6 +34,7 @@
       <AssemblyInfo>
         <AssemblyName>Microsoft.Build.Framework</AssemblyName>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>Microsoft.Build.Framework.BuildEngineResult</ReturnType>
@@ -48,15 +50,13 @@
       <Docs>
         <param name="projectFileNames">Das zu erstellende Projekt.</param>
         <param name="targetNames">Die Ziele im zu erstellenden Projekt (können NULL sein).</param>
-        <param name="globalProperties">Ein Array von <see cref="T:System.Collections.IDictionary" />-Objekten mit zusätzlichen globalen Eigenschaften, die auf das untergeordnete Projekt angewendet werden sollen (Arrayeinträge können NULL sein).  
-  
-Schlüssel und Werte müssen Zeichenfolgen sein.</param>
+        <param name="globalProperties">Ein Array von Hash Tabellen zusätzlicher globaler Eigenschaften, die auf das untergeordnete Projekt angewendet werden sollen (Array Einträge können NULL sein). Der Schlüssel und der Wert in der Hash Tabelle sollten beide Zeichen folgen sein.</param>
         <param name="removeGlobalProperties">Eine Liste globaler Eigenschaften, die entfernt werden sollen.</param>
         <param name="toolsVersion">Eine von der Engine erkannte Toolsversion, die während dieses Builds verwendet wird (kann NULL sein).</param>
-        <param name="returnTargetOutputs">Gibt an, dass die Zielausgaben im BuildEngineResult zurückgegeben werden müssen.</param>
-        <summary>Ermöglicht Tasks das Initiieren eines Builds in einer Projektdatei.</summary>
-        <returns>Wenn der Build erfolgreich erstellt wurde, werden die Ausgaben der angegebenen Ziele zurückgegeben.</returns>
-        <remarks>To be added.</remarks>
+        <param name="returnTargetOutputs">Wenn die Ziel Ausgaben in buildengineresult zurückgegeben werden sollen</param>
+        <summary>Diese Methode ermöglicht es Tasks, einen Build für eine bestimmte Projektdatei zu initiieren. Wenn der Build erfolgreich ist, werden die Ausgaben (sofern vorhanden) der angegebenen Ziele zurückgegeben.</summary>
+        <returns>Gibt eine-Struktur zurück, die die erfolgreiche oder fehlgeschlagene Erstellung und die Ziel Ausgaben nach Projekt enthält.</returns>
+        <remarks>1) Es ist zulässig, NULL für <c>targetNames</c> und <c>TargetOutputs</c> 2 zu übergeben. wenn keine Ziele angegeben sind, werden die Standard Ziele erstellt.</remarks>
       </Docs>
     </Member>
     <Member MemberName="Reacquire">
@@ -70,6 +70,7 @@ Schlüssel und Werte müssen Zeichenfolgen sein.</param>
       <AssemblyInfo>
         <AssemblyName>Microsoft.Build.Framework</AssemblyName>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
@@ -91,6 +92,7 @@ Schlüssel und Werte müssen Zeichenfolgen sein.</param>
       <AssemblyInfo>
         <AssemblyName>Microsoft.Build.Framework</AssemblyName>
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
@@ -102,7 +104,7 @@ Schlüssel und Werte müssen Zeichenfolgen sein.</param>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Es ist nur ein Knoten (MSBuild. exe-Prozess) pro CPU vorhanden. Es kann immer nur ein Projekt, ein Ziel und eine Aufgabe auf einem Knoten erstellt werden. Wenn eine Aufgabe z. b. auf den Abschluss eines erzeugten Tools oder eines anderen Ereignisses wartet, kann die Aufgabe Yield aufgerufen werden, die sofort zurückgegeben wird. Dies ermöglicht es dem Knoten, ein Ziel in einem anderen Projekt zu erstellen, sofern vorhanden.  Wenn der Task zum Fortsetzen bereit ist, sollte er <xref:Microsoft.Build.Framework.IBuildEngine3.Reacquire%2A> aufgerufen werden. Wenn eine Aufgabe eine grobe Regel erwartet, dass ein Vorgang mehr als 20 oder 30 Sekunden in Anspruch nimmt, kann Sie sich entscheiden, `Yield` aufzurufen, bevor der Vorgang gestartet wird, und `Reacquire`, wenn der Vorgang beendet ist.  
+ Pro CPU ist nur ein Knoten (msbuild.exe Prozess) vorhanden. Es kann immer nur ein Projekt, ein Ziel und eine Aufgabe auf einem Knoten erstellt werden. Wenn eine Aufgabe z. b. auf den Abschluss eines erzeugten Tools oder eines anderen Ereignisses wartet, kann die Aufgabe Yield aufgerufen werden, die sofort zurückgegeben wird. Dies ermöglicht es dem Knoten, ein Ziel in einem anderen Projekt zu erstellen, sofern vorhanden.  Wenn die Aufgabe zum Fortsetzen bereit ist, sollte Sie aufgerufen werden <xref:Microsoft.Build.Framework.IBuildEngine3.Reacquire%2A> . Eine grobe Regel: Wenn eine Aufgabe erwartet, dass ein Vorgang mehr als 20 oder 30 Sekunden in Anspruch nimmt, kann der Vorgang aufgerufen werden, `Yield` bevor der Vorgang gestartet wird, und nach `Reacquire` Abschluss des Vorgangs.  
   
  ]]></format>
         </remarks>
