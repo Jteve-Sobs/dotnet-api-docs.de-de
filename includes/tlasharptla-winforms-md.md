@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 08/29/2019
 ms.locfileid: "71138409"
 ---
-<span data-ttu-id="ea647-101">Windows Forms</span><span class="sxs-lookup"><span data-stu-id="ea647-101">Windows Forms</span></span>
+<span data-ttu-id="cdd75-101">Windows Forms</span><span class="sxs-lookup"><span data-stu-id="cdd75-101">Windows Forms</span></span>
