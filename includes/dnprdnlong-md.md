@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71140279"
 ---
-<span data-ttu-id="719a9-101">.NET Framework 2.0</span><span class="sxs-lookup"><span data-stu-id="719a9-101">.NET Framework 2.0</span></span>
+<span data-ttu-id="fd80b-101">.NET Framework 2.0</span><span class="sxs-lookup"><span data-stu-id="fd80b-101">.NET Framework 2.0</span></span>
