@@ -7,4 +7,4 @@ ms.lasthandoff: 07/21/2020
 ms.locfileid: "86755137"
 ---
 > [!WARNING]
-> `BinaryFormatter`ist unsicher und kann nicht sicher gemacht werden. Weitere Informationen finden Sie im [BinaryFormatter-Sicherheitshandbuch](/dotnet/standard/serialization/binaryformatter-security-guide).
+> `BinaryFormatter` ist unsicher und kann nicht sicher gemacht werden. Weitere Informationen finden Sie im [BinaryFormatter-Sicherheitshandbuch](/dotnet/standard/serialization/binaryformatter-security-guide).
