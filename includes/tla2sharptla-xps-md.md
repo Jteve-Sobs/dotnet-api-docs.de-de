@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71139209"
 ---
-<span data-ttu-id="6a069-101">XPS</span><span class="sxs-lookup"><span data-stu-id="6a069-101">XPS</span></span>
+<span data-ttu-id="9758e-101">XPS</span><span class="sxs-lookup"><span data-stu-id="9758e-101">XPS</span></span>

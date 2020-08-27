@@ -6,4 +6,4 @@ ms.contentlocale: de-DE
 ms.lasthandoff: 07/14/2020
 ms.locfileid: "71138939"
 ---
-<span data-ttu-id="c11df-101">GIF (Graphics Interchange Format)</span><span class="sxs-lookup"><span data-stu-id="c11df-101">Graphics Interchange Format (GIF)</span></span>
+<span data-ttu-id="c555c-101">GIF (Graphics Interchange Format)</span><span class="sxs-lookup"><span data-stu-id="c555c-101">Graphics Interchange Format (GIF)</span></span>
