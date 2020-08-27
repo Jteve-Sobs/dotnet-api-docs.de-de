@@ -1,5 +1,5 @@
 <Type Name="Uri" FullName="System.Uri">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="fb41b26cac3c43b930158e4cf00a6969aedceab4" /><Meta Name="ms.sourcegitcommit" Value="57ccffdf8fe8e719b7e778b859bf1ca216879f31" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/28/2020" /><Meta Name="ms.locfileid" Value="87329393" /></Metadata><TypeSignature Language="C#" Value="public class Uri" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="7ba700ef29a344b1fc35ef8c76886dfa5eb2e8fa" /><Meta Name="ms.sourcegitcommit" Value="fda117d408e4a5939dea12880cb9bb03e7c44ca9" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/25/2020" /><Meta Name="ms.locfileid" Value="88812470" /></Metadata><TypeSignature Language="C#" Value="public class Uri" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit Uri extends System.Object" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
   <TypeSignature Language="DocId" Value="T:System.Uri" />
   <TypeSignature Language="VB.NET" Value="Public Class Uri" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
@@ -94,7 +94,7 @@
   
 -   Standardmäßig werden alle reservierten Zeichen im URI in Übereinstimmung mit RFC 2396 mit Escapezeichen versehen. Dieses Verhalten ändert sich, wenn internationale Ressourcen Bezeichner oder die internationale Domänen Namen-Verarbeitung aktiviert ist. in diesem Fall werden reservierte Zeichen im URI in Übereinstimmung mit RFC 3986 und RFC 3987 mit Escapezeichen versehen.
 
- Als Teil der Kanonisierung im Konstruktor für einige Schemas, Punkt Segmente und leere Segmente (/./,/. /und//) werden komprimiert (d. h., Sie werden entfernt). Die Schemas, für die diese Sequenzen von URI komprimiert werden, sind http, HTTPS, TCP, net. Pipe und net. TCP. Für einige andere Schemas werden diese Sequenzen nicht komprimiert. Im folgenden wird erläutert, wie diese Komprimierung in der Praxis aussieht.
+ Als Teil der Kanonisierung im Konstruktor für einige Schemas werden Punkt Segmente und leere Segmente ( `/./` , `/../` und `//` ) komprimiert (d. h. Sie werden entfernt). Die Schemas, für die <xref:System.Uri> komprimierungssegmente enthalten, sind http, HTTPS, TCP, net. Pipe und net. TCP. Für einige andere Schemas werden diese Sequenzen nicht komprimiert. Der folgende Code Ausschnitt zeigt, wie die Komprimierung in der Praxis aussieht. Die mit Escapezeichen versehenen Sequenzen werden bei Bedarf ohne Escapezeichen versehen und dann komprimiert.
   
 ```csharp
 var uri = new Uri("http://myUrl/../.."); // http scheme, unescaped
@@ -105,25 +105,25 @@ var uri = new Uri("ftp://myUrl/../.."); // ftp scheme, unescaped
 OR
 var uri = new Uri("ftp://myUrl/%2E%2E/%2E%2E"); // ftp scheme, escaped
 
-Console.WriteLine(uri.AbsoluteUri);  
-Console.WriteLine(uri.PathAndQuery);  
+Console.WriteLine($"AbsoluteUri: {uri.AbsoluteUri}");
+Console.WriteLine($"PathAndQuery: {uri.PathAndQuery}");
 ```  
-  
- Wenn dieser Code ausgeführt wird, wird die folgende Ausgabe zurückgegeben, wobei die Escapesequenzen bei Bedarf ohne Escapezeichen versehen und dann komprimiert werden.
+
+Wenn dieser Code ausgeführt wird, wird eine Ausgabe ähnlich dem folgenden Text zurückgegeben.
 
 ```  
-http://myUrl/  
-/  
+AbsoluteUri: http://myurl/
+PathAndQuery: /
 ```  
   
  Mithilfe der-Methode können Sie den Inhalt der- <xref:System.Uri> Klasse von einem escapecodierten URI-Verweis in einen lesbaren URI-Verweis transformieren <xref:System.Uri.ToString%2A> . Beachten Sie, dass einige reservierte Zeichen in der Ausgabe der Methode möglicherweise noch mit Escapezeichen versehen werden <xref:System.Uri.ToString%2A> . Dies dient zur Unterstützung der eindeutigen Wiederherstellung eines URIs aus dem Wert, der von zurückgegeben wird <xref:System.Uri.ToString%2A> .  
   
  Einige URIs enthalten einen Fragmentbezeichner oder eine Abfrage oder beides. Ein Fragmentbezeichner ist ein beliebiger Text, der auf ein Nummern Zeichen (#) folgt, ohne das Nummern Zeichen. der Fragmenttext wird in der- <xref:System.Uri.Fragment%2A> Eigenschaft gespeichert. Abfrage Informationen sind Text, der auf ein Fragezeichen (?) im URI folgt. der Abfragetext wird in der- <xref:System.Uri.Query%2A> Eigenschaft gespeichert.  
   
- Wenn in der .NET Framework Version 1,1 die für einen Konstruktor angegebene Zeichenfolge ein unbekanntes Schema und "c: \\ " enthält, fügt die Uri-Klasse nach dem Doppelpunkt "//" ein. Der URI `xyz:c:\abc` wird z. b. in `xyz://c:/abc` konvertiert. In der .NET Framework Version 2,0 wurde dieses Verhalten entfernt, und die Beispiel Zeichenfolge wird in konvertiert `xyz:c:/abc` .  
+ In .NET Framework Version 1,1, wenn die für einen Konstruktor angegebene Zeichenfolge ein unbekanntes Schema und "c: \\ " enthält, fügt die Uri-Klasse nach dem Doppelpunkt "//" ein. Der URI `xyz:c:\abc` wird z. b. in `xyz://c:/abc` konvertiert. In der .NET Framework Version 2,0 wurde dieses Verhalten entfernt, und die Beispiel Zeichenfolge wird in konvertiert `xyz:c:/abc` .  
   
 > [!NOTE]
->  Die Uri-Klasse unterstützt die Verwendung von IP-Adressen in Quad-Notation für IPv4-Protokoll und Doppelpunkt-hexadezimal für das IPv6-Protokoll. Denken Sie daran, die IPv6-Adresse in eckige Klammern einzuschließen, wie in http://[:: 1].  
+> Die Uri-Klasse unterstützt die Verwendung von IP-Adressen in Quad-Notation für IPv4-Protokoll und Doppelpunkt-hexadezimal für das IPv6-Protokoll. Denken Sie daran, die IPv6-Adresse in eckige Klammern einzuschließen, wie in http://[:: 1].  
   
 ## <a name="international-resource-identifier-support"></a>International Resource Identifier-Unterstützung  
  Webadressen werden in der Regel mithilfe von Uniform Resource Identifier ausgedrückt, die aus einem sehr eingeschränkten Satz von Zeichen bestehen:  
@@ -142,8 +142,8 @@ http://myUrl/
   
  Die folgenden Änderungen sind erforderlich, um die Unterstützung für IRI zu aktivieren:  
   
--   Geben Sie an, ob die IDN-Verarbeitung (Internationalized Domain Name) auf den Domänen Namen angewendet werden soll und ob IRI-Regeln angewendet werden sollen. Dies kann in der *machine.config* oder in der *app.config* Datei erfolgen. Fügen Sie z. b. Folgendes hinzu:  
-  
+-   Geben Sie an, ob die IDN-Verarbeitung (Internationalized Domain Name) auf den Domänen Namen angewendet werden soll und ob IRI-Regeln angewendet werden sollen. Dies kann in der *machine.config* oder in der *app.config* Datei erfolgen. Fügen Sie z. b. Folgendes hinzu:
+
     ```xml  
     <configuration>  
       <uri>  
@@ -159,19 +159,19 @@ http://myUrl/
   
  Das Aktivieren von IRI und IDN wirkt sich auf den Wert der Eigenschaft <xref:System.Uri.DnsSafeHost%2A?displayProperty=nameWithType> aus. Das Aktivieren von IRI und IDN kann auch das Verhalten der Methoden <xref:System.Uri.Equals%2A>, <xref:System.Uri.OriginalString%2A>, <xref:System.Uri.GetComponents%2A> und <xref:System.Uri.IsWellFormedOriginalString%2A> verändern.  
   
- Es gibt drei mögliche Werte für IDN, abhängig von den verwendeten DNS-Servern:  
+Es gibt drei mögliche Werte für IDN, abhängig von den verwendeten DNS-Servern:  
   
--   IDN aktiviert = alle  
+- IDN aktiviert = alle
+
+  Durch diesen Wert werden alle Unicode-Domänennamen in ihre Punycode-Entsprechungen (IDN-Namen) konvertiert.  
   
-     Durch diesen Wert werden alle Unicode-Domänennamen in ihre Punycode-Entsprechungen (IDN-Namen) konvertiert.  
+- IDN aktiviert = AllExceptIntranet
+
+  Dieser Wert konvertiert alle Unicode-Domänen Namen, die nicht im lokalen Intranet sind, in die Verwendung der Punycode-Entsprechungen (IDN-Namen). In diesem Fall sollten die DNS-Server, die für das Intranet verwendet werden, die Auflösung von Unicode-Namen unterstützen, um internationale Namen im lokalen Intranet zu verarbeiten.  
   
--   IDN aktiviert = AllExceptIntranet  
-  
-     Dieser Wert konvertiert alle Unicode-Domänen Namen, die nicht im lokalen Intranet sind, in die Verwendung der Punycode-Entsprechungen (IDN-Namen). In diesem Fall sollten die DNS-Server, die für das Intranet verwendet werden, die Auflösung von Unicode-Namen unterstützen, um internationale Namen im lokalen Intranet zu verarbeiten.  
-  
--   IDN aktiviert = None  
-  
-     Durch diesen Wert werden keine Unicode-Domänennamen in ihre Punycode-Entsprechungen konvertiert. Dies ist der Standardwert, der mit dem .NET Framework 2,0-Verhalten konsistent ist.  
+- IDN aktiviert = None
+
+  Durch diesen Wert werden keine Unicode-Domänennamen in ihre Punycode-Entsprechungen konvertiert. Dies ist der Standardwert, der mit dem .NET Framework 2,0-Verhalten konsistent ist.  
   
  Wenn die IRI-Verarbeitung aktiviert ist (irimultising aktiviert = `true` ), erfolgt die Normalisierung und Zeichen Überprüfung gemäß den neuesten IRI-Regeln in RFC 3986 und RFC 3987. Wenn die IRI-Verarbeitung deaktiviert ist, werden Normalisierung und Zeichen Überprüfung gemäß RFC 2396 und RFC 2732 (für IPv6-Literale) ausgeführt.  In Versionen der .NET Framework vor Version 4,5 lautet der Standardwert `false` . In .NET Framework Version 4,5 und höher ist der Standardwert `true` , und der aktivierte Status der IRI-Verarbeitung kann nicht durch Einstellungen in einer *config* -Datei geändert werden.  
   
@@ -184,7 +184,9 @@ http://myUrl/
  Der <xref:System.GenericUriParserOptions.Idn?displayProperty=nameWithType>-Typ gibt an, dass der Parser die IDN-Analyse von Hostnamen unterstützt. Ob IDN verwendet wird, wird von den zuvor beschriebenen Konfigurations Werten vorgegeben.  
   
 ## <a name="implicit-file-path-support"></a>Implizite Datei Pfad Unterstützung
- <xref:System.Uri>kann auch verwendet werden, um lokale Dateisystem Pfade darzustellen. Diese Pfade können *explizit* in URIs dargestellt werden, die mit dem file://-Schema beginnen, und *implizit* in URIs, die nicht über das file://-Schema verfügen. Als konkretes Beispiel sind die beiden folgenden URIs gültig und stellen denselben Dateipfad dar:
+
+ <xref:System.Uri> kann auch verwendet werden, um lokale Dateisystem Pfade darzustellen. Diese Pfade können *explizit* in URIs dargestellt werden, die mit dem file://-Schema beginnen, und *implizit* in URIs, die nicht über das file://-Schema verfügen. Als konkretes Beispiel sind die beiden folgenden URIs gültig und stellen denselben Dateipfad dar:
+ 
 ```csharp
 Uri uri1 = new Uri("C:/test/path/file.txt") // Implicit file path.
 Uri uri2 = new Uri("file:///C:/test/path/file.txt") // Explicit file path.
@@ -220,19 +222,21 @@ Diese Validierung kann in anderen Fällen verwendet werden, z. b. beim Umgang mi
 Uri baseUri = new Uri(@"\\host\share\some\directory\name\");
 ```
 
-  
 ## <a name="performance-considerations"></a>Überlegungen zur Leistung  
- Wenn Sie eine * Web.config *-Datei verwenden, die URIs zum Initialisieren der Anwendung enthält, ist zusätzliche Zeit erforderlich, um die URIs zu verarbeiten, wenn deren Schema Bezeichner nicht standardmäßig sind. Initialisieren Sie in diesem Fall die betroffenen Teile der Anwendung, wenn die URIs benötigt werden, nicht zur Startzeit.  
+ Wenn Sie eine * Web.config *-Datei verwenden, die URIs zum Initialisieren der Anwendung enthält, ist zusätzliche Zeit erforderlich, um die URIs zu verarbeiten, wenn deren Schema Bezeichner nicht standardmäßig sind. Initialisieren Sie in diesem Fall die betroffenen Teile der Anwendung, wenn die URIs benötigt werden, nicht zur Startzeit.
   
-   
-  
-## Examples  
- Im folgenden Beispiel wird eine Instanz der <xref:System.Uri> -Klasse erstellt und zum Erstellen einer- <xref:System.Net.WebRequest> Instanz verwendet.  
+## Examples
+
+Im folgenden Beispiel wird eine Instanz der <xref:System.Uri> -Klasse erstellt und zum Erstellen einer- <xref:System.Net.WebRequest> Instanz verwendet.  
   
  [!code-cpp[Classic Uri Example#1](~/samples/snippets/cpp/VS_Snippets_Remoting/Classic Uri Example/CPP/source.cpp#1)]
  [!code-csharp[Classic Uri Example#1](~/samples/snippets/csharp/VS_Snippets_Remoting/Classic Uri Example/CS/source.cs#1)]
- [!code-vb[Classic Uri Example#1](~/samples/snippets/visualbasic/VS_Snippets_Remoting/Classic Uri Example/VB/source.vb#1)]  
-  
+ [!code-vb[Classic Uri Example#1](~/samples/snippets/visualbasic/VS_Snippets_Remoting/Classic Uri Example/VB/source.vb#1)]
+
+Der folgende Code Ausschnitt zeigt Beispiel Werte für die verschiedenen Eigenschaften der-Klasse.
+
+[!code-csharp[Classic Uri Example#1](~/samples/snippets/csharp/VS_Snippets_Remoting/Classic Uri Example/CS/source.cs#2)]
+
  ]]></format>
     </remarks>
     <threadsafe>Alle Elemente von <see cref="T:System.Uri" /> sind Thread sicher und können gleichzeitig von mehreren Threads verwendet werden.</threadsafe>
@@ -306,9 +310,7 @@ Uri baseUri = new Uri(@"\\host\share\some\directory\name\");
   
  Dieser Konstruktor stellt nicht sicher, dass <xref:System.Uri> auf eine barrierefreie Ressource verweist.  
   
- Dieser Konstruktor geht davon aus, dass der `string` -Parameter auf einen absoluten URI verweist und dem Aufruf des <xref:System.Uri.%23ctor%2A> Konstruktors entspricht, wobei <xref:System.UriKind> auf festgelegt ist <xref:System.UriKind.Absolute> . Wenn der `string` an den Konstruktor übergebenen Parameter ein relativer URI ist, löst dieser Konstruktor einen aus <xref:System.UriFormatException> .  
-  
-   
+ Dieser Konstruktor geht davon aus, dass der `string` -Parameter auf einen absoluten URI verweist und dem Aufruf des <xref:System.Uri.%23ctor%2A> Konstruktors entspricht, wobei <xref:System.UriKind> auf festgelegt ist <xref:System.UriKind.Absolute> . Wenn der `string` an den Konstruktor übergebenen Parameter ein relativer URI ist, löst dieser Konstruktor einen aus <xref:System.UriFormatException> .
   
 ## Examples  
  Im folgenden Beispiel wird eine- <xref:System.Uri> Instanz mit dem-URI erstellt `http://www.contoso.com/` .  
@@ -500,9 +502,7 @@ Der im URI angegebene MS-DOS-Pfad muss mit „c:\\\\“ beginnen.</exception>
   
  Wenn `dontEscape` auf festgelegt ist `false` , schützt der Konstruktor alle reservierten Zeichen, indem überprüft wird, ob alle Vorkommen von Prozent (%) gefolgt von einer gültigen Escapesequenz. Wenn die Zeichenfolge, die einem Prozentsatz folgt, ungültig ist, wird der Prozentsatz durch %25 ersetzt.  
   
- Dieser Konstruktor stellt nicht sicher, dass <xref:System.Uri> auf eine barrierefreie Ressource verweist.  
-  
-   
+ Dieser Konstruktor stellt nicht sicher, dass <xref:System.Uri> auf eine barrierefreie Ressource verweist.
   
 ## Examples  
  Im folgenden Beispiel wird eine- <xref:System.Uri> Instanz für den URI erstellt `http://www.contoso.com/Hello%20World.htm` . Da der enthaltene URI vollständig mit Escapezeichen versehen und in kanonischer Form ist, kann der- `dontEscape` Parameter auf festgelegt werden `true` .  
@@ -696,11 +696,9 @@ Der in <paramref name="uriString" /> angegebene MS-DOS-Pfad muss mit „c:\\\\�
  
  Wenn das `baseUri` relative Teile aufweist (z. b. `/api` ), muss der relative Teil mit einem Schrägstrich (wie `/api/` ) beendet werden, wenn der relative Teil von `baseUri` im konstruierten beibehalten werden soll <xref:System.Uri> . 
 
- Wenn außerdem `relativeUri` mit einem Schrägstrich beginnt, wird ein beliebiger relativer Teil des`baseUri`
+ Wenn außerdem `relativeUri` mit einem Schrägstrich beginnt, wird ein beliebiger relativer Teil des `baseUri`
 
- Dieser Konstruktor stellt nicht sicher, dass <xref:System.Uri> auf eine barrierefreie Ressource verweist.  
-  
-   
+ Dieser Konstruktor stellt nicht sicher, dass <xref:System.Uri> auf eine barrierefreie Ressource verweist.
   
 ## Examples  
  Im folgenden Beispiel wird eine neue Instanz der <xref:System.Uri> -Klasse erstellt, indem die relativen URIs kombiniert `http://www.contoso.com` und `catalog/shownew.htm` der absolute URI gebildet wird `http://www.contoso.com/catalog/shownew.htm` .  
@@ -800,11 +798,9 @@ Der in <paramref name="uriString" /> angegebene MS-DOS-Pfad muss mit „c:\\\\�
  
  Wenn das `baseUri` relative Teile aufweist (z. b. `/api` ), muss der relative Teil mit einem Schrägstrich (wie `/api/` ) beendet werden, wenn der relative Teil von `baseUri` im konstruierten beibehalten werden soll <xref:System.Uri> . 
 
- Wenn außerdem `relativeUri` mit einem Schrägstrich beginnt, wird ein beliebiger relativer Teil des`baseUri`
+ Wenn außerdem `relativeUri` mit einem Schrägstrich beginnt, wird ein beliebiger relativer Teil des `baseUri`
  
- Dieser Konstruktor stellt nicht sicher, dass <xref:System.Uri> auf eine barrierefreie Ressource verweist.  
-  
-   
+ Dieser Konstruktor stellt nicht sicher, dass <xref:System.Uri> auf eine barrierefreie Ressource verweist.
   
 ## Examples  
  In diesem Beispiel werden eine absolute <xref:System.Uri> Instanz, `absoluteUri` , und eine relative-Instanz,, erstellt <xref:System.Uri> `relativeUri` . Anschließend wird eine neue- <xref:System.Uri> Instanz `combinedUri` aus diesen beiden-Instanzen erstellt.  
@@ -915,9 +911,7 @@ Der in <paramref name="uriString" /> angegebene MS-DOS-Pfad muss mit „c:\\\\�
   
  Der- `dontEscape` Parameter steuert, ob reservierte Zeichen in Escapesequenzen übersetzt werden. Dieser Parameter sollte nur auf festgelegt werden, `true` Wenn Sie sicher sind, dass alle reservierten Zeichen im URI mit Escapezeichen versehen wurden. Wenn Sie den Wert für einen URI festlegen, der nicht vollständig mit Escapezeichen versehen `true` wurde, kann ein unerwartetes Verhalten Es wird dringend empfohlen, diesen Parameter immer auf festzulegen `false` . Wenn `dontEscape` auf festgelegt ist `false` , schützt der Konstruktor alle reservierten Zeichen, indem überprüft wird, ob alle Vorkommen von Prozent (%) gefolgt von einer gültigen Escapesequenz. Wenn die Zeichenfolge, die einem Prozentsatz folgt, ungültig ist, wird der Prozentsatz durch %25 ersetzt.  
   
- Dieser Konstruktor stellt nicht sicher, dass <xref:System.Uri> auf eine barrierefreie Ressource verweist.  
-  
-   
+ Dieser Konstruktor stellt nicht sicher, dass <xref:System.Uri> auf eine barrierefreie Ressource verweist.
   
 ## Examples  
  Im folgenden Beispiel wird eine neue Instanz der <xref:System.Uri> -Klasse erstellt, indem die relativen URIs kombiniert `http://www.contoso.com` und `Hello%20World.htm` ein absoluter URI gebildet wird.  
@@ -1006,16 +1000,14 @@ Der in <paramref name="uriString" /> angegebene MS-DOS-Pfad muss mit „c:\\\\�
       </ReturnValue>
       <Docs>
         <summary>Ruft den absoluten Pfad des URIs ab.</summary>
-        <value>Ein <see cref="T:System.String" /> mit dem absoluten Pfad der Ressource.</value>
+        <value>Der absolute Pfad zur Ressource.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
  Die- <xref:System.Uri.AbsolutePath%2A> Eigenschaft enthält die Pfadinformationen, die vom Server zum Auflösen von Informationsanforderungen verwendet werden. In der Regel handelt es sich hierbei um den Pfad zu den gewünschten Informationen im Dateisystem des Servers. es kann aber auch die Anwendung oder das Skript angeben, die der Server ausführen muss, um die Informationen bereitzustellen.  
   
- Die Pfadinformationen enthalten nicht das Schema, den Hostnamen oder den Abfrage Teil des URI.  
-  
-   
+ Die Pfadinformationen enthalten nicht das Schema, den Hostnamen oder den Abfrage Teil des URI.
   
 ## Examples  
  Im folgenden Beispiel wird der Pfad/catalog/shownew.htm in die Konsole geschrieben.  
@@ -1065,14 +1057,12 @@ Der in <paramref name="uriString" /> angegebene MS-DOS-Pfad muss mit „c:\\\\�
       </ReturnValue>
       <Docs>
         <summary>Ruft den absoluten URI ab.</summary>
-        <value>Ein <see cref="T:System.String" /> mit dem vollständigen URI.</value>
+        <value>Der gesamte URI.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die- <xref:System.Uri.AbsoluteUri%2A> Eigenschaft enthält den gesamten URI, der in der- <xref:System.Uri> Instanz gespeichert ist, einschließlich aller Fragmente und Abfrage Zeichenfolgen.  
-  
-   
+ Die- <xref:System.Uri.AbsoluteUri%2A> Eigenschaft enthält den gesamten URI, der in der- <xref:System.Uri> Instanz gespeichert ist, einschließlich aller Fragmente und Abfrage Zeichenfolgen.
   
 ## Examples  
  Im folgenden Beispiel wird der gesamte Inhalt der- <xref:System.Uri> Instanz in die Konsole geschrieben. Im gezeigten Beispiel wird in `http://www.contoso.com/catalog/shownew.htm?date=today` die Konsole geschrieben.  
@@ -1122,14 +1112,12 @@ Der in <paramref name="uriString" /> angegebene MS-DOS-Pfad muss mit „c:\\\\�
       </ReturnValue>
       <Docs>
         <summary>Ruft den DNS-Hostnamen (Domain Name System) oder die IP-Adresse und die Anschlussnummer für einen Server ab.</summary>
-        <value>Ein <see cref="T:System.String" />, der die Zertifizierungsstellenkomponente des von dieser Instanz dargestellten URIs enthält.</value>
+        <value>Die Autoritäts Komponente des URIs, der durch diese Instanz dargestellt wird.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die <xref:System.Uri.Authority%2A> Eigenschaft ist in der Regel ein Server-DNS-Hostname oder eine IP-Adresse. Diese Eigenschaft kann die Dienst Portnummer enthalten, wenn Sie vom Standardport für den URI abweicht. Wenn die <xref:System.Uri.Authority%2A> Komponente reservierte Zeichen enthält, werden diese in dem von dieser Eigenschaft zurückgegebenen Zeichen folgen Wert mit Escapezeichen versehen.  
-  
-   
+ Die <xref:System.Uri.Authority%2A> Eigenschaft ist in der Regel ein Server-DNS-Hostname oder eine IP-Adresse. Diese Eigenschaft kann die Dienst Portnummer enthalten, wenn Sie vom Standardport für den URI abweicht. Wenn die <xref:System.Uri.Authority%2A> Komponente reservierte Zeichen enthält, werden diese in dem von dieser Eigenschaft zurückgegebenen Zeichen folgen Wert mit Escapezeichen versehen.
   
 ## Examples  
  Im folgenden Beispiel werden der Hostname ( `www.contoso.com` ) und die Portnummer (8080) des Servers in die Konsole geschrieben.  
@@ -1238,14 +1226,12 @@ Der in <paramref name="uriString" /> angegebene MS-DOS-Pfad muss mit „c:\\\\�
       <Docs>
         <param name="name">Der Hostname, der überprüft werden soll. Dies kann eine IPv4- oder IPv6-Adresse oder ein Internethostname sein.</param>
         <summary>Bestimmt, ob der angegebene Hostname ein gültiger DNS-Name ist.</summary>
-        <returns>Ein <see cref="T:System.UriHostNameType" />, der den Typ des Hostnamens angibt. Wenn der Typ des Hostnamens nicht bestimmt werden kann oder der Hostname <see langword="null" /> oder eine Zeichenfolge der Länge 0 (null) ist, gibt diese Methode <see cref="F:System.UriHostNameType.Unknown" /> zurück.</returns>
+        <returns>Der Typ des Hostnamens. Wenn der Typ des Hostnamens nicht bestimmt werden kann oder der Hostname <see langword="null" /> oder eine Zeichenfolge der Länge 0 (null) ist, gibt diese Methode <see cref="F:System.UriHostNameType.Unknown" /> zurück.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die- <xref:System.Uri.CheckHostName%2A> Methode überprüft, ob der angegebene Hostname den Anforderungen für einen gültigen Internet Hostnamen entspricht. Es wird jedoch keine Host Namen Suche durchgeführt, um zu überprüfen, ob der Host vorhanden ist.  
-  
-   
+ Die- <xref:System.Uri.CheckHostName%2A> Methode überprüft, ob der angegebene Hostname den Anforderungen für einen gültigen Internet Hostnamen entspricht. Es wird jedoch keine Host Namen Suche durchgeführt, um zu überprüfen, ob der Host vorhanden ist.
   
 ## Examples  
  Im folgenden Beispiel wird überprüft, ob der Hostname gültig ist.  
@@ -1298,16 +1284,14 @@ Der in <paramref name="uriString" /> angegebene MS-DOS-Pfad muss mit „c:\\\\�
       <Docs>
         <param name="schemeName">Der Schemaname, der validiert werden soll.</param>
         <summary>Bestimmt, ob der angegebene Schemaname gültig ist.</summary>
-        <returns>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn der Schemaname gültig ist, andernfalls <see langword="false" />.</returns>
+        <returns><see langword="true" />, wenn der Schemaname gültig ist, andernfalls <see langword="false" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
  Diese Methode überprüft den Schema Namen standardmäßig auf Gültigkeit gemäß RFC 2396. Wenn die Verarbeitung von International Resource Identifier (IRIS) oder Internationalized Domain Name (IDN) aktiviert ist, prüft diese Methode den Schema Namen gemäß RFC 3986 auf Gültigkeit. Der Schema Name muss mit einem Buchstaben beginnen und darf nur Buchstaben, Ziffern und die Zeichen ".", "+" oder "-" enthalten.  
   
- Weitere Informationen zur IRI-Unterstützung finden Sie im Abschnitt "Hinweise" für die- <xref:System.Uri> Klasse.  
-  
-   
+ Weitere Informationen zur IRI-Unterstützung finden Sie im Abschnitt "Hinweise" für die- <xref:System.Uri> Klasse.
   
 ## Examples  
  Im folgenden Beispiel wird eine <xref:System.Uri> -Instanz erstellt und überprüft, ob der Schema Name gültig ist.  
@@ -1407,13 +1391,13 @@ Der in <paramref name="uriString" /> angegebene MS-DOS-Pfad muss mit „c:\\\\�
         <Parameter Name="comparisonType" Type="System.StringComparison" Index="4" FrameworkAlternate="dotnet-uwp-10.0;net-5.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netcore-3.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
       </Parameters>
       <Docs>
-        <param name="uri1">Die erste <see cref="T:System.Uri" />.</param>
-        <param name="uri2">Das zweite <see cref="T:System.Uri" />.</param>
+        <param name="uri1">Der erste URI.</param>
+        <param name="uri2">Der zweite Uri.</param>
         <param name="partsToCompare">Eine bitweise Kombination der <see cref="T:System.UriComponents" />-Werte, die die Teile von <paramref name="uri1" /> und <paramref name="uri2" /> angeben, die verglichen werden sollen.</param>
-        <param name="compareFormat">Einer der <see cref="T:System.UriFormat" />-Werte, der das Escapezeichen angibt, das beim Vergleichen der URI-Komponenten verwendet wird.</param>
-        <param name="comparisonType">Einer der <see cref="T:System.StringComparison" />-Werte.</param>
+        <param name="compareFormat">Einer der Enumerationswerte, der das Escapezeichen angibt, das beim Vergleichen der URI-Komponenten verwendet wird.</param>
+        <param name="comparisonType">Einer der Enumerationswerte, der die Kultur, Groß-/Kleinschreibung und Sortierregeln für den Vergleich angibt.</param>
         <summary>Vergleicht die angegebenen Teile von zwei URIs gemäß den angegebenen Vergleichsregeln.</summary>
-        <returns>Ein <see cref="T:System.Int32" />-Wert, der die lexikalische Beziehung zwischen den verglichenen <see cref="T:System.Uri" />-Komponenten angibt.  
+        <returns>Ein Wert, der die lexikalische Beziehung zwischen den verglichenen <see cref="T:System.Uri" />-Komponenten angibt.  
   
  <list type="table"><listheader><term> Wert 
  </term><description> Bedeutung 
@@ -1473,7 +1457,7 @@ Der in <paramref name="uriString" /> angegebene MS-DOS-Pfad muss mit „c:\\\\�
       </ReturnValue>
       <Docs>
         <summary>Ruft einen Hostnamen, der sicher für die DNS-Auflösung verwendet werden kann, da er keine Escapezeichen enthält.</summary>
-        <value>Ein <see cref="T:System.String" /> , der den Hostteil des URIs in einem für die DNS-Auflösung geeigneten Format enthält, oder die ursprüngliche Host Zeichenfolge, wenn Sie bereits für die Auflösung geeignet ist.</value>
+        <value>Der Hostteil des URIs in einem Format, das für die DNS-Auflösung geeignet ist. oder die ursprüngliche Host Zeichenfolge, wenn Sie bereits für die Auflösung geeignet ist.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -1488,12 +1472,10 @@ Wenn Sie zum Erstellen dieser Instanz eine Zeichenfolge mit Escapezeichen verwen
   
  Die folgenden beiden Änderungen sind erforderlich, um die Unterstützung für IRI zu aktivieren:  
   
-1.  Fügen Sie die folgende Zeile in der *machine.config* -Datei im Verzeichnis ".NET Framework 2,0" ein.  
+1.  Fügen Sie die folgende Zeile in der *machine.config* -Datei im Verzeichnis ".NET Framework 2,0" ein.  \<section name="uri" type="System.Configuration.UriSection, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />  
   
-     \<section name="uri" type="System.Configuration.UriSection, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />  
-  
-2.  Geben Sie an, ob die IDN-Verarbeitung (Internationalized Domain Name) auf den Domänen Namen angewendet werden soll und ob IRI-Regeln angewendet werden sollen. Dies kann in der *machine.config* oder in der *app.config* Datei erfolgen. Fügen Sie z. b. Folgendes hinzu:  
-  
+2.  Geben Sie an, ob die IDN-Verarbeitung (Internationalized Domain Name) auf den Domänen Namen angewendet werden soll und ob IRI-Regeln angewendet werden sollen. Dies kann in der *machine.config* oder in der *app.config* Datei erfolgen. Fügen Sie z. b. Folgendes hinzu:
+
     ```xml  
     <configuration>  
       <uri>  
@@ -1509,23 +1491,21 @@ Wenn Sie zum Erstellen dieser Instanz eine Zeichenfolge mit Escapezeichen verwen
   
  Es gibt drei mögliche Werte für IDN, abhängig von den verwendeten DNS-Servern:  
   
--   IDN aktiviert = alle  
+- IDN aktiviert = alle
+
+  Durch diesen Wert werden alle Unicode-Domänennamen in ihre Punycode-Entsprechungen (IDN-Namen) konvertiert.  
   
-     Durch diesen Wert werden alle Unicode-Domänennamen in ihre Punycode-Entsprechungen (IDN-Namen) konvertiert.  
+- IDN aktiviert = AllExceptIntranet
+
+  Durch diesen Wert werden alle externen Unicode-Domänennamen so konvertiert, dass die Punycode-Entsprechungen (IDN-Namen) verwendet werden. Wenn internationale Namen im lokalen Intranet verarbeitet werden sollen, müssen die DNS-Server im Intranet Unicode-Namen unterstützen.  
   
--   IDN aktiviert = AllExceptIntranet  
-  
-     Durch diesen Wert werden alle externen Unicode-Domänennamen so konvertiert, dass die Punycode-Entsprechungen (IDN-Namen) verwendet werden. Wenn internationale Namen im lokalen Intranet verarbeitet werden sollen, müssen die DNS-Server im Intranet Unicode-Namen unterstützen.  
-  
--   IDN aktiviert = None  
-  
-     Durch diesen Wert werden keine Unicode-Domänennamen in ihre Punycode-Entsprechungen konvertiert. Dies ist der Standardwert, der mit dem .NET Framework 2,0-Verhalten konsistent ist.  
+- IDN aktiviert = None
+
+  Durch diesen Wert werden keine Unicode-Domänennamen in ihre Punycode-Entsprechungen konvertiert. Dies ist der Standardwert, der mit dem .NET Framework 2,0-Verhalten konsistent ist.  
   
  Durch das Aktivieren der IRI-Verarbeitung (iriising aktiviert = `true` ) erfolgt die Normalisierung und Zeichen Überprüfung gemäß den neuesten IRI-Regeln in RFC 3987. Der Standardwert ist `false` und führt normalisierungs-und Zeichen Prüfungen gemäß RFC 2396 und RFC 2732 (für IPv6-Literale) durch.  
   
- Weitere Informationen zur IRI-Unterstützung finden Sie im Abschnitt "Hinweise" für die- <xref:System.Uri> Klasse.  
-  
-   
+ Weitere Informationen zur IRI-Unterstützung finden Sie im Abschnitt "Hinweise" für die- <xref:System.Uri> Klasse.
   
 ## Examples  
  Im folgenden Beispiel wird eine- <xref:System.Uri> Instanz aus einer Zeichenfolge erstellt. Es veranschaulicht den Unterschied zwischen dem Wert, der von zurückgegeben <xref:System.Uri.Host%2A> wird, der den im URI angegebenen Hostnamen oder die Adresse zurückgibt, und dem von zurückgegebenen Wert <xref:System.Uri.DnsSafeHost%2A> , der eine Adresse zurückgibt, die für die DNS-Auflösung sicher verwendet werden kann.  
@@ -1579,9 +1559,9 @@ Wenn Sie zum Erstellen dieser Instanz eine Zeichenfolge mit Escapezeichen verwen
         <Parameter Name="comparand" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="comparand">Die <see cref="T:System.Uri" />-Instanz oder ein URI-Bezeichner, der mit der aktuellen Instanz verglichen werden soll.</param>
+        <param name="comparand">Der URI oder ein URI-Bezeichner, der mit der aktuellen Instanz verglichen werden soll.</param>
         <summary>Überprüft zwei <see cref="T:System.Uri" />-Instanzen auf Gleichheit.</summary>
-        <returns>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn die zwei Instanzen denselben URI darstellen, andernfalls <see langword="false" />.</returns>
+        <returns><see langword="true" />, wenn die beiden Instanzen denselben URI darstellen, andernfalls <see langword="false" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -1596,12 +1576,10 @@ Wenn Sie zum Erstellen dieser Instanz eine Zeichenfolge mit Escapezeichen verwen
 >  In den .NET Framework Versionen 1,0 und 1,1 <xref:System.Uri.Query%2A> wird auch der ignoriert.  
   
 > [!NOTE]
->  Die- <xref:System.Uri.Equals%2A> Methode kann in einer abgeleiteten Klasse überschrieben werden. gehen Sie vorsichtig vor, da eine böswillige Entität die Methode ändern könnte. Sie sollten diese Methode nicht verwenden, um Sicherheitsüberprüfungen auszuführen, es sei denn, Sie wissen, dass diese Instanz von einer vertrauenswürdigen Quelle stammt.  
-  
-   
+>  Die- <xref:System.Uri.Equals%2A> Methode kann in einer abgeleiteten Klasse überschrieben werden. gehen Sie vorsichtig vor, da eine böswillige Entität die Methode ändern könnte. Sie sollten diese Methode nicht verwenden, um Sicherheitsüberprüfungen auszuführen, es sei denn, Sie wissen, dass diese Instanz von einer vertrauenswürdigen Quelle stammt.
   
 ## Examples  
- In diesem Beispiel werden zwei Instanzen aus Zeichen folgen erstellt <xref:System.Uri> und verglichen, um zu bestimmen, ob Sie denselben Wert darstellen. `address1`und `address2` sind identisch, da der- <xref:System.Uri.Fragment%2A> Teil für diesen Vergleich ignoriert wird. Das Ergebnis wird in die Konsole geschrieben.  
+ In diesem Beispiel werden zwei Instanzen aus Zeichen folgen erstellt <xref:System.Uri> und verglichen, um zu bestimmen, ob Sie denselben Wert darstellen. `address1` und `address2` sind identisch, da der- <xref:System.Uri.Fragment%2A> Teil für diesen Vergleich ignoriert wird. Das Ergebnis wird in die Konsole geschrieben.  
   
  [!code-cpp[NCLUriExamples#8](~/samples/snippets/cpp/VS_Snippets_Remoting/NCLUriExamples/CPP/uriexamples.cpp#8)]
  [!code-csharp[NCLUriExamples#8](~/samples/snippets/csharp/VS_Snippets_Remoting/NCLUriExamples/CS/uriexamples.cs#8)]
@@ -1697,7 +1675,7 @@ Wenn Sie zum Erstellen dieser Instanz eine Zeichenfolge mit Escapezeichen verwen
       <Docs>
         <param name="stringToEscape">Die Zeichenfolge, die mit Escapezeichen versehen werden soll.</param>
         <summary>Konvertiert eine Zeichenfolge in eine Darstellung mit Escapezeichen.</summary>
-        <returns>Ein <see cref="T:System.String" />, der die Darstellung von <paramref name="stringToEscape" /> mit Escapezeichen enthält.</returns>
+        <returns>Die Darstellung von <paramref name="stringToEscape" /> mit Escapezeichen.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -1819,7 +1797,7 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
       <Docs>
         <param name="stringToEscape">Die Zeichenfolge, die mit Escapezeichen versehen werden soll.</param>
         <summary>Konvertiert eine URI-Zeichenfolge in eine Darstellung mit Escapezeichen.</summary>
-        <returns>Ein <see cref="T:System.String" />, der die Darstellung von <paramref name="stringToEscape" /> mit Escapezeichen enthält.</returns>
+        <returns>Die Darstellung von <paramref name="stringToEscape" /> mit Escapezeichen.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -1878,16 +1856,14 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
       </ReturnValue>
       <Docs>
         <summary>Ruft das mit Escapezeichen versehene URI-Fragment ab.</summary>
-        <value>Ein <see cref="T:System.String" />, der URI-Fragmentinformationen enthält.</value>
+        <value>URI-Fragmentinformationen.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
  Die-Eigenschaft ruft den <xref:System.Uri.Fragment%2A> Text ab, der auf einen fragmentmarker (#) im URI folgt, einschließlich des fragmentmarkers selbst. Wenn der URI angegeben `http://www.contoso.com/index.htm#main` ist, würde die- <xref:System.Uri.Fragment%2A> Eigenschaft #Main zurückgeben.  
   
- Die- <xref:System.Uri.Fragment%2A> Eigenschaft wird in keinem <xref:System.Uri.Equals%2A> Vergleich berücksichtigt.  
-  
-   
+ Die- <xref:System.Uri.Fragment%2A> Eigenschaft wird in keinem <xref:System.Uri.Equals%2A> Vergleich berücksichtigt.
   
 ## Examples  
  Im folgenden Beispiel wird eine <xref:System.Uri> -Instanz erstellt und die Fragmentinformationen in die Konsole geschrieben.  
@@ -1937,14 +1913,12 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
       <Docs>
         <param name="digit">Die zu konvertierende Hexadezimalziffer (0-9, a-f, A-F).</param>
         <summary>Ruft den Dezimalwert einer Hexadezimalziffer ab.</summary>
-        <returns>Ein <see cref="T:System.Int32" />-Wert, der eine Zahl von 0 bis 15 enthält, die der angegebenen Hexadezimalziffer entspricht.</returns>
+        <returns>Eine Zahl von 0 bis 15, die der angegebenen Hexadezimalziffer entspricht.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die- <xref:System.Uri.FromHex%2A> Methode konvertiert ein Zeichen, das eine hexadezimale Ziffer (0-9, a-f, a-f) darstellt, in ihren Dezimalwert (0 bis 15). Wenn `digit` keine gültige hexadezimale Ziffer ist, <xref:System.ArgumentException> wird eine Ausnahme ausgelöst.  
-  
-   
+ Die- <xref:System.Uri.FromHex%2A> Methode konvertiert ein Zeichen, das eine hexadezimale Ziffer (0-9, a-f, a-f) darstellt, in ihren Dezimalwert (0 bis 15). Wenn `digit` keine gültige hexadezimale Ziffer ist, <xref:System.ArgumentException> wird eine Ausnahme ausgelöst.
   
 ## Examples  
  Im folgenden Beispiel wird bestimmt, ob ein Zeichen ein hexadezimales Zeichen ist. ist dies der Fall, wird der entsprechende Dezimalwert in die Konsole geschrieben.  
@@ -1997,9 +1971,9 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
       </Parameters>
       <Docs>
         <param name="components">Eine bitweise Kombination der <see cref="T:System.UriComponents" />-Werte, die angeben, welche Teile der aktuellen Instanz dem Aufrufer zurückgegeben werden sollen.</param>
-        <param name="format">Einer der <see cref="T:System.UriFormat" />-Werte, die steuern, wie Sonderzeichen mit Escapezeichen versehen werden.</param>
+        <param name="format">Einer der Enumerationswerte, der steuert, wie Sonderzeichen mit Escapezeichen versehen werden.</param>
         <summary>Ruft die angegebenen Komponenten der aktuellen Instanz mit dem angegebenen Escapeverhalten für Sonderzeichen ab.</summary>
-        <returns>Ein <see cref="T:System.String" />, der die Komponenten enthält.</returns>
+        <returns>Die Komponenten der aktuellen Instanz.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -2013,7 +1987,7 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
  Weitere Informationen zur IRI-Unterstützung finden Sie im Abschnitt "Hinweise" für die- <xref:System.Uri> Klasse.  
   
 > [!NOTE]
->  Wenn die- <xref:System.Uri.GetComponents%2A> Methode aufgerufen wird und `format` auf festgelegt ist <xref:System.UriFormat.Unescaped> , können Sie den Rückgabewert nicht als Argument für einen <xref:System.Uri.%23ctor%2A> Konstruktor verwenden, um eine Entsprechung zu erstellen <xref:System.Uri> .  
+> Wenn die- <xref:System.Uri.GetComponents%2A> Methode aufgerufen wird und `format` auf festgelegt ist <xref:System.UriFormat.Unescaped> , können Sie den Rückgabewert nicht als Argument für einen <xref:System.Uri.%23ctor%2A> Konstruktor verwenden, um eine Entsprechung zu erstellen <xref:System.Uri> .  
   
  ]]></format>
         </remarks>
@@ -2058,7 +2032,7 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
       <Parameters />
       <Docs>
         <summary>Ruft den Hashcode für den URI ab.</summary>
-        <returns>Ein <see cref="T:System.Int32" />, der den für diesen URI generierten Hashwert enthält.</returns>
+        <returns>Der für diesen URI generierte Hashwert.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -2107,24 +2081,24 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
         <Parameter Name="part" Type="System.UriPartial" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1;netcore-3.1;net-5.0" />
       </Parameters>
       <Docs>
-        <param name="part">Einer der <see cref="T:System.UriPartial" />-Werte, der den Schlussteil des zurückzugebenden URIs angibt.</param>
+        <param name="part">Einer der Enumerationswerte, der das Ende des zurückzugebenden URI-Teils angibt.</param>
         <summary>Ruft den angegebenen Teil einer <see cref="T:System.Uri" />-Instanz ab.</summary>
-        <returns>Ein <see cref="T:System.String" />, der den angegebenen Teil der <see cref="T:System.Uri" />-Instanz enthält.</returns>
+        <returns>Der angegebene Teil der <see cref="T:System.Uri" />-Instanz.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
  Die- <xref:System.Uri.GetLeftPart%2A> Methode gibt eine Zeichenfolge zurück, die den äußersten linken Teil der URI-Zeichenfolge enthält, und endet mit dem durch angegebenen Bereich `part` .  
   
- <xref:System.Uri.GetLeftPart%2A>umfasst in den folgenden Fällen Trennzeichen:  
+ <xref:System.Uri.GetLeftPart%2A> umfasst in den folgenden Fällen Trennzeichen:  
   
--   <xref:System.UriPartial.Scheme>schließt das Schema Trennzeichen ein.  
+-   <xref:System.UriPartial.Scheme> schließt das Schema Trennzeichen ein.  
   
--   <xref:System.UriPartial.Authority>schließt das Trennzeichen für den Pfad nicht ein.  
+-   <xref:System.UriPartial.Authority> schließt das Trennzeichen für den Pfad nicht ein.  
   
--   <xref:System.UriPartial.Path>schließt alle Trennzeichen im ursprünglichen URI bis zum Abfrage-oder Fragmenttrennzeichen ein.  
+-   <xref:System.UriPartial.Path> schließt alle Trennzeichen im ursprünglichen URI bis zum Abfrage-oder Fragmenttrennzeichen ein.  
   
--   <xref:System.UriPartial.Query>schließt die <xref:System.UriPartial.Path> sowie die Abfrage und das zugehörige Trennzeichen ein.  
+-   <xref:System.UriPartial.Query> schließt die <xref:System.UriPartial.Path> sowie die Abfrage und das zugehörige Trennzeichen ein.  
   
  Die folgenden Beispiele zeigen einen URI und die Ergebnisse des Aufrufs von <xref:System.Uri.GetLeftPart%2A> mit <xref:System.UriPartial.Scheme> , <xref:System.UriPartial.Authority> , <xref:System.UriPartial.Path> oder <xref:System.UriPartial.Query> .  
   
@@ -2135,9 +2109,7 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
 |`mailto:user@contoso.com?subject=uri`|`mailto:`|`mailto:user@contoso.com`|`mailto:user@contoso.com?subject=uri`|`<none>`|  
 |`nntp://news.contoso.com/123456@contoso.com`|`nntp://`|`nntp://news.contoso.com`|`nntp://news.contoso.com/123456@contoso.com`|`nntp://news.contoso.com/123456@contoso.com`|  
 |`news:123456@contoso.com`|`news:`|`news:123456@contoso.com`|`news:123456@contoso.com`|`<none>`|  
-|`file://server/filename.ext`|`file://`|`file://server`|`file://server/filename.ext`|`file://server/filename.ext`|  
-  
-   
+|`file://server/filename.ext`|`file://`|`file://server`|`file://server/filename.ext`|`file://server/filename.ext`|
   
 ## Examples  
  Im folgenden Beispiel wird eine <xref:System.Uri> -Instanz erstellt und der Pfad in die Konsole geschrieben.  
@@ -2186,8 +2158,8 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
         <Parameter Name="streamingContext" Type="System.Runtime.Serialization.StreamingContext" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1;netcore-3.1;net-5.0" />
       </Parameters>
       <Docs>
-        <param name="serializationInfo">Ein <see cref="T:System.Runtime.Serialization.SerializationInfo" />-Objekt mit den zum Serialisieren der <see cref="T:System.Uri" /> erforderlichen Informationen.</param>
-        <param name="streamingContext">Ein <see cref="T:System.Runtime.Serialization.StreamingContext" />-Objekt mit der Quelle und dem Ziel des entsprechenden serialisierten Streams für <see cref="T:System.Uri" />.</param>
+        <param name="serializationInfo">Die zum Serialisieren von <see cref="T:System.Uri" /> erforderlichen Informationen.</param>
+        <param name="streamingContext">Ein Objekt, das die Quelle und das Ziel des serialisierten Streams enthält, der <see cref="T:System.Uri" /> zugeordnet ist.</param>
         <summary>Gibt die Daten zurück, die zum Serialisieren der aktuellen Instanz benötigt werden.</summary>
         <remarks>To be added.</remarks>
       </Docs>
@@ -2334,14 +2306,12 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
       </ReturnValue>
       <Docs>
         <summary>Ruft die Hostkomponente dieser Instanz ab.</summary>
-        <value>Ein <see cref="T:System.String" />, der den Hostnamen enthält. Das ist normalerweise der DNS-Hostname oder die IP-Adresse des Servers.</value>
+        <value>Der Hostname. Das ist normalerweise der DNS-Hostname oder die IP-Adresse des Servers.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Anders als bei der- <xref:System.Uri.Authority%2A> Eigenschaft enthält dieser Eigenschafts Wert nicht die Portnummer.  
-  
-   
+ Anders als bei der- <xref:System.Uri.Authority%2A> Eigenschaft enthält dieser Eigenschafts Wert nicht die Portnummer.
   
 ## Examples  
  Im folgenden Beispiel wird der Hostname ( `www.contoso.com` ) des Servers in die Konsole geschrieben.  
@@ -2438,7 +2408,7 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Der zu RFC 3490 kompatible IDN (Internationale Domänenname) des Hosts, wofür ggf. Punycode verwendet wird. Diese Zeichenfolge kann sicher für die DNS-Auflösung verwendet werden, da sie keine Escapezeichen enthält.</summary>
+        <summary>Ruft den mit RFC 3490 kompatiblen IDN (Internationaler Domänenname) des Hosts ab, wofür ggf. Punycode verwendet wird. Diese Zeichenfolge kann sicher für die DNS-Auflösung verwendet werden, da sie keine Escapezeichen enthält.</summary>
         <value>Der Hostname, der gemäß dem IDN-Standard mit Punycode formatiert ist.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
@@ -2449,7 +2419,6 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
  Die veraltete <xref:System.Uri.DnsSafeHost%2A> Eigenschaft ist abhängig von *app.config* Einstellungen, die von Windows Store-Anwendungen nicht geändert werden können. Idnhost wird als bevorzugte Alternative zur Verwendung von bereitgestellt <xref:System.Uri.DnsSafeHost%2A> , da <xref:System.Uri.IdnHost%2A> garantiert immer DNS-sicher ist, unabhängig von der aktuellen *app.config* Einstellungen.  
 
  Wenn Sie zum Erstellen dieser Instanz eine Zeichenfolge mit Escapezeichen verwendet haben (z. b `"http://[fe80::200:39ff:fe36:1a2d%254]/temp/example.htm"` .), gibt idnhost eine Escapezeichenfolge zurück. Bevor Sie diese Zeichenfolge für die DNS-Auflösung verwenden, sollten Sie die Escapezeichen der von idnhost zurückgegebenen Escapezeichen Beachten Sie Folgendes: Wenn Sie eine ungültige Zeichenfolge ohne Escapezeichen verwendet haben, um diese Instanz zu erstellen (z. b. "http://[fe80:: 200:39ff: fe36:1a2d %4]/Temp/example.htm"), gibt idnhost eine Zeichenfolge ohne Escapezeichen zurück.
-
 
  ]]></format>
         </remarks>
@@ -2490,8 +2459,8 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft ab, ob die <see cref="T:System.Uri" />-Instanz absolut ist.</summary>
-        <value>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn die <see cref="T:System.Uri" />-Instanz absolut ist, andernfalls <see langword="false" />.</value>
+        <summary>Ruft einen Wert ab, der angibt, ob die <see cref="T:System.Uri" />-Instanz absolut ist.</summary>
+        <value><see langword="true" /> , wenn die- <see cref="T:System.Uri" /> Instanz absolut ist, <see langword="false" /> andernfalls.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -2547,7 +2516,7 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
       </Parameters>
       <Docs>
         <param name="character">Der zu überprüfende <see cref="T:System.Char" />.</param>
-        <summary>Ruft ab, ob ein Zeichen in einem Dateisystemnamen ungültig ist.</summary>
+        <summary>Gibt an, ob ein Zeichen in einem Dateisystemnamen ungültig ist.</summary>
         <returns><see langword="true" />, wenn das angegebene Zeichen ungültig ist, andernfalls <see langword="false" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
@@ -2596,16 +2565,16 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
         <Parameter Name="uri" Type="System.Uri" Index="0" FrameworkAlternate="dotnet-uwp-10.0;net-5.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netcore-3.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
       </Parameters>
       <Docs>
-        <param name="uri">Die angegebene <see cref="T:System.Uri" />-Instanz, die getestet werden soll.</param>
+        <param name="uri">Der angegebene zu testende URI.</param>
         <summary>Bestimmt, ob die aktuelle <see cref="T:System.Uri" />-Instanz eine Basis der angegebenen <see cref="T:System.Uri" />-Instanz ist.</summary>
         <returns><see langword="true" />, wenn die aktuelle <see cref="T:System.Uri" />-Instanz eine Basis von <paramref name="uri" /> ist, andernfalls <see langword="false" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Uri.IsBaseOf%2A>wird verwendet, um die aktuelle <xref:System.Uri> Instanz mit einem angegebenen zu vergleichen <xref:System.Uri> , um zu bestimmen, ob dieser URI eine Basis für den angegebenen ist <xref:System.Uri> . Beim Vergleichen von zwei- <xref:System.Uri> Objekten, um eine Basis Beziehung zu ermitteln, werden die Benutzerinformationen ( <xref:System.Uri.UserInfo%2A> ) nicht ausgewertet. Beim Vergleichen von zwei URIs (uri1 und uri2) ist uri1 die Basis von uri2 if, wenn Sie alles in uri2 nach dem letzten Schrägstrich (/) ignorieren, sind die beiden URIs identisch. http://host/path/path/file?queryIn der folgenden Tabelle wird als Basis-URI verwendet, um zu sehen, ob es sich um eine Basis für andere URIs handelt.  
+ <xref:System.Uri.IsBaseOf%2A> wird verwendet, um die aktuelle <xref:System.Uri> Instanz mit einem angegebenen zu vergleichen <xref:System.Uri> , um zu bestimmen, ob dieser URI eine Basis für den angegebenen ist <xref:System.Uri> . Beim Vergleichen von zwei- <xref:System.Uri> Objekten, um eine Basis Beziehung zu ermitteln, werden die Benutzerinformationen ( <xref:System.Uri.UserInfo%2A> ) nicht ausgewertet. Beim Vergleichen von zwei URIs (uri1 und uri2) ist uri1 die Basis von uri2 if, wenn Sie alles in uri2 nach dem letzten Schrägstrich (/) ignorieren, sind die beiden URIs identisch. http://host/path/path/file?queryIn der folgenden Tabelle wird als Basis-URI verwendet, um zu sehen, ob es sich um eine Basis für andere URIs handelt.  
   
-|URI|http://host/path/path/file?queryist Basis von|  
+|URI|http://host/path/path/file?query ist Basis von|  
 |---------|------------------------------------------------------|  
 |http://host/path/path/file/|ja|  
 |http://host/path/path/#fragment|ja|  
@@ -2618,9 +2587,7 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
 |http://host/path/path#Fragment|Nein|  
 |http://host/path/path2/|Nein|  
 ://host/path/path2/MoreDir|Nein|  
-|http://host/path/File|Nein|  
-  
-   
+|http://host/path/File|Nein|
   
 ## Examples  
  In diesem Beispiel wird eine- <xref:System.Uri> Instanz erstellt, die eine-Basis <xref:System.Uri> Instanz darstellt. Anschließend wird eine zweite <xref:System.Uri> Instanz aus einer Zeichenfolge erstellt. Sie ruft <xref:System.Uri.IsBaseOf%2A> auf, um zu bestimmen, ob die Basis Instanz die Basis der zweiten Instanz ist. Das Ergebnis wird in die Konsole geschrieben.  
@@ -2669,8 +2636,8 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft ab, ob der Portwert im URI der Standardwert für dieses Schema ist.</summary>
-        <value>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn der Wert in der <see cref="P:System.Uri.Port" />-Eigenschaft der Standardport für dieses Schema ist, andernfalls <see langword="false" />.</value>
+        <summary>Ruft einen Wert ab, der angibt, ob der Portwert im URI der Standardwert für dieses Schema ist.</summary>
+        <value><see langword="true" /> , wenn der Wert in der- <see cref="P:System.Uri.Port" /> Eigenschaft der Standardport für dieses Schema ist, andernfalls <see langword="false" /> .</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -2730,9 +2697,9 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
         <Parameter Name="character" Type="System.Char" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1;netcore-3.1;net-5.0" />
       </Parameters>
       <Docs>
-        <param name="character">Der zu überprüfende <see cref="T:System.Char" />.</param>
-        <summary>Ruft ab, ob das angegebene Zeichen mit Escapezeichen versehen werden soll.</summary>
-        <returns>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn das angegebene Zeichen mit Escapezeichen versehen werden muss, andernfalls <see langword="false" />.</returns>
+        <param name="character">Das zu überprüfende Zeichen.</param>
+        <summary>Bestimmt, ob das angegebene Zeichen mit Escapezeichen versehen werden soll.</summary>
+        <returns><see langword="true" />, wenn das angegebene Zeichen mit Escapezeichen versehen werden soll, andernfalls <see langword="false" />.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -2772,14 +2739,12 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
       </ReturnValue>
       <Docs>
         <summary>Ruft einen Wert ab, der angibt, ob der angegebene <see cref="T:System.Uri" /> ein Datei-URI ist.</summary>
-        <value>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn der <see cref="T:System.Uri" /> einen Datei-URI darstellt, andernfalls <see langword="false" />.</value>
+        <value><see langword="true" /> , wenn <see cref="T:System.Uri" /> ein Datei-URI ist, andernfalls <see langword="false" /> .</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die- <xref:System.Uri.IsFile%2A> Eigenschaft ist, `true` Wenn die- <xref:System.Uri.Scheme%2A> Eigenschaft entspricht <xref:System.Uri.UriSchemeFile> .  
-  
-   
+ Die- <xref:System.Uri.IsFile%2A> Eigenschaft ist, `true` Wenn die- <xref:System.Uri.Scheme%2A> Eigenschaft entspricht <xref:System.Uri.UriSchemeFile> .
   
 ## Examples  
  Im folgenden Beispiel wird eine <xref:System.Uri> -Instanz erstellt und ermittelt, ob es sich um einen Datei-URI handelt.  
@@ -2834,9 +2799,7 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Hexadezimale Ziffern sind die Ziffern 0 bis 9 und die Buchstaben a-f oder a-f.  
-  
-   
+ Hexadezimale Ziffern sind die Ziffern 0 bis 9 und die Buchstaben a-f oder a-f.
   
 ## Examples  
  Im folgenden Beispiel wird bestimmt, ob ein Zeichen ein hexadezimales Zeichen ist. ist dies der Fall, wird der entsprechende Dezimalwert in die Konsole geschrieben.  
@@ -2887,14 +2850,12 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
         <param name="pattern">Die zu überprüfende Zeichenfolge.</param>
         <param name="index">Die Stelle in <paramref name="pattern" />, die auf hexadezimale Codierung überprüft werden soll.</param>
         <summary>Bestimmt, ob ein Zeichen in einer Zeichenfolge hexadezimal codiert ist.</summary>
-        <returns>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn <paramref name="pattern" /> an der angegebenen Position hexadezimal codiert ist, andernfalls <see langword="false" />.</returns>
+        <returns><see langword="true" />, wenn <paramref name="pattern" /> an der angegebenen Position hexadezimal codiert ist, andernfalls <see langword="false" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die- <xref:System.Uri.IsHexEncoding%2A> Methode überprüft die hexadezimale Codierung, die auf das Muster "% hexhex" in einer Zeichenfolge folgt, wobei "Hex" eine Ziffer zwischen 0 und 9 oder ein Buchstabe von a-F (ohne Beachtung der Groß-/Kleinschreibung) ist.  
-  
-   
+ Die- <xref:System.Uri.IsHexEncoding%2A> Methode überprüft die hexadezimale Codierung, die auf das Muster "% hexhex" in einer Zeichenfolge folgt, wobei "Hex" eine Ziffer zwischen 0 und 9 oder ein Buchstabe von a-F (ohne Beachtung der Groß-/Kleinschreibung) ist.
   
 ## Examples  
  Im folgenden Codebeispiel wird bestimmt, ob ein Zeichen hexadezimal codiert ist. wenn dies der Fall ist, wird das entsprechende Zeichen in die Konsole geschrieben.  
@@ -2942,15 +2903,13 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft ab, ob der angegebene <see cref="T:System.Uri" /> auf den lokalen Host verweist.</summary>
-        <value>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn dieser <see cref="T:System.Uri" /> auf den lokalen Host verweist, andernfalls <see langword="false" />.</value>
+        <summary>Ruft einen Wert ab, der angibt, ob der angegebene <see cref="T:System.Uri" /> auf den lokalen Host verweist.</summary>
+        <value><see langword="true" /> , wenn dieser auf <see cref="T:System.Uri" /> den lokalen Host verweist, andernfalls <see langword="false" /> .</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Uri.IsLoopback%2A>Gibt zurück, `true` Wenn der URI, der beim Erstellen dieser Instanz angegeben wurde, 127.0.0.1, Loopback oder localhost war, oder wenn der URI keine Hostinformationen angegeben hat (z. b. file:///c:dir/file.txt). Alle anderen URIs geben zurück `false` .  
-  
-   
+ <xref:System.Uri.IsLoopback%2A> Gibt zurück, `true` Wenn der URI, der beim Erstellen dieser Instanz angegeben wurde, 127.0.0.1, Loopback oder localhost war, oder wenn der URI keine Hostinformationen angegeben hat (z. b. file:///c:dir/file.txt). Alle anderen URIs geben zurück `false` .
   
 ## Examples  
  Im folgenden Beispiel wird eine <xref:System.Uri> -Instanz erstellt und ermittelt, ob Sie auf einen lokalen Host verweist.  
@@ -3008,9 +2967,9 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
         <Parameter Name="character" Type="System.Char" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1;netcore-3.1;net-5.0" />
       </Parameters>
       <Docs>
-        <param name="character">Der zu überprüfende <see cref="T:System.Char" />.</param>
-        <summary>Ruft ab, ob das angegebene Zeichen ein reserviertes Zeichen ist.</summary>
-        <returns>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn das angegebene Zeichen ein reserviertes Zeichen ist, andernfalls <see langword="false" />.</returns>
+        <param name="character">Das zu überprüfende Zeichen.</param>
+        <summary>Bestimmt, ob das angegebene Zeichen ein reserviertes Zeichen ist.</summary>
+        <returns><see langword="true" />, wenn das angegebene Zeichen ein reserviertes Zeichen ist, andernfalls <see langword="false" />.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -3049,15 +3008,13 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft ab, ob der angegebene <see cref="T:System.Uri" /> einen UNC-Pfad (Universal Naming Convention) darstellt.</summary>
-        <value>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn der <see cref="T:System.Uri" /> einen UNC-Pfad darstellt, andernfalls <see langword="false" />.</value>
+        <summary>Ruft einen Wert ab, der angibt, ob der angegebene <see cref="T:System.Uri" /> ein UNC-Pfad (Universal Naming Convention) ist.</summary>
+        <value><see langword="true" /> , wenn <see cref="T:System.Uri" /> ein UNC-Pfad ist, andernfalls <see langword="false" /> .</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die- <xref:System.Uri.IsUnc%2A> Eigenschaft ist, `true` Wenn die angegebene <xref:System.Uri> Instanz ein UNC-Pfad ist (z \\ . b. \server\folder oder file://Server/Folder). Diese Eigenschaft gibt immer zurück, `true` Wenn der URI über das file://-Schema verfügt und eine Host Komponente angibt.  
-  
-   
+ Die- <xref:System.Uri.IsUnc%2A> Eigenschaft ist `true` , wenn die angegebene- <xref:System.Uri> Instanz ein UNC-Pfad ist (z `\\server\folder` . b.,//Server oder `file://server/folder` ). Diese Eigenschaft gibt immer zurück, `true` Wenn der URI über das file://-Schema verfügt und eine Host Komponente angibt.
   
 ## Examples  
  Im folgenden Beispiel wird eine <xref:System.Uri> -Instanz erstellt und ermittelt, ob es sich um einen UNC-Pfad handelt.  
@@ -3241,16 +3198,14 @@ Die Länge von <paramref name="stringToEscape" /> überschreitet 32766 Zeichen.<
       </ReturnValue>
       <Docs>
         <summary>Ruft die Darstellung eines Dateinamens im lokalen Betriebssystem ab.</summary>
-        <value>Ein <see cref="T:System.String" /> mit der Darstellung eines Dateinamens im lokalen Betriebssystem.</value>
+        <value>Die Darstellung eines Datei namens im lokalen Betriebssystem.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
  Der von dieser Eigenschaft zurückgegebene Wert ist nicht mit Escapezeichen versehen. Wenn der Pfad als Windows-Dateipfad erkannt wird, werden alle Schrägstriche (/) durch rückwärts Schrägstriche ( \\ ) ersetzt.  
   
- Für den URI `file://computer/file.ext` ist der absolute Pfad `/file.ext` und der lokale Pfad `\\computer\file.ext` .  
-  
-   
+ Für den URI `file://computer/file.ext` ist der absolute Pfad `/file.ext` und der lokale Pfad `\\computer\file.ext` .
   
 ## Examples  
  Im folgenden Beispiel wird eine <xref:System.Uri> -Instanz erstellt und der lokale Pfad in die Konsole geschrieben.  
@@ -3326,9 +3281,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
 |`http://www.contoso.com:8000/`|`http://www.contoso.com/test/test.htm`|`http://www.contoso.com/test/test.htm`|  
 |`http://username@www.contoso.com/`|`http://www.contoso.com/test1/test1.txt`|`test1/test1.txt`|  
   
- Benutzerinformationen, sofern Sie im URI vorhanden sind, werden ignoriert.  
-  
-   
+ Benutzerinformationen, sofern Sie im URI vorhanden sind, werden ignoriert.
   
 ## Examples  
  Im folgenden Beispiel werden zwei- <xref:System.Uri> Instanzen erstellt. Der Unterschied in den Pfadinformationen wird in die Konsole geschrieben.  
@@ -3398,9 +3351,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
 |`http://www.contoso.com:8000/`|`http://www.contoso.com/test/test.htm`|`http://www.contoso.com/test/test.htm`|  
 |`http://username@www.contoso.com/`|`http://www.contoso.com/test1/test1.txt`|`test1/test1.txt`|  
   
- Benutzerinformationen, sofern Sie im URI vorhanden sind, werden ignoriert.  
-  
-   
+ Benutzerinformationen, sofern Sie im URI vorhanden sind, werden ignoriert.
   
 ## Examples  
  Im folgenden Beispiel werden zwei- <xref:System.Uri> Instanzen erstellt. Der Unterschied in den Pfadinformationen wird in die Konsole geschrieben.  
@@ -3453,20 +3404,18 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
         <Parameter Name="uri2" Type="System.Uri" Index="1" FrameworkAlternate="dotnet-uwp-10.0;net-5.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netcore-3.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
       </Parameters>
       <Docs>
-        <param name="uri1">Eine <see cref="T:System.Uri" />-Instanz, die mit <paramref name="uri2" /> verglichen werden soll.</param>
-        <param name="uri2">Eine <see cref="T:System.Uri" />-Instanz, die mit <paramref name="uri1" /> verglichen werden soll.</param>
+        <param name="uri1">Ein URI, der mit <paramref name="uri2" /> verglichen werden soll.</param>
+        <param name="uri2">Ein URI, der mit <paramref name="uri1" /> verglichen werden soll.</param>
         <summary>Bestimmt, ob zwei <see cref="T:System.Uri" />-Instanzen denselben Wert haben.</summary>
-        <returns>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn die <see cref="T:System.Uri" />-Instanzen äquivalent sind, andernfalls <see langword="false" />.</returns>
+        <returns><see langword="true" />, wenn die <see cref="T:System.Uri" />-Instanzen äquivalent sind, andernfalls <see langword="false" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Überladung verwendet die- <xref:System.Uri.Equals%2A> Methode, um zu bestimmen, ob die beiden- <xref:System.Uri> Instanzen äquivalent sind. <xref:System.Uri.UserInfo%2A>und <xref:System.Uri.Fragment%2A> der Inhalt wird bei diesem Vergleich ignoriert.  
-  
-   
+ Diese Überladung verwendet die- <xref:System.Uri.Equals%2A> Methode, um zu bestimmen, ob die beiden- <xref:System.Uri> Instanzen äquivalent sind. <xref:System.Uri.UserInfo%2A> und <xref:System.Uri.Fragment%2A> der Inhalt wird bei diesem Vergleich ignoriert.
   
 ## Examples  
- In diesem Beispiel werden drei Instanzen aus Zeichen folgen erstellt <xref:System.Uri> und verglichen, um zu bestimmen, ob Sie denselben Wert darstellen. `Address1`und `Address2` sind identisch, da der- <xref:System.Uri.Fragment%2A> Teil für diesen Vergleich ignoriert wird. Das Ergebnis wird in die Konsole geschrieben.  
+ In diesem Beispiel werden drei Instanzen aus Zeichen folgen erstellt <xref:System.Uri> und verglichen, um zu bestimmen, ob Sie denselben Wert darstellen. `Address1` und `Address2` sind identisch, da der- <xref:System.Uri.Fragment%2A> Teil für diesen Vergleich ignoriert wird. Das Ergebnis wird in die Konsole geschrieben.  
   
  [!code-cpp[NCLUriEnhancements#5](~/samples/snippets/cpp/VS_Snippets_Remoting/NCLUriEnhancements/CPP/nclurienhancements.cpp#5)]
  [!code-csharp[NCLUriEnhancements#5](~/samples/snippets/csharp/VS_Snippets_Remoting/NCLUriEnhancements/CS/nclurienhancements.cs#5)]
@@ -3514,20 +3463,18 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
         <Parameter Name="uri2" Type="System.Uri" Index="1" FrameworkAlternate="dotnet-uwp-10.0;net-5.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netcore-3.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
       </Parameters>
       <Docs>
-        <param name="uri1">Eine <see cref="T:System.Uri" />-Instanz, die mit <paramref name="uri2" /> verglichen werden soll.</param>
-        <param name="uri2">Eine <see cref="T:System.Uri" />-Instanz, die mit <paramref name="uri1" /> verglichen werden soll.</param>
+        <param name="uri1">Ein URI, der mit <paramref name="uri2" /> verglichen werden soll.</param>
+        <param name="uri2">Ein URI, der mit <paramref name="uri1" /> verglichen werden soll.</param>
         <summary>Bestimmt, ob zwei <see cref="T:System.Uri" />-Instanzen verschiedene Werte haben.</summary>
-        <returns>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn die beiden <see cref="T:System.Uri" />-Instanzen ungleich sind, andernfalls <see langword="false" />. Wenn einer der Parameter <see langword="null" /> ist, gibt diese Methode <see langword="true" /> zurück.</returns>
+        <returns><see langword="true" />, wenn die beiden <see cref="T:System.Uri" />-Instanzen ungleich sind, andernfalls <see langword="false" />. Wenn einer der Parameter <see langword="null" /> ist, gibt diese Methode <see langword="true" /> zurück.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Diese Überladung verwendet die- <xref:System.Uri.Equals%2A> Methode, um zu bestimmen, ob die beiden- <xref:System.Uri> Instanzen nicht äquivalent sind. <xref:System.Uri.UserInfo%2A>und <xref:System.Uri.Fragment%2A> der Inhalt wird bei diesem Vergleich ignoriert.  
-  
-   
+ Diese Überladung verwendet die- <xref:System.Uri.Equals%2A> Methode, um zu bestimmen, ob die beiden- <xref:System.Uri> Instanzen nicht äquivalent sind. <xref:System.Uri.UserInfo%2A> und <xref:System.Uri.Fragment%2A> der Inhalt wird bei diesem Vergleich ignoriert.
   
 ## Examples  
- In diesem Beispiel werden drei Instanzen aus Zeichen folgen erstellt <xref:System.Uri> und verglichen, um zu bestimmen, ob Sie denselben Wert darstellen. `Address2`und `Address3` sind nicht identisch, da `Address3` eine enthält <xref:System.Uri.Query%2A> , die in nicht gefunden wurde `Address2` . Das Ergebnis wird in die Konsole geschrieben.  
+ In diesem Beispiel werden drei Instanzen aus Zeichen folgen erstellt <xref:System.Uri> und verglichen, um zu bestimmen, ob Sie denselben Wert darstellen. `Address2` und `Address3` sind nicht identisch, da `Address3` eine enthält <xref:System.Uri.Query%2A> , die in nicht gefunden wurde `Address2` . Das Ergebnis wird in die Konsole geschrieben.  
   
  [!code-cpp[NCLUriEnhancements#5](~/samples/snippets/cpp/VS_Snippets_Remoting/NCLUriEnhancements/CPP/nclurienhancements.cpp#5)]
  [!code-csharp[NCLUriEnhancements#5](~/samples/snippets/csharp/VS_Snippets_Remoting/NCLUriEnhancements/CS/nclurienhancements.cs#5)]
@@ -3572,22 +3519,20 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
       </ReturnValue>
       <Docs>
         <summary>Ruft die ursprüngliche URI-Zeichenfolge ab, die an den <see cref="T:System.Uri" />-Konstruktor übergeben wurde.</summary>
-        <value>Ein <see cref="T:System.String" />, der exakt den URI enthält, der beim Erstellen dieser Instanz angegeben wurde, andernfalls <see cref="F:System.String.Empty" />.</value>
+        <value>Der genaue URI, der angegeben wurde, als diese Instanz erstellt wurde. andernfalls <see cref="F:System.String.Empty" /> .</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
  Wenn der URI, der für den Konstruktor angegeben wurde, führende oder nachfolgende Leerzeichen enthält, werden diese Leerzeichen beibehalten.  
   
- Der von dieser Eigenschaft zurückgegebene Wert unterscheidet sich von <xref:System.Uri.ToString%2A> und <xref:System.Uri.AbsoluteUri%2A> . <xref:System.Uri.ToString%2A>Gibt die kanonisch ohne Escapezeichen für den URI zurück. <xref:System.Uri.AbsoluteUri%2A>Gibt die kanonisch geschützte Form des URIs zurück.  
+ Der von dieser Eigenschaft zurückgegebene Wert unterscheidet sich von <xref:System.Uri.ToString%2A> und <xref:System.Uri.AbsoluteUri%2A> . <xref:System.Uri.ToString%2A> Gibt die kanonisch ohne Escapezeichen für den URI zurück. <xref:System.Uri.AbsoluteUri%2A> Gibt die kanonisch geschützte Form des URIs zurück.  
   
  Wenn die Unterstützung internationaler Ressourcen Bezeichner (IRI) und Internationalized Domain Name (IDN) aktiviert ist, wird <xref:System.Uri.OriginalString%2A> die ursprüngliche nicht normalisierte Zeichenfolge mit dem Punycode-Hostnamen zurückgegeben, wenn zum Initialisieren der Instanz verwendet wurde <xref:System.Uri> . Punycode-Namen enthalten nur ASCII-Zeichen und beginnen immer mit dem Präfix „xn--“.  
   
  Weitere Informationen zur IRI-Unterstützung finden Sie im Abschnitt "Hinweise" für die- <xref:System.Uri> Klasse.  
   
- Wenn ein- <xref:System.Uri> Objekt serialisiert wird, <xref:System.Uri.OriginalString%2A> wird der nicht beibehalten. Der Serialisierungsprozess verwendet bei der Serialisierung die vollständig mit Escapezeichen und kanonisierte <xref:System.Uri.AbsoluteUri%2A> Eigenschaft. Bei einem <xref:System.Uri> -Objekt, das eine IPv6-Adresse enthält, sind die IPv6-Adresse und die Bereichs-ID im serialisierten <xref:System.Uri> Objekt enthalten.  
-  
-   
+ Wenn ein- <xref:System.Uri> Objekt serialisiert wird, <xref:System.Uri.OriginalString%2A> wird der nicht beibehalten. Der Serialisierungsprozess verwendet bei der Serialisierung die vollständig mit Escapezeichen und kanonisierte <xref:System.Uri.AbsoluteUri%2A> Eigenschaft. Bei einem <xref:System.Uri> -Objekt, das eine IPv6-Adresse enthält, sind die IPv6-Adresse und die Bereichs-ID im serialisierten <xref:System.Uri> Objekt enthalten.
   
 ## Examples  
  Im folgenden Beispiel wird eine neue- <xref:System.Uri> Instanz aus einer Zeichenfolge erstellt. Es veranschaulicht den Unterschied zwischen dem Wert, der von zurückgegeben <xref:System.Uri.OriginalString%2A> wird, der die Zeichenfolge zurückgibt, die an den Konstruktor übergeben wurde, und von einem-Befehl <xref:System.Uri.ToString%2A> , der die kanonische Form der Zeichenfolge zurückgibt.  
@@ -3683,7 +3628,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
       </ReturnValue>
       <Docs>
         <summary>Ruft die durch ein Fragezeichen (?) getrennten Werte der <see cref="P:System.Uri.AbsolutePath" />-Eigenschaft und der <see cref="P:System.Uri.Query" />-Eigenschaft ab.</summary>
-        <value>Ein <see cref="T:System.String" />, der die durch ein Fragezeichen (?) getrennten Werte der <see cref="P:System.Uri.AbsolutePath" />-Eigenschaft und der <see cref="P:System.Uri.Query" />-Eigenschaft enthält.</value>
+        <value>Die <see cref="P:System.Uri.AbsolutePath" /> -Eigenschaft und die-Eigenschaft <see cref="P:System.Uri.Query" /> werden durch ein Fragezeichen (?) getrennt.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -3692,9 +3637,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
   
  Die- <xref:System.Uri.PathAndQuery%2A> Eigenschaft wird standardmäßig gemäß RFC 2396 mit Escapezeichen versehen. Wenn die Verarbeitung von internationalen Ressourcen Bezeichnern (IRIS) oder Internationalized Domain Name (IDN) aktiviert ist, <xref:System.Uri.PathAndQuery%2A> wird die Eigenschaft gemäß RFC 3986 und RFC 3987 mit Escapezeichen versehen.  
   
- Weitere Informationen zur IRI-Unterstützung finden Sie im Abschnitt "Hinweise" für die- <xref:System.Uri> Klasse.  
-  
-   
+ Weitere Informationen zur IRI-Unterstützung finden Sie im Abschnitt "Hinweise" für die- <xref:System.Uri> Klasse.
   
 ## Examples  
  Im folgenden Beispiel werden die Informationen des URI-Pfads (/Catalog/shownew.htm) und der Abfrage (date = today) in die Konsole geschrieben.  
@@ -3744,14 +3687,12 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
       </ReturnValue>
       <Docs>
         <summary>Ruft die Anschlussnummer dieses URIs ab.</summary>
-        <value>Ein <see cref="T:System.Int32" />-Wert, der die Portnummer für diesen URI enthält.</value>
+        <value>Die Portnummer für diesen URI.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die Portnummer definiert den Protokollport, der zum Kontaktieren des Servers verwendet wird, auf den im URI verwiesen wird. Wenn ein Port nicht als Teil des URI angegeben wird, gibt die- <xref:System.Uri.Port%2A> Eigenschaft den Standardwert für das Protokoll zurück. Wenn keine Standard Portnummer vorhanden ist, gibt diese Eigenschaft-1 zurück.  
-  
-   
+ Die Portnummer definiert den Protokollport, der zum Kontaktieren des Servers verwendet wird, auf den im URI verwiesen wird. Wenn ein Port nicht als Teil des URI angegeben wird, gibt die- <xref:System.Uri.Port%2A> Eigenschaft den Standardwert für das Protokoll zurück. Wenn keine Standard Portnummer vorhanden ist, gibt diese Eigenschaft-1 zurück.
   
 ## Examples  
  Im folgenden Beispiel wird die URI-Portnummer in die Konsole geschrieben. In diesem Fall ist der Wert die Standard Portnummer für http, Port 80.  
@@ -3801,7 +3742,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
       </ReturnValue>
       <Docs>
         <summary>Ruft im angegebenen URI enthaltene Abfrageinformationen ab.</summary>
-        <value>Ein <see cref="T:System.String" /> mit den im angegebenen URI enthaltenen Abfrageinformationen.</value>
+        <value>Alle Abfrage Informationen, die im angegebenen URI enthalten sind.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -3810,9 +3751,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
   
  Die Abfrage Informationen werden standardmäßig gemäß RFC 2396 mit Escapezeichen versehen. Wenn die Verarbeitung von internationalen Ressourcen Bezeichnern (IRIS) oder internationalisierten Domänen Namen (IDN) aktiviert ist, werden die Abfrage Informationen gemäß RFC 3986 und RFC 3987 mit Escapezeichen versehen.  
   
- Weitere Informationen zur IRI-Unterstützung finden Sie im Abschnitt "Hinweise" für die- <xref:System.Uri> Klasse.  
-  
-   
+ Weitere Informationen zur IRI-Unterstützung finden Sie im Abschnitt "Hinweise" für die- <xref:System.Uri> Klasse.
   
 ## Examples  
  Im folgenden Beispiel wird die Abfrage date = today in die Konsole geschrieben.  
@@ -3862,7 +3801,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
       </ReturnValue>
       <Docs>
         <summary>Ruft den Namen des Schemas für diesen URI ab.</summary>
-        <value>Ein <see cref="T:System.String" />, der das in Kleinbuchstaben umgewandelte Schema für diesen URI enthält.</value>
+        <value>Das Schema für diesen URI, in Kleinbuchstaben konvertiert.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -3885,9 +3824,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
 |news|Der Zugriff auf die Ressource erfolgt über das NNTP-Protokoll.|  
 |NNTP-|Der Zugriff auf die Ressource erfolgt über das NNTP-Protokoll.|  
 |telnet|Der Zugriff auf die Ressource erfolgt über das Telnet-Protokoll.|  
-|uuid|Der Zugriff auf die Ressource erfolgt über einen eindeutigen UUID-Endpunkt Namen für die Kommunikation mit einem Dienst.|  
-  
-   
+|uuid|Der Zugriff auf die Ressource erfolgt über einen eindeutigen UUID-Endpunkt Namen für die Kommunikation mit einem Dienst.|
   
 ## Examples  
  Im folgenden Beispiel wird der Schema Name (http) für den URI in die Konsole geschrieben `http://www.contoso.com/` .  
@@ -3983,7 +3920,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
       </ReturnValue>
       <Docs>
         <summary>Ruft ein Array mit den Pfadsegmenten ab, aus denen sich der angegebene URI zusammensetzt.</summary>
-        <value>Ein <see cref="T:System.String" />-Array mit den Pfadsegmenten, aus denen sich der angegebene URI zusammensetzt.</value>
+        <value>Die Pfadsegmente, die den angegebenen URI bilden.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -4018,9 +3955,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
  - Strecken
  - Section1.htm  
   
- Beachten Sie Folgendes: da der absolute Pfad mit "/" beginnt, enthält das erste Segment ihn und nichts anderes.  
-  
-   
+ Beachten Sie Folgendes: da der absolute Pfad mit "/" beginnt, enthält das erste Segment ihn und nichts anderes.
   
 ## Examples  
  Im folgenden Beispiel wird eine <xref:System.Uri> -Instanz mit drei Segmenten erstellt und die Segmente auf dem Bildschirm angezeigt.  
@@ -4078,8 +4013,8 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
         <Parameter Name="streamingContext" Type="System.Runtime.Serialization.StreamingContext" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1;netcore-3.1;net-5.0" />
       </Parameters>
       <Docs>
-        <param name="serializationInfo">Ein <see cref="T:System.Runtime.Serialization.SerializationInfo" />-Objekt mit den zum Serialisieren der <see cref="T:System.Uri" /> erforderlichen Informationen.</param>
-        <param name="streamingContext">Ein <see cref="T:System.Runtime.Serialization.StreamingContext" />-Objekt mit der Quelle und dem Ziel des entsprechenden serialisierten Streams für <see cref="T:System.Uri" />.</param>
+        <param name="serializationInfo">Die zum Serialisieren von <see cref="T:System.Uri" /> erforderlichen Informationen.</param>
+        <param name="streamingContext">Ein Objekt mit der Quelle und dem Ziel des entsprechenden serialisierten Streams für die <see cref="T:System.Uri" />.</param>
         <summary>Gibt die Daten zurück, die zum Serialisieren der aktuellen Instanz benötigt werden.</summary>
         <remarks>To be added.</remarks>
       </Docs>
@@ -4121,7 +4056,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
       <Parameters />
       <Docs>
         <summary>Ruft eine kanonische Zeichenfolgenentsprechung der angegebenen <see cref="T:System.Uri" />-Instanz ab.</summary>
-        <returns>Eine <see cref="T:System.String" />-Instanz, die eine kanonische Darstellung der <see cref="T:System.Uri" />-Instanz enthält, die nicht mit Escapezeichen versehen wurde. #, ? und % sind die einzigen Zeichen, die mit Escapezeichen versehen sind.</returns>
+        <returns>Die kanonische Darstellung der <see cref="T:System.Uri" />-Instanz ohne Escapezeichen. #, ? und % sind die einzigen Zeichen, die mit Escapezeichen versehen sind.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -4129,9 +4064,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
  Die von dieser Methode zurückgegebene Zeichenfolge enthält keine Port Informationen, wenn der Port der Standardport für das Schema ist.  
   
 > [!NOTE]
->  Die Zeichenfolge, die von der-Methode zurückgegeben <xref:System.Uri.ToString%2A> wird, kann Steuerzeichen enthalten, wodurch der Zustand einer Konsolenanwendung beschädigt werden kann. Sie können die- <xref:System.Uri.GetComponents%2A> Methode mit dem- <xref:System.UriFormat.SafeUnescaped?displayProperty=nameWithType> Format verwenden, um Steuerzeichen aus der zurückgegebenen Zeichenfolge zu entfernen.  
-  
-   
+> Die Zeichenfolge, die von der-Methode zurückgegeben <xref:System.Uri.ToString%2A> wird, kann Steuerzeichen enthalten, wodurch der Zustand einer Konsolenanwendung beschädigt werden kann. Sie können die- <xref:System.Uri.GetComponents%2A> Methode mit dem- <xref:System.UriFormat.SafeUnescaped?displayProperty=nameWithType> Format verwenden, um Steuerzeichen aus der zurückgegebenen Zeichenfolge zu entfernen.
   
 ## Examples  
  Im folgenden Beispiel wird eine neue- <xref:System.Uri> Instanz aus einer Zeichenfolge erstellt. Es veranschaulicht den Unterschied zwischen dem Wert, der von zurückgegeben <xref:System.Uri.OriginalString%2A> wird, der die Zeichenfolge zurückgibt, die an den Konstruktor übergeben wurde, und von einem-Befehl <xref:System.Uri.ToString%2A> , der die kanonische Form der Zeichenfolge zurückgibt.  
@@ -4196,11 +4129,11 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
         <Parameter Name="result" Type="System.Uri" RefType="out" Index="2" FrameworkAlternate="dotnet-uwp-10.0;net-5.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netcore-3.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
       </Parameters>
       <Docs>
-        <param name="uriString">Der <see cref="T:System.String" />, der den <see cref="T:System.Uri" /> darstellt.</param>
+        <param name="uriString">Die Zeichenfolgendarstellung des <see cref="T:System.Uri" />.</param>
         <param name="uriKind">Der Typ des Uris.</param>
         <param name="result">Diese Methode gibt den erstellten <see cref="T:System.Uri" /> zurück.</param>
         <summary>Erstellt mit der angegebenen <see cref="T:System.Uri" />-Instanz und einer <see cref="T:System.String" /> einen neuen <see cref="T:System.UriKind" />.</summary>
-        <returns>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn der <see cref="T:System.Uri" /> erfolgreich erstellt wurde, andernfalls <see langword="false" />.</returns>
+        <returns><see langword="true" />, wenn <see cref="T:System.Uri" /> erfolgreich erstellt wurde, andernfalls <see langword="false" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -4250,11 +4183,11 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
         <Parameter Name="result" Type="System.Uri" RefType="out" Index="2" FrameworkAlternate="dotnet-uwp-10.0;net-5.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netcore-3.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
       </Parameters>
       <Docs>
-        <param name="baseUri">Der Basis-<see cref="T:System.Uri" />.</param>
-        <param name="relativeUri">Der relative <see cref="T:System.Uri" />, dargestellt als ein <see cref="T:System.String" />, der dem Basis-<see cref="T:System.Uri" /> hinzugefügt werden soll.</param>
+        <param name="baseUri">Der Basis-URI.</param>
+        <param name="relativeUri">Die Zeichenfolgendarstellung des relativen URIs, der dem Basis-<see cref="T:System.Uri" /> hinzugefügt werden soll.</param>
         <param name="result">Enthält nach dem Beenden der Methode einen aus <see cref="T:System.Uri" /> und <paramref name="baseUri" /> erstellten <paramref name="relativeUri" />. Dieser Parameter wird nicht initialisiert übergeben.</param>
         <summary>Erstellt mit der angegebenen Basis und den relativen <see cref="T:System.Uri" />-Instanzen einen neuen <see cref="T:System.String" />.</summary>
-        <returns>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn der <see cref="T:System.Uri" /> erfolgreich erstellt wurde, andernfalls <see langword="false" />.</returns>
+        <returns><see langword="true" />, wenn <see cref="T:System.Uri" /> erfolgreich erstellt wurde, andernfalls <see langword="false" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -4304,11 +4237,11 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
         <Parameter Name="result" Type="System.Uri" RefType="out" Index="2" FrameworkAlternate="dotnet-uwp-10.0;net-5.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netcore-3.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
       </Parameters>
       <Docs>
-        <param name="baseUri">Der Basis-<see cref="T:System.Uri" />.</param>
-        <param name="relativeUri">Der relative <see cref="T:System.Uri" />, der dem Basis-<see cref="T:System.Uri" /> hinzugefügt werden soll.</param>
-        <param name="result">Enthält nach dem Beenden der Methode einen aus <paramref name="baseUri" /> und <paramref name="relativeUri" /> erstellten <see cref="T:System.Uri" />. Dieser Parameter wird nicht initialisiert übergeben.</param>
+        <param name="baseUri">Der Basis-URI.</param>
+        <param name="relativeUri">Der relative URI, der dem Basis-<see cref="T:System.Uri" /> hinzugefügt werden soll.</param>
+        <param name="result">Enthält nach dem Beenden der Methode einen aus <see cref="T:System.Uri" /> und <paramref name="baseUri" /> erstellten <paramref name="relativeUri" />. Dieser Parameter wird nicht initialisiert übergeben.</param>
         <summary>Erstellt mit der angegebenen Basis und den relativen <see cref="T:System.Uri" />-Instanzen einen neuen <see cref="T:System.Uri" />.</summary>
-        <returns>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn der <see cref="T:System.Uri" /> erfolgreich erstellt wurde, andernfalls <see langword="false" />.</returns>
+        <returns><see langword="true" />, wenn <see cref="T:System.Uri" /> erfolgreich erstellt wurde, andernfalls <see langword="false" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -4366,9 +4299,9 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
         <Parameter Name="path" Type="System.String" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1;netcore-3.1;net-5.0" />
       </Parameters>
       <Docs>
-        <param name="path">Die zu konvertierende <see cref="T:System.String" />.</param>
+        <param name="path">Die zu konvertierende Zeichenfolge.</param>
         <summary>Konvertiert die angegebene Zeichenfolge, indem alle Escapesequenzen durch die entsprechende Darstellung ohne Escapezeichen ersetzt werden.</summary>
-        <returns>Ein <see cref="T:System.String" />, der den Wert des <paramref name="path" />-Parameters ohne Escapezeichen enthält.</returns>
+        <returns>Der Wert des <paramref name="path" />-Parameters ohne Escapezeichen.</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -4411,16 +4344,14 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
       <Docs>
         <param name="stringToUnescape">Die Zeichenfolge, deren Escapezeichen entfernt werden sollen.</param>
         <summary>Konvertiert eine Zeichenfolge in eine Darstellung ohne Escapezeichen.</summary>
-        <returns>Ein <see cref="T:System.String" />, der die Darstellung von <paramref name="stringToUnescape" /> ohne Escapezeichen enthält.</returns>
+        <returns>Die Darstellung von <paramref name="stringToUnescape" /> ohne Escapezeichen.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
  Verwenden Sie diese Methode mit Sorgfalt. Das Escapezeichen einer Zeichenfolge, die zuvor ohne Escapezeichen versehen wurde, kann zu Mehrdeutigkeiten und Fehlern führen  
   
- Viele Webbrowser unterbrechen Leerzeichen in URIs in Pluszeichen ("+"). die UnescapeDataString-Methode konvertiert Pluszeichen jedoch nicht in Leerzeichen, da dieses Verhalten in allen URI-Schemas nicht standardmäßig ist.  
-  
-   
+ Viele Webbrowser unterbrechen Leerzeichen in URIs in Pluszeichen ("+"). die UnescapeDataString-Methode konvertiert Pluszeichen jedoch nicht in Leerzeichen, da dieses Verhalten in allen URI-Schemas nicht standardmäßig ist.
   
 ## Examples  
  Im folgenden Codebeispiel wird ein URI-Escapezeichen und dann alle Pluszeichen ("+") in Leerzeichen konvertiert.  
@@ -4470,9 +4401,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- In .NET Framework Version 1,1 wurde ein " `file:///path` "-URI in " `file:/path` " übersetzt. Dies wurde für Version 2,0 korrigiert.  
-  
-   
+ In .NET Framework Version 1,1 wurde ein " `file:///path` "-URI in " `file:/path` " übersetzt. Dies wurde für Version 2,0 korrigiert.
   
 ## Examples  
  Im folgenden Beispiel wird eine <xref:System.Uri> -Instanz erstellt, und es wird bestimmt, ob das Schema ist <xref:System.Uri.UriSchemeFile> .  
@@ -4865,9 +4794,7 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die NNTP- <xref:System.Uri> Analyse-Fehler in .NET Framework Version 1,1 wurden korrigiert.  
-  
-   
+ Die NNTP- <xref:System.Uri> Analyse-Fehler in .NET Framework Version 1,1 wurden korrigiert.
   
 ## Examples  
  Im folgenden Beispiel wird eine <xref:System.Uri> -Instanz erstellt, und es wird bestimmt, ob das Schema ist <xref:System.Uri.UriSchemeNntp> .  
@@ -4915,15 +4842,13 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gibt an, dass die URI-Zeichenfolge vor dem Erstellen der <see cref="T:System.Uri" />-Instanz vollständig mit Escapezeichen versehen war.</summary>
-        <value>Ein <see cref="T:System.Boolean" />-Wert, der <see langword="true" /> ist, wenn der <paramref name="dontEscape" />-Parameter auf <see langword="true" /> festgelegt wurde, als die <see cref="T:System.Uri" />-Instanz erstellt wurde, andernfalls <see langword="false" />.</value>
+        <summary>Ruft einen Wert ab, der angibt, ob die URI-Zeichenfolge vor dem Erstellen der <see cref="T:System.Uri" />-Instanz vollständig mit Escapezeichen versehen war.</summary>
+        <value><see langword="true" /> , wenn der- <paramref name="dontEscape" /> Parameter auf festgelegt wurde, <see langword="true" /> als die- <see cref="T:System.Uri" /> Instanz erstellt wurde, andernfalls <see langword="false" /> .</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Die- <xref:System.Uri.UserEscaped%2A> Eigenschaft wird auf festgelegt, `true` um anzugeben, dass die zum Erstellen der-Instanz verwendete Zeichenfolge vollständig mit Escapezeichen versehen <xref:System.Uri> wurde, bevor Sie an den-Konstruktor übergeben wurde. das heißt, der- `dontEscape` Parameter des konstruktoraufrufes wurde auf `true`  
-  
-   
+ Die- <xref:System.Uri.UserEscaped%2A> Eigenschaft wird auf festgelegt, `true` um anzugeben, dass die zum Erstellen der-Instanz verwendete Zeichenfolge vollständig mit Escapezeichen versehen <xref:System.Uri> wurde, bevor Sie an den-Konstruktor übergeben wurde. das heißt, der- `dontEscape` Parameter des konstruktoraufrufes wurde auf `true`
   
 ## Examples  
  Im folgenden Beispiel wird eine <xref:System.Uri> -Instanz erstellt und bestimmt, ob Sie bei der Erstellung vollständig mit Escapezeichen versehen wurde.  
@@ -4972,14 +4897,12 @@ Wenn der Hostname oder das Schema nicht identisch ist, gibt diese Methode einen 
       </ReturnValue>
       <Docs>
         <summary>Ruft Benutzernamen, Kennwort oder weitere benutzerspezifische Informationen ab, die dem angegebenen URI zugeordnet sind.</summary>
-        <value>Ein <see cref="T:System.String" />, der die dem URI zugeordneten Benutzerinformationen enthält. Der zurückgegebene Wert schließt nicht das '@'-Zeichen ein, das zum Begrenzen des Benutzerinformationsteils des URIs reserviert ist.</value>
+        <value>Die dem URI zugeordneten Benutzerinformationen. Der zurückgegebene Wert schließt nicht das '@'-Zeichen ein, das zum Begrenzen des Benutzerinformationsteils des URIs reserviert ist.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Der von dieser Eigenschaft zurückgegebene Wert weist normalerweise das Format "username: Password" auf.  
-  
-   
+ Der von dieser Eigenschaft zurückgegebene Wert weist normalerweise das Format "username: Password" auf.
   
 ## Examples  
  Im folgenden Beispiel wird eine <xref:System.Uri> -Instanz erstellt und die Benutzerinformationen in die Konsole geschrieben.  
