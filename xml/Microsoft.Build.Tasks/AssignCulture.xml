@@ -1,5 +1,5 @@
 <Type Name="AssignCulture" FullName="Microsoft.Build.Tasks.AssignCulture">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="18526dc2dd9d1fb613169044963050dff5d33802" /><Meta Name="ms.sourcegitcommit" Value="81833381d2d0b5a8c55f71b43f00769fd38298af" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/17/2019" /><Meta Name="ms.locfileid" Value="69570938" /></Metadata><TypeSignature Language="C#" Value="public class AssignCulture : Microsoft.Build.Tasks.TaskExtension" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="b37d2c545234cbea3da501c5add098a7e707ee74" /><Meta Name="ms.sourcegitcommit" Value="b53d35b4a410c949742abd4c6a989d1af5357bca" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/21/2020" /><Meta Name="ms.locfileid" Value="86635767" /></Metadata><TypeSignature Language="C#" Value="public class AssignCulture : Microsoft.Build.Tasks.TaskExtension" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit AssignCulture extends Microsoft.Build.Tasks.TaskExtension" />
   <TypeSignature Language="DocId" Value="T:Microsoft.Build.Tasks.AssignCulture" />
   <TypeSignature Language="VB.NET" Value="Public Class AssignCulture&#xA;Inherits TaskExtension" />
@@ -17,12 +17,23 @@
     <AssemblyName>Microsoft.Build.Tasks.v3.5</AssemblyName>
     <AssemblyVersion>3.5.0.0</AssemblyVersion>
   </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>Microsoft.Build.Tasks.Core</AssemblyName>
+    <AssemblyVersion>15.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
   <Base>
     <BaseTypeName>Microsoft.Build.Tasks.TaskExtension</BaseTypeName>
   </Base>
   <Interfaces />
   <Docs>
-    <summary>Implementiert die <c>AssignCulture</c>-Aufgabe. Verwenden Sie das <c>AssignCulture</c>-Element in der Projektdatei, um diese Aufgabe zu erstellen und auszuführen. Informationen zu Verwendung und Parametern finden Sie unter [AssignCulture-Aufgabe](https://msdn.microsoft.com/library/8f8314cc-82a6-4f16-a62d-b9f0d1d5e274).</summary>
+    <summary>Klasse: AssignCulture 
+Dieser Task nimmt eine Liste von Ressourcendateinamen und legt ein Attribut fest, das den Kulturnamen enthält, der in den Dateinamen eingebettet ist: 
+MyResources.fr.resx     ==&gt; Culture='fr' 
+Der Task kann auch eine Liste von „kulturneutralen“ Dateinamen zurückgeben, zum Beispiel: 
+MyGlyph.fr.bmp          ==&gt; MyGlyph.bmp [Culture='fr'] 
+Dies liegt daran, dass auf eingebettete Ressourcen auf diese Weise verwiesen wird.
+            
+Für diesen Task gibt es viele Ausnahmefälle. Weitere Informationen finden Sie im Komponententest.</summary>
     <remarks>To be added.</remarks>
     <forInternalUseOnly />
   </Docs>
@@ -45,6 +56,10 @@
       <AssemblyInfo>
         <AssemblyName>Microsoft.Build.Tasks.v3.5</AssemblyName>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>Microsoft.Build.Tasks.Core</AssemblyName>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Parameters />
       <Docs>
@@ -73,25 +88,35 @@
         <AssemblyName>Microsoft.Build.Tasks.v3.5</AssemblyName>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>Microsoft.Build.Tasks.Core</AssemblyName>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
       <Attributes>
         <Attribute>
-          <AttributeName>Microsoft.Build.Framework.Output</AttributeName>
+          <AttributeName Language="C#">[Microsoft.Build.Framework.Output]</AttributeName>
+          <AttributeName Language="F#">[&lt;Microsoft.Build.Framework.Output&gt;]</AttributeName>
         </Attribute>
         <Attribute FrameworkAlternate="netframework-4.0">
-          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+          <AttributeName Language="C#">[get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]</AttributeName>
+          <AttributeName Language="F#">[&lt;get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")&gt;]</AttributeName>
         </Attribute>
       </Attributes>
       <ReturnValue>
         <ReturnType>Microsoft.Build.Framework.ITaskItem[]</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft eine Liste von <see cref="P:Microsoft.Build.Tasks.AssignCulture.Files" /> mit einem <c>Culture</c>-Metadateneintrag ab, der zu jedem Element hinzugefügt wurde.</summary>
-        <value>Die Liste von <see cref="P:Microsoft.Build.Tasks.AssignCulture.Files" />mit einem <c>Kultur</c> -Metadateneintrag, der zu jedem Element hinzugefügt wurde.</value>
+        <summary>Diese ausgehende Liste von Dateien stimmt exakt mit der eingehenden Files-Liste überein, mit der Ausnahme, dass der Attributname „Culture“ hinzugefügt wird, wenn ein bestimmter Dateiname das folgende Format aufweist: 
+MyResource.&lt;any-valid-culture-id&gt;.resx 
+Der Wert der Kultur ist dann „&lt;any-valid-culture-id&gt;“.
+            
+Wenn das eingehende Element von Files bereits über ein Culture-Attribut verfügt, dann wird stattdessen das ursprüngliche Attribut verwendet.</summary>
+        <value>Die Liste von <see cref="P:Microsoft.Build.Tasks.AssignCulture.Files" /> mit einem <c>Kultur</c> -Metadateneintrag, der zu jedem Element hinzugefügt wurde.</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- Wenn das eingehende Element aus <xref:Microsoft.Build.Tasks.AssignCulture.Files%2A> der-Eigenschaft bereits `Culture` einen Metadateneintrag enthält, wird der ursprüngliche Metadateneintrag verwendet.  
+ Wenn das eingehende Element aus der- <xref:Microsoft.Build.Tasks.AssignCulture.Files%2A> Eigenschaft bereits einen `Culture` Metadateneintrag enthält, wird der ursprüngliche Metadateneintrag verwendet.  
   
  Die Aufgabe weist nur dann einen `Culture`-Metadateneintrag zu, wenn der Dateiname einen gültigen Kulturbezeichner enthält. Der Kulturbezeichner muss zwischen den letzten beiden Punkten im Dateinamen platziert werden.  
   
@@ -120,19 +145,28 @@
         <AssemblyName>Microsoft.Build.Tasks.v3.5</AssemblyName>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>Microsoft.Build.Tasks.Core</AssemblyName>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
       <Attributes>
         <Attribute>
-          <AttributeName>Microsoft.Build.Framework.Output</AttributeName>
+          <AttributeName Language="C#">[Microsoft.Build.Framework.Output]</AttributeName>
+          <AttributeName Language="F#">[&lt;Microsoft.Build.Framework.Output&gt;]</AttributeName>
         </Attribute>
         <Attribute FrameworkAlternate="netframework-4.0">
-          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+          <AttributeName Language="C#">[get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]</AttributeName>
+          <AttributeName Language="F#">[&lt;get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")&gt;]</AttributeName>
         </Attribute>
       </Attributes>
       <ReturnValue>
         <ReturnType>Microsoft.Build.Framework.ITaskItem[]</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft eine Teilmenge der <see cref="P:Microsoft.Build.Tasks.AssignCulture.AssignedFiles" /> ab, die einen <c>Culture</c>-Metadateneintrag besitzen.</summary>
+        <summary>Hierbei handelt es sich um eine Teilmenge von AssignedFiles, die über alle Elemente verfügt, denen ein Culture-Attribut zugewiesen wurde. Dazu gehören Elemente, die bereits über ein Culture-Attribut in der Files-Liste verfügen, sowie Elemente, denen ein Culture-Attribut zugewiesen wurde, weil eine gültige Kultur-ID in ihren Dateinamen eingebettet war.
+            
+Folgendes gilt immer: 
+AssignedFiles = AssignedFilesWithCulture + AssignedFilesWithNoCulture</summary>
         <value>Eine Teilmenge der <see cref="P:Microsoft.Build.Tasks.AssignCulture.AssignedFiles" /> , die über einen <c>Kultur</c> Metadateneintrag verfügen.</value>
         <remarks>To be added.</remarks>
         <forInternalUseOnly />
@@ -158,19 +192,28 @@
         <AssemblyName>Microsoft.Build.Tasks.v3.5</AssemblyName>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>Microsoft.Build.Tasks.Core</AssemblyName>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
       <Attributes>
         <Attribute>
-          <AttributeName>Microsoft.Build.Framework.Output</AttributeName>
+          <AttributeName Language="C#">[Microsoft.Build.Framework.Output]</AttributeName>
+          <AttributeName Language="F#">[&lt;Microsoft.Build.Framework.Output&gt;]</AttributeName>
         </Attribute>
         <Attribute FrameworkAlternate="netframework-4.0">
-          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+          <AttributeName Language="C#">[get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]</AttributeName>
+          <AttributeName Language="F#">[&lt;get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")&gt;]</AttributeName>
         </Attribute>
       </Attributes>
       <ReturnValue>
         <ReturnType>Microsoft.Build.Framework.ITaskItem[]</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft eine Teilmenge der <see cref="P:Microsoft.Build.Tasks.AssignCulture.AssignedFiles" /> ab, die keinen <c>Culture</c>-Metadateneintrag besitzen.</summary>
+        <summary>Hierbei handelt es sich um eine Teilmenge von AssignedFiles, die über alle Elemente verfügt, denen kein Culture-Attribut zugewiesen wurde. 
+            
+Folgendes gilt immer: 
+AssignedFiles = AssignedFilesWithCulture + AssignedFilesWithNoCulture</summary>
         <value>Eine Teilmenge der <see cref="P:Microsoft.Build.Tasks.AssignCulture.AssignedFiles" /> , die nicht über einen <c>Culture</c> -Metadateneintrag verfügen.</value>
         <remarks>To be added.</remarks>
         <forInternalUseOnly />
@@ -196,19 +239,38 @@
         <AssemblyName>Microsoft.Build.Tasks.v3.5</AssemblyName>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>Microsoft.Build.Tasks.Core</AssemblyName>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
       <Attributes>
         <Attribute>
-          <AttributeName>Microsoft.Build.Framework.Output</AttributeName>
+          <AttributeName Language="C#">[Microsoft.Build.Framework.Output]</AttributeName>
+          <AttributeName Language="F#">[&lt;Microsoft.Build.Framework.Output&gt;]</AttributeName>
         </Attribute>
         <Attribute FrameworkAlternate="netframework-4.0">
-          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+          <AttributeName Language="C#">[get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]</AttributeName>
+          <AttributeName Language="F#">[&lt;get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")&gt;]</AttributeName>
         </Attribute>
       </Attributes>
       <ReturnValue>
         <ReturnType>Microsoft.Build.Framework.ITaskItem[]</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft eine Teilmenge der <see cref="P:Microsoft.Build.Tasks.AssignCulture.AssignedFiles" /> ab, die keinen <c>Culture</c>-Metadateneintrag besitzen.</summary>
+        <summary>Diese Liste enthält die gleiche Anzahl von Elementen wie die Files-Liste oder die AssignedFiles-Liste.
+            
+Elemente in dieser Liste verfügen über den Dateinamen aus Files oder AssignedFiles, jedoch wird die Kultur entfernt, wenn diese in den Dateinamen eingebettet war.
+            
+Wenn das eingehende Element in Files beispielsweise wie folgt lautet: 
+MyBitmap.fr.bmp 
+dann lautet die entsprechende Datei in CultureNeutralAssignedFiles wie folgt: 
+MyBitmap.bmp 
+Die Kultur wird nur entfernt, wenn es sich um einen gültigen Kulturbezeichner handelt.
+Beispielsweise würde 
+MyCrazyFile.XX.txt 
+in genau demselben Dateinamen resultieren: 
+MyCrazyFile.XX.txt 
+Das liegt daran, dass „XX“ kein gültiger Kulturbezeichner ist.</summary>
         <value>Eine Teilmenge der <see cref="P:Microsoft.Build.Tasks.AssignCulture.AssignedFiles" /> , die nicht über einen <c>Culture</c> -Metadateneintrag verfügen.</value>
         <remarks>To be added.</remarks>
         <forInternalUseOnly />
@@ -234,13 +296,17 @@
         <AssemblyName>Microsoft.Build.Tasks.v3.5</AssemblyName>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>Microsoft.Build.Tasks.Core</AssemblyName>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Führt die <c>AssignCulture</c>-Aufgabe aus.</summary>
-        <returns><see langword="true" />, wenn die Aufgabe erfolgreich ausgeführt wurde, andernfalls <see langword="false" />.</returns>
+        <summary>„Execute“.</summary>
+        <returns />
         <remarks>To be added.</remarks>
         <forInternalUseOnly />
       </Docs>
@@ -265,22 +331,29 @@
         <AssemblyName>Microsoft.Build.Tasks.v3.5</AssemblyName>
         <AssemblyVersion>3.5.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>Microsoft.Build.Tasks.Core</AssemblyName>
+        <AssemblyVersion>15.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
       <Attributes>
         <Attribute>
-          <AttributeName>Microsoft.Build.Framework.Required</AttributeName>
+          <AttributeName Language="C#">[Microsoft.Build.Framework.Required]</AttributeName>
+          <AttributeName Language="F#">[&lt;Microsoft.Build.Framework.Required&gt;]</AttributeName>
         </Attribute>
         <Attribute FrameworkAlternate="netframework-4.0">
-          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+          <AttributeName Language="C#">[get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]</AttributeName>
+          <AttributeName Language="F#">[&lt;get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")&gt;]</AttributeName>
         </Attribute>
         <Attribute FrameworkAlternate="netframework-4.0">
-          <AttributeName>set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+          <AttributeName Language="C#">[set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]</AttributeName>
+          <AttributeName Language="F#">[&lt;set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")&gt;]</AttributeName>
         </Attribute>
       </Attributes>
       <ReturnValue>
         <ReturnType>Microsoft.Build.Framework.ITaskItem[]</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Ruft eine Liste der Dateien mit eingebetteten Kulturnamen ab, denen eine Kultur zugewiesen werden soll, oder legt diese fest.</summary>
+        <summary>Hierbei handelt es sich um die eingehende Liste der Dateien, denen eine Kultur zugewiesen werden soll.</summary>
         <value>Die Liste der Dateien mit eingebetteten Kulturnamen, denen eine Kultur zugewiesen werden soll.</value>
         <remarks>To be added.</remarks>
         <forInternalUseOnly />
