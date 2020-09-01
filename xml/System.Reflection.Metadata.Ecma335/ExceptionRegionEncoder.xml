@@ -1,5 +1,5 @@
 <Type Name="ExceptionRegionEncoder" FullName="System.Reflection.Metadata.Ecma335.ExceptionRegionEncoder">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="8ca7c694ace8f22c18b55a119f99a33aa321b430" /><Meta Name="ms.sourcegitcommit" Value="b53d35b4a410c949742abd4c6a989d1af5357bca" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="07/21/2020" /><Meta Name="ms.locfileid" Value="86795217" /></Metadata><TypeSignature Language="C#" Value="public struct ExceptionRegionEncoder" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="1ce4ba5e97cf70e75f7ce6648c22c9024a22f9f8" /><Meta Name="ms.sourcegitcommit" Value="99247877c0ae3f6b8619b55f52be0419280a6aa5" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="de-DE" /><Meta Name="ms.lasthandoff" Value="08/27/2020" /><Meta Name="ms.locfileid" Value="88952120" /></Metadata><TypeSignature Language="C#" Value="public struct ExceptionRegionEncoder" />
   <TypeSignature Language="ILAsm" Value=".class public sequential ansi sealed beforefieldinit ExceptionRegionEncoder extends System.ValueType" />
   <TypeSignature Language="DocId" Value="T:System.Reflection.Metadata.Ecma335.ExceptionRegionEncoder" />
   <TypeSignature Language="VB.NET" Value="Public Structure ExceptionRegionEncoder" />
@@ -59,15 +59,22 @@
       </Parameters>
       <Docs>
         <param name="kind">Klauselart.</param>
-        <param name="tryOffset">Block Start Offset testen.</param>
-        <param name="tryLength">Try-Blocklänge.</param>
-        <param name="handlerOffset">Start Offset des Handlers.</param>
-        <param name="handlerLength">Handlerlänge.</param>
-        <param name="catchType"><see cref="T:System.Reflection.Metadata.TypeDefinitionHandle" />, <see cref="T:System.Reflection.Metadata.TypeReferenceHandle" /> oder <see cref="T:System.Reflection.Metadata.TypeSpecificationHandle" /> oder Nil, wenn <paramref name="kind" /> nicht ist. <see cref="F:System.Reflection.Metadata.ExceptionRegionKind.Catch" /></param>
-        <param name="filterOffset">Offset des Filter Blocks, oder 0 (null), wenn der <paramref name="kind" /> nicht ist <see cref="F:System.Reflection.Metadata.ExceptionRegionKind.Filter" /> .</param>
-        <summary>Fügt eine Exception-Klausel hinzu.</summary>
+        <param name="tryOffset">Try-Block-Startoffset.</param>
+        <param name="tryLength">Länge des Try-Blocks.</param>
+        <param name="handlerOffset">Startoffset des Handlers.</param>
+        <param name="handlerLength">Länge des Handlers.</param>
+        <param name="catchType"><see cref="T:System.Reflection.Metadata.TypeDefinitionHandle" />, <see cref="T:System.Reflection.Metadata.TypeReferenceHandle" /> oder <see cref="T:System.Reflection.Metadata.TypeSpecificationHandle" /> oder Nil, wenn <paramref name="kind" /> nicht <see cref="F:System.Reflection.Metadata.ExceptionRegionKind.Catch" /> ist.</param>
+        <param name="filterOffset">Offset des Filterblocks oder 0, wenn <paramref name="kind" /> nicht <see cref="F:System.Reflection.Metadata.ExceptionRegionKind.Filter" />ist.</param>
+        <summary>Fügt eine Ausnahmeklausel hinzu.</summary>
         <returns>Encoder für die Next-Klausel.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="catchType" /> ist ungültig.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="kind" /> besitzt einen ungültigen Wert.
+          
+- oder -
+
+<paramref name="tryOffset" />, <paramref name="tryLength" />, <paramref name="handlerOffset" /> oder <paramref name="handlerLength" /> liegt außerhalb des Bereichs.</exception>
+        <exception cref="T:System.InvalidOperationException">Im Methodenkörper wurden keine Ausnahmebereiche deklariert.</exception>
       </Docs>
     </Member>
     <Member MemberName="AddCatch">
@@ -98,14 +105,17 @@
         <Parameter Name="catchType" Type="System.Reflection.Metadata.EntityHandle" />
       </Parameters>
       <Docs>
-        <param name="tryOffset">Block Start Offset testen.</param>
-        <param name="tryLength">Try-Blocklänge.</param>
-        <param name="handlerOffset">Start Offset des Handlers.</param>
-        <param name="handlerLength">Handlerlänge.</param>
-        <param name="catchType"><see cref="T:System.Reflection.Metadata.TypeDefinitionHandle" />, <see cref="T:System.Reflection.Metadata.TypeReferenceHandle" /> oder <see cref="T:System.Reflection.Metadata.TypeSpecificationHandle" /> .</param>
+        <param name="tryOffset">Try-Block-Startoffset.</param>
+        <param name="tryLength">Länge des Try-Blocks.</param>
+        <param name="handlerOffset">Startoffset des Handlers.</param>
+        <param name="handlerLength">Länge des Handlers.</param>
+        <param name="catchType"><see cref="T:System.Reflection.Metadata.TypeDefinitionHandle" />, <see cref="T:System.Reflection.Metadata.TypeReferenceHandle" /> oder <see cref="T:System.Reflection.Metadata.TypeSpecificationHandle" />.</param>
         <summary>Fügt eine Fault-Klausel hinzu.</summary>
         <returns>Encoder für die Next-Klausel.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="catchType" /> ist ungültig.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="tryOffset" />, <paramref name="tryLength" />, <paramref name="handlerOffset" /> oder <paramref name="handlerLength" /> liegt außerhalb des Bereichs.</exception>
+        <exception cref="T:System.InvalidOperationException">Im Methodenkörper wurden keine Ausnahmebereiche deklariert.</exception>
       </Docs>
     </Member>
     <Member MemberName="AddFault">
@@ -135,13 +145,15 @@
         <Parameter Name="handlerLength" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="tryOffset">Block Start Offset testen.</param>
-        <param name="tryLength">Try-Blocklänge.</param>
-        <param name="handlerOffset">Start Offset des Handlers.</param>
-        <param name="handlerLength">Handlerlänge.</param>
+        <param name="tryOffset">Try-Block-Startoffset.</param>
+        <param name="tryLength">Länge des Try-Blocks.</param>
+        <param name="handlerOffset">Startoffset des Handlers.</param>
+        <param name="handlerLength">Länge des Handlers.</param>
         <summary>Fügt eine Fault-Klausel hinzu.</summary>
         <returns>Encoder für die Next-Klausel.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="tryOffset" />, <paramref name="tryLength" />, <paramref name="handlerOffset" /> oder <paramref name="handlerLength" /> liegt außerhalb des Bereichs.</exception>
+        <exception cref="T:System.InvalidOperationException">Im Methodenkörper wurden keine Ausnahmebereiche deklariert.</exception>
       </Docs>
     </Member>
     <Member MemberName="AddFilter">
@@ -172,14 +184,16 @@
         <Parameter Name="filterOffset" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="tryOffset">Block Start Offset testen.</param>
-        <param name="tryLength">Try-Blocklänge.</param>
-        <param name="handlerOffset">Start Offset des Handlers.</param>
-        <param name="handlerLength">Handlerlänge.</param>
-        <param name="filterOffset">Offset des Filter Blocks.</param>
+        <param name="tryOffset">Try-Block-Startoffset.</param>
+        <param name="tryLength">Länge des Try-Blocks.</param>
+        <param name="handlerOffset">Startoffset des Handlers.</param>
+        <param name="handlerLength">Länge des Handlers.</param>
+        <param name="filterOffset">Offset des Filterblocks.</param>
         <summary>Fügt eine Fault-Klausel hinzu.</summary>
         <returns>Encoder für die Next-Klausel.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="tryOffset" />, <paramref name="tryLength" />, <paramref name="handlerOffset" /> oder <paramref name="handlerLength" /> liegt außerhalb des Bereichs.</exception>
+        <exception cref="T:System.InvalidOperationException">Im Methodenkörper wurden keine Ausnahmebereiche deklariert.</exception>
       </Docs>
     </Member>
     <Member MemberName="AddFinally">
@@ -209,13 +223,15 @@
         <Parameter Name="handlerLength" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="tryOffset">Block Start Offset testen.</param>
-        <param name="tryLength">Try-Blocklänge.</param>
-        <param name="handlerOffset">Start Offset des Handlers.</param>
-        <param name="handlerLength">Handlerlänge.</param>
-        <summary>Fügt eine schließlich-Klausel hinzu.</summary>
+        <param name="tryOffset">Try-Block-Startoffset.</param>
+        <param name="tryLength">Länge des Try-Blocks.</param>
+        <param name="handlerOffset">Startoffset des Handlers.</param>
+        <param name="handlerLength">Länge des Handlers.</param>
+        <summary>Fügt eine Finally-Klausel hinzu.</summary>
         <returns>Encoder für die Next-Klausel.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="tryOffset" />, <paramref name="tryLength" />, <paramref name="handlerOffset" /> oder <paramref name="handlerLength" /> liegt außerhalb des Bereichs.</exception>
+        <exception cref="T:System.InvalidOperationException">Im Methodenkörper wurden keine Ausnahmebereiche deklariert.</exception>
       </Docs>
     </Member>
     <Member MemberName="Builder">
@@ -239,7 +255,7 @@
         <ReturnType>System.Reflection.Metadata.BlobBuilder</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Der zugrunde liegende Generator.</summary>
+        <summary>Der zugrundeliegende Generator.</summary>
         <value>To be added.</value>
         <remarks>To be added.</remarks>
       </Docs>
@@ -265,7 +281,7 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary><see langword="true" /> , wenn der Encoder ein kleines Format verwendet.</summary>
+        <summary><see langword="true" />, wenn der Encoder ein kleines Format verwendet.</summary>
         <value>To be added.</value>
         <remarks>To be added.</remarks>
       </Docs>
@@ -295,9 +311,9 @@
         <Parameter Name="length" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="startOffset">Start Offset des Bereichs.</param>
-        <param name="length">Die Länge der Region.</param>
-        <summary>Gibt zurück, <see langword="true" /> Wenn der Bereich in ein kleines Format passt.</summary>
+        <param name="startOffset">Der Startoffset des Bereichs.</param>
+        <param name="length">Die Länge des Bereichs.</param>
+        <summary>Gibt <see langword="true" /> zurück, wenn der Bereich für ein kleines Format geeignet ist.</summary>
         <returns>To be added.</returns>
         <remarks>To be added.</remarks>
       </Docs>
@@ -326,8 +342,8 @@
         <Parameter Name="exceptionRegionCount" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="exceptionRegionCount">Anzahl der Ausnahme Bereiche.</param>
-        <summary>Gibt zurück, <see langword="true" /> Wenn die Anzahl der Ausnahme Bereiche das erste kleine Format ist.</summary>
+        <param name="exceptionRegionCount">Die Anzahl der Ausnahmebereiche.</param>
+        <summary>Gibt <see langword="true" /> zurück, wenn die Anzahl der Ausnahmebereiche für ein kleines Format geeignet ist.</summary>
         <returns>To be added.</returns>
         <remarks>To be added.</remarks>
       </Docs>
